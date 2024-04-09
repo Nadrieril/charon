@@ -10,8 +10,17 @@ Museo del Prado, Madrid.
 </div></p>
 
 # Charon
-Charon acts as an interface between the rustc compiler and program verification projects. Its
-purpose is to process Rust crates and convert them into files easy to handle by program
+
+Charon is the front-end of a Rust program verification pipeline.
+It interfaces with rustc to extract the information of a Rust crate
+and convert it to an easy-to-process file.
+
+It is based on rustc's MIR (control-flow-based intermediate representation)
+
+Charon is an interface between the rustc compiler and program verification projects.
+It processes Rust crates to extract the information needed by program verifiers:
+types, traits, 
+and convert them into files easy to handle by program
 verifiers. It is implemented as a custom driver for the rustc compiler.
 
 Charon is, in Greek mythology, an old man carrying the souls of the deceased accross the
