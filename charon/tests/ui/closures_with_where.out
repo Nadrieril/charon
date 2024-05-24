@@ -1,0 +1,60 @@
+# Final LLBC before serialization:
+
+trait test_crate::Ops<Self, const K : usize>
+{
+    fn of_usize : test_crate::Ops::of_usize
+}
+
+fn test_crate::Ops::of_usize<Self, const K : usize>(@1: usize) -> Self
+
+fn test_crate::test::closure<'_0, T, const K : usize>(@1: &'_0 mut (()), @2: (usize)) -> T
+where
+    [@TraitClause0]: test_crate::Ops<T, const K : usize>,
+{
+    let @0: T; // return
+    let state@1: &'_0 mut (()); // arg #1
+    let i@2: usize; // arg #2
+    let @3: usize; // anonymous local
+
+    @3 := copy (i@2)
+    @0 := @TraitClause0::of_usize(move (@3))
+    drop @3
+    return
+}
+
+trait core::ops::function::FnOnce<Self, Args>
+{
+    type Output
+    fn call_once : core::ops::function::FnOnce::call_once
+}
+
+trait core::ops::function::FnMut<Self, Args>
+{
+    parent_clause_0 : [@TraitClause0]: core::ops::function::FnOnce<Self, Args>
+    fn call_mut : core::ops::function::FnMut::call_mut
+}
+
+fn core::array::from_fn<T, F, const N : usize>(@1: F) -> Array<T, const N : usize>
+where
+    [@TraitClause0]: core::ops::function::FnMut<F, (usize)>,
+    (parents((parents(@TraitClause0)::[@TraitClause3]))::[@TraitClause0])::Output = T,
+
+fn test_crate::test<T, const K : usize>() -> Array<T, 1 : usize>
+where
+    [@TraitClause0]: test_crate::Ops<T, const K : usize>,
+{
+    let @0: Array<T, 1 : usize>; // return
+    let @1: fn(usize) -> T; // anonymous local
+
+    @1 := {test_crate::test::closure<T, const K : usize>[@TraitClause0]} {}
+    @0 := core::array::from_fn<T, fn(usize) -> T, 1 : usize>[core::ops::function::FnMut<fn(usize) -> T, (usize)>](move (@1))
+    drop @1
+    return
+}
+
+fn core::ops::function::FnMut::call_mut<'_0, Self, Args>(@1: &'_0 mut (Self), @2: Args) -> (parents(Self)::[@TraitClause0])::Output
+
+fn core::ops::function::FnOnce::call_once<Self, Args>(@1: Self, @2: Args) -> Self::Output
+
+
+
