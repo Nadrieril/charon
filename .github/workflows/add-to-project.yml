@@ -1,0 +1,35 @@
+name: Add new issue/pr to project
+
+on:
+  issues:
+    types:
+      - opened
+      - transferred
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  add-to-project:
+    name: Add issue/pr to project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate token
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+      - uses: actions/add-to-project@v0.5.0
+        with:
+          project-url: https://github.com/orgs/AeneasVerif/projects/1
+          github-token: ${{ steps.generate_token.outputs.token }}
+
+# This describes using github app for auth: https://github.com/actions/add-to-project/issues/158#issuecomment-1229912541
+# It is recommended to use github app by github docs
+# Could come useful: https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/automating-projects-using-actions
+# TODO:
+# - create app
+# - store the app ID and key as explained https://github.com/actions/create-github-app-token
+# - use https://github.com/actions/create-github-app-token go generate token
+# - test by opening issue/Pr and asking non-admin to do it
