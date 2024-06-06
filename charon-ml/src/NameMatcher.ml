@@ -521,23 +521,22 @@ and match_expr_with_trait_decl_ref (ctx : ctx) (c : match_config) (ptr : expr)
   | EComp pid -> match_name_with_generics ctx c pid d.name tr.decl_generics
   | EPrimAdt _ | ERef _ | EVar _ | EArrow _ | ERawPtr _ -> false
 
-and match_trait_ref (ctx : ctx) (c : match_config) (pid : pattern)
-    (tr : T.trait_ref) : bool =
+and match_trait_decl_ref (ctx : ctx) (c : match_config) (pid : pattern)
+    (tr : T.trait_decl_ref) : bool =
   (* Lookup the trait declaration *)
-  let d =
-    T.TraitDeclId.Map.find tr.trait_decl_ref.trait_decl_id ctx.trait_decls
-  in
+  let d = T.TraitDeclId.Map.find tr.trait_decl_id ctx.trait_decls in
   (* Match the trait decl ref *)
-  match_name_with_generics ctx c pid d.name tr.trait_decl_ref.decl_generics
+  match_name_with_generics ctx c pid d.name tr.decl_generics
 
-and match_trait_ref_item (ctx : ctx) (c : match_config) (pid : pattern)
-    (tr : T.trait_ref) (item_name : string) (generics : T.generic_args) : bool =
+and match_trait_decl_ref_item (ctx : ctx) (c : match_config) (pid : pattern)
+    (tr : T.trait_decl_ref) (item_name : string) (generics : T.generic_args) :
+    bool =
   if c.match_with_trait_decl_refs then
     (* We match the trait decl ref *)
     (* We split the pattern between the trait decl ref and the associated item name *)
     let pid, pitem_name = Collections.List.pop_last pid in
     (* Match the trait ref *)
-    match_trait_ref ctx c pid tr
+    match_trait_decl_ref ctx c pid tr
     &&
     (* Match the item name *)
     match pitem_name with
@@ -549,7 +548,8 @@ and match_trait_ref_item (ctx : ctx) (c : match_config) (pid : pattern)
 
 and match_trait_type (ctx : ctx) (c : match_config) (pid : pattern)
     (tr : T.trait_ref) (type_name : string) : bool =
-  match_trait_ref_item ctx c pid tr type_name TypesUtils.empty_generic_args
+  match_trait_decl_ref_item ctx c pid tr.trait_decl_ref type_name
+    TypesUtils.empty_generic_args
 
 and match_generic_args (ctx : ctx) (c : match_config) (m : maps)
     (pgenerics : generic_args) (generics : T.generic_args) : bool =
@@ -613,11 +613,11 @@ let assumed_fun_id_to_string (fid : E.assumed_fun_id) : string =
 
 let match_fn_ptr (ctx : ctx) (c : match_config) (p : pattern) (func : E.fn_ptr)
     : bool =
-  let to_name (s : string list) : T.name =
-    List.map (fun s -> T.PeIdent (s, T.Disambiguator.of_int 0)) s
-  in
   match func.func with
   | FunId (FAssumed fid) -> (
+      let to_name (s : string list) : T.name =
+        List.map (fun s -> T.PeIdent (s, T.Disambiguator.of_int 0)) s
+      in
       match fid with
       | BoxNew -> (
           (* Slightly annoying because of the impl block.
@@ -653,9 +653,30 @@ let match_fn_ptr (ctx : ctx) (c : match_config) (p : pattern) (func : E.fn_ptr)
           match_name_with_generics ctx c p (to_name [ name ]) func.generics)
   | FunId (FRegular fid) ->
       let d = A.FunDeclId.Map.find fid ctx.fun_decls in
-      match_name_with_generics ctx c p d.name func.generics
+      (* Match the pattern on the name of the function. *)
+      let match_function_name =
+        match_name_with_generics ctx c p d.name func.generics
+      in
+      (* Match the pattern on the trait implementation and method name, if applicable. *)
+      let match_trait_ref =
+        match d.kind with
+        | TraitItemImpl (impl_id, _, method_name, _)
+          when c.match_with_trait_decl_refs ->
+            let impl = T.TraitImplId.Map.find impl_id ctx.trait_impls in
+            (* TODO: split the generics in two? Figure out what the old way did.
+               TODO: really need to substitute impl args into the
+               trait_decl_ref. Or make the trait decl matcher take impl
+               generics or something. Probably need to understand this whole
+               mess better and add strongly typed data so we can't mix things
+               up. *)
+            match_trait_decl_ref_item ctx c p impl.impl_trait method_name
+              func.generics
+        | _ -> false
+      in
+      match_function_name || match_trait_ref
   | TraitMethod (tr, method_name, _) ->
-      match_trait_ref_item ctx c p tr method_name func.generics
+      match_trait_decl_ref_item ctx c p tr.trait_decl_ref method_name
+        func.generics
 
 let mk_name_with_generics_matcher (ctx : ctx) (c : match_config) (pat : string)
     : T.name -> T.generic_args -> bool =

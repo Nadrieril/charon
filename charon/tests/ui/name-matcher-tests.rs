@@ -28,7 +28,7 @@ impl<T> Trait<Option<T>> for Box<T> {
         "test_crate::{test_crate::Trait<alloc::boxed::Box<@T>, core::option::Option<@U>>}::method"
     )]
     #[pattern::pass("test_crate::{test_crate::Trait<@T, @U>}::method")]
-    #[pattern::fail("test_crate::Trait<@T, @U>::method")]
+    #[pattern::pass("test_crate::Trait<@T, @U>::method")]
     fn method<U>() {}
 }
 
