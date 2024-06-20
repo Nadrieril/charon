@@ -499,23 +499,12 @@ impl<'tcx, 'ctx> TranslateCtx<'tcx, 'ctx> {
             trace!("Trait impl: {:?}\n- parent_trait_refs:\n{}", rust_id, refs);
         }
 
-        // Explore the trait decl method items to retrieve the list of required methods
-        use std::collections::HashSet;
-        let mut decl_required_methods: HashSet<String> = HashSet::new();
-        for item in tcx
-            .associated_items(implemented_trait_rust_id)
-            .in_definition_order()
-        {
-            if let AssocKind::Fn = &item.kind && !item.defaultness(tcx).has_value() {
-                decl_required_methods.insert(item.name.to_string());
-            }
-        }
-
         // Explore the associated items
         // We do something subtle here: TODO
         let tcx = bt_ctx.t_ctx.tcx;
         let mut consts = HashMap::new();
         let mut types: HashMap<TraitItemName, Ty> = HashMap::new();
+        let mut methods = HashMap::new();
         let mut required_methods = Vec::new();
         let mut provided_methods = Vec::new();
 
@@ -525,15 +514,7 @@ impl<'tcx, 'ctx> TranslateCtx<'tcx, 'ctx> {
                 AssocKind::Fn => {
                     let method_name = bt_ctx.t_ctx.translate_trait_item_name(item.def_id)?;
                     let fun_id = bt_ctx.register_fun_decl_id(span, item.def_id);
-
-                    // Check if we implement a required method or reimplement
-                    // a provided method
-                    let is_required = decl_required_methods.contains(&method_name.0);
-                    if is_required {
-                        required_methods.push((method_name, fun_id));
-                    } else {
-                        provided_methods.push((method_name, fun_id));
-                    }
+                    methods.insert(method_name, fun_id);
                 }
                 AssocKind::Const => {
                     let (name, c) = bt_ctx.translate_const_from_trait_item(item)?;
@@ -558,10 +539,22 @@ impl<'tcx, 'ctx> TranslateCtx<'tcx, 'ctx> {
             .associated_items(implemented_trait_rust_id)
             .in_definition_order()
         {
+            let name = TraitItemName(item.name.to_string());
             match &item.kind {
-                AssocKind::Fn => (),
+                AssocKind::Fn => {
+                    // Does the trait impl provide an implementation for this function?
+                    if let Some(&fun_id) = methods.get(&name) {
+                        let has_default = item.defaultness(tcx).has_value();
+                        // Check if we implement a required method or reimplement
+                        // a provided method
+                        if has_default {
+                            provided_methods.push((name, fun_id));
+                        } else {
+                            required_methods.push((name, fun_id));
+                        }
+                    }
+                }
                 AssocKind::Const => {
-                    let name = TraitItemName(item.name.to_string());
                     // Does the trait impl provide an implementation for this const?
                     let c = match partial_consts.get(&name) {
                         Some(c) => c.clone(),
@@ -574,7 +567,6 @@ impl<'tcx, 'ctx> TranslateCtx<'tcx, 'ctx> {
                     consts.push((name, c));
                 }
                 AssocKind::Type => {
-                    let name = TraitItemName(item.name.to_string());
                     // Does the trait impl provide an implementation for this type?
                     let ty = match partial_types.get(&name) {
                         Some(ty) => ty.clone(),

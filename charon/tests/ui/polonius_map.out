@@ -108,16 +108,16 @@ impl core::cmp::impls::{impl core::cmp::Eq for u32#41} : core::cmp::Eq<u32>
 
 opaque type std::collections::hash::map::DefaultHasher
 
-fn std::collections::hash::map::{impl core::hash::Hasher for std::collections::hash::map::DefaultHasher#86}::write<'_0, '_1>(@1: &'_0 mut (std::collections::hash::map::DefaultHasher), @2: &'_1 (Slice<u8>))
-
 fn std::collections::hash::map::{impl core::hash::Hasher for std::collections::hash::map::DefaultHasher#86}::finish<'_0>(@1: &'_0 (std::collections::hash::map::DefaultHasher)) -> u64
+
+fn std::collections::hash::map::{impl core::hash::Hasher for std::collections::hash::map::DefaultHasher#86}::write<'_0, '_1>(@1: &'_0 mut (std::collections::hash::map::DefaultHasher), @2: &'_1 (Slice<u8>))
 
 fn std::collections::hash::map::{impl core::hash::Hasher for std::collections::hash::map::DefaultHasher#86}::write_str<'_0, '_1>(@1: &'_0 mut (std::collections::hash::map::DefaultHasher), @2: &'_1 (Str))
 
 impl std::collections::hash::map::{impl core::hash::Hasher for std::collections::hash::map::DefaultHasher#86} : core::hash::Hasher<std::collections::hash::map::DefaultHasher>
 {
-    fn write = std::collections::hash::map::{impl core::hash::Hasher for std::collections::hash::map::DefaultHasher#86}::write
     fn finish = std::collections::hash::map::{impl core::hash::Hasher for std::collections::hash::map::DefaultHasher#86}::finish
+    fn write = std::collections::hash::map::{impl core::hash::Hasher for std::collections::hash::map::DefaultHasher#86}::write
     fn write_str = std::collections::hash::map::{impl core::hash::Hasher for std::collections::hash::map::DefaultHasher#86}::write_str
 }
 
