@@ -1,4 +1,4 @@
-//! Translate functions from the rust compiler MIR to our internal representation.
+//! Translate functions from the rust compilerItemKind::TraitDeclRequired { field1: .. }tion.
 //! Our internal representation is very close to MIR, but is more convenient for
 //! us to handle, and easier to maintain - rustc's representation can evolve
 //! independently.
@@ -153,22 +153,11 @@ impl<'tcx, 'ctx> TranslateCtx<'tcx, 'ctx> {
 
                             let item_name = self.translate_trait_item_name(trait_item_id)?;
 
-                            // Check if the current function implements a provided method.
-                            // We do so by retrieving the def id of the method which is
-                            // implemented, and checking its kind.
-                            let provided = match self.get_item_kind(src, trait_item_id)? {
-                                ItemKind::TraitItemDecl(..) => false,
-                                ItemKind::TraitItemProvided(..) => true,
-                                ItemKind::Regular | ItemKind::TraitItemImpl { .. } => {
-                                    unreachable!()
-                                }
-                            };
-
-                            ItemKind::TraitItemImpl {
+                            ItemKind::TraitImpl {
                                 impl_id,
                                 trait_id,
                                 item_name,
-                                provided,
+                                reuses_default: false,
                             }
                         }
                     }
@@ -188,8 +177,6 @@ impl<'tcx, 'ctx> TranslateCtx<'tcx, 'ctx> {
 
                     // In order to check if this is a provided item, we check
                     // the defaultness (i.e., whether the item has a default value):
-                    let is_provided = tcx.defaultness(rust_id).has_value();
-
                     // Compute additional information
                     let item_name = self.translate_trait_item_name(rust_id)?;
                     let trait_id = tcx.trait_of_item(rust_id).unwrap();
@@ -198,10 +185,10 @@ impl<'tcx, 'ctx> TranslateCtx<'tcx, 'ctx> {
                     // may eliminate) don't have associated items.
                     let trait_id = trait_id.unwrap();
 
-                    if is_provided {
-                        ItemKind::TraitItemProvided(trait_id, item_name)
-                    } else {
-                        ItemKind::TraitItemDecl(trait_id, item_name)
+                    ItemKind::TraitDecl {
+                        trait_id,
+                        item_name,
+                        has_default: tcx.defaultness(rust_id).has_value(),
                     }
                 }
             };
@@ -1657,10 +1644,10 @@ impl<'tcx, 'ctx, 'ctx1> BodyTransCtx<'tcx, 'ctx, 'ctx1> {
         // Add the ctx trait clause if it is a trait decl item
         match fun_kind {
             ItemKind::Regular => {}
-            ItemKind::TraitItemImpl { impl_id, .. } => {
+            ItemKind::TraitImpl { impl_id, .. } => {
                 self.translate_trait_impl_self_trait_clause(*impl_id)?
             }
-            ItemKind::TraitItemProvided(..) | ItemKind::TraitItemDecl(..) => {
+            ItemKind::TraitDecl { .. } => {
                 // This is a trait decl item
                 let trait_id = tcx.trait_of_item(def_id).unwrap();
                 self.translate_trait_decl_self_trait_clause(trait_id)?;
@@ -1669,11 +1656,13 @@ impl<'tcx, 'ctx, 'ctx1> BodyTransCtx<'tcx, 'ctx, 'ctx1> {
 
         // Translate the predicates (in particular, the trait clauses)
         match &fun_kind {
-            ItemKind::Regular | ItemKind::TraitItemImpl { .. } => {
+            ItemKind::Regular | ItemKind::TraitImpl { .. } => {
                 self.translate_predicates_of(None, def_id, PredicateOrigin::WhereClauseOnFn)?;
             }
-            ItemKind::TraitItemProvided(trait_decl_id, ..)
-            | ItemKind::TraitItemDecl(trait_decl_id, ..) => {
+            ItemKind::TraitDecl {
+                trait_id: trait_decl_id,
+                ..
+            } => {
                 self.translate_predicates_of(
                     Some(*trait_decl_id),
                     def_id,
@@ -1716,10 +1705,7 @@ impl<'tcx, 'ctx, 'ctx1> BodyTransCtx<'tcx, 'ctx, 'ctx1> {
 
         let mut parent_params_info = self.get_function_parent_params_info(&dep_src, def_id)?;
         // If this is a trait decl method, we need to adjust the number of parent clauses
-        if matches!(
-            fun_kind,
-            ItemKind::TraitItemProvided(..) | ItemKind::TraitItemDecl(..)
-        ) {
+        if matches!(fun_kind, ItemKind::TraitDecl { .. }) {
             if let Some(info) = &mut parent_params_info {
                 // All the trait clauses are registered as parent (of Self)
                 // trait clauses, not as local trait clauses.
@@ -1746,9 +1732,7 @@ impl<'tcx, 'ctx, 'ctx1> BodyTransCtx<'tcx, 'ctx, 'ctx1> {
         let kind = self.t_ctx.get_item_kind(src, def_id)?;
         let info = match kind {
             ItemKind::Regular => None,
-            ItemKind::TraitItemImpl { .. }
-            | ItemKind::TraitItemDecl { .. }
-            | ItemKind::TraitItemProvided { .. } => {
+            ItemKind::TraitImpl { .. } | ItemKind::TraitDecl { .. } => {
                 Some(self.get_parent_params_info(def_id)?.unwrap())
             }
         };
@@ -1780,18 +1764,16 @@ impl<'tcx, 'ctx> TranslateCtx<'tcx, 'ctx> {
         let kind = bt_ctx
             .t_ctx
             .get_item_kind(&DepSource::make(rust_id, def_span), rust_id)?;
-        let is_trait_method_decl = match &kind {
-            ItemKind::Regular
-            | ItemKind::TraitItemImpl { .. }
-            | ItemKind::TraitItemProvided(..) => false,
-            ItemKind::TraitItemDecl(..) => true,
+        let is_trait_method_decl_without_default = match &kind {
+            ItemKind::Regular | ItemKind::TraitImpl { .. } => false,
+            ItemKind::TraitDecl { has_default, .. } => !has_default,
         };
 
         // Translate the function signature
         trace!("Translating function signature");
         let signature = bt_ctx.translate_function_signature(rust_id)?;
 
-        let body_id = if !is_trait_method_decl {
+        let body_id = if !is_trait_method_decl_without_default {
             // Translate the body. This doesn't store anything if we can't/decide not to translate
             // this body.
             match bt_ctx.translate_body(rust_id, signature.inputs.len(), &item_meta) {

@@ -116,6 +116,8 @@ type item_kind =
   | RegularKind
       (** A "normal" item (either defined at the top-level, or inside
           a type impl block). *)
+  | TraitItemDecl of trait_decl_id * string * bool
+      (** A trait item declaration. The boolean indicates whether this declaration has a default implementation. *)
   | TraitItemImpl of trait_impl_id * trait_decl_id * string * bool
       (** Trait item implementation.
 
@@ -123,12 +125,8 @@ type item_kind =
           - [trait impl id]
           - [trait_id]
           - [item_name]
-          - [provided]: true if this item *re-implements* a provided item
+          - [reuses_default]: true if this item is the default implementation provided by the trait.
         *)
-  | TraitItemDecl of trait_decl_id * string  (** A trait item declaration *)
-  | TraitItemProvided of trait_decl_id * string
-      (** Provided trait item (trait item declaration which defines a
-          default implementation at the same time *)
 [@@deriving show]
 
 type 'body gexpr_body = {

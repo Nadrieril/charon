@@ -1067,28 +1067,34 @@ let item_kind_of_json (js : json) : (item_kind, string) result =
     | `String "Regular" -> Ok RegularKind
     | `Assoc
         [
-          ( "TraitItemImpl",
+          ( "TraitDecl",
+            `Assoc
+              [
+                ("trait_id", trait_id);
+                ("item_name", item_name);
+                ("has_default", has_default);
+              ] );
+        ] ->
+        let* trait_id = TraitDeclId.id_of_json trait_id in
+        let* item_name = string_of_json item_name in
+        let* has_default = bool_of_json has_default in
+        Ok (TraitItemDecl (trait_id, item_name, has_default))
+    | `Assoc
+        [
+          ( "TraitImpl",
             `Assoc
               [
                 ("impl_id", impl_id);
                 ("trait_id", trait_id);
-                ("item_name", method_name);
-                ("provided", provided);
+                ("item_name", item_name);
+                ("reuses_default", reuses_default);
               ] );
         ] ->
         let* impl_id = TraitImplId.id_of_json impl_id in
         let* trait_id = TraitDeclId.id_of_json trait_id in
-        let* method_name = string_of_json method_name in
-        let* provided = bool_of_json provided in
-        Ok (TraitItemImpl (impl_id, trait_id, method_name, provided))
-    | `Assoc [ ("TraitItemDecl", `List [ trait_id; item_name ]) ] ->
-        let* trait_id = TraitDeclId.id_of_json trait_id in
         let* item_name = string_of_json item_name in
-        Ok (TraitItemDecl (trait_id, item_name))
-    | `Assoc [ ("TraitItemProvided", `List [ trait_id; item_name ]) ] ->
-        let* trait_id = TraitDeclId.id_of_json trait_id in
-        let* item_name = string_of_json item_name in
-        Ok (TraitItemProvided (trait_id, item_name))
+        let* reuses_default = bool_of_json reuses_default in
+        Ok (TraitItemImpl (impl_id, trait_id, item_name, reuses_default))
     | _ -> Error "")
 
 let maybe_opaque_body_of_json (bodies : 'body gexpr_body option list)
