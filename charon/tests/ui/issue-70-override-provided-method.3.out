@@ -133,6 +133,14 @@ where
     return
 }
 
+impl<T> test_crate::{impl test_crate::GenericTrait<core::option::Option<T>> for test_crate::NoOverride<T>#1}<T> : test_crate::GenericTrait<test_crate::NoOverride<T>, core::option::Option<T>>
+where
+    [@TraitClause0]: core::marker::Copy<T>,
+{
+    parent_clause0 = core::option::{impl core::clone::Clone for core::option::Option<T>#5}<T>[(parents(@TraitClause0)::[@TraitClause0])]
+    fn other_method = test_crate::{impl test_crate::GenericTrait<core::option::Option<T>> for test_crate::NoOverride<T>#1}::other_method
+}
+
 fn test_crate::GenericTrait::provided<Self, T, U>(@1: T, @2: U)
 where
     [@TraitClause0]: core::cmp::PartialEq<U, T>,
@@ -164,15 +172,6 @@ where
     drop x@1
     @0 := ()
     return
-}
-
-impl<T> test_crate::{impl test_crate::GenericTrait<core::option::Option<T>> for test_crate::NoOverride<T>#1}<T> : test_crate::GenericTrait<test_crate::NoOverride<T>, core::option::Option<T>>
-where
-    [@TraitClause0]: core::marker::Copy<T>,
-{
-    parent_clause0 = core::option::{impl core::clone::Clone for core::option::Option<T>#5}<T>[(parents(@TraitClause0)::[@TraitClause0])]
-    fn other_method = test_crate::{impl test_crate::GenericTrait<core::option::Option<T>> for test_crate::NoOverride<T>#1}::other_method
-    fn provided = test_crate::GenericTrait::provided
 }
 
 fn core::clone::Clone::clone<'_0, Self>(@1: &'_0 (Self)) -> Self

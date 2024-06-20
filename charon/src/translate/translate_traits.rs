@@ -282,6 +282,40 @@ impl<'tcx, 'ctx> TranslateCtx<'tcx, 'ctx> {
             s.translate_predicates_of(None, rust_id, PredicateOrigin::WhereClauseOnTrait)
         })?;
 
+        // HACK: we can't handle the clauses of some of the iterator methods (those with `for<'a>`)
+        // so we pretend they don't exist.
+        let invisible_methods: &[&str] =
+            if name.equals_ref_name(&["core", "iter", "traits", "iterator", "Iterator"]) {
+                &[
+                    "filter",
+                    "find",
+                    "inspect",
+                    "is_sorted_by",
+                    "map_windows",
+                    "max_by",
+                    "max_by_key",
+                    "min_by",
+                    "rposition",
+                    "min_by_key",
+                    "partition",
+                    "partition_in_place",
+                    "scan",
+                    "skip_while",
+                    "take_while",
+                    "try_find",
+                ]
+            } else if name.equals_ref_name(&[
+                "core",
+                "iter",
+                "traits",
+                "double_ended",
+                "DoubleEndedIterator",
+            ]) {
+                &["rfind"]
+            } else {
+                &[]
+            };
+
         // Explore the associated items
         // We do something subtle here: TODO: explain
         let tcx = bt_ctx.t_ctx.tcx;
@@ -297,19 +331,13 @@ impl<'tcx, 'ctx> TranslateCtx<'tcx, 'ctx> {
                 AssocKind::Fn => {
                     let span = tcx.def_span(rust_id);
                     let method_name = bt_ctx.t_ctx.translate_trait_item_name(item.def_id)?;
-                    // Skip the provided methods for the *external* trait declarations,
-                    // but still remember their name (unless `extract_opaque_bodies` is set).
+                    if invisible_methods.iter().any(|n| n == &method_name.0) {
+                        continue;
+                    }
+                    let fun_id = bt_ctx.register_fun_decl_id(span, item.def_id);
                     if has_default_value {
-                        // This is a *provided* method
-                        if rust_id.is_local() || bt_ctx.t_ctx.options.extract_opaque_bodies {
-                            let fun_id = bt_ctx.register_fun_decl_id(span, item.def_id);
-                            provided_methods.push((method_name, Some(fun_id)));
-                        } else {
-                            provided_methods.push((method_name, None));
-                        }
+                        provided_methods.push((method_name, fun_id));
                     } else {
-                        // This is a required method (no default implementation)
-                        let fun_id = bt_ctx.register_fun_decl_id(span, item.def_id);
                         required_methods.push((method_name, fun_id));
                     }
                 }

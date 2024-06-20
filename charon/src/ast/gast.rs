@@ -280,7 +280,7 @@ pub struct TraitDecl {
     /// TODO: allow to optionnaly extract information. For instance: attempt
     /// to extract, and fail nicely if we don't succeed (definition not in
     /// the supported subset, etc.).
-    pub provided_methods: Vec<(TraitItemName, Option<FunDeclId>)>,
+    pub provided_methods: Vec<(TraitItemName, FunDeclId)>,
 }
 
 /// A trait **implementation**.

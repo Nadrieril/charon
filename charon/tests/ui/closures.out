@@ -302,7 +302,7 @@ fn test_crate::test_map_option_id2(@1: core::option::Option<u32>) -> core::optio
 trait core::clone::Clone<Self>
 {
     fn clone : core::clone::Clone::clone
-    fn clone_from
+    fn clone_from : core::clone::Clone::clone_from
 }
 
 fn core::clone::Clone::clone<'_0, Self>(@1: &'_0 (Self)) -> Self
@@ -574,6 +574,8 @@ fn test_crate::test_array_map(@1: Array<i32, 256 : usize>) -> Array<i32, 256 : u
 fn core::ops::function::FnMut::call_mut<'_0, Self, Args>(@1: &'_0 mut (Self), @2: Args) -> (parents(Self)::[@TraitClause0])::Output
 
 fn core::ops::function::FnOnce::call_once<Self, Args>(@1: Self, @2: Args) -> Self::Output
+
+fn core::clone::Clone::clone_from<'_0, '_1, Self>(@1: &'_0 mut (Self), @2: &'_1 (Self))
 
 
 
