@@ -17,9 +17,12 @@ fn test_crate::{impl core::clone::Clone for test_crate::Foo}::clone<'_0>(@1: &'_
     return
 }
 
+fn core::clone::Clone::clone_from<'_0, '_1, Self>(@1: &'_0 mut (Self), @2: &'_1 (Self))
+
 impl test_crate::{impl core::clone::Clone for test_crate::Foo} : core::clone::Clone<test_crate::Foo>
 {
     fn clone = test_crate::{impl core::clone::Clone for test_crate::Foo}::clone
+    fn clone_from = core::clone::Clone::clone_from
 }
 
 trait core::marker::Copy<Self>
@@ -105,8 +108,6 @@ where
 }
 
 fn core::clone::Clone::clone<'_0, Self>(@1: &'_0 (Self)) -> Self
-
-fn core::clone::Clone::clone_from<'_0, '_1, Self>(@1: &'_0 mut (Self), @2: &'_1 (Self))
 
 
 

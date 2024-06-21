@@ -15,9 +15,12 @@ fn test_crate::{impl test_crate::BoolTrait for bool}::get_bool<'_0>(@1: &'_0 (bo
     return
 }
 
+fn test_crate::BoolTrait::ret_true<'_0, Self>(@1: &'_0 (Self)) -> bool
+
 impl test_crate::{impl test_crate::BoolTrait for bool} : test_crate::BoolTrait<bool>
 {
     fn get_bool = test_crate::{impl test_crate::BoolTrait for bool}::get_bool
+    fn ret_true = test_crate::BoolTrait::ret_true
 }
 
 enum core::option::Option<T> =
@@ -34,8 +37,6 @@ global test_crate::SIX_SIX_SIX
 opaque type test_crate::Test2
 
 fn test_crate::BoolTrait::get_bool<'_0, Self>(@1: &'_0 (Self)) -> bool
-
-fn test_crate::BoolTrait::ret_true<'_0, Self>(@1: &'_0 (Self)) -> bool
 
 
 

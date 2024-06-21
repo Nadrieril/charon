@@ -79,6 +79,8 @@ fn test_crate::{impl test_crate::Trait for test_crate::Foo}::required<'_0>(@1: &
 
 impl test_crate::{impl test_crate::Trait for test_crate::Foo} : test_crate::Trait<test_crate::Foo>
 {
+    fn provided1 = test_crate::Trait::provided1
+    fn provided2 = test_crate::Trait::provided2
     fn required = test_crate::{impl test_crate::Trait for test_crate::Foo}::required
 }
 
@@ -123,6 +125,7 @@ fn test_crate::{impl test_crate::Trait for test_crate::Bar#1}::required<'_0>(@1:
 impl test_crate::{impl test_crate::Trait for test_crate::Bar#1} : test_crate::Trait<test_crate::Bar>
 {
     fn provided1 = test_crate::{impl test_crate::Trait for test_crate::Bar#1}::provided1
+    fn provided2 = test_crate::Trait::provided2
     fn required = test_crate::{impl test_crate::Trait for test_crate::Bar#1}::required
 }
 

@@ -548,6 +548,18 @@ impl<'tcx, 'ctx> TranslateCtx<'tcx, 'ctx> {
             }
         }
 
+        let implemented_trait_decl: &TraitDecl = bt_ctx
+            .t_ctx
+            .get_or_translate(AnyTransId::TraitDecl(implemented_trait.trait_id))?
+            .as_trait_decl();
+        // If there's a method not defined by this impl, it must have a default in the trait decl.
+        // We reuse that default for the impl.
+        for (name, id) in &implemented_trait_decl.methods {
+            if !methods.contains_key(name) {
+                methods.insert(name.clone(), *id);
+            }
+        }
+
         // In case of a trait implementation, some values may not have been
         // provided, in case the declaration provided default values. We
         // check those, and lookup the relevant values.
