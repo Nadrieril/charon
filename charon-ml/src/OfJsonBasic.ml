@@ -56,6 +56,22 @@ let list_of_json (a_of_json : json -> ('a, string) result) (js : json) :
     | `List jsl -> of_json_list a_of_json jsl
     | _ -> Error ("not a list: " ^ show js))
 
+let rec of_json_map (a_of_json : json -> ('a, string) result)
+    (jsl : (string * json) list) : ((string * 'a) list, string) result =
+  match jsl with
+  | [] -> Ok []
+  | (k, v) :: jsl' ->
+      let* v = a_of_json v in
+      let* jsl' = of_json_map a_of_json jsl' in
+      Ok ((k, v) :: jsl')
+
+let map_of_json (a_of_json : json -> ('a, string) result) (js : json) :
+    ((string * 'a) list, string) result =
+  combine_error_msgs js "map_of_json"
+    (match js with
+    | `Assoc jsl -> of_json_map a_of_json jsl
+    | _ -> Error ("not a map: " ^ show js))
+
 let string_of_json (js : json) : (string, string) result =
   match js with
   | `String str -> Ok str

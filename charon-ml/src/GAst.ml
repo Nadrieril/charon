@@ -162,8 +162,7 @@ type trait_decl = {
   parent_clauses : trait_clause list;
   consts : (trait_item_name * (ty * global_decl_id option)) list;
   types : (trait_item_name * (trait_clause list * ty option)) list;
-  required_methods : (trait_item_name * fun_decl_id) list;
-  provided_methods : (trait_item_name * fun_decl_id option) list;
+  methods : (trait_item_name * fun_decl_id) list;
 }
 [@@deriving show]
 
@@ -177,8 +176,7 @@ type trait_impl = {
   parent_trait_refs : trait_ref list;
   consts : (trait_item_name * (ty * global_decl_id)) list;
   types : (trait_item_name * (trait_ref list * ty)) list;
-  required_methods : (trait_item_name * fun_decl_id) list;
-  provided_methods : (trait_item_name * fun_decl_id) list;
+  methods : (trait_item_name * fun_decl_id) list;
 }
 [@@deriving show]
 

@@ -1,4 +1,6 @@
 //! Definitions common to [crate::ullbc_ast] and [crate::llbc_ast]
+use std::collections::BTreeMap;
+
 pub use crate::expressions::*;
 pub use crate::gast_utils::*;
 use crate::generate_index_type;
@@ -263,24 +265,9 @@ pub struct TraitDecl {
         TraitItemName,
         (Vector<TraitClauseId, TraitClause>, Option<Ty>),
     )>,
-    /// The *required* methods.
-    ///
-    /// The required methods are the methods declared by the trait but with
-    /// no default implementation.
-    pub required_methods: Vec<(TraitItemName, FunDeclId)>,
-    /// The *provided* methods.
-    ///
-    /// The provided methods are the methods with a default implementation.
-    ///
-    /// We include the [FunDeclId] identifiers *only* for the local
-    /// trait declarations. Otherwise, it would mean we extract *all* the
-    /// provided methods, which is not something we want to do *yet* for
-    /// the external traits.
-    ///
-    /// TODO: allow to optionnaly extract information. For instance: attempt
-    /// to extract, and fail nicely if we don't succeed (definition not in
-    /// the supported subset, etc.).
-    pub provided_methods: Vec<(TraitItemName, FunDeclId)>,
+    /// The methods. The body of the associated `FunDeclId` will be opaque if and only if the trait
+    /// provided a default implementation for that method.
+    pub methods: BTreeMap<TraitItemName, FunDeclId>,
 }
 
 /// A trait **implementation**.
@@ -313,10 +300,8 @@ pub struct TraitImpl {
     pub consts: Vec<(TraitItemName, (Ty, GlobalDeclId))>,
     /// The associated types declared in the trait.
     pub types: Vec<(TraitItemName, (Vec<TraitRef>, Ty))>,
-    /// The implemented required methods
-    pub required_methods: Vec<(TraitItemName, FunDeclId)>,
-    /// The re-implemented provided methods
-    pub provided_methods: Vec<(TraitItemName, FunDeclId)>,
+    /// The implemented methods
+    pub methods: BTreeMap<TraitItemName, FunDeclId>,
 }
 
 /// A function operand is used in function calls.

@@ -25,20 +25,20 @@ trait core::hash::Hasher<Self>
 {
     fn finish : core::hash::Hasher::finish
     fn write : core::hash::Hasher::write
-    fn write_u8 : core::hash::Hasher::write_u8
-    fn write_u16 : core::hash::Hasher::write_u16
-    fn write_u32 : core::hash::Hasher::write_u32
-    fn write_u64 : core::hash::Hasher::write_u64
-    fn write_u128 : core::hash::Hasher::write_u128
-    fn write_usize : core::hash::Hasher::write_usize
-    fn write_i8 : core::hash::Hasher::write_i8
+    fn write_i128 : core::hash::Hasher::write_i128
     fn write_i16 : core::hash::Hasher::write_i16
     fn write_i32 : core::hash::Hasher::write_i32
     fn write_i64 : core::hash::Hasher::write_i64
-    fn write_i128 : core::hash::Hasher::write_i128
+    fn write_i8 : core::hash::Hasher::write_i8
     fn write_isize : core::hash::Hasher::write_isize
     fn write_length_prefix : core::hash::Hasher::write_length_prefix
     fn write_str : core::hash::Hasher::write_str
+    fn write_u128 : core::hash::Hasher::write_u128
+    fn write_u16 : core::hash::Hasher::write_u16
+    fn write_u32 : core::hash::Hasher::write_u32
+    fn write_u64 : core::hash::Hasher::write_u64
+    fn write_u8 : core::hash::Hasher::write_u8
+    fn write_usize : core::hash::Hasher::write_usize
 }
 
 trait core::hash::Hash<Self>

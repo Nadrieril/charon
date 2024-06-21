@@ -366,13 +366,7 @@ fn compute_declarations_graph<'tcx, 'ctx>(ctx: &'tcx TransformCtx<'ctx>) -> Deps
                     d.consts.drive(&mut graph);
                     d.types.drive(&mut graph);
 
-                    let method_ids = d
-                        .required_methods
-                        .iter()
-                        .chain(d.provided_methods.iter())
-                        .map(|(_, id)| id)
-                        .copied();
-                    for id in method_ids {
+                    for (_, id) in &d.methods {
                         // Important: we must ignore the function id, because
                         // otherwise in the presence of associated types we may
                         // get a mutual recursion between the function and the
@@ -384,7 +378,7 @@ fn compute_declarations_graph<'tcx, 'ctx>(ctx: &'tcx TransformCtx<'ctx>) -> Deps
                         //   fn f(x : Trait::X);
                         // }
                         // ```
-                        if let Some(decl) = ctx.translated.fun_decls.get(id) {
+                        if let Some(decl) = ctx.translated.fun_decls.get(*id) {
                             decl.signature.drive(&mut graph);
                         }
                     }

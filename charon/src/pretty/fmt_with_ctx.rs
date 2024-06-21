@@ -1122,10 +1122,7 @@ impl<C: AstFormatter> FmtWithCtx<C> for TraitDecl {
                                 }
                             }
                         }))
-                        .chain(self.required_methods.iter().map(|(name, f)| {
-                            format!("{TAB_INCR}fn {name} : {}\n", ctx.format_object(*f))
-                        }))
-                        .chain(self.provided_methods.iter().map(|(name, f)| {
+                        .chain(self.methods.iter().map(|(name, f)| {
                             format!("{TAB_INCR}fn {name} : {}\n", ctx.format_object(*f))
                         })),
                 )
@@ -1160,45 +1157,40 @@ impl<C: AstFormatter> FmtWithCtx<C> for TraitImpl {
             .fmt_with_ctx_with_trait_clauses(ctx, "", &None);
 
         let items = {
-            let items = self
-                .parent_trait_refs
-                .iter()
-                .enumerate()
-                .map(|(i, clause)| {
-                    let i = TraitClauseId::new(i);
-                    format!(
-                        "{TAB_INCR}parent_clause{i} = {}\n",
-                        clause.fmt_with_ctx(ctx)
-                    )
-                })
-                .chain(self.consts.iter().map(|(name, (ty, id))| {
-                    format!(
-                        "{TAB_INCR}const {name} : {} = {}\n",
-                        ty.fmt_with_ctx(ctx),
-                        ctx.format_object(*id)
-                    )
-                }))
-                .chain(self.types.iter().map(|(name, (trait_refs, ty))| {
-                    let trait_refs = trait_refs
-                        .iter()
-                        .map(|x| x.fmt_with_ctx(ctx))
-                        .collect::<Vec<_>>()
-                        .join(", ");
-                    format!(
-                        "{TAB_INCR}type {name} = {} with [{}]\n",
-                        ty.fmt_with_ctx(ctx),
-                        trait_refs
-                    )
-                }))
-                .chain(
-                    self.required_methods
-                        .iter()
-                        .chain(self.provided_methods.iter())
-                        .map(|(name, f)| {
-                            format!("{TAB_INCR}fn {name} = {}\n", ctx.format_object(*f))
-                        }),
-                )
-                .collect::<Vec<String>>();
+            let items =
+                self.parent_trait_refs
+                    .iter()
+                    .enumerate()
+                    .map(|(i, clause)| {
+                        let i = TraitClauseId::new(i);
+                        format!(
+                            "{TAB_INCR}parent_clause{i} = {}\n",
+                            clause.fmt_with_ctx(ctx)
+                        )
+                    })
+                    .chain(self.consts.iter().map(|(name, (ty, id))| {
+                        format!(
+                            "{TAB_INCR}const {name} : {} = {}\n",
+                            ty.fmt_with_ctx(ctx),
+                            ctx.format_object(*id)
+                        )
+                    }))
+                    .chain(self.types.iter().map(|(name, (trait_refs, ty))| {
+                        let trait_refs = trait_refs
+                            .iter()
+                            .map(|x| x.fmt_with_ctx(ctx))
+                            .collect::<Vec<_>>()
+                            .join(", ");
+                        format!(
+                            "{TAB_INCR}type {name} = {} with [{}]\n",
+                            ty.fmt_with_ctx(ctx),
+                            trait_refs
+                        )
+                    }))
+                    .chain(self.methods.iter().map(|(name, f)| {
+                        format!("{TAB_INCR}fn {name} = {}\n", ctx.format_object(*f))
+                    }))
+                    .collect::<Vec<String>>();
             if items.is_empty() {
                 "".to_string()
             } else {

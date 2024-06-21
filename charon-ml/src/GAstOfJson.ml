@@ -1196,8 +1196,7 @@ let trait_decl_of_json (id_to_file : id_to_file_map) (js : json) :
           ("parent_clauses", parent_clauses);
           ("consts", consts);
           ("types", types);
-          ("required_methods", required_methods);
-          ("provided_methods", provided_methods);
+          ("methods", methods);
         ] ->
         let* def_id = TraitDeclId.id_of_json def_id in
         let* is_local = bool_of_json is_local in
@@ -1222,16 +1221,7 @@ let trait_decl_of_json (id_to_file : id_to_file_map) (js : json) :
                   (option_of_json ty_of_json)))
             types
         in
-        let* required_methods =
-          list_of_json
-            (pair_of_json string_of_json FunDeclId.id_of_json)
-            required_methods
-        in
-        let* provided_methods =
-          list_of_json
-            (pair_of_json string_of_json (option_of_json FunDeclId.id_of_json))
-            provided_methods
-        in
+        let* methods = map_of_json FunDeclId.id_of_json methods in
         Ok
           {
             def_id;
@@ -1242,8 +1232,7 @@ let trait_decl_of_json (id_to_file : id_to_file_map) (js : json) :
             parent_clauses;
             consts;
             types;
-            required_methods;
-            provided_methods;
+            methods;
           }
     | _ -> Error "")
 
@@ -1262,8 +1251,7 @@ let trait_impl_of_json (id_to_file : id_to_file_map) (js : json) :
           ("parent_trait_refs", parent_trait_refs);
           ("consts", consts);
           ("types", types);
-          ("required_methods", required_methods);
-          ("provided_methods", provided_methods);
+          ("methods", methods);
         ] ->
         let* def_id = TraitImplId.id_of_json def_id in
         let* item_meta = item_meta_of_json id_to_file item_meta in
@@ -1286,11 +1274,7 @@ let trait_impl_of_json (id_to_file : id_to_file_map) (js : json) :
                (pair_of_json (list_of_json trait_ref_of_json) ty_of_json))
             types
         in
-        let methods_of_json =
-          list_of_json (pair_of_json string_of_json FunDeclId.id_of_json)
-        in
-        let* required_methods = methods_of_json required_methods in
-        let* provided_methods = methods_of_json provided_methods in
+        let* methods = map_of_json FunDeclId.id_of_json methods in
         Ok
           ({
              def_id;
@@ -1302,8 +1286,7 @@ let trait_impl_of_json (id_to_file : id_to_file_map) (js : json) :
              parent_trait_refs;
              consts;
              types;
-             required_methods;
-             provided_methods;
+             methods;
            }
             : trait_impl)
     | _ -> Error "")

@@ -9,7 +9,7 @@ use crate::ullbc_ast as ast;
 use hax_frontend_exporter as hax;
 use hax_frontend_exporter::SInto;
 use rustc_hir::def_id::DefId;
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 
 /// The context in which we are translating a clause, used to generate the appropriate ids and
 /// trait references.
@@ -321,8 +321,7 @@ impl<'tcx, 'ctx> TranslateCtx<'tcx, 'ctx> {
         let tcx = bt_ctx.t_ctx.tcx;
         let mut consts = Vec::new();
         let mut types = Vec::new();
-        let mut required_methods = Vec::new();
-        let mut provided_methods = Vec::new();
+        let mut methods = BTreeMap::new();
         for item in tcx.associated_items(rust_id).in_definition_order() {
             use rustc_middle::ty::AssocKind;
 
@@ -335,11 +334,7 @@ impl<'tcx, 'ctx> TranslateCtx<'tcx, 'ctx> {
                         continue;
                     }
                     let fun_id = bt_ctx.register_fun_decl_id(span, item.def_id);
-                    if has_default_value {
-                        provided_methods.push((method_name, fun_id));
-                    } else {
-                        required_methods.push((method_name, fun_id));
-                    }
+                    methods.insert(method_name, fun_id);
                 }
                 AssocKind::Const => {
                     // Check if the constant has a value (i.e., a body).
@@ -442,8 +437,7 @@ impl<'tcx, 'ctx> TranslateCtx<'tcx, 'ctx> {
             parent_clauses,
             consts,
             types,
-            required_methods,
-            provided_methods,
+            methods,
         })
     }
 
@@ -532,9 +526,7 @@ impl<'tcx, 'ctx> TranslateCtx<'tcx, 'ctx> {
         let tcx = bt_ctx.t_ctx.tcx;
         let mut consts = HashMap::new();
         let mut types: HashMap<TraitItemName, Ty> = HashMap::new();
-        let mut methods = HashMap::new();
-        let mut required_methods = Vec::new();
-        let mut provided_methods = Vec::new();
+        let mut methods = BTreeMap::new();
 
         use rustc_middle::ty::AssocKind;
         for item in tcx.associated_items(rust_id).in_definition_order() {
@@ -569,19 +561,7 @@ impl<'tcx, 'ctx> TranslateCtx<'tcx, 'ctx> {
         {
             let name = TraitItemName(item.name.to_string());
             match &item.kind {
-                AssocKind::Fn => {
-                    // Does the trait impl provide an implementation for this function?
-                    if let Some(&fun_id) = methods.get(&name) {
-                        let has_default = item.defaultness(tcx).has_value();
-                        // Check if we implement a required method or reimplement
-                        // a provided method
-                        if has_default {
-                            provided_methods.push((name, fun_id));
-                        } else {
-                            required_methods.push((name, fun_id));
-                        }
-                    }
-                }
+                AssocKind::Fn => {}
                 AssocKind::Const => {
                     // Does the trait impl provide an implementation for this const?
                     let c = match partial_consts.get(&name) {
@@ -641,8 +621,7 @@ impl<'tcx, 'ctx> TranslateCtx<'tcx, 'ctx> {
             parent_trait_refs,
             consts,
             types,
-            required_methods,
-            provided_methods,
+            methods,
         })
     }
 }

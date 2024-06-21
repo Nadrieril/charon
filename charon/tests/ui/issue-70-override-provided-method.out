@@ -101,11 +101,11 @@ enum core::cmp::Ordering =
 trait core::cmp::PartialOrd<Self, Rhs>
 {
     parent_clause_0 : [@TraitClause0]: core::cmp::PartialEq<Self, Rhs>
-    fn partial_cmp : core::cmp::PartialOrd::partial_cmp
-    fn lt : core::cmp::PartialOrd::lt
-    fn le : core::cmp::PartialOrd::le
-    fn gt : core::cmp::PartialOrd::gt
     fn ge : core::cmp::PartialOrd::ge
+    fn gt : core::cmp::PartialOrd::gt
+    fn le : core::cmp::PartialOrd::le
+    fn lt : core::cmp::PartialOrd::lt
+    fn partial_cmp : core::cmp::PartialOrd::partial_cmp
 }
 
 fn core::cmp::impls::{impl core::cmp::PartialEq<u32> for u32#24}::eq<'_0, '_1>(@1: &'_0 (u32), @2: &'_1 (u32)) -> bool
@@ -118,24 +118,24 @@ impl core::cmp::impls::{impl core::cmp::PartialEq<u32> for u32#24} : core::cmp::
     fn ne = core::cmp::impls::{impl core::cmp::PartialEq<u32> for u32#24}::ne
 }
 
-fn core::cmp::impls::{impl core::cmp::PartialOrd<u32> for u32#60}::partial_cmp<'_0, '_1>(@1: &'_0 (u32), @2: &'_1 (u32)) -> core::option::Option<core::cmp::Ordering>
-
-fn core::cmp::impls::{impl core::cmp::PartialOrd<u32> for u32#60}::lt<'_0, '_1>(@1: &'_0 (u32), @2: &'_1 (u32)) -> bool
-
-fn core::cmp::impls::{impl core::cmp::PartialOrd<u32> for u32#60}::le<'_0, '_1>(@1: &'_0 (u32), @2: &'_1 (u32)) -> bool
+fn core::cmp::impls::{impl core::cmp::PartialOrd<u32> for u32#60}::ge<'_0, '_1>(@1: &'_0 (u32), @2: &'_1 (u32)) -> bool
 
 fn core::cmp::impls::{impl core::cmp::PartialOrd<u32> for u32#60}::gt<'_0, '_1>(@1: &'_0 (u32), @2: &'_1 (u32)) -> bool
 
-fn core::cmp::impls::{impl core::cmp::PartialOrd<u32> for u32#60}::ge<'_0, '_1>(@1: &'_0 (u32), @2: &'_1 (u32)) -> bool
+fn core::cmp::impls::{impl core::cmp::PartialOrd<u32> for u32#60}::le<'_0, '_1>(@1: &'_0 (u32), @2: &'_1 (u32)) -> bool
+
+fn core::cmp::impls::{impl core::cmp::PartialOrd<u32> for u32#60}::lt<'_0, '_1>(@1: &'_0 (u32), @2: &'_1 (u32)) -> bool
+
+fn core::cmp::impls::{impl core::cmp::PartialOrd<u32> for u32#60}::partial_cmp<'_0, '_1>(@1: &'_0 (u32), @2: &'_1 (u32)) -> core::option::Option<core::cmp::Ordering>
 
 impl core::cmp::impls::{impl core::cmp::PartialOrd<u32> for u32#60} : core::cmp::PartialOrd<u32, u32>
 {
     parent_clause0 = core::cmp::impls::{impl core::cmp::PartialEq<u32> for u32#24}
-    fn partial_cmp = core::cmp::impls::{impl core::cmp::PartialOrd<u32> for u32#60}::partial_cmp
-    fn lt = core::cmp::impls::{impl core::cmp::PartialOrd<u32> for u32#60}::lt
-    fn le = core::cmp::impls::{impl core::cmp::PartialOrd<u32> for u32#60}::le
-    fn gt = core::cmp::impls::{impl core::cmp::PartialOrd<u32> for u32#60}::gt
     fn ge = core::cmp::impls::{impl core::cmp::PartialOrd<u32> for u32#60}::ge
+    fn gt = core::cmp::impls::{impl core::cmp::PartialOrd<u32> for u32#60}::gt
+    fn le = core::cmp::impls::{impl core::cmp::PartialOrd<u32> for u32#60}::le
+    fn lt = core::cmp::impls::{impl core::cmp::PartialOrd<u32> for u32#60}::lt
+    fn partial_cmp = core::cmp::impls::{impl core::cmp::PartialOrd<u32> for u32#60}::partial_cmp
 }
 
 fn core::cmp::PartialOrd::partial_cmp<'_0, '_1, Self, Rhs>(@1: &'_0 (Self), @2: &'_1 (Rhs)) -> core::option::Option<core::cmp::Ordering>
