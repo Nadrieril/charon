@@ -15,16 +15,17 @@ let rec statement_of_json (id_to_file : id_to_file_map) (js : json) :
     (match js with
     | `Assoc [ ("span", span); ("content", content) ] ->
         let* span = span_of_json id_to_file span in
-        let* content = raw_statement_of_json content in
+        let* content = raw_statement_of_json id_to_file content in
         Ok ({ span; content } : statement)
     | _ -> Error "")
 
-and raw_statement_of_json (js : json) : (raw_statement, string) result =
+and raw_statement_of_json (id_to_file : id_to_file_map) (js : json) :
+    (raw_statement, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc [ ("Assign", `List [ place; rvalue ]) ] ->
         let* place = place_of_json place in
-        let* rvalue = rvalue_of_json rvalue in
+        let* rvalue = rvalue_of_json id_to_file rvalue in
         Ok (Assign (place, rvalue))
     | `Assoc [ ("FakeRead", place) ] ->
         let* place = place_of_json place in
@@ -59,11 +60,12 @@ let switch_of_json (js : json) : (switch, string) result =
         Ok (SwitchInt (int_ty, tgts, otherwise))
     | _ -> Error "")
 
-let call_of_json (js : json) : (raw_terminator, string) result =
+let call_of_json (id_to_file : id_to_file_map) (js : json) :
+    (raw_terminator, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc [ ("call", call); ("target", target) ] ->
-        let* call = call_of_json call in
+        let* call = call_of_json id_to_file call in
         let* target = option_of_json BlockId.id_of_json target in
 
         Ok (Call (call, target))
@@ -75,11 +77,12 @@ let rec terminator_of_json (id_to_file : id_to_file_map) (js : json) :
     (match js with
     | `Assoc [ ("span", span); ("content", content) ] ->
         let* span = span_of_json id_to_file span in
-        let* content = raw_terminator_of_json content in
+        let* content = raw_terminator_of_json id_to_file content in
         Ok ({ span; content } : terminator)
     | _ -> Error "")
 
-and raw_terminator_of_json (js : json) : (raw_terminator, string) result =
+and raw_terminator_of_json (id_to_file : id_to_file_map) (js : json) :
+    (raw_terminator, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc [ ("Goto", `Assoc [ ("target", target) ]) ] ->
@@ -87,7 +90,7 @@ and raw_terminator_of_json (js : json) : (raw_terminator, string) result =
         Ok (Goto target)
     | `Assoc [ ("Switch", `Assoc [ ("discr", discr); ("targets", targets) ]) ]
       ->
-        let* discr = operand_of_json discr in
+        let* discr = operand_of_json id_to_file discr in
         let* targets = switch_of_json targets in
         Ok (Switch (discr, targets))
     | `Assoc [ ("Abort", _) ] -> Ok Panic
@@ -96,14 +99,14 @@ and raw_terminator_of_json (js : json) : (raw_terminator, string) result =
         let* place = place_of_json place in
         let* target = BlockId.id_of_json target in
         Ok (Drop (place, target))
-    | `Assoc [ ("Call", call) ] -> call_of_json call
+    | `Assoc [ ("Call", call) ] -> call_of_json id_to_file call
     | `Assoc
         [
           ( "Assert",
             `Assoc
               [ ("cond", cond); ("expected", expected); ("target", target) ] );
         ] ->
-        let* cond = operand_of_json cond in
+        let* cond = operand_of_json id_to_file cond in
         let* expected = bool_of_json expected in
         let* target = BlockId.id_of_json target in
         Ok (Assert ({ cond; expected }, target))

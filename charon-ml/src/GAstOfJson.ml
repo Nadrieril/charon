@@ -337,12 +337,13 @@ let const_generic_of_json (js : json) : (const_generic, string) result =
         Ok (CgValue lit)
     | _ -> Error "")
 
-let rec ty_of_json (js : json) : (ty, string) result =
+let rec ty_of_json (id_to_file : id_to_file_map) (js : json) :
+    (ty, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc [ ("Adt", `List [ id; generics ]) ] ->
         let* id = type_id_of_json id in
-        let* generics = generic_args_of_json generics in
+        let* generics = generic_args_of_json id_to_file generics in
         (* Sanity check *)
         (match id with
         | TTuple -> assert (generics.regions = [] && generics.trait_refs = [])
@@ -356,27 +357,28 @@ let rec ty_of_json (js : json) : (ty, string) result =
         Ok (TLiteral ty)
     | `Assoc [ ("Ref", `List [ region; ty; ref_kind ]) ] ->
         let* region = region_of_json region in
-        let* ty = ty_of_json ty in
+        let* ty = ty_of_json id_to_file ty in
         let* ref_kind = ref_kind_of_json ref_kind in
         Ok (TRef (region, ty, ref_kind))
     | `Assoc [ ("RawPtr", `List [ ty; ref_kind ]) ] ->
-        let* ty = ty_of_json ty in
+        let* ty = ty_of_json id_to_file ty in
         let* ref_kind = ref_kind_of_json ref_kind in
         Ok (TRawPtr (ty, ref_kind))
     | `Assoc [ ("TraitType", `List [ trait_ref; item_name ]) ] ->
-        let* trait_ref = trait_ref_of_json trait_ref in
+        let* trait_ref = trait_ref_of_json id_to_file trait_ref in
         let* item_name = string_of_json item_name in
         Ok (TTraitType (trait_ref, item_name))
     | `Assoc [ ("Arrow", `List [ regions; inputs; output ]) ] ->
         let* regions = list_of_json region_var_of_json regions in
-        let* inputs = list_of_json ty_of_json inputs in
-        let* output = ty_of_json output in
+        let* inputs = list_of_json (ty_of_json id_to_file) inputs in
+        let* output = ty_of_json id_to_file output in
         Ok (TArrow (regions, inputs, output))
     | `Assoc [ ("DynTrait", `Null) ] -> Ok (TDynTrait ())
     | `String "Never" -> Ok TNever
     | _ -> Error "")
 
-and trait_ref_of_json (js : json) : (trait_ref, string) result =
+and trait_ref_of_json (id_to_file : id_to_file_map) (js : json) :
+    (trait_ref, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc
@@ -385,22 +387,26 @@ and trait_ref_of_json (js : json) : (trait_ref, string) result =
           ("generics", generics);
           ("trait_decl_ref", trait_decl_ref);
         ] ->
-        let* trait_id = trait_instance_id_of_json trait_id in
-        let* generics = generic_args_of_json generics in
-        let* trait_decl_ref = trait_decl_ref_of_json trait_decl_ref in
+        let* trait_id = trait_instance_id_of_json id_to_file trait_id in
+        let* generics = generic_args_of_json id_to_file generics in
+        let* trait_decl_ref =
+          trait_decl_ref_of_json id_to_file trait_decl_ref
+        in
         Ok ({ trait_id; generics; trait_decl_ref } : trait_ref)
     | _ -> Error "")
 
-and trait_decl_ref_of_json (js : json) : (trait_decl_ref, string) result =
+and trait_decl_ref_of_json (id_to_file : id_to_file_map) (js : json) :
+    (trait_decl_ref, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc [ ("trait_id", trait_id); ("generics", generics) ] ->
         let* trait_decl_id = TraitDeclId.id_of_json trait_id in
-        let* decl_generics = generic_args_of_json generics in
+        let* decl_generics = generic_args_of_json id_to_file generics in
         Ok ({ trait_decl_id; decl_generics } : trait_decl_ref)
     | _ -> Error "")
 
-and generic_args_of_json (js : json) : (generic_args, string) result =
+and generic_args_of_json (id_to_file : id_to_file_map) (js : json) :
+    (generic_args, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc
@@ -411,15 +417,18 @@ and generic_args_of_json (js : json) : (generic_args, string) result =
           ("trait_refs", trait_refs);
         ] ->
         let* regions = list_of_json region_of_json regions in
-        let* types = list_of_json ty_of_json types in
+        let* types = list_of_json (ty_of_json id_to_file) types in
         let* const_generics =
           list_of_json const_generic_of_json const_generics
         in
-        let* trait_refs = list_of_json trait_ref_of_json trait_refs in
+        let* trait_refs =
+          list_of_json (trait_ref_of_json id_to_file) trait_refs
+        in
         Ok { regions; types; const_generics; trait_refs }
     | _ -> Error "")
 
-and trait_instance_id_of_json (js : json) : (trait_instance_id, string) result =
+and trait_instance_id_of_json (id_to_file : id_to_file_map) (js : json) :
+    (trait_instance_id, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `String "SelfId" -> Ok Self
@@ -433,37 +442,37 @@ and trait_instance_id_of_json (js : json) : (trait_instance_id, string) result =
         let* id = TraitClauseId.id_of_json id in
         Ok (Clause id)
     | `Assoc [ ("ParentClause", `List [ inst_id; decl_id; clause_id ]) ] ->
-        let* inst_id = trait_instance_id_of_json inst_id in
+        let* inst_id = trait_instance_id_of_json id_to_file inst_id in
         let* decl_id = TraitDeclId.id_of_json decl_id in
         let* clause_id = TraitClauseId.id_of_json clause_id in
         Ok (ParentClause (inst_id, decl_id, clause_id))
     | `Assoc
         [ ("ItemClause", `List [ inst_id; decl_id; item_name; clause_id ]) ] ->
-        let* inst_id = trait_instance_id_of_json inst_id in
+        let* inst_id = trait_instance_id_of_json id_to_file inst_id in
         let* decl_id = TraitDeclId.id_of_json decl_id in
         let* item_name = string_of_json item_name in
         let* clause_id = TraitClauseId.id_of_json clause_id in
         Ok (ItemClause (inst_id, decl_id, item_name, clause_id))
     | `Assoc [ ("FnPointer", ty) ] ->
-        let* ty = ty_of_json ty in
+        let* ty = ty_of_json id_to_file ty in
         Ok (FnPointer ty)
     | `Assoc [ ("Closure", `List [ fid; generics ]) ] ->
         let* fid = FunDeclId.id_of_json fid in
-        let* generics = generic_args_of_json generics in
+        let* generics = generic_args_of_json id_to_file generics in
         Ok (Closure (fid, generics))
     | `Assoc [ ("Dyn", id) ] ->
         let* id = TraitDeclId.id_of_json id in
         Ok (Dyn id)
     | `Assoc [ ("Unsolved", `List [ decl_id; generics ]) ] ->
         let* decl_id = TraitDeclId.id_of_json decl_id in
-        let* generics = generic_args_of_json generics in
+        let* generics = generic_args_of_json id_to_file generics in
         Ok (Unsolved (decl_id, generics))
     | `Assoc [ ("Unknown", str) ] ->
         let* str = string_of_json str in
         Ok (UnknownTrait str)
     | _ -> Error "")
 
-let field_of_json (id_to_file : id_to_file_map) (js : json) :
+and field_of_json (id_to_file : id_to_file_map) (js : json) :
     (field, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
@@ -473,11 +482,11 @@ let field_of_json (id_to_file : id_to_file_map) (js : json) :
         let* span = span_of_json id_to_file span in
         let* attr_info = attr_info_of_json attr_info in
         let* name = option_of_json string_of_json name in
-        let* ty = ty_of_json ty in
+        let* ty = ty_of_json id_to_file ty in
         Ok { span; attr_info; field_name = name; field_ty = ty }
     | _ -> Error "")
 
-let variant_of_json (id_to_file : id_to_file_map) (js : json) :
+and variant_of_json (id_to_file : id_to_file_map) (js : json) :
     (variant, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
@@ -497,7 +506,7 @@ let variant_of_json (id_to_file : id_to_file_map) (js : json) :
         Ok { span; attr_info; variant_name = name; fields; discriminant }
     | _ -> Error "")
 
-let type_decl_kind_of_json (id_to_file : id_to_file_map) (js : json) :
+and type_decl_kind_of_json (id_to_file : id_to_file_map) (js : json) :
     (type_decl_kind, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
@@ -508,12 +517,12 @@ let type_decl_kind_of_json (id_to_file : id_to_file_map) (js : json) :
         let* variants = list_of_json (variant_of_json id_to_file) variants in
         Ok (Enum variants)
     | `Assoc [ ("Alias", ty) ] ->
-        let* ty = ty_of_json ty in
+        let* ty = ty_of_json id_to_file ty in
         Ok (Alias ty)
     | `String "Opaque" -> Ok Opaque
     | _ -> Error "")
 
-let region_var_group_of_json (js : json) : (region_var_group, string) result =
+and region_var_group_of_json (js : json) : (region_var_group, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc [ ("id", id); ("regions", regions); ("parents", parents) ] ->
@@ -523,10 +532,10 @@ let region_var_group_of_json (js : json) : (region_var_group, string) result =
         Ok { id; regions; parents }
     | _ -> Error "")
 
-let region_var_groups_of_json (js : json) : (region_var_groups, string) result =
+and region_var_groups_of_json (js : json) : (region_var_groups, string) result =
   combine_error_msgs js __FUNCTION__ (list_of_json region_var_group_of_json js)
 
-let trait_clause_of_json (id_to_file : id_to_file_map) (js : json) :
+and trait_clause_of_json (id_to_file : id_to_file_map) (js : json) :
     (trait_clause, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
@@ -541,11 +550,11 @@ let trait_clause_of_json (id_to_file : id_to_file_map) (js : json) :
         let* clause_id = TraitClauseId.id_of_json clause_id in
         let* span = option_of_json (span_of_json id_to_file) span in
         let* trait_id = TraitDeclId.id_of_json trait_id in
-        let* clause_generics = generic_args_of_json generics in
+        let* clause_generics = generic_args_of_json id_to_file generics in
         Ok ({ clause_id; span; trait_id; clause_generics } : trait_clause)
     | _ -> Error "")
 
-let region_outlives_of_json (js : json) : (region_outlives, string) result =
+and region_outlives_of_json (js : json) : (region_outlives, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `List [ r0; r1 ] ->
@@ -554,28 +563,29 @@ let region_outlives_of_json (js : json) : (region_outlives, string) result =
         Ok (r0, r1)
     | _ -> Error "")
 
-let type_outlives_of_json (js : json) : (type_outlives, string) result =
+and type_outlives_of_json (id_to_file : id_to_file_map) (js : json) :
+    (type_outlives, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `List [ ty; r ] ->
-        let* ty = ty_of_json ty in
+        let* ty = ty_of_json id_to_file ty in
         let* r = region_of_json r in
         Ok (ty, r)
     | _ -> Error "")
 
-let trait_type_constraint_of_json (js : json) :
+and trait_type_constraint_of_json (id_to_file : id_to_file_map) (js : json) :
     (trait_type_constraint, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc [ ("trait_ref", trait_ref); ("type_name", type_name); ("ty", ty) ]
       ->
-        let* trait_ref = trait_ref_of_json trait_ref in
+        let* trait_ref = trait_ref_of_json id_to_file trait_ref in
         let* type_name = string_of_json type_name in
-        let* ty = ty_of_json ty in
+        let* ty = ty_of_json id_to_file ty in
         Ok ({ trait_ref; type_name; ty } : trait_type_constraint)
     | _ -> Error "")
 
-let generic_params_of_json (id_to_file : id_to_file_map) (js : json) :
+and generic_params_of_json (id_to_file : id_to_file_map) (js : json) :
     (generic_params, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
@@ -600,9 +610,13 @@ let generic_params_of_json (id_to_file : id_to_file_map) (js : json) :
         let* regions_outlive =
           list_of_json region_outlives_of_json regions_outlive
         in
-        let* types_outlive = list_of_json type_outlives_of_json types_outlive in
+        let* types_outlive =
+          list_of_json (type_outlives_of_json id_to_file) types_outlive
+        in
         let* trait_type_constraints =
-          list_of_json trait_type_constraint_of_json trait_type_constraints
+          list_of_json
+            (trait_type_constraint_of_json id_to_file)
+            trait_type_constraints
         in
         Ok
           {
@@ -616,18 +630,19 @@ let generic_params_of_json (id_to_file : id_to_file_map) (js : json) :
           }
     | _ -> Error "")
 
-let impl_elem_kind_of_json (js : json) : (impl_elem_kind, string) result =
+and impl_elem_kind_of_json (id_to_file : id_to_file_map) (js : json) :
+    (impl_elem_kind, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc [ ("Ty", ty) ] ->
-        let* ty = ty_of_json ty in
+        let* ty = ty_of_json id_to_file ty in
         Ok (ImplElemTy ty)
     | `Assoc [ ("Trait", tr) ] ->
-        let* tr = trait_decl_ref_of_json tr in
+        let* tr = trait_decl_ref_of_json id_to_file tr in
         Ok (ImplElemTrait tr)
     | _ -> Error "")
 
-let impl_elem_of_json (id_to_file : id_to_file_map) (js : json) :
+and impl_elem_of_json (id_to_file : id_to_file_map) (js : json) :
     (impl_elem, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
@@ -639,11 +654,11 @@ let impl_elem_of_json (id_to_file : id_to_file_map) (js : json) :
         ] ->
         let* disambiguator = Disambiguator.id_of_json disambiguator in
         let* generics = generic_params_of_json id_to_file generics in
-        let* kind = impl_elem_kind_of_json kind in
+        let* kind = impl_elem_kind_of_json id_to_file kind in
         Ok { disambiguator; generics; kind }
     | _ -> Error "")
 
-let path_elem_of_json (id_to_file : id_to_file_map) (js : json) :
+and path_elem_of_json (id_to_file : id_to_file_map) (js : json) :
     (path_elem, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
@@ -656,12 +671,12 @@ let path_elem_of_json (id_to_file : id_to_file_map) (js : json) :
         Ok (PeImpl d)
     | _ -> Error "")
 
-let name_of_json (id_to_file : id_to_file_map) (js : json) :
+and name_of_json (id_to_file : id_to_file_map) (js : json) :
     (name, string) result =
   combine_error_msgs js __FUNCTION__
     (list_of_json (path_elem_of_json id_to_file) js)
 
-let item_meta_of_json (id_to_file : id_to_file_map) (js : json) :
+and item_meta_of_json (id_to_file : id_to_file_map) (js : json) :
     (item_meta, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
@@ -698,13 +713,14 @@ let type_decl_of_json (id_to_file : id_to_file_map) (js : json) :
         Ok { def_id; item_meta; generics; kind }
     | _ -> Error "")
 
-let var_of_json (js : json) : (var, string) result =
+let var_of_json (id_to_file : id_to_file_map) (js : json) : (var, string) result
+    =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc [ ("index", index); ("name", name); ("ty", ty) ] ->
         let* index = VarId.id_of_json index in
         let* name = string_option_of_json name in
-        let* var_ty = ty_of_json ty in
+        let* var_ty = ty_of_json id_to_file ty in
         Ok { index; name; var_ty }
     | _ -> Error "")
 
@@ -753,7 +769,8 @@ let borrow_kind_of_json (js : json) : (borrow_kind, string) result =
   | `String "Shallow" -> Ok BShallow
   | _ -> Error ("borrow_kind_of_json failed on:" ^ show js)
 
-let cast_kind_of_json (js : json) : (cast_kind, string) result =
+let cast_kind_of_json (id_to_file : id_to_file_map) (js : json) :
+    (cast_kind, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc [ ("Scalar", `List [ src_ty; tgt_ty ]) ] ->
@@ -761,22 +778,23 @@ let cast_kind_of_json (js : json) : (cast_kind, string) result =
         let* tgt_ty = literal_type_of_json tgt_ty in
         Ok (CastScalar (src_ty, tgt_ty))
     | `Assoc [ ("FnPtr", `List [ src_ty; tgt_ty ]) ] ->
-        let* src_ty = ty_of_json src_ty in
-        let* tgt_ty = ty_of_json tgt_ty in
+        let* src_ty = ty_of_json id_to_file src_ty in
+        let* tgt_ty = ty_of_json id_to_file tgt_ty in
         Ok (CastFnPtr (src_ty, tgt_ty))
     | `Assoc [ ("Unsize", `List [ src_ty; tgt_ty ]) ] ->
-        let* src_ty = ty_of_json src_ty in
-        let* tgt_ty = ty_of_json tgt_ty in
+        let* src_ty = ty_of_json id_to_file src_ty in
+        let* tgt_ty = ty_of_json id_to_file tgt_ty in
         Ok (CastUnsize (src_ty, tgt_ty))
     | _ -> Error "")
 
-let unop_of_json (js : json) : (unop, string) result =
+let unop_of_json (id_to_file : id_to_file_map) (js : json) :
+    (unop, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `String "Not" -> Ok Not
     | `String "Neg" -> Ok Neg
     | `Assoc [ ("Cast", cast_kind) ] ->
-        let* cast_kind = cast_kind_of_json cast_kind in
+        let* cast_kind = cast_kind_of_json id_to_file cast_kind in
         Ok (Cast cast_kind)
     | _ -> Error "")
 
@@ -847,50 +865,54 @@ let fun_id_of_json (js : json) : (fun_id, string) result =
         Ok (FAssumed fid)
     | _ -> Error "")
 
-let fun_id_or_trait_method_ref_of_json (js : json) :
-    (fun_id_or_trait_method_ref, string) result =
+let fun_id_or_trait_method_ref_of_json (id_to_file : id_to_file_map) (js : json)
+    : (fun_id_or_trait_method_ref, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc [ ("Fun", id) ] ->
         let* id = fun_id_of_json id in
         Ok (FunId id)
     | `Assoc [ ("Trait", `List [ trait_ref; method_name; fun_decl_id ]) ] ->
-        let* trait_ref = trait_ref_of_json trait_ref in
+        let* trait_ref = trait_ref_of_json id_to_file trait_ref in
         let* method_name = string_of_json method_name in
         let* fun_decl_id = FunDeclId.id_of_json fun_decl_id in
         Ok (TraitMethod (trait_ref, method_name, fun_decl_id))
     | _ -> Error "")
 
-let fn_ptr_of_json (js : json) : (fn_ptr, string) result =
+let fn_ptr_of_json (id_to_file : id_to_file_map) (js : json) :
+    (fn_ptr, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc [ ("func", func); ("generics", generics) ] ->
-        let* func = fun_id_or_trait_method_ref_of_json func in
-        let* generics = generic_args_of_json generics in
+        let* func = fun_id_or_trait_method_ref_of_json id_to_file func in
+        let* generics = generic_args_of_json id_to_file generics in
         Ok { func; generics }
     | _ -> Error "")
 
-let fn_operand_of_json (js : json) : (fn_operand, string) result =
+let fn_operand_of_json (id_to_file : id_to_file_map) (js : json) :
+    (fn_operand, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc [ ("Regular", func) ] ->
-        let* func = fn_ptr_of_json func in
+        let* func = fn_ptr_of_json id_to_file func in
         Ok (FnOpRegular func)
     | `Assoc [ ("Move", p) ] ->
         let* p = place_of_json p in
         Ok (FnOpMove p)
     | _ -> Error "")
 
-let rec constant_expr_of_json (js : json) : (constant_expr, string) result =
+let rec constant_expr_of_json (id_to_file : id_to_file_map) (js : json) :
+    (constant_expr, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc [ ("value", value); ("ty", ty) ] ->
-        let* value = raw_constant_expr_of_json value in
-        let* ty = ty_of_json ty in
+        let* value = raw_constant_expr_of_json id_to_file value in
+        let* ty = ty_of_json id_to_file ty in
         Ok { value; ty }
     | _ -> Error "")
 
-and raw_constant_expr_of_json (js : json) : (raw_constant_expr, string) result =
+and raw_constant_expr_of_json (id_to_file : id_to_file_map) (js : json) :
+    (raw_constant_expr, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc [ ("Literal", lit) ] ->
@@ -900,15 +922,16 @@ and raw_constant_expr_of_json (js : json) : (raw_constant_expr, string) result =
         let* vid = ConstGenericVarId.id_of_json vid in
         Ok (CVar vid)
     | `Assoc [ ("TraitConst", `List [ trait_ref; const_name ]) ] ->
-        let* trait_ref = trait_ref_of_json trait_ref in
+        let* trait_ref = trait_ref_of_json id_to_file trait_ref in
         let* const_name = string_of_json const_name in
         Ok (CTraitConst (trait_ref, const_name))
     | `Assoc [ ("FnPtr", fn_ptr) ] ->
-        let* fn_ptr = fn_ptr_of_json fn_ptr in
+        let* fn_ptr = fn_ptr_of_json id_to_file fn_ptr in
         Ok (CFnPtr fn_ptr)
     | _ -> Error "")
 
-let operand_of_json (js : json) : (operand, string) result =
+let operand_of_json (id_to_file : id_to_file_map) (js : json) :
+    (operand, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc [ ("Copy", place) ] ->
@@ -918,11 +941,12 @@ let operand_of_json (js : json) : (operand, string) result =
         let* place = place_of_json place in
         Ok (Move place)
     | `Assoc [ ("Const", cv) ] ->
-        let* cv = constant_expr_of_json cv in
+        let* cv = constant_expr_of_json id_to_file cv in
         Ok (Constant cv)
     | _ -> Error "")
 
-let aggregate_kind_of_json (js : json) : (aggregate_kind, string) result =
+let aggregate_kind_of_json (id_to_file : id_to_file_map) (js : json) :
+    (aggregate_kind, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc [ ("Adt", `List [ id; opt_variant_id; generics ]) ] ->
@@ -930,36 +954,37 @@ let aggregate_kind_of_json (js : json) : (aggregate_kind, string) result =
         let* opt_variant_id =
           option_of_json VariantId.id_of_json opt_variant_id
         in
-        let* generics = generic_args_of_json generics in
+        let* generics = generic_args_of_json id_to_file generics in
         Ok (AggregatedAdt (id, opt_variant_id, generics))
     | `Assoc [ ("Array", `List [ ty; cg ]) ] ->
-        let* ty = ty_of_json ty in
+        let* ty = ty_of_json id_to_file ty in
         let* cg = const_generic_of_json cg in
         Ok (AggregatedArray (ty, cg))
     | `Assoc [ ("Closure", `List [ fid; generics ]) ] ->
         let* fid = FunDeclId.id_of_json fid in
-        let* generics = generic_args_of_json generics in
+        let* generics = generic_args_of_json id_to_file generics in
         Ok (AggregatedClosure (fid, generics))
     | _ -> Error "")
 
-let rvalue_of_json (js : json) : (rvalue, string) result =
+let rvalue_of_json (id_to_file : id_to_file_map) (js : json) :
+    (rvalue, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc [ ("Use", op) ] ->
-        let* op = operand_of_json op in
+        let* op = operand_of_json id_to_file op in
         Ok (Use op)
     | `Assoc [ ("Ref", `List [ place; borrow_kind ]) ] ->
         let* place = place_of_json place in
         let* borrow_kind = borrow_kind_of_json borrow_kind in
         Ok (RvRef (place, borrow_kind))
     | `Assoc [ ("UnaryOp", `List [ unop; op ]) ] ->
-        let* unop = unop_of_json unop in
-        let* op = operand_of_json op in
+        let* unop = unop_of_json id_to_file unop in
+        let* op = operand_of_json id_to_file op in
         Ok (UnaryOp (unop, op))
     | `Assoc [ ("BinaryOp", `List [ binop; op1; op2 ]) ] ->
         let* binop = binop_of_json binop in
-        let* op1 = operand_of_json op1 in
-        let* op2 = operand_of_json op2 in
+        let* op1 = operand_of_json id_to_file op1 in
+        let* op2 = operand_of_json id_to_file op2 in
         Ok (BinaryOp (binop, op1, op2))
     | `Assoc [ ("Discriminant", `List [ place; adt_id ]) ] ->
         let* place = place_of_json place in
@@ -967,18 +992,20 @@ let rvalue_of_json (js : json) : (rvalue, string) result =
         Ok (Discriminant (place, adt_id))
     | `Assoc [ ("Global", `List [ gid; generics ]) ] ->
         let* gid = GlobalDeclId.id_of_json gid in
-        let* generics = generic_args_of_json generics in
+        let* generics = generic_args_of_json id_to_file generics in
         Ok (Global (gid, generics) : rvalue)
     | `Assoc [ ("Len", `List [ place; ty; const_generics ]) ] ->
         let* place = place_of_json place in
-        let* ty = ty_of_json ty in
+        let* ty = ty_of_json id_to_file ty in
         let* const_generics =
           option_of_json const_generic_of_json const_generics
         in
         Ok (Len (place, ty, const_generics) : rvalue)
     | `Assoc [ ("Aggregate", `List [ aggregate_kind; ops ]) ] ->
-        let* aggregate_kind = aggregate_kind_of_json aggregate_kind in
-        let* ops = list_of_json operand_of_json ops in
+        let* aggregate_kind =
+          aggregate_kind_of_json id_to_file aggregate_kind
+        in
+        let* ops = list_of_json (operand_of_json id_to_file) ops in
         Ok (Aggregate (aggregate_kind, ops))
     | _ -> Error "")
 
@@ -1024,12 +1051,13 @@ let closure_kind_of_json (js : json) : (closure_kind, string) result =
     | `String "FnOnce" -> Ok FnOnce
     | _ -> Error "")
 
-let closure_info_of_json (js : json) : (closure_info, string) result =
+let closure_info_of_json (id_to_file : id_to_file_map) (js : json) :
+    (closure_info, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc [ ("kind", kind); ("state", state) ] ->
         let* kind = closure_kind_of_json kind in
-        let* state = list_of_json ty_of_json state in
+        let* state = list_of_json (ty_of_json id_to_file) state in
         Ok { kind; state }
     | _ -> Error "")
 
@@ -1049,14 +1077,16 @@ let fun_sig_of_json (id_to_file : id_to_file_map) (js : json) :
         ] ->
         let* is_unsafe = bool_of_json is_unsafe in
         let* is_closure = bool_of_json is_closure in
-        let* closure_info = option_of_json closure_info_of_json closure_info in
+        let* closure_info =
+          option_of_json (closure_info_of_json id_to_file) closure_info
+        in
 
         let* generics = generic_params_of_json id_to_file generics in
         let* parent_params_info =
           option_of_json params_info_of_json parent_params_info
         in
-        let* inputs = list_of_json ty_of_json inputs in
-        let* output = ty_of_json output in
+        let* inputs = list_of_json (ty_of_json id_to_file) inputs in
+        let* output = ty_of_json id_to_file output in
         Ok
           {
             is_unsafe;
@@ -1069,12 +1099,13 @@ let fun_sig_of_json (id_to_file : id_to_file_map) (js : json) :
           }
     | _ -> Error "")
 
-let call_of_json (js : json) : (call, string) result =
+let call_of_json (id_to_file : id_to_file_map) (js : json) :
+    (call, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc [ ("func", func); ("args", args); ("dest", dest) ] ->
-        let* func = fn_operand_of_json func in
-        let* args = list_of_json operand_of_json args in
+        let* func = fn_operand_of_json id_to_file func in
+        let* args = list_of_json (operand_of_json id_to_file) args in
         let* dest = place_of_json dest in
         Ok { func; args; dest }
     | _ -> Error "")
@@ -1093,7 +1124,7 @@ let gexpr_body_of_json (body_of_json : json -> ('body, string) result)
         ] ->
         let* span = span_of_json id_to_file span in
         let* arg_count = int_of_json arg_count in
-        let* locals = list_of_json var_of_json locals in
+        let* locals = list_of_json (var_of_json id_to_file) locals in
         let* body = body_of_json body in
         Ok { span; arg_count; locals; body }
     | _ -> Error "")
@@ -1185,7 +1216,7 @@ let gglobal_decl_of_json (bodies : 'body gexpr_body option list)
         let* global_id = GlobalDeclId.id_of_json def_id in
         let* item_meta = item_meta_of_json id_to_file item_meta in
         let* generics = generic_params_of_json id_to_file generics in
-        let* ty = ty_of_json ty in
+        let* ty = ty_of_json id_to_file ty in
         let* kind = item_kind_of_json kind in
         let* body = maybe_opaque_body_of_json bodies body in
         let global =
@@ -1218,7 +1249,7 @@ let trait_decl_of_json (id_to_file : id_to_file_map) (js : json) :
         let* consts =
           list_of_json
             (pair_of_json string_of_json
-               (pair_of_json ty_of_json
+               (pair_of_json (ty_of_json id_to_file)
                   (option_of_json GlobalDeclId.id_of_json)))
             consts
         in
@@ -1227,7 +1258,7 @@ let trait_decl_of_json (id_to_file : id_to_file_map) (js : json) :
             (pair_of_json string_of_json
                (pair_of_json
                   (list_of_json (trait_clause_of_json id_to_file))
-                  (option_of_json ty_of_json)))
+                  (option_of_json (ty_of_json id_to_file))))
             types
         in
         let* required_methods =
@@ -1271,21 +1302,23 @@ let trait_impl_of_json (id_to_file : id_to_file_map) (js : json) :
         ] ->
         let* def_id = TraitImplId.id_of_json def_id in
         let* item_meta = item_meta_of_json id_to_file item_meta in
-        let* impl_trait = trait_decl_ref_of_json impl_trait in
+        let* impl_trait = trait_decl_ref_of_json id_to_file impl_trait in
         let* generics = generic_params_of_json id_to_file generics in
         let* parent_trait_refs =
-          list_of_json trait_ref_of_json parent_trait_refs
+          list_of_json (trait_ref_of_json id_to_file) parent_trait_refs
         in
         let* consts =
           list_of_json
             (pair_of_json string_of_json
-               (pair_of_json ty_of_json GlobalDeclId.id_of_json))
+               (pair_of_json (ty_of_json id_to_file) GlobalDeclId.id_of_json))
             consts
         in
         let* types =
           list_of_json
             (pair_of_json string_of_json
-               (pair_of_json (list_of_json trait_ref_of_json) ty_of_json))
+               (pair_of_json
+                  (list_of_json (trait_ref_of_json id_to_file))
+                  (ty_of_json id_to_file)))
             types
         in
         let methods_of_json =

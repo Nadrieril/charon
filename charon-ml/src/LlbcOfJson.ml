@@ -8,11 +8,12 @@ open OfJsonBasic
 open Types
 open LlbcAst
 
-let assertion_of_json (js : json) : (assertion, string) result =
+let assertion_of_json (id_to_file : id_to_file_map) (js : json) :
+    (assertion, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc [ ("cond", cond); ("expected", expected) ] ->
-        let* cond = operand_of_json cond in
+        let* cond = operand_of_json id_to_file cond in
         let* expected = bool_of_json expected in
         Ok { cond; expected }
     | _ -> Error "")
@@ -33,7 +34,7 @@ and raw_statement_of_json (id_to_file : id_to_file_map) (js : json) :
     (match js with
     | `Assoc [ ("Assign", `List [ place; rvalue ]) ] ->
         let* place = place_of_json place in
-        let* rvalue = rvalue_of_json rvalue in
+        let* rvalue = rvalue_of_json id_to_file rvalue in
         Ok (Assign (place, rvalue))
     | `Assoc [ ("FakeRead", place) ] ->
         let* place = place_of_json place in
@@ -46,10 +47,10 @@ and raw_statement_of_json (id_to_file : id_to_file_map) (js : json) :
         let* place = place_of_json place in
         Ok (Drop place)
     | `Assoc [ ("Assert", assertion) ] ->
-        let* assertion = assertion_of_json assertion in
+        let* assertion = assertion_of_json id_to_file assertion in
         Ok (Assert assertion)
     | `Assoc [ ("Call", call) ] ->
-        let* call = call_of_json call in
+        let* call = call_of_json id_to_file call in
         Ok (Call call)
     | `Assoc [ ("Abort", _) ] -> Ok Panic
     | `String "Return" -> Ok Return
@@ -91,12 +92,12 @@ and switch_of_json (id_to_file : id_to_file_map) (js : json) :
   combine_error_msgs js __FUNCTION__
     (match js with
     | `Assoc [ ("If", `List [ op; st1; st2 ]) ] ->
-        let* op = operand_of_json op in
+        let* op = operand_of_json id_to_file op in
         let* st1 = statement_of_json id_to_file st1 in
         let* st2 = statement_of_json id_to_file st2 in
         Ok (If (op, st1, st2))
     | `Assoc [ ("SwitchInt", `List [ op; int_ty; tgts; otherwise ]) ] ->
-        let* op = operand_of_json op in
+        let* op = operand_of_json id_to_file op in
         let* int_ty = integer_type_of_json int_ty in
         let* tgts =
           list_of_json
