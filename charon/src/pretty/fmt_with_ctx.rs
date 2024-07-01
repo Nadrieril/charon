@@ -143,8 +143,12 @@ impl<C: AstFormatter> FmtWithCtx<C> for DeclarationGroup {
 }
 
 impl<C: AstFormatter> FmtWithCtx<C> for ExistentialPredicate {
-    fn fmt_with_ctx(&self, _ctx: &C) -> String {
-        format!("exists(TODO)")
+    fn fmt_with_ctx(&self, ctx: &C) -> String {
+        let params = &self.0;
+        // TODO: we should push generics instead of replacing them.
+        let ctx = &ctx.set_generics(&params);
+        let (params, preds, _) = params.fmt_with_ctx_with_trait_clauses(ctx, "", false, &None);
+        format!("exists{params} {preds}")
     }
 }
 
@@ -198,7 +202,7 @@ impl<C: AstFormatter> FmtWithCtx<C> for FunSig {
         // Generic parameters
         let (params, clauses, _) =
             self.generics
-                .fmt_with_ctx_with_trait_clauses(ctx, "", &self.parent_params_info);
+                .fmt_with_ctx_with_trait_clauses(ctx, "", true, &self.parent_params_info);
 
         // Arguments
         let mut args: Vec<String> = Vec::new();
@@ -318,6 +322,7 @@ impl GenericParams {
         &self,
         ctx: &C,
         tab: &str,
+        newlines: bool,
         info: &Option<ParamsInfo>,
     ) -> (String, String, bool)
     where
@@ -372,7 +377,7 @@ impl GenericParams {
                     .chain(regions_outlive.into_iter())
                     .chain(type_constraints.into_iter())
                     .collect();
-                fmt_where_clauses(tab, 0, clauses)
+                fmt_where_clauses(tab, newlines, 0, clauses)
             }
             Some(info) => {
                 // Below: definitely not efficient nor convenient, but it is not really
@@ -393,7 +398,7 @@ impl GenericParams {
                 let num_inherited = inherited_clauses.len();
                 let all_clauses: Vec<_> =
                     inherited_clauses.into_iter().chain(local_clauses).collect();
-                fmt_where_clauses(tab, num_inherited, all_clauses)
+                fmt_where_clauses(tab, newlines, num_inherited, all_clauses)
             }
         };
         (params, preds, any_where)
@@ -518,6 +523,7 @@ where
         let (params, preds, _) = self.signature.generics.fmt_with_ctx_with_trait_clauses(
             ctx,
             tab,
+            true,
             &self.signature.parent_params_info,
         );
 
@@ -575,7 +581,7 @@ where
         // Translate the parameters and the trait clauses
         let (params, preds, any_where) = self
             .generics
-            .fmt_with_ctx_with_trait_clauses(ctx, "  ", &None);
+            .fmt_with_ctx_with_trait_clauses(ctx, "  ", true, &None);
         // Predicates
         let eq_space = if !any_where {
             " ".to_string()
@@ -1089,7 +1095,7 @@ impl<C: AstFormatter> FmtWithCtx<C> for TraitDecl {
         let name = self.item_meta.name.fmt_with_ctx(ctx);
         let (generics, clauses, _) = self
             .generics
-            .fmt_with_ctx_with_trait_clauses(ctx, "", &None);
+            .fmt_with_ctx_with_trait_clauses(ctx, "", true, &None);
 
         let items = {
             let items = self
@@ -1122,6 +1128,7 @@ impl<C: AstFormatter> FmtWithCtx<C> for TraitDecl {
                                 trait_clauses.iter().map(|x| x.fmt_with_ctx(ctx)).collect();
                             let clauses = fmt_where_clauses(
                                 &format!("{TAB_INCR}{TAB_INCR}"),
+                                true,
                                 0,
                                 trait_clauses,
                             );
@@ -1171,7 +1178,7 @@ impl<C: AstFormatter> FmtWithCtx<C> for TraitImpl {
         let name = self.item_meta.name.fmt_with_ctx(ctx);
         let (generics, clauses, _) = self
             .generics
-            .fmt_with_ctx_with_trait_clauses(ctx, "", &None);
+            .fmt_with_ctx_with_trait_clauses(ctx, "", true, &None);
 
         let items = {
             let items = self
@@ -1341,7 +1348,7 @@ impl<C: AstFormatter> FmtWithCtx<C> for TypeDecl {
 
         let (params, preds, any_where) = self
             .generics
-            .fmt_with_ctx_with_trait_clauses(ctx, "  ", &None);
+            .fmt_with_ctx_with_trait_clauses(ctx, "  ", true, &None);
         // Predicates
         let eq_space = if !any_where {
             " ".to_string()
@@ -1650,35 +1657,46 @@ where
 /// they have access to, which includes the clauses inherited from the parent.
 /// This can be confusing: we insert a delimiter between the inherited clauses
 /// and the local clauses.
-pub fn fmt_where_clauses(tab: &str, num_parent_clauses: usize, clauses: Vec<String>) -> String {
+pub fn fmt_where_clauses(
+    tab: &str,
+    newlines: bool,
+    num_parent_clauses: usize,
+    clauses: Vec<String>,
+) -> String {
+    let line_prefix = if newlines {
+        format!("\n{tab}")
+    } else {
+        "".to_string()
+    };
+    let extra_tab = if newlines { TAB_INCR } else { " " };
     if clauses.is_empty() {
         "".to_string()
     } else {
         let mut clauses = clauses
             .iter()
-            .map(|x| format!("\n{tab}{TAB_INCR}{x},"))
+            .map(|x| format!("{line_prefix}{extra_tab}{x},"))
             .collect::<Vec<String>>();
         if num_parent_clauses > 0 {
             let local_clauses = clauses.split_off(num_parent_clauses);
 
-            let delim1 = if local_clauses.is_empty() {
+            let delim1 = if local_clauses.is_empty() || !newlines {
                 "".to_string()
             } else {
-                format!("\n{tab}{TAB_INCR}// Local clauses:")
+                format!("{line_prefix}{extra_tab}// Local clauses:")
             };
 
-            let delim0 = if clauses.is_empty() {
+            let delim0 = if clauses.is_empty() || !newlines {
                 "".to_string()
             } else {
-                format!("\n{tab}{TAB_INCR}// Inherited clauses:")
+                format!("{line_prefix}{extra_tab}// Inherited clauses:")
             };
 
             let clauses = clauses.join("");
             let local_clauses = local_clauses.join("");
-            format!("\n{tab}where{delim0}{clauses}{delim1}{local_clauses}")
+            format!("{line_prefix}where{delim0}{clauses}{delim1}{local_clauses}")
         } else {
             let clauses = clauses.join("");
-            format!("\n{tab}where{clauses}")
+            format!("{line_prefix}where{clauses}")
         }
     }
 }

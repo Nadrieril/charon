@@ -337,11 +337,22 @@ impl<'tcx, 'ctx, 'ctx1> BodyTransCtx<'tcx, 'ctx, 'ctx1> {
                 error_or_panic!(self, span, "Unsupported type: infer type")
             }
 
-            hax::Ty::Dynamic(_existential_preds, _region, _) => {
+            hax::Ty::Dynamic(_existential_preds, region, _) => {
                 // TODO: we don't translate the predicates yet because our machinery can't handle
                 // it.
                 trace!("Dynamic");
-                Ok(Ty::DynTrait(ExistentialPredicate))
+                let mut params = GenericParams::empty();
+                let existential_var = params
+                    .types
+                    .push_with(|id| TypeVar::new(id, "DynSelf".into()));
+
+                let region = self.translate_region(span, erase_regions, region)?;
+                // TODO: the region is inside our new scope, we should fix the debruijn indices.
+                params
+                    .types_outlive
+                    .push(OutlivesPred(Ty::TypeVar(existential_var), region));
+
+                Ok(Ty::DynTrait(ExistentialPredicate(params)))
             }
 
             hax::Ty::Coroutine(..) => {

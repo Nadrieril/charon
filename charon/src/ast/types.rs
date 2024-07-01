@@ -26,7 +26,7 @@ generate_index_type!(GlobalDeclId, "Global");
 /// Type variable.
 /// We make sure not to mix variables and type variables by having two distinct
 /// definitions.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Drive, DriveMut)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize, Drive, DriveMut)]
 pub struct TypeVar {
     /// Unique index identifying the variable
     pub index: TypeVarId,
@@ -36,7 +36,7 @@ pub struct TypeVar {
 
 /// Region variable.
 #[derive(
-    Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Hash, PartialOrd, Ord, Drive, DriveMut,
+    Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize, Deserialize, Drive, DriveMut,
 )]
 pub struct RegionVar {
     /// Unique index identifying the variable
@@ -46,7 +46,7 @@ pub struct RegionVar {
 }
 
 /// Const Generic Variable
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Drive, DriveMut)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize, Drive, DriveMut)]
 pub struct ConstGenericVar {
     /// Unique index identifying the variable
     pub index: ConstGenericVarId,
@@ -130,9 +130,7 @@ pub enum Region {
 /// definition. Note that every path designated by [TraitInstanceId] refers
 /// to a *trait instance*, which is why the [Clause] variant may seem redundant
 /// with some of the other variants.
-#[derive(
-    Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash, Ord, PartialOrd, Drive, DriveMut,
-)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash, Drive, DriveMut)]
 pub enum TraitInstanceId {
     /// A specific top-level implementation item.
     TraitImpl(TraitImplId),
@@ -253,7 +251,7 @@ pub struct TraitDeclRef {
 }
 
 /// .0 outlives .1
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Clone, Hash, Serialize, Deserialize, PartialEq, Eq)]
 pub struct OutlivesPred<T, U>(pub T, pub U);
 
 // The derive macro doesn't handle generics well.
@@ -284,14 +282,14 @@ pub type TypeOutlives = OutlivesPred<Ty, Region>;
 /// T : Foo<S = String>
 ///         ^^^^^^^^^^
 /// ```
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Drive, DriveMut)]
+#[derive(Debug, Clone, Hash, Serialize, Deserialize, PartialEq, Eq, Drive, DriveMut)]
 pub struct TraitTypeConstraint {
     pub trait_ref: TraitRef,
     pub type_name: TraitItemName,
     pub ty: Ty,
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize, Hash, Drive, DriveMut)]
+#[derive(Debug, Clone, Hash, Eq, PartialEq, Serialize, Deserialize, Drive, DriveMut)]
 pub struct GenericArgs {
     pub regions: Vec<Region>,
     pub types: Vec<Ty>,
@@ -307,7 +305,7 @@ pub struct GenericArgs {
 /// be filled. We group in a different place the predicates which are not
 /// trait clauses, because those enforce constraints but do not need to
 /// be filled with witnesses/instances.
-#[derive(Debug, Default, Clone, PartialEq, Eq, Serialize, Deserialize, Drive, DriveMut)]
+#[derive(Debug, Default, Clone, Hash, PartialEq, Eq, Serialize, Deserialize, Drive, DriveMut)]
 pub struct GenericParams {
     pub regions: Vector<RegionId, RegionVar>,
     pub types: Vector<TypeVarId, TypeVar>,
@@ -324,16 +322,17 @@ pub struct GenericParams {
 
 /// A predicate of the form `exists<T> where T: Trait`.
 ///
-/// TODO: store something useful here
+/// This is entirely described by a `GenericParams`: we quantify over the variables and predicates
+/// in it. This is used for `dyn Trait`: we represent it as `dyn (exists<T> where T: Trait)`.
 #[derive(Debug, Default, Clone, Hash, PartialEq, Eq, Serialize, Deserialize, Drive, DriveMut)]
-pub struct ExistentialPredicate;
+pub struct ExistentialPredicate(pub GenericParams);
 
 generate_index_type!(TraitClauseId, "TraitClause");
 generate_index_type!(TraitDeclId, "TraitDecl");
 generate_index_type!(TraitImplId, "TraitImpl");
 
 /// A predicate of the form `Type: Trait<Args>`.
-#[derive(Debug, Clone, Serialize, Deserialize, Derivative, Drive, DriveMut)]
+#[derive(Debug, Clone, Hash, Serialize, Deserialize, Derivative, Drive, DriveMut)]
 #[derivative(PartialEq)]
 pub struct TraitClause {
     /// We use this id when solving trait constraints, to be able to refer
@@ -355,7 +354,9 @@ pub struct TraitClause {
 impl Eq for TraitClause {}
 
 /// Where a given predicate came from.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Derivative, Drive, DriveMut)]
+#[derive(
+    Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize, Derivative, Drive, DriveMut,
+)]
 pub enum PredicateOrigin {
     // Note: we use this for globals too, but that's only available with an unstable feature.
     // ```

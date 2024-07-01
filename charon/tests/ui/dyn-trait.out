@@ -16,7 +16,7 @@ trait core::fmt::Display<Self>
     fn fmt : core::fmt::Display::fmt
 }
 
-fn test_crate::construct<T>(@1: T) -> alloc::boxed::Box<dyn (exists(TODO))>
+fn test_crate::construct<T>(@1: T) -> alloc::boxed::Box<dyn (exists<DynSelf> where DynSelf : 'static,)>
 where
     [@TraitClause0]: core::fmt::Display<T>,
 
@@ -41,25 +41,25 @@ where
 
 fn alloc::string::ToString::to_string<'_0, Self>(@1: &'_0 (Self)) -> alloc::string::String
 
-fn test_crate::destruct<'_0>(@1: &'_0 (dyn (exists(TODO)))) -> alloc::string::String
+fn test_crate::destruct<'_0>(@1: &'_0 (dyn (exists<DynSelf> where DynSelf : wrong_region('_0_0),))) -> alloc::string::String
 {
     let @0: alloc::string::String; // return
-    let x@1: &'_ (dyn (exists(TODO))); // arg #1
-    let @2: &'_ (dyn (exists(TODO))); // anonymous local
+    let x@1: &'_ (dyn (exists<DynSelf> where DynSelf : '_,)); // arg #1
+    let @2: &'_ (dyn (exists<DynSelf> where DynSelf : '_,)); // anonymous local
 
     @2 := &*(x@1)
-    @0 := alloc::string::{impl alloc::string::ToString for T#32}<dyn (exists(TODO))>[core::fmt::Display]::to_string(move (@2))
+    @0 := alloc::string::{impl alloc::string::ToString for T#32}<dyn (exists<DynSelf> where DynSelf : '_,)>[core::fmt::Display]::to_string(move (@2))
     drop @2
     return
 }
 
 fn test_crate::combine()
 
-fn test_crate::foo<'_0, '_1, T>(@1: &'_0 (dyn (exists(TODO))), @2: &'_1 (dyn (exists(TODO))))
+fn test_crate::foo<'_0, '_1, T>(@1: &'_0 (dyn (exists<DynSelf> where DynSelf : 'static,)), @2: &'_1 (dyn (exists<DynSelf> where DynSelf : wrong_region('_0_1),)))
 {
     let @0: (); // return
-    let @1: &'_ (dyn (exists(TODO))); // arg #1
-    let @2: &'_ (dyn (exists(TODO))); // arg #2
+    let @1: &'_ (dyn (exists<DynSelf> where DynSelf : '_,)); // arg #1
+    let @2: &'_ (dyn (exists<DynSelf> where DynSelf : '_,)); // arg #2
     let @3: (); // anonymous local
 
     @3 := ()
@@ -68,10 +68,10 @@ fn test_crate::foo<'_0, '_1, T>(@1: &'_0 (dyn (exists(TODO))), @2: &'_1 (dyn (ex
     return
 }
 
-fn test_crate::bar<'_0>(@1: &'_0 (dyn (exists(TODO))))
+fn test_crate::bar<'_0>(@1: &'_0 (dyn (exists<DynSelf> where DynSelf : wrong_region('_0_0),)))
 {
     let @0: (); // return
-    let @1: &'_ (dyn (exists(TODO))); // arg #1
+    let @1: &'_ (dyn (exists<DynSelf> where DynSelf : '_,)); // arg #1
     let @2: (); // anonymous local
 
     @2 := ()
