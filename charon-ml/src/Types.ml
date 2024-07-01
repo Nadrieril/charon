@@ -204,6 +204,7 @@ type trait_item_name = string [@@deriving show, ord]
 class ['self] iter_ty_base =
   object (self : 'self)
     inherit [_] iter_const_generic
+    method visit_span : 'env -> span -> unit = fun _ _ -> ()
     method visit_region_db_id : 'env -> region_db_id -> unit = fun _ _ -> ()
     method visit_region_var_id : 'env -> region_var_id -> unit = fun _ _ -> ()
     method visit_region_id : 'env -> region_id -> unit = fun _ _ -> ()
@@ -225,12 +226,26 @@ class ['self] iter_ty_base =
         let { index; name } : region_var = x in
         self#visit_region_var_id env index;
         self#visit_option self#visit_string env name
+
+    method visit_type_var : 'env -> type_var -> unit =
+      fun env x ->
+        let { index; name } : type_var = x in
+        self#visit_type_var_id env index;
+        self#visit_string env name
+
+    method visit_const_generic_var : 'env -> const_generic_var -> unit =
+      fun env x ->
+        let { index; name; ty } : const_generic_var = x in
+        self#visit_const_generic_var_id env index;
+        self#visit_string env name;
+        self#visit_literal_type env ty
   end
 
 (** Ancestor for map visitor for {!type: Types.ty} *)
 class virtual ['self] map_ty_base =
   object (self : 'self)
     inherit [_] map_const_generic
+    method visit_span : 'env -> span -> span = fun _ x -> x
 
     method visit_region_db_id : 'env -> region_db_id -> region_db_id =
       fun _ id -> id
@@ -265,6 +280,22 @@ class virtual ['self] map_ty_base =
         let index = self#visit_region_var_id env index in
         let name = self#visit_option self#visit_string env name in
         { index; name }
+
+    method visit_type_var : 'env -> type_var -> type_var =
+      fun env x ->
+        let { index; name } : type_var = x in
+        let index = self#visit_type_var_id env index in
+        let name = self#visit_string env name in
+        { index; name }
+
+    method visit_const_generic_var
+        : 'env -> const_generic_var -> const_generic_var =
+      fun env x ->
+        let { index; name; ty } : const_generic_var = x in
+        let index = self#visit_const_generic_var_id env index in
+        let name = self#visit_string env name in
+        let ty = self#visit_literal_type env ty in
+        { index; name; ty }
   end
 
 (* TODO: Str should be a literal *)
@@ -288,7 +319,7 @@ and ty =
   | TTraitType of trait_ref * string
       (** The string is for the name of the associated type *)
   | TArrow of region_var list * ty list * ty
-  | TDynTrait of unit
+  | TDynTrait of generic_params
 
 and trait_ref = {
   trait_id : trait_instance_id;
@@ -354,73 +385,9 @@ and region =
   | RFVar of region_id
       (** Free region. We use those during the symbolic execution. *)
   | RErased  (** Erased region *)
-[@@deriving
-  show,
-    ord,
-    visitors
-      {
-        name = "iter_ty";
-        variety = "iter";
-        ancestors = [ "iter_ty_base" ];
-        nude = true (* Don't inherit {!VisitorsRuntime.iter} *);
-        concrete = true;
-        polymorphic = false;
-      },
-    visitors
-      {
-        name = "map_ty";
-        variety = "map";
-        ancestors = [ "map_ty_base" ];
-        nude = true (* Don't inherit {!VisitorsRuntime.map} *);
-        concrete = false;
-        polymorphic = false;
-      }]
-
-(** Ancestor for iter visitor for {!type: Types.generic_params} *)
-class ['self] iter_generic_params_base =
-  object (self : 'self)
-    inherit [_] iter_ty
-    method visit_span : 'env -> span -> unit = fun _ _ -> ()
-
-    method visit_type_var : 'env -> type_var -> unit =
-      fun env x ->
-        let { index; name } : type_var = x in
-        self#visit_type_var_id env index;
-        self#visit_string env name
-
-    method visit_const_generic_var : 'env -> const_generic_var -> unit =
-      fun env x ->
-        let { index; name; ty } : const_generic_var = x in
-        self#visit_const_generic_var_id env index;
-        self#visit_string env name;
-        self#visit_literal_type env ty
-  end
-
-(** Ancestor for map visitor for {!type: Types.generic_params} *)
-class virtual ['self] map_generic_params_base =
-  object (self : 'self)
-    inherit [_] map_ty
-    method visit_span : 'env -> span -> span = fun _ x -> x
-
-    method visit_type_var : 'env -> type_var -> type_var =
-      fun env x ->
-        let { index; name } : type_var = x in
-        let index = self#visit_type_var_id env index in
-        let name = self#visit_string env name in
-        { index; name }
-
-    method visit_const_generic_var
-        : 'env -> const_generic_var -> const_generic_var =
-      fun env x ->
-        let { index; name; ty } : const_generic_var = x in
-        let index = self#visit_const_generic_var_id env index in
-        let name = self#visit_string env name in
-        let ty = self#visit_literal_type env ty in
-        { index; name; ty }
-  end
 
 (** Type with erased regions (this only has an informative purpose) *)
-type ety = ty
+and ety = ty
 
 (** Type with non-erased regions (this only has an informative purpose) *)
 and rty = ty
@@ -472,18 +439,18 @@ and trait_type_constraint = {
     ord,
     visitors
       {
-        name = "iter_generic_params";
+        name = "iter_ty";
         variety = "iter";
-        ancestors = [ "iter_generic_params_base" ];
+        ancestors = [ "iter_ty_base" ];
         nude = true (* Don't inherit {!VisitorsRuntime.iter} *);
         concrete = true;
         polymorphic = false;
       },
     visitors
       {
-        name = "map_generic_params";
+        name = "map_ty";
         variety = "map";
-        ancestors = [ "map_generic_params_base" ];
+        ancestors = [ "map_ty_base" ];
         nude = true (* Don't inherit {!VisitorsRuntime.map} *);
         concrete = false;
         polymorphic = false;

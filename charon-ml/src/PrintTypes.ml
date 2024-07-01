@@ -167,7 +167,13 @@ and ty_to_string (env : ('a, 'b) fmt_env) (ty : ty) : string =
         "(" ^ String.concat ", " (List.map (ty_to_string env) inputs) ^ ") -> "
       in
       inputs ^ ty_to_string env output
-  | TDynTrait _ -> "dyn (TODO)"
+  | TDynTrait params ->
+      let env = fmt_env_update_generics_and_preds env params in
+      let params, clauses =
+        predicates_and_trait_clauses_to_string env "" "" None params
+      in
+      let params = "<" ^ String.concat ", " params ^ ">" in
+      "dyn (exists" ^ params ^ clauses ^ ")"
 
 and params_to_string (env : ('a, 'b) fmt_env) (is_tuple : bool)
     (generics : generic_args) : string =
@@ -286,14 +292,14 @@ and name_to_string (env : ('a, 'b) fmt_env) (n : name) : string =
   let name = List.map (path_elem_to_string env) n in
   String.concat "::" name
 
-let trait_clause_to_string (env : ('a, 'b) fmt_env) (clause : trait_clause) :
+and trait_clause_to_string (env : ('a, 'b) fmt_env) (clause : trait_clause) :
     string =
   let clause_id = trait_clause_id_to_string env clause.clause_id in
   let trait_id = trait_decl_id_to_string env clause.trait_id in
   let generics = generic_args_to_string env clause.clause_generics in
   "[" ^ clause_id ^ "]: " ^ trait_id ^ generics
 
-let generic_params_to_strings (env : ('a, 'b) fmt_env)
+and generic_params_to_strings (env : ('a, 'b) fmt_env)
     (generics : generic_params) : string list * string list =
   let { regions; types; const_generics; trait_clauses; _ } : generic_params =
     generics
@@ -305,17 +311,17 @@ let generic_params_to_strings (env : ('a, 'b) fmt_env)
   let trait_clauses = List.map (trait_clause_to_string env) trait_clauses in
   (params, trait_clauses)
 
-let field_to_string env (f : field) : string =
+and field_to_string env (f : field) : string =
   match f.field_name with
   | Some field_name -> field_name ^ " : " ^ ty_to_string env f.field_ty
   | None -> ty_to_string env f.field_ty
 
-let variant_to_string env (v : variant) : string =
+and variant_to_string env (v : variant) : string =
   v.variant_name ^ "("
   ^ String.concat ", " (List.map (field_to_string env) v.fields)
   ^ ")"
 
-let trait_type_constraint_to_string (env : ('a, 'b) fmt_env)
+and trait_type_constraint_to_string (env : ('a, 'b) fmt_env)
     (ttc : trait_type_constraint) : string =
   let { trait_ref; type_name; ty } = ttc in
   let trait_ref = trait_ref_to_string env trait_ref in
@@ -323,7 +329,7 @@ let trait_type_constraint_to_string (env : ('a, 'b) fmt_env)
   trait_ref ^ "::" ^ type_name ^ " = " ^ ty
 
 (** Helper to format "where" clauses *)
-let clauses_to_string (indent : string) (indent_incr : string)
+and clauses_to_string (indent : string) (indent_incr : string)
     (num_inherited_clauses : int) (clauses : string list) : string =
   if clauses = [] then ""
   else
@@ -345,7 +351,7 @@ let clauses_to_string (indent : string) (indent_incr : string)
     "\n" ^ String.concat "\n" clauses
 
 (** Helper to format "where" clauses *)
-let predicates_and_trait_clauses_to_string (env : ('a, 'b) fmt_env)
+and predicates_and_trait_clauses_to_string (env : ('a, 'b) fmt_env)
     (indent : string) (indent_incr : string) (params_info : params_info option)
     (generics : generic_params) : string list * string =
   let params, trait_clauses = generic_params_to_strings env generics in

@@ -39,14 +39,14 @@ type var = {
 class ['self] iter_ast_base =
   object (_self : 'self)
     inherit [_] iter_rvalue
-    inherit! [_] iter_generic_params
+    inherit! [_] iter_ty
   end
 
 (** Ancestor the AST map visitors *)
 class ['self] map_ast_base =
   object (_self : 'self)
     inherit [_] map_rvalue
-    inherit! [_] map_generic_params
+    inherit! [_] map_ty
   end
 
 (* Below: the types need not be mutually recursive, but it makes it easier

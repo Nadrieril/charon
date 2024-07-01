@@ -373,7 +373,9 @@ let rec ty_of_json (id_to_file : id_to_file_map) (js : json) :
         let* inputs = list_of_json (ty_of_json id_to_file) inputs in
         let* output = ty_of_json id_to_file output in
         Ok (TArrow (regions, inputs, output))
-    | `Assoc [ ("DynTrait", `Null) ] -> Ok (TDynTrait ())
+    | `Assoc [ ("DynTrait", params) ] ->
+        let* params = generic_params_of_json id_to_file params in
+        Ok (TDynTrait params)
     | `String "Never" -> Ok TNever
     | _ -> Error "")
 
