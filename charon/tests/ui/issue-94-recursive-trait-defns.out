@@ -24,15 +24,15 @@ trait test_crate::T2<Self, T>
 
 trait test_crate::T3<Self>
 {
-    parent_clause_0 : [@TraitClause0]: test_crate::T5<Self::T>
+    parent_clause_0 : [@TraitClause0]: test_crate::T5<Self::T, Self::Self_Clause0_T>
     type T
+    type Self_Clause0_T
 }
 
-trait test_crate::T5<Self>
+trait test_crate::T5<Self, Self_T>
 {
-    parent_clause_0 : [@TraitClause0]: test_crate::T4<Self::T>
-    parent_clause_1 : [@TraitClause1]: test_crate::T3<Self::T>
-    type T
+    parent_clause_0 : [@TraitClause0]: test_crate::T4<Self_T>
+    parent_clause_1 : [@TraitClause1]: test_crate::T3<Self_T>
 }
 
 trait test_crate::T4<Self>

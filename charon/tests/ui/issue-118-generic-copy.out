@@ -74,16 +74,15 @@ where
     return
 }
 
-trait test_crate::Trait<Self>
+trait test_crate::Trait<Self, Self_Ty>
 {
-    parent_clause_0 : [@TraitClause0]: core::marker::Copy<Self::Ty>
-    parent_clause_1 : [@TraitClause1]: core::clone::Clone<Self::Ty>
-    type Ty
+    parent_clause_0 : [@TraitClause0]: core::marker::Copy<Self_Ty>
+    parent_clause_1 : [@TraitClause1]: core::clone::Clone<Self_Ty>
 }
 
-fn test_crate::copy_assoc_ty<T>(@1: @TraitClause0::Ty)
+fn test_crate::copy_assoc_ty<T, Clause0_Ty>(@1: Clause0_Ty)
 where
-    [@TraitClause0]: test_crate::Trait<T>,
+    [@TraitClause0]: test_crate::Trait<T, Clause0_Ty>,
 {
     let @0: (); // return
     let x@1: @TraitClause0::Ty; // arg #1

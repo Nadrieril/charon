@@ -10,22 +10,20 @@ fn test_crate::map::closure<'_0>(@1: &'_0 mut (()), @2: (i32)) -> i32
     return
 }
 
-trait core::ops::function::FnOnce<Self, Args>
+trait core::ops::function::FnOnce<Self, Args, Self_Output>
 {
-    type Output
     fn call_once : core::ops::function::FnOnce::call_once
 }
 
-trait core::ops::function::FnMut<Self, Args>
+trait core::ops::function::FnMut<Self, Args, Self_Clause0_Output>
 {
-    parent_clause_0 : [@TraitClause0]: core::ops::function::FnOnce<Self, Args>
+    parent_clause_0 : [@TraitClause0]: core::ops::function::FnOnce<Self, Args, Self_Clause0_Output>
     fn call_mut : core::ops::function::FnMut::call_mut
 }
 
 fn core::array::{Array<T, const N : usize>}#23::map<T, F, U, const N : usize>(@1: Array<T, const N : usize>, @2: F) -> Array<U, const N : usize>
 where
-    [@TraitClause0]: core::ops::function::FnMut<F, (T)>,
-    (parents(@TraitClause0)::[@TraitClause0])::Output = U,
+    [@TraitClause0]: core::ops::function::FnMut<F, (T), U>,
 
 fn test_crate::map(@1: Array<i32, 256 : usize>) -> Array<i32, 256 : usize>
 {
@@ -61,9 +59,8 @@ enum core::option::Option<T> =
 |  Some(T)
 
 
-trait core::iter::traits::iterator::Iterator<Self>
+trait core::iter::traits::iterator::Iterator<Self, Self_Item>
 {
-    type Item
     fn next : core::iter::traits::iterator::Iterator::next
     fn next_chunk
     fn size_hint
@@ -143,29 +140,23 @@ trait core::iter::traits::iterator::Iterator<Self>
     fn __iterator_get_unchecked
 }
 
-trait core::iter::traits::collect::IntoIterator<Self>
-where
-    (parents(Self)::[@TraitClause0])::Item = Self::Item,
+trait core::iter::traits::collect::IntoIterator<Self, Self_Item, Self_IntoIter>
 {
-    parent_clause_0 : [@TraitClause0]: core::iter::traits::iterator::Iterator<Self::IntoIter>
-    type Item
-    type IntoIter
+    parent_clause_0 : [@TraitClause0]: core::iter::traits::iterator::Iterator<Self_IntoIter, Self_Item>
     fn into_iter : core::iter::traits::collect::IntoIterator::into_iter
 }
 
-fn core::iter::traits::collect::{impl core::iter::traits::collect::IntoIterator for I}#1::into_iter<I>(@1: I) -> I
+fn core::iter::traits::collect::{impl core::iter::traits::collect::IntoIterator<Clause0_Item, I> for I}#1::into_iter<I, Clause0_Item>(@1: I) -> I
 where
     // Inherited clauses:
-    [@TraitClause0]: core::iter::traits::iterator::Iterator<I>,
+    [@TraitClause0]: core::iter::traits::iterator::Iterator<I, Clause0_Item>,
 
-impl<I> core::iter::traits::collect::{impl core::iter::traits::collect::IntoIterator for I}#1<I> : core::iter::traits::collect::IntoIterator<I>
+impl<I, Clause0_Item> core::iter::traits::collect::{impl core::iter::traits::collect::IntoIterator<Clause0_Item, I> for I}#1<I, Clause0_Item> : core::iter::traits::collect::IntoIterator<I, Clause0_Item, I>
 where
-    [@TraitClause0]: core::iter::traits::iterator::Iterator<I>,
+    [@TraitClause0]: core::iter::traits::iterator::Iterator<I, Clause0_Item>,
 {
     parent_clause0 = @TraitClause0
-    type Item = @TraitClause0::Item
-    type IntoIter = I
-    fn into_iter = core::iter::traits::collect::{impl core::iter::traits::collect::IntoIterator for I}#1::into_iter
+    fn into_iter = core::iter::traits::collect::{impl core::iter::traits::collect::IntoIterator<Clause0_Item, I> for I}#1::into_iter
 }
 
 trait core::clone::Clone<Self>
@@ -209,27 +200,27 @@ trait core::iter::range::Step<Self>
     fn backward_unchecked
 }
 
-fn core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::next<'_0, A>(@1: &'_0 mut (core::ops::range::Range<A>)) -> core::option::Option<A>
+fn core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6::next<'_0, A>(@1: &'_0 mut (core::ops::range::Range<A>)) -> core::option::Option<A>
 where
     // Inherited clauses:
     [@TraitClause0]: core::iter::range::Step<A>,
 
-fn core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::size_hint<'_0, A>(@1: &'_0 (core::ops::range::Range<A>)) -> (usize, core::option::Option<usize>)
+fn core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6::size_hint<'_0, A>(@1: &'_0 (core::ops::range::Range<A>)) -> (usize, core::option::Option<usize>)
 where
     // Inherited clauses:
     [@TraitClause0]: core::iter::range::Step<A>,
 
-fn core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::count<A>(@1: core::ops::range::Range<A>) -> usize
+fn core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6::count<A>(@1: core::ops::range::Range<A>) -> usize
 where
     // Inherited clauses:
     [@TraitClause0]: core::iter::range::Step<A>,
 
-fn core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::nth<'_0, A>(@1: &'_0 mut (core::ops::range::Range<A>), @2: usize) -> core::option::Option<A>
+fn core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6::nth<'_0, A>(@1: &'_0 mut (core::ops::range::Range<A>), @2: usize) -> core::option::Option<A>
 where
     // Inherited clauses:
     [@TraitClause0]: core::iter::range::Step<A>,
 
-fn core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::last<A>(@1: core::ops::range::Range<A>) -> core::option::Option<A>
+fn core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6::last<A>(@1: core::ops::range::Range<A>) -> core::option::Option<A>
 where
     // Inherited clauses:
     [@TraitClause0]: core::iter::range::Step<A>,
@@ -250,21 +241,21 @@ trait core::cmp::Ord<Self>
     fn clamp
 }
 
-fn core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::min<A>(@1: core::ops::range::Range<A>) -> core::option::Option<A>
+fn core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6::min<A>(@1: core::ops::range::Range<A>) -> core::option::Option<A>
 where
     // Inherited clauses:
     [@TraitClause0]: core::iter::range::Step<A>,
     // Local clauses:
     [@TraitClause1]: core::cmp::Ord<A>,
 
-fn core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::max<A>(@1: core::ops::range::Range<A>) -> core::option::Option<A>
+fn core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6::max<A>(@1: core::ops::range::Range<A>) -> core::option::Option<A>
 where
     // Inherited clauses:
     [@TraitClause0]: core::iter::range::Step<A>,
     // Local clauses:
     [@TraitClause1]: core::cmp::Ord<A>,
 
-fn core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::is_sorted<A>(@1: core::ops::range::Range<A>) -> bool
+fn core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6::is_sorted<A>(@1: core::ops::range::Range<A>) -> bool
 where
     // Inherited clauses:
     [@TraitClause0]: core::iter::range::Step<A>,
@@ -281,18 +272,19 @@ trait core::marker::Copy<Self>
 
 trait core::num::nonzero::private::Sealed<Self>
 
-trait core::num::nonzero::ZeroablePrimitive<Self>
+trait core::num::nonzero::ZeroablePrimitive<Self, Self_NonZeroInner>
 {
     parent_clause_0 : [@TraitClause0]: core::marker::Copy<Self>
     parent_clause_1 : [@TraitClause1]: core::num::nonzero::private::Sealed<Self>
-    parent_clause_2 : [@TraitClause2]: core::marker::Copy<Self::NonZeroInner>
-    parent_clause_3 : [@TraitClause3]: core::clone::Clone<Self::NonZeroInner>
-    type NonZeroInner
+    parent_clause_2 : [@TraitClause2]: core::marker::Copy<Self_NonZeroInner>
+    parent_clause_3 : [@TraitClause3]: core::clone::Clone<Self_NonZeroInner>
 }
 
-opaque type core::num::nonzero::NonZero<T>
+opaque type core::num::nonzero::NonZero<T, Clause0_NonZeroInner>
   where
-      [@TraitClause0]: core::num::nonzero::ZeroablePrimitive<T>,
+      [@TraitClause0]: core::num::nonzero::ZeroablePrimitive<T, Clause0_NonZeroInner>,
+
+opaque type core::num::nonzero::private::NonZeroUsizeInner
 
 fn core::clone::impls::{impl core::clone::Clone for usize}#5::clone<'_0>(@1: &'_0 (usize)) -> usize
 
@@ -308,8 +300,6 @@ impl core::marker::{impl core::marker::Copy for usize}#38 : core::marker::Copy<u
 
 impl core::num::nonzero::{impl core::num::nonzero::private::Sealed for usize}#25 : core::num::nonzero::private::Sealed<usize>
 
-opaque type core::num::nonzero::private::NonZeroUsizeInner
-
 fn core::num::nonzero::private::{impl core::clone::Clone for core::num::nonzero::private::NonZeroUsizeInner}#26::clone<'_0>(@1: &'_0 (core::num::nonzero::private::NonZeroUsizeInner)) -> core::num::nonzero::private::NonZeroUsizeInner
 
 impl core::num::nonzero::private::{impl core::clone::Clone for core::num::nonzero::private::NonZeroUsizeInner}#26 : core::clone::Clone<core::num::nonzero::private::NonZeroUsizeInner>
@@ -322,16 +312,15 @@ impl core::num::nonzero::private::{impl core::marker::Copy for core::num::nonzer
     parent_clause0 = core::num::nonzero::private::{impl core::clone::Clone for core::num::nonzero::private::NonZeroUsizeInner}#26
 }
 
-impl core::num::nonzero::{impl core::num::nonzero::ZeroablePrimitive for usize}#26 : core::num::nonzero::ZeroablePrimitive<usize>
+impl core::num::nonzero::{impl core::num::nonzero::ZeroablePrimitive<core::num::nonzero::private::NonZeroUsizeInner> for usize}#26 : core::num::nonzero::ZeroablePrimitive<usize, core::num::nonzero::private::NonZeroUsizeInner>
 {
     parent_clause0 = core::marker::{impl core::marker::Copy for usize}#38
     parent_clause1 = core::num::nonzero::{impl core::num::nonzero::private::Sealed for usize}#25
     parent_clause2 = core::num::nonzero::private::{impl core::marker::Copy for core::num::nonzero::private::NonZeroUsizeInner}#27
     parent_clause3 = core::num::nonzero::private::{impl core::clone::Clone for core::num::nonzero::private::NonZeroUsizeInner}#26
-    type NonZeroInner = core::num::nonzero::private::NonZeroUsizeInner
 }
 
-fn core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::advance_by<'_0, A>(@1: &'_0 mut (core::ops::range::Range<A>), @2: usize) -> core::result::Result<(), core::num::nonzero::NonZero<usize, core::num::nonzero::{impl core::num::nonzero::ZeroablePrimitive for usize}#26>>
+fn core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6::advance_by<'_0, A>(@1: &'_0 mut (core::ops::range::Range<A>), @2: usize) -> core::result::Result<(), core::num::nonzero::NonZero<usize, core::num::nonzero::{impl core::num::nonzero::ZeroablePrimitive<core::num::nonzero::private::NonZeroUsizeInner> for usize}#26>>
 where
     // Inherited clauses:
     [@TraitClause0]: core::iter::range::Step<A>,
@@ -342,28 +331,27 @@ trait core::iter::adapters::zip::TrustedRandomAccessNoCoerce<Self>
     fn size
 }
 
-unsafe fn core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::__iterator_get_unchecked<'_0, A>(@1: &'_0 mut (core::ops::range::Range<A>), @2: usize) -> core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6<A>[@TraitClause0]::Item
+unsafe fn core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6::__iterator_get_unchecked<'_0, A>(@1: &'_0 mut (core::ops::range::Range<A>), @2: usize) -> core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6<A>[@TraitClause0]::Item
 where
     // Inherited clauses:
     [@TraitClause0]: core::iter::range::Step<A>,
     // Local clauses:
     [@TraitClause1]: core::iter::adapters::zip::TrustedRandomAccessNoCoerce<core::ops::range::Range<A>>,
 
-impl<A> core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6<A> : core::iter::traits::iterator::Iterator<core::ops::range::Range<A>>
+impl<A> core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6<A> : core::iter::traits::iterator::Iterator<core::ops::range::Range<A>, A>
 where
     [@TraitClause0]: core::iter::range::Step<A>,
 {
-    type Item = A
-    fn next = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::next
-    fn size_hint = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::size_hint
-    fn count = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::count
-    fn nth = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::nth
-    fn last = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::last
-    fn min = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::min
-    fn max = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::max
-    fn is_sorted = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::is_sorted
-    fn advance_by = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::advance_by
-    fn __iterator_get_unchecked = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::__iterator_get_unchecked
+    fn next = core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6::next
+    fn size_hint = core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6::size_hint
+    fn count = core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6::count
+    fn nth = core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6::nth
+    fn last = core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6::last
+    fn min = core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6::min
+    fn max = core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6::max
+    fn is_sorted = core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6::is_sorted
+    fn advance_by = core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6::advance_by
+    fn __iterator_get_unchecked = core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6::__iterator_get_unchecked
 }
 
 fn core::clone::impls::{impl core::clone::Clone for u8}#6::clone<'_0>(@1: &'_0 (u8)) -> u8
@@ -430,9 +418,9 @@ impl core::iter::range::{impl core::iter::range::Step for u8}#35 : core::iter::r
     fn backward_unchecked = core::iter::range::{impl core::iter::range::Step for u8}#35::backward_unchecked
 }
 
-fn core::iter::traits::collect::IntoIterator::into_iter<Self>(@1: Self) -> Self::IntoIter
+fn core::iter::traits::collect::IntoIterator::into_iter<Self, Self_Item, Self_IntoIter>(@1: Self) -> Self_IntoIter
 
-fn core::iter::traits::iterator::Iterator::next<'_0, Self>(@1: &'_0 mut (Self)) -> core::option::Option<Self::Item>
+fn core::iter::traits::iterator::Iterator::next<'_0, Self, Self_Item>(@1: &'_0 mut (Self)) -> core::option::Option<Self_Item>
 
 fn test_crate::cbd(@1: Array<u8, 33 : usize>)
 {
@@ -456,14 +444,14 @@ fn test_crate::cbd(@1: Array<u8, 33 : usize>)
     let @17: &'_ mut (u8); // anonymous local
 
     @3 := core::ops::range::Range { start: const (0 : u8), end: const (3 : u8) }
-    @2 := core::iter::traits::collect::{impl core::iter::traits::collect::IntoIterator for I}#1<core::ops::range::Range<u8>>[core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6<u8>[core::iter::range::{impl core::iter::range::Step for u8}#35]]::into_iter(move (@3))
+    @2 := core::iter::traits::collect::{impl core::iter::traits::collect::IntoIterator<Clause0_Item, I> for I}#1<core::ops::range::Range<u8>>[core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6<u8>[core::iter::range::{impl core::iter::range::Step for u8}#35]]::into_iter(move (@3))
     drop @3
     @fake_read(@2)
     iter@4 := move (@2)
     loop {
         @9 := &mut iter@4
         @8 := &two-phase-mut *(@9)
-        @7 := core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6<u8>[core::iter::range::{impl core::iter::range::Step for u8}#35]::next(move (@8))
+        @7 := core::iter::range::{impl core::iter::traits::iterator::Iterator<A> for core::ops::range::Range<A>}#6<u8>[core::iter::range::{impl core::iter::range::Step for u8}#35]::next(move (@8))
         drop @8
         @fake_read(@7)
         match @7 {
@@ -606,9 +594,9 @@ fn test_crate::select<'_0, '_1>(@1: &'_0 (Slice<u8>), @2: &'_1 (Slice<u8>))
     return
 }
 
-fn core::ops::function::FnMut::call_mut<'_0, Self, Args>(@1: &'_0 mut (Self), @2: Args) -> (parents(Self)::[@TraitClause0])::Output
+fn core::ops::function::FnMut::call_mut<'_0, Self, Args, Self_Clause0_Output>(@1: &'_0 mut (Self), @2: Args) -> Self_Clause0_Output
 
-fn core::ops::function::FnOnce::call_once<Self, Args>(@1: Self, @2: Args) -> Self::Output
+fn core::ops::function::FnOnce::call_once<Self, Args, Self_Output>(@1: Self, @2: Args) -> Self_Output
 
 fn core::iter::range::Step::steps_between<'_0, '_1, Self>(@1: &'_0 (Self), @2: &'_1 (Self)) -> core::option::Option<usize>
 

@@ -445,31 +445,29 @@ where
     fn to_type = test_crate::{impl test_crate::ToType<T> for test_crate::BoolWrapper}#7::to_type
 }
 
-global test_crate::WithConstTy::LEN2<Self, const LEN : usize>  {
+global test_crate::WithConstTy::LEN2<Self, Self_V, Self_W, const LEN : usize>  {
     let @0: usize; // return
 
     @0 := const (32 : usize)
     return
 }
 
-trait test_crate::WithConstTy<Self, const LEN : usize>
+trait test_crate::WithConstTy<Self, Self_V, Self_W, const LEN : usize>
 {
-    parent_clause_0 : [@TraitClause0]: test_crate::ToU64<Self::W>
+    parent_clause_0 : [@TraitClause0]: test_crate::ToU64<Self_W>
     const LEN1 : usize
     const LEN2 : usize
-    type V
-    type W
     fn f : test_crate::WithConstTy::f
 }
 
-global test_crate::{impl test_crate::WithConstTy<32 : usize> for bool}#8::LEN1  {
+global test_crate::{impl test_crate::WithConstTy<u8, u64, 32 : usize> for bool}#8::LEN1  {
     let @0: usize; // return
 
     @0 := const (12 : usize)
     return
 }
 
-fn test_crate::{impl test_crate::WithConstTy<32 : usize> for bool}#8::f<'_0, '_1>(@1: &'_0 mut (test_crate::{impl test_crate::WithConstTy<32 : usize> for bool}#8::W), @2: &'_1 (Array<u8, 32 : usize>))
+fn test_crate::{impl test_crate::WithConstTy<u8, u64, 32 : usize> for bool}#8::f<'_0, '_1>(@1: &'_0 mut (test_crate::{impl test_crate::WithConstTy<u8, u64, 32 : usize> for bool}#8::W), @2: &'_1 (Array<u8, 32 : usize>))
 {
     let @0: (); // return
     let @1: &'_ mut (u64); // arg #1
@@ -482,19 +480,17 @@ fn test_crate::{impl test_crate::WithConstTy<32 : usize> for bool}#8::f<'_0, '_1
     return
 }
 
-impl test_crate::{impl test_crate::WithConstTy<32 : usize> for bool}#8 : test_crate::WithConstTy<bool, 32 : usize>
+impl test_crate::{impl test_crate::WithConstTy<u8, u64, 32 : usize> for bool}#8 : test_crate::WithConstTy<bool, u8, u64, 32 : usize>
 {
     parent_clause0 = test_crate::{impl test_crate::ToU64 for u64}#2
-    const LEN1 = test_crate::{impl test_crate::WithConstTy<32 : usize> for bool}#8::LEN1
-    const LEN2 = test_crate::WithConstTy::LEN2<bool, 32 : usize>
-    type V = u8
-    type W = u64
-    fn f = test_crate::{impl test_crate::WithConstTy<32 : usize> for bool}#8::f
+    const LEN1 = test_crate::{impl test_crate::WithConstTy<u8, u64, 32 : usize> for bool}#8::LEN1
+    const LEN2 = test_crate::WithConstTy::LEN2<bool, u8, u64, 32 : usize>
+    fn f = test_crate::{impl test_crate::WithConstTy<u8, u64, 32 : usize> for bool}#8::f
 }
 
-fn test_crate::use_with_const_ty1<H, const LEN : usize>() -> usize
+fn test_crate::use_with_const_ty1<H, Clause0_V, Clause0_W, const LEN : usize>() -> usize
 where
-    [@TraitClause0]: test_crate::WithConstTy<H, const LEN : usize>,
+    [@TraitClause0]: test_crate::WithConstTy<H, Clause0_V, Clause0_W, const LEN : usize>,
 {
     let @0: usize; // return
 
@@ -502,9 +498,9 @@ where
     return
 }
 
-fn test_crate::use_with_const_ty2<H, const LEN : usize>(@1: @TraitClause0::W)
+fn test_crate::use_with_const_ty2<H, Clause0_V, Clause0_W, const LEN : usize>(@1: Clause0_W)
 where
-    [@TraitClause0]: test_crate::WithConstTy<H, const LEN : usize>,
+    [@TraitClause0]: test_crate::WithConstTy<H, Clause0_V, Clause0_W, const LEN : usize>,
 {
     let @0: (); // return
     let @1: @TraitClause0::W; // arg #1
@@ -517,9 +513,9 @@ where
     return
 }
 
-fn test_crate::use_with_const_ty3<H, const LEN : usize>(@1: @TraitClause0::W) -> u64
+fn test_crate::use_with_const_ty3<H, Clause0_V, Clause0_W, const LEN : usize>(@1: Clause0_W) -> u64
 where
-    [@TraitClause0]: test_crate::WithConstTy<H, const LEN : usize>,
+    [@TraitClause0]: test_crate::WithConstTy<H, Clause0_V, Clause0_W, const LEN : usize>,
 {
     let @0: u64; // return
     let x@1: @TraitClause0::W; // arg #1
@@ -546,10 +542,9 @@ where
     return
 }
 
-fn test_crate::test_where2<T>(@1: @TraitClause0::V)
+fn test_crate::test_where2<T, Clause0_W>(@1: u32)
 where
-    [@TraitClause0]: test_crate::WithConstTy<T, 32 : usize>,
-    @TraitClause0::V = u32,
+    [@TraitClause0]: test_crate::WithConstTy<T, u32, Clause0_W, 32 : usize>,
 {
     let @0: (); // return
     let _x@1: u32; // arg #1
@@ -563,26 +558,25 @@ where
 
 opaque type alloc::string::String
 
-trait test_crate::ParentTrait0<Self>
+trait test_crate::ParentTrait0<Self, Self_W>
 {
-    type W
     fn get_name : test_crate::ParentTrait0::get_name
     fn get_w : test_crate::ParentTrait0::get_w
 }
 
 trait test_crate::ParentTrait1<Self>
 
-trait test_crate::ChildTrait<Self>
+trait test_crate::ChildTrait<Self, Self_Clause0_W>
 {
-    parent_clause_0 : [@TraitClause0]: test_crate::ParentTrait0<Self>
+    parent_clause_0 : [@TraitClause0]: test_crate::ParentTrait0<Self, Self_Clause0_W>
     parent_clause_1 : [@TraitClause1]: test_crate::ParentTrait1<Self>
 }
 
-fn test_crate::ParentTrait0::get_name<'_0, Self>(@1: &'_0 (Self)) -> alloc::string::String
+fn test_crate::ParentTrait0::get_name<'_0, Self, Self_W>(@1: &'_0 (Self)) -> alloc::string::String
 
-fn test_crate::test_child_trait1<'_0, T>(@1: &'_0 (T)) -> alloc::string::String
+fn test_crate::test_child_trait1<'_0, T, Clause0_Clause0_W>(@1: &'_0 (T)) -> alloc::string::String
 where
-    [@TraitClause0]: test_crate::ChildTrait<T>,
+    [@TraitClause0]: test_crate::ChildTrait<T, Clause0_Clause0_W>,
 {
     let @0: alloc::string::String; // return
     let x@1: &'_ (T); // arg #1
@@ -594,11 +588,11 @@ where
     return
 }
 
-fn test_crate::ParentTrait0::get_w<'_0, Self>(@1: &'_0 (Self)) -> Self::W
+fn test_crate::ParentTrait0::get_w<'_0, Self, Self_W>(@1: &'_0 (Self)) -> Self_W
 
-fn test_crate::test_child_trait2<'_0, T>(@1: &'_0 (T)) -> (parents(@TraitClause0)::[@TraitClause0])::W
+fn test_crate::test_child_trait2<'_0, T, Clause0_Clause0_W>(@1: &'_0 (T)) -> Clause0_Clause0_W
 where
-    [@TraitClause0]: test_crate::ChildTrait<T>,
+    [@TraitClause0]: test_crate::ChildTrait<T, Clause0_Clause0_W>,
 {
     let @0: (parents(@TraitClause0)::[@TraitClause0])::W; // return
     let x@1: &'_ (T); // arg #1
@@ -610,11 +604,10 @@ where
     return
 }
 
-fn test_crate::order1<T, U>()
+fn test_crate::order1<T, U, Clause1_W>()
 where
-    [@TraitClause0]: test_crate::ParentTrait0<T>,
-    [@TraitClause1]: test_crate::ParentTrait0<U>,
-    @TraitClause0::W = @TraitClause1::W,
+    [@TraitClause0]: test_crate::ParentTrait0<T, Clause1_W>,
+    [@TraitClause1]: test_crate::ParentTrait0<U, Clause1_W>,
 {
     let @0: (); // return
     let @1: (); // anonymous local
@@ -637,58 +630,42 @@ impl test_crate::{impl test_crate::ChildTrait1 for usize}#10 : test_crate::Child
     parent_clause0 = test_crate::{impl test_crate::ParentTrait1 for usize}#9
 }
 
-trait test_crate::Iterator<Self>
-{
-    type Item
-}
+trait test_crate::Iterator<Self, Self_Item>
 
-trait test_crate::IntoIterator<Self>
-where
-    (parents(Self)::[@TraitClause0])::Item = Self::Item,
+trait test_crate::IntoIterator<Self, Self_Item, Self_IntoIter>
 {
-    parent_clause_0 : [@TraitClause0]: test_crate::Iterator<Self::IntoIter>
-    type Item
-    type IntoIter
+    parent_clause_0 : [@TraitClause0]: test_crate::Iterator<Self_IntoIter, Self_Item>
     fn into_iter : test_crate::IntoIterator::into_iter
 }
 
 trait test_crate::FromResidual<Self, T>
 
-trait test_crate::Try<Self>
+trait test_crate::Try<Self, Self_Residual>
 {
-    parent_clause_0 : [@TraitClause0]: test_crate::FromResidual<Self, Self::Residual>
-    type Residual
+    parent_clause_0 : [@TraitClause0]: test_crate::FromResidual<Self, Self_Residual>
 }
 
-trait test_crate::WithTarget<Self>
+trait test_crate::WithTarget<Self, Self_Target>
+
+trait test_crate::ParentTrait2<Self, Self_U, Self_Clause0_Target>
 {
-    type Target
+    parent_clause_0 : [@TraitClause0]: test_crate::WithTarget<Self_U, Self_Clause0_Target>
 }
 
-trait test_crate::ParentTrait2<Self>
+trait test_crate::ChildTrait2<Self, Self_Clause0_U, Self_Clause0_Clause0_Target>
 {
-    parent_clause_0 : [@TraitClause0]: test_crate::WithTarget<Self::U>
-    type U
-}
-
-trait test_crate::ChildTrait2<Self>
-{
-    parent_clause_0 : [@TraitClause0]: test_crate::ParentTrait2<Self>
+    parent_clause_0 : [@TraitClause0]: test_crate::ParentTrait2<Self, Self_Clause0_U, Self_Clause0_Clause0_Target>
     fn convert : test_crate::ChildTrait2::convert
 }
 
-impl test_crate::{impl test_crate::WithTarget for u32}#11 : test_crate::WithTarget<u32>
+impl test_crate::{impl test_crate::WithTarget<u32> for u32}#11 : test_crate::WithTarget<u32, u32>
+
+impl test_crate::{impl test_crate::ParentTrait2<u32, u32> for u32}#12 : test_crate::ParentTrait2<u32, u32, u32>
 {
-    type Target = u32
+    parent_clause0 = test_crate::{impl test_crate::WithTarget<u32> for u32}#11
 }
 
-impl test_crate::{impl test_crate::ParentTrait2 for u32}#12 : test_crate::ParentTrait2<u32>
-{
-    parent_clause0 = test_crate::{impl test_crate::WithTarget for u32}#11
-    type U = u32
-}
-
-fn test_crate::{impl test_crate::ChildTrait2 for u32}#13::convert(@1: u32) -> u32
+fn test_crate::{impl test_crate::ChildTrait2<u32, u32> for u32}#13::convert(@1: u32) -> u32
 {
     let @0: u32; // return
     let x@1: u32; // arg #1
@@ -697,41 +674,39 @@ fn test_crate::{impl test_crate::ChildTrait2 for u32}#13::convert(@1: u32) -> u3
     return
 }
 
-impl test_crate::{impl test_crate::ChildTrait2 for u32}#13 : test_crate::ChildTrait2<u32>
+impl test_crate::{impl test_crate::ChildTrait2<u32, u32> for u32}#13 : test_crate::ChildTrait2<u32, u32, u32>
 {
-    parent_clause0 = test_crate::{impl test_crate::ParentTrait2 for u32}#12
-    fn convert = test_crate::{impl test_crate::ChildTrait2 for u32}#13::convert
+    parent_clause0 = test_crate::{impl test_crate::ParentTrait2<u32, u32> for u32}#12
+    fn convert = test_crate::{impl test_crate::ChildTrait2<u32, u32> for u32}#13::convert
 }
 
-trait test_crate::CFnOnce<Self, Args>
+trait test_crate::CFnOnce<Self, Args, Self_Output>
 {
-    type Output
     fn call_once : test_crate::CFnOnce::call_once
 }
 
-trait test_crate::CFnMut<Self, Args>
+trait test_crate::CFnMut<Self, Args, Self_Clause0_Output>
 {
-    parent_clause_0 : [@TraitClause0]: test_crate::CFnOnce<Self, Args>
+    parent_clause_0 : [@TraitClause0]: test_crate::CFnOnce<Self, Args, Self_Clause0_Output>
     fn call_mut : test_crate::CFnMut::call_mut
 }
 
-trait test_crate::CFn<Self, Args>
+trait test_crate::CFn<Self, Args, Self_Clause0_Clause0_Output>
 {
-    parent_clause_0 : [@TraitClause0]: test_crate::CFnMut<Self, Args>
+    parent_clause_0 : [@TraitClause0]: test_crate::CFnMut<Self, Args, Self_Clause0_Clause0_Output>
     fn call : test_crate::CFn::call
 }
 
-trait test_crate::GetTrait<Self>
+trait test_crate::GetTrait<Self, Self_W>
 {
-    type W
     fn get_w : test_crate::GetTrait::get_w
 }
 
-fn test_crate::GetTrait::get_w<'_0, Self>(@1: &'_0 (Self)) -> Self::W
+fn test_crate::GetTrait::get_w<'_0, Self, Self_W>(@1: &'_0 (Self)) -> Self_W
 
-fn test_crate::test_get_trait<'_0, T>(@1: &'_0 (T)) -> @TraitClause0::W
+fn test_crate::test_get_trait<'_0, T, Clause0_W>(@1: &'_0 (T)) -> Clause0_W
 where
-    [@TraitClause0]: test_crate::GetTrait<T>,
+    [@TraitClause0]: test_crate::GetTrait<T, Clause0_W>,
 {
     let @0: @TraitClause0::W; // return
     let x@1: &'_ (T); // arg #1
@@ -844,17 +819,17 @@ impl test_crate::{impl test_crate::RecursiveImpl for ()}#17 : test_crate::Recurs
     type Item = ()
 }
 
-fn test_crate::WithConstTy::f<'_0, '_1, Self, const LEN : usize>(@1: &'_0 mut (Self::W), @2: &'_1 (Array<u8, const LEN : usize>))
+fn test_crate::WithConstTy::f<'_0, '_1, Self, Self_V, Self_W, const LEN : usize>(@1: &'_0 mut (Self_W), @2: &'_1 (Array<u8, const LEN : usize>))
 
-fn test_crate::IntoIterator::into_iter<Self>(@1: Self) -> Self::IntoIter
+fn test_crate::IntoIterator::into_iter<Self, Self_Item, Self_IntoIter>(@1: Self) -> Self_IntoIter
 
-fn test_crate::ChildTrait2::convert<Self>(@1: (parents(Self)::[@TraitClause0])::U) -> (parents((parents(Self)::[@TraitClause0]))::[@TraitClause0])::Target
+fn test_crate::ChildTrait2::convert<Self, Self_Clause0_U, Self_Clause0_Clause0_Target>(@1: Self_Clause0_U) -> Self_Clause0_Clause0_Target
 
-fn test_crate::CFnOnce::call_once<Self, Args>(@1: Self, @2: Args) -> Self::Output
+fn test_crate::CFnOnce::call_once<Self, Args, Self_Output>(@1: Self, @2: Args) -> Self_Output
 
-fn test_crate::CFnMut::call_mut<'_0, Self, Args>(@1: &'_0 mut (Self), @2: Args) -> (parents(Self)::[@TraitClause0])::Output
+fn test_crate::CFnMut::call_mut<'_0, Self, Args, Self_Clause0_Output>(@1: &'_0 mut (Self), @2: Args) -> Self_Clause0_Output
 
-fn test_crate::CFn::call<'_0, Self, Args>(@1: &'_0 (Self), @2: Args) -> (parents((parents(Self)::[@TraitClause0]))::[@TraitClause0])::Output
+fn test_crate::CFn::call<'_0, Self, Args, Self_Clause0_Clause0_Output>(@1: &'_0 (Self), @2: Args) -> Self_Clause0_Clause0_Output
 
 
 

@@ -115,6 +115,8 @@ impl CheckGenericsVisitor<'_, '_> {
         }
     }
     fn enter_ty(&mut self, ty: &Ty) {
+        // TODO: check that `TraitType` refers to an existing associated type.
+        // TODO: check that `TypeVar` refers to a type variable in scope.
         if let Ty::Adt(kind, args) = ty {
             self.check_typeid_generics(args, kind);
         }

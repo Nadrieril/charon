@@ -13,16 +13,14 @@ fn test_cargo_dependencies::silly_incr::closure(@1: (), @2: (u32)) -> u32
     return
 }
 
-trait core::ops::function::FnOnce<Self, Args>
+trait core::ops::function::FnOnce<Self, Args, Self_Output>
 {
-    type Output
     fn call_once : core::ops::function::FnOnce::call_once
 }
 
 fn take_mut::take<'_0, T, F>(@1: &'_0 mut (T), @2: F)
 where
-    [@TraitClause0]: core::ops::function::FnOnce<F, (T)>,
-    @TraitClause0::Output = T,
+    [@TraitClause0]: core::ops::function::FnOnce<F, (T), T>,
 
 fn test_cargo_dependencies::silly_incr<'_0>(@1: &'_0 mut (u32))
 {

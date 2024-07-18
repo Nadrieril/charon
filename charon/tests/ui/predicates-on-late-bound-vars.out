@@ -77,16 +77,12 @@ fn test_crate::foo()
     return
 }
 
-trait test_crate::Foo<Self>
-{
-    type S
-}
+trait test_crate::Foo<Self, Self_S>
 
-fn test_crate::f<T, U>() -> core::option::Option<@TraitClause0::S>
+fn test_crate::f<T, U, Clause1_S>() -> core::option::Option<Clause1_S>
 where
-    [@TraitClause0]: test_crate::Foo<T>,
-    [@TraitClause1]: test_crate::Foo<U>,
-    @TraitClause0::S = @TraitClause1::S,
+    [@TraitClause0]: test_crate::Foo<T, Clause1_S>,
+    [@TraitClause1]: test_crate::Foo<U, Clause1_S>,
 {
     let @0: core::option::Option<@TraitClause1::S>; // return
 

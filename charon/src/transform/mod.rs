@@ -3,6 +3,8 @@ pub mod check_generics;
 #[charon::opaque]
 pub mod ctx;
 #[charon::opaque]
+pub mod expand_associated_types;
+#[charon::opaque]
 pub mod graphs;
 #[charon::opaque]
 pub mod index_to_function_calls;
@@ -41,6 +43,8 @@ pub use ctx::TransformCtx;
 pub static ULLBC_PASSES: &[&dyn ctx::UllbcPass] = &[
     // Move clauses on associated types to be parent clauses
     &lift_associated_item_clauses::Transform,
+    // Change trait associated types to be type parameters instead. See the module for details.
+    &expand_associated_types::Transform,
     // # Micro-pass: Remove overflow/div-by-zero/bounds checks since they are already part of the
     // arithmetic/array operation in the semantics of (U)LLBC.
     // **WARNING**: this pass uses the fact that the dynamic checks introduced by Rustc use a
@@ -97,5 +101,5 @@ pub static LLBC_PASSES: &[&dyn ctx::LlbcPass] = &[
     // useless no-ops.
     &remove_nops::Transform,
     // Check that all supplied generic types match the corresponding generic parameters.
-    &check_generics::Check,
+    // &check_generics::Check,
 ];

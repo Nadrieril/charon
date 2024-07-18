@@ -2,13 +2,18 @@ trait Foo<'a>: Copy {
     // FIXME: the `+ 'a` appears to be completely ignored.
     type Item: Clone + 'a;
 
-    fn use_item(x: &Self::Item) -> &Self::Item {
+    fn use_item_required(x: &Self::Item) -> &Self::Item;
+    fn use_item_provided(x: &Self::Item) -> &Self::Item {
         x
     }
 }
 
 impl<'a, T> Foo<'a> for &'a T {
     type Item = Option<&'a T>;
+
+    fn use_item_required(x: &Self::Item) -> &Self::Item {
+        x
+    }
 }
 
 fn external_use_item<'a, T: Foo<'a>>(x: T::Item) -> T::Item {

@@ -19,6 +19,7 @@ generate_index_type!(VariantId, "Variant");
 generate_index_type!(FieldId, "Field");
 generate_index_type!(RegionId, "Region");
 generate_index_type!(ConstGenericVarId, "Const");
+generate_index_type!(TraitTypeConstraintId, "TraitTypeConstraint");
 generate_index_type!(GlobalDeclId, "Global");
 
 /// Type variable.
@@ -290,7 +291,7 @@ pub struct TraitTypeConstraint {
     pub ty: Ty,
 }
 
-#[derive(Debug, Clone, Eq, PartialEq, Serialize, Deserialize, Hash, Drive, DriveMut)]
+#[derive(Clone, Eq, PartialEq, Serialize, Deserialize, Hash, Drive, DriveMut)]
 pub struct GenericArgs {
     pub regions: Vec<Region>,
     pub types: Vec<Ty>,
@@ -318,7 +319,7 @@ pub struct GenericParams {
     /// The type outlives the region
     pub types_outlive: Vec<TypeOutlives>,
     /// Constraints over trait associated types
-    pub trait_type_constraints: Vec<TraitTypeConstraint>,
+    pub trait_type_constraints: Vector<TraitTypeConstraintId, TraitTypeConstraint>,
 }
 
 /// A predicate of the form `exists<T> where T: Trait`.
@@ -381,7 +382,7 @@ pub enum PredicateOrigin {
     // trait Trait {}
     // ```
     TraitSelf,
-    // Note: this also includes supertrait constraings.
+    // Note: this also includes supertrait constraints.
     // ```
     // trait Trait<T: Clone> {}
     // trait Trait<T> where T: Clone {}

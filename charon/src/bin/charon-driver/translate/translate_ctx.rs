@@ -1113,7 +1113,7 @@ impl<'tcx, 'ctx, 'ctx1> BodyTransCtx<'tcx, 'ctx, 'ctx1> {
             trait_clauses: self.get_local_trait_clauses(),
             regions_outlive: self.regions_outlive.clone(),
             types_outlive: self.types_outlive.clone(),
-            trait_type_constraints: self.trait_type_constraints.clone(),
+            trait_type_constraints: self.trait_type_constraints.iter().cloned().collect(),
         }
     }
 

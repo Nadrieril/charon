@@ -80,8 +80,13 @@ where
     }
 
     /// Remove the value from this slot.
-    pub fn remove(&mut self, id: I) {
-        self.vector[id] = None
+    pub fn remove(&mut self, id: I) -> Option<T> {
+        std::mem::replace(&mut self.vector[id], None)
+    }
+
+    /// Remove all elements after `at` and returns them.
+    pub fn split_off<'a>(&'a mut self, at: usize) -> impl Iterator<Item = T> + 'a {
+        self.vector.drain(I::from_usize(at)..).flatten()
     }
 
     pub fn push(&mut self, x: T) -> I {
@@ -93,6 +98,16 @@ where
         let x = f(id);
         self.set_slot(id, x);
         id
+    }
+
+    /// Get a mutable reference into the ith element. If the vector is too short, extend it until
+    /// it has enough elements. If the element doesn't exist, use the provided function to
+    /// initialize it.
+    pub fn get_or_extend_and_insert(&mut self, id: I, f: impl FnOnce() -> T) -> &mut T {
+        if id.index() >= self.vector.len() {
+            self.vector.resize_with(id.index() + 1, || None);
+        }
+        self.vector[id].get_or_insert_with(f)
     }
 
     /// Map each entry to a new one, keeping the same ids.
@@ -141,6 +156,12 @@ where
         self.vector
             .iter_enumerated()
             .flat_map(|(i, opt)| Some((i, opt.as_ref()?)))
+    }
+
+    pub fn iter_mut_indexed(&mut self) -> impl Iterator<Item = (I, &mut T)> {
+        self.vector
+            .iter_mut_enumerated()
+            .flat_map(|(i, opt)| Some((i, opt.as_mut()?)))
     }
 
     pub fn into_iter_indexed(self) -> impl Iterator<Item = (I, T)> {

@@ -1,16 +1,28 @@
 //! This file groups everything which is linked to implementations about [crate::types]
+use derive_visitor::{DriveMut, VisitorMut};
+
 use crate::ids::Vector;
 use crate::types::*;
-use std::collections::HashMap;
+use std::fmt::Debug;
 use std::iter::Iterator;
 
 impl DeBruijnId {
+    pub fn zero() -> Self {
+        DeBruijnId { index: 0 }
+    }
+
     pub fn new(index: usize) -> Self {
         DeBruijnId { index }
     }
 
     pub fn is_zero(&self) -> bool {
         self.index == 0
+    }
+
+    pub fn incr(&self) -> Self {
+        DeBruijnId {
+            index: self.index + 1,
+        }
     }
 
     pub fn decr(&self) -> Self {
@@ -224,6 +236,151 @@ impl IntegerTy {
     }
 }
 
+#[derive(VisitorMut)]
+#[visitor(Ty, Region(exit), ConstGeneric(exit), TraitRefKind(exit))]
+struct SubstVisitor<'a> {
+    // The arguments to substitute.
+    args: &'a GenericArgs,
+    // The De Bruijn index of the binder we are substituting for. We leave other binder levels
+    // untouched.
+    binder_depth: DeBruijnId,
+}
+
+// TODO: subst everything
+impl<'a> SubstVisitor<'a> {
+    fn new(args: &'a GenericArgs) -> Self {
+        Self {
+            args,
+            binder_depth: DeBruijnId::zero(),
+        }
+    }
+
+    fn enter_ty(&mut self, ty: &mut Ty) {
+        match ty {
+            Ty::Arrow(_, _, _) => self.binder_depth = self.binder_depth.incr(),
+            _ => {}
+        }
+    }
+    fn exit_ty(&mut self, ty: &mut Ty) {
+        match ty {
+            Ty::TypeVar(v) => {
+                // TODO: take into account `ImplElem` binder
+                *ty = self.args.types[v.index()].clone();
+            }
+            Ty::Arrow(_, _, _) => self.binder_depth = self.binder_depth.decr(),
+            Ty::Adt(_, _)
+            | Ty::DynTrait(_)
+            | Ty::Literal(_)
+            | Ty::Never
+            | Ty::RawPtr(_, _)
+            | Ty::Ref(_, _, _)
+            | Ty::TraitType(_, _) => {}
+        }
+    }
+    fn exit_region(&mut self, region: &mut Region) {
+        match region {
+            Region::BVar(dbid, v) if *dbid == self.binder_depth => {
+                // TODO: prpbably need to update the binders
+                *region = self.args.regions[v.index()].clone();
+            }
+            _ => {}
+        }
+    }
+    fn exit_const_generic(&mut self, cg: &mut ConstGeneric) {
+        match cg {
+            ConstGeneric::Var(v) => {
+                *cg = self.args.const_generics[v.index()].clone();
+            }
+            _ => {}
+        }
+    }
+    fn exit_trait_ref_kind(&mut self, tref: &mut TraitRefKind) {
+        match tref {
+            TraitRefKind::Clause(clause_id) => {
+                *tref = self.args.trait_refs[clause_id.index()].kind.clone();
+            }
+            _ => {}
+        }
+    }
+}
+
+/// A value of type `T` bound by the generic parameters of item
+/// `item`. Used when dealing with multiple items at a time, to
+/// ensure we don't mix up generics.
+///
+/// To get the value, use `under_binder_of` or `subst_for`.
+pub struct ItemBinder<ItemId, T> {
+    pub item_id: ItemId,
+    val: T,
+}
+
+impl<ItemId, T> ItemBinder<ItemId, T>
+where
+    ItemId: Debug + Copy + PartialEq,
+{
+    pub fn new(item_id: ItemId, val: T) -> Self {
+        Self { item_id, val }
+    }
+
+    pub fn as_ref(&self) -> ItemBinder<ItemId, &T> {
+        ItemBinder {
+            item_id: self.item_id,
+            val: &self.val,
+        }
+    }
+
+    pub fn map_bound<U>(self, f: impl FnOnce(T) -> U) -> ItemBinder<ItemId, U> {
+        ItemBinder {
+            item_id: self.item_id,
+            val: f(self.val),
+        }
+    }
+
+    fn assert_item_id(&self, item_id: ItemId) {
+        assert_eq!(
+            self.item_id, item_id,
+            "Trying to use item bound for {:?} as if it belonged to {:?}",
+            self.item_id, item_id
+        );
+    }
+
+    /// Assert that the value is bound for item `item_id`, and returns it. This is used when we
+    /// plan to store the returned value inside that item.
+    pub fn under_binder_of(self, item_id: ItemId) -> T {
+        self.assert_item_id(item_id);
+        self.val
+    }
+
+    /// Given generic args for `item_id`, assert that the value is bound for `item_id` and
+    /// substitute it with the provided generic arguments. Because the arguments are bound in the
+    /// context of another item, so it the resulting substituted value.
+    pub fn subst_for<OtherItem: Debug + Copy + PartialEq>(
+        self,
+        item_id: ItemId,
+        args: ItemBinder<OtherItem, &GenericArgs>,
+    ) -> ItemBinder<OtherItem, T>
+    where
+        T: DriveMut,
+    {
+        self.assert_item_id(item_id);
+        args.map_bound(|args| {
+            let mut val = self.val;
+            val.drive_mut(&mut SubstVisitor::new(args));
+            val
+        })
+    }
+}
+
+/// Dummy item identifier that represents the current item when not ambiguous.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct CurrentItem;
+
+impl<T> ItemBinder<CurrentItem, T> {
+    pub fn under_current_binder(self) -> T {
+        self.val
+    }
+}
+
 impl Ty {
     /// Return true if it is actually unit (i.e.: 0-tuple)
     pub fn is_unit(&self) -> bool {
@@ -321,5 +478,15 @@ impl Variant {
             .attributes
             .iter()
             .any(|attr| attr.is_opaque())
+    }
+}
+
+impl PredicateOrigin {
+    /// Whether the corresponding clause was declared on a trait.
+    pub(crate) fn comes_from_trait(&self) -> bool {
+        match self {
+            Self::TraitSelf | Self::WhereClauseOnTrait | Self::TraitItem(_) => true,
+            Self::WhereClauseOnFn | Self::WhereClauseOnType | Self::WhereClauseOnImpl => false,
+        }
     }
 }

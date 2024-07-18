@@ -56,6 +56,7 @@ type id_to_file_map = file_name IdToFile.t
 let de_bruijn_id_of_json = int_of_json
 let path_buf_of_json = string_of_json
 let trait_item_name_of_json = string_of_json
+let trait_type_constraint_id_of_json = int_of_json
 let vector_of_json _ = list_of_json
 let const_generic_var_id_of_json = ConstGenericVarId.id_of_json
 let disambiguator_of_json = Disambiguator.id_of_json
@@ -646,7 +647,8 @@ and generic_params_of_json (id_to_file : id_to_file_map) (js : json) :
             types_outlive
         in
         let* trait_type_constraints =
-          list_of_json trait_type_constraint_of_json trait_type_constraints
+          vector_of_json trait_type_constraint_id_of_json
+            trait_type_constraint_of_json trait_type_constraints
         in
         Ok
           {

@@ -12,21 +12,20 @@ fn test_crate::incr_u32(@1: u32) -> u32
     return
 }
 
-trait core::ops::function::FnOnce<Self, Args>
+trait core::ops::function::FnOnce<Self, Args, Self_Output>
 {
-    type Output
     fn call_once : core::ops::function::FnOnce::call_once
 }
 
-trait core::ops::function::FnMut<Self, Args>
+trait core::ops::function::FnMut<Self, Args, Self_Clause0_Output>
 {
-    parent_clause_0 : [@TraitClause0]: core::ops::function::FnOnce<Self, Args>
+    parent_clause_0 : [@TraitClause0]: core::ops::function::FnOnce<Self, Args, Self_Clause0_Output>
     fn call_mut : core::ops::function::FnMut::call_mut
 }
 
-trait core::ops::function::Fn<Self, Args>
+trait core::ops::function::Fn<Self, Args, Self_Clause0_Clause0_Output>
 {
-    parent_clause_0 : [@TraitClause0]: core::ops::function::FnMut<Self, Args>
+    parent_clause_0 : [@TraitClause0]: core::ops::function::FnMut<Self, Args, Self_Clause0_Clause0_Output>
     fn call : core::ops::function::Fn::call
 }
 
@@ -35,12 +34,11 @@ enum core::option::Option<T> =
 |  Some(T)
 
 
-fn core::ops::function::Fn::call<'_0, Self, Args>(@1: &'_0 (Self), @2: Args) -> (parents((parents(Self)::[@TraitClause0]))::[@TraitClause0])::Output
+fn core::ops::function::Fn::call<'_0, Self, Args, Self_Clause0_Clause0_Output>(@1: &'_0 (Self), @2: Args) -> Self_Clause0_Clause0_Output
 
 fn test_crate::map_option<T, F>(@1: core::option::Option<T>, @2: F) -> core::option::Option<T>
 where
-    [@TraitClause0]: core::ops::function::Fn<F, (T)>,
-    (parents((parents(@TraitClause0)::[@TraitClause0]))::[@TraitClause0])::Output = T,
+    [@TraitClause0]: core::ops::function::Fn<F, (T), T>,
 {
     let @0: core::option::Option<T>; // return
     let x@1: core::option::Option<T>; // arg #1
@@ -553,8 +551,7 @@ fn test_crate::test_array_map::closure<'_0>(@1: &'_0 mut (()), @2: (i32)) -> i32
 
 fn core::array::{Array<T, const N : usize>}#23::map<T, F, U, const N : usize>(@1: Array<T, const N : usize>, @2: F) -> Array<U, const N : usize>
 where
-    [@TraitClause0]: core::ops::function::FnMut<F, (T)>,
-    (parents(@TraitClause0)::[@TraitClause0])::Output = U,
+    [@TraitClause0]: core::ops::function::FnMut<F, (T), U>,
 
 fn test_crate::test_array_map(@1: Array<i32, 256 : usize>) -> Array<i32, 256 : usize>
 {
@@ -571,9 +568,9 @@ fn test_crate::test_array_map(@1: Array<i32, 256 : usize>) -> Array<i32, 256 : u
     return
 }
 
-fn core::ops::function::FnMut::call_mut<'_0, Self, Args>(@1: &'_0 mut (Self), @2: Args) -> (parents(Self)::[@TraitClause0])::Output
+fn core::ops::function::FnMut::call_mut<'_0, Self, Args, Self_Clause0_Output>(@1: &'_0 mut (Self), @2: Args) -> Self_Clause0_Output
 
-fn core::ops::function::FnOnce::call_once<Self, Args>(@1: Self, @2: Args) -> Self::Output
+fn core::ops::function::FnOnce::call_once<Self, Args, Self_Output>(@1: Self, @2: Args) -> Self_Output
 
 
 

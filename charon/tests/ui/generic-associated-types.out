@@ -51,7 +51,8 @@ warning: unused variable: `x`
    |
    = note: `#[warn(unused_variables)]` on by default
 
+thread 'rustc' panicked at src/transform/expand_associated_types.rs:702:38:
+called `Option::unwrap()` on a `None` value
 error: aborting due to 6 previous errors; 1 warning emitted
 
-[ERROR charon_driver:249] Compilation encountered 6 errors
-Error: Charon driver exited with code 1
+Error: Charon driver exited with code 101
