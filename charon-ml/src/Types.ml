@@ -413,6 +413,12 @@ and global_decl_ref = {
   global_generics : generic_args;
 }
 
+(** Reference to a function declaration. *)
+and fun_decl_ref = {
+  fun_id : fun_decl_id;
+  fun_generics : generic_args;  (** Generic arguments passed to the function. *)
+}
+
 and generic_args = {
   regions : region list;
   types : ty list;
@@ -666,6 +672,17 @@ and item_meta = {
   attr_info : attr_info;  (** Attributes and visibility. *)
   is_local : bool;
       (** `true` if the type decl is a local type decl, `false` if it comes from an external crate. *)
+}
+
+(** A value of type `T` bound by generic parameters. Used in any context where we're adding generic
+    parameters that aren't on the top-level item, e.g. trait methods, `for<'a>` clauses, GATs.
+ *)
+and 'a0 binder = {
+  params : generic_params;
+  skip_binder : 'a0;
+      (** Named this way to highlight accesses to the inner value that might be handling parameters
+        incorrectly. Prefer using helper methods.
+     *)
 }
 [@@deriving show, ord]
 

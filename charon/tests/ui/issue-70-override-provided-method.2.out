@@ -123,7 +123,7 @@ fn test_crate::{impl test_crate::Trait for test_crate::Bar}#1::provided1<'_0>(@1
 impl test_crate::{impl test_crate::Trait for test_crate::Bar}#1 : test_crate::Trait<test_crate::Bar>
 {
     fn required = test_crate::{impl test_crate::Trait for test_crate::Bar}#1::required
-    fn provided1 = test_crate::{impl test_crate::Trait for test_crate::Bar}#1::provided1
+    fn provided1<'_0> = test_crate::{impl test_crate::Trait for test_crate::Bar}#1::provided1<'_0>
 }
 
 

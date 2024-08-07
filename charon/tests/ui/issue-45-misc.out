@@ -355,15 +355,15 @@ where
 {
     type Item = A
     fn next = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::next
-    fn size_hint = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::size_hint
-    fn count = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::count
-    fn nth = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::nth
-    fn last = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::last
-    fn min = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::min
-    fn max = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::max
-    fn is_sorted = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::is_sorted
-    fn advance_by = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::advance_by
-    fn __iterator_get_unchecked = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::__iterator_get_unchecked
+    fn size_hint<'_0, A, [@TraitClause0]: core::iter::range::Step<A>> = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::size_hint<'_0, A>[@TraitClause0]
+    fn count<A, [@TraitClause0]: core::iter::range::Step<A>> = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::count<A>[@TraitClause0]
+    fn nth<'_0, A, [@TraitClause0]: core::iter::range::Step<A>> = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::nth<'_0, A>[@TraitClause0]
+    fn last<A, [@TraitClause0]: core::iter::range::Step<A>> = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::last<A>[@TraitClause0]
+    fn min<A, [@TraitClause0]: core::iter::range::Step<A>, [@TraitClause1]: core::cmp::Ord<A>> = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::min<A>[@TraitClause0, @TraitClause1]
+    fn max<A, [@TraitClause0]: core::iter::range::Step<A>, [@TraitClause1]: core::cmp::Ord<A>> = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::max<A>[@TraitClause0, @TraitClause1]
+    fn is_sorted<A, [@TraitClause0]: core::iter::range::Step<A>> = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::is_sorted<A>[@TraitClause0]
+    fn advance_by<'_0, A, [@TraitClause0]: core::iter::range::Step<A>> = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::advance_by<'_0, A>[@TraitClause0]
+    fn __iterator_get_unchecked<'_0, A, [@TraitClause0]: core::iter::range::Step<A>, [@TraitClause1]: core::iter::adapters::zip::TrustedRandomAccessNoCoerce<core::ops::range::Range<A>>> = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>}#6::__iterator_get_unchecked<'_0, A>[@TraitClause0, @TraitClause1]
 }
 
 fn core::clone::impls::{impl core::clone::Clone for u8}#6::clone<'_0>(@1: &'_0 (u8)) -> u8
@@ -380,7 +380,7 @@ fn core::cmp::impls::{impl core::cmp::PartialEq<u8> for u8}#22::ne<'_0, '_1>(@1:
 impl core::cmp::impls::{impl core::cmp::PartialEq<u8> for u8}#22 : core::cmp::PartialEq<u8, u8>
 {
     fn eq = core::cmp::impls::{impl core::cmp::PartialEq<u8> for u8}#22::eq
-    fn ne = core::cmp::impls::{impl core::cmp::PartialEq<u8> for u8}#22::ne
+    fn ne<'_0, '_1> = core::cmp::impls::{impl core::cmp::PartialEq<u8> for u8}#22::ne<'_0, '_1>
 }
 
 fn core::cmp::impls::{impl core::cmp::PartialOrd<u8> for u8}#60::partial_cmp<'_0, '_1>(@1: &'_0 (u8), @2: &'_1 (u8)) -> core::option::Option<core::cmp::Ordering>
@@ -397,10 +397,10 @@ impl core::cmp::impls::{impl core::cmp::PartialOrd<u8> for u8}#60 : core::cmp::P
 {
     parent_clause0 = core::cmp::impls::{impl core::cmp::PartialEq<u8> for u8}#22
     fn partial_cmp = core::cmp::impls::{impl core::cmp::PartialOrd<u8> for u8}#60::partial_cmp
-    fn lt = core::cmp::impls::{impl core::cmp::PartialOrd<u8> for u8}#60::lt
-    fn le = core::cmp::impls::{impl core::cmp::PartialOrd<u8> for u8}#60::le
-    fn ge = core::cmp::impls::{impl core::cmp::PartialOrd<u8> for u8}#60::ge
-    fn gt = core::cmp::impls::{impl core::cmp::PartialOrd<u8> for u8}#60::gt
+    fn lt<'_0, '_1> = core::cmp::impls::{impl core::cmp::PartialOrd<u8> for u8}#60::lt<'_0, '_1>
+    fn le<'_0, '_1> = core::cmp::impls::{impl core::cmp::PartialOrd<u8> for u8}#60::le<'_0, '_1>
+    fn ge<'_0, '_1> = core::cmp::impls::{impl core::cmp::PartialOrd<u8> for u8}#60::ge<'_0, '_1>
+    fn gt<'_0, '_1> = core::cmp::impls::{impl core::cmp::PartialOrd<u8> for u8}#60::gt<'_0, '_1>
 }
 
 fn core::iter::range::{impl core::iter::range::Step for u8}#35::steps_between<'_0, '_1>(@1: &'_0 (u8), @2: &'_1 (u8)) -> core::option::Option<usize>

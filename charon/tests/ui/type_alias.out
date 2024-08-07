@@ -61,7 +61,7 @@ where
     parent_clause0 = alloc::slice::{impl core::borrow::Borrow<Slice<T>> for alloc::vec::Vec<T, A>}#5<T, alloc::alloc::Global>
     type Owned = alloc::vec::Vec<T, alloc::alloc::Global>
     fn to_owned = alloc::slice::{impl alloc::borrow::ToOwned for Slice<T>}#9::to_owned
-    fn clone_into = alloc::slice::{impl alloc::borrow::ToOwned for Slice<T>}#9::clone_into
+    fn clone_into<'_0, '_1, T, [@TraitClause0]: core::clone::Clone<T>> = alloc::slice::{impl alloc::borrow::ToOwned for Slice<T>}#9::clone_into<'_0, '_1, T>[@TraitClause0]
 }
 
 type test_crate::Generic2<'a, T>

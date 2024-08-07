@@ -321,6 +321,16 @@ pub struct GenericParams {
     pub trait_type_constraints: Vec<TraitTypeConstraint>,
 }
 
+/// A value of type `T` bound by generic parameters. Used in any context where we're adding generic
+/// parameters that aren't on the top-level item, e.g. trait methods, `for<'a>` clauses, GATs.
+#[derive(Debug, Default, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Binder<T> {
+    pub params: GenericParams,
+    /// Named this way to highlight accesses to the inner value that might be handling parameters
+    /// incorrectly. Prefer using helper methods.
+    pub skip_binder: T,
+}
+
 /// A predicate of the form `exists<T> where T: Trait`.
 ///
 /// TODO: store something useful here

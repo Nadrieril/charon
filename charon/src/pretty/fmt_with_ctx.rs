@@ -54,6 +54,22 @@ impl<C: AstFormatter> FmtWithCtx<C> for AbortKind {
     }
 }
 
+impl<T> Binder<T> {
+    /// Format the parameters and contents of this binder and returns the resulting strings. Note:
+    /// this assumes the binder fully replaces the existing generics.
+    fn fmt_split<'a, C>(&'a self, ctx: &'a C) -> (String, String)
+    where
+        C: AstFormatter,
+        T: FmtWithCtx<<C as SetGenerics<'a>>::C>,
+    {
+        let ctx = &ctx.set_generics(&self.params);
+        (
+            self.params.fmt_with_ctx(ctx),
+            self.skip_binder.fmt_with_ctx(ctx),
+        )
+    }
+}
+
 impl<C: AstFormatter> FmtWithCtx<C> for BlockData {
     fn fmt_with_ctx_and_indent(&self, tab: &str, ctx: &C) -> String {
         let mut out: Vec<String> = Vec::new();
@@ -173,6 +189,14 @@ impl<C: AstFormatter> FmtWithCtx<C> for FnPtr {
                 format!("{}::{}", trait_ref.fmt_with_ctx(ctx), &method_id.0)
             }
         };
+        format!("{}{}", f, generics)
+    }
+}
+
+impl<C: AstFormatter> FmtWithCtx<C> for FunDeclRef {
+    fn fmt_with_ctx(&self, ctx: &C) -> String {
+        let f = ctx.format_object(self.id);
+        let generics = self.generics.fmt_with_ctx_split_trait_refs(ctx);
         format!("{}{}", f, generics)
     }
 }
@@ -1153,10 +1177,13 @@ impl<C: AstFormatter> FmtWithCtx<C> for TraitImpl {
                 .chain(
                     self.required_methods
                         .iter()
-                        .chain(self.provided_methods.iter())
                         .map(|(name, f)| {
                             format!("{TAB_INCR}fn {name} = {}\n", ctx.format_object(*f))
-                        }),
+                        })
+                        .chain(self.provided_methods.iter().map(|(name, binder)| {
+                            let (params, fn_ref) = binder.fmt_split(ctx);
+                            format!("{TAB_INCR}fn {name}{params} = {fn_ref}\n",)
+                        })),
                 )
                 .collect::<Vec<String>>();
             if items.is_empty() {

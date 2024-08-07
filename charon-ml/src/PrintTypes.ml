@@ -128,6 +128,12 @@ and global_decl_ref_to_string (env : ('a, 'b) fmt_env) (gr : global_decl_ref) :
   let generics = generic_args_to_string env gr.global_generics in
   global_id ^ generics
 
+and fun_decl_ref_to_string (env : ('a, 'b) fmt_env) (fr : fun_decl_ref) : string
+    =
+  let fun_id = fun_decl_id_to_string env fr.fun_id in
+  let generics = generic_args_to_string env fr.fun_generics in
+  fun_id ^ generics
+
 and trait_decl_id_to_string env id =
   match TraitDeclId.Map.find_opt id env.trait_decls with
   | None -> trait_decl_id_to_pretty_string id

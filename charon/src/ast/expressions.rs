@@ -323,6 +323,7 @@ pub enum AssumedFunId {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, EnumAsGetters, Serialize, Deserialize, Drive, DriveMut)]
+// TODO: rename to `FnPtrKind` and merge with `FunId`.
 pub enum FunIdOrTraitMethodRef {
     #[charon::rename("FunId")]
     Fun(FunId),

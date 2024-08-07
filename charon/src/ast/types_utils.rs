@@ -1,6 +1,7 @@
 //! This file groups everything which is linked to implementations about [crate::types]
 use crate::ids::Vector;
 use crate::types::*;
+use derive_visitor::{Drive, DriveMut, Event, Visitor, VisitorMut};
 use std::collections::HashMap;
 use std::iter::Iterator;
 
@@ -484,5 +485,24 @@ impl Variant {
             .attributes
             .iter()
             .any(|attr| attr.is_opaque())
+    }
+}
+
+// The derive macro doesn't handle generics.
+impl<T: Drive> Drive for Binder<T> {
+    fn drive<V: Visitor>(&self, visitor: &mut V) {
+        visitor.visit(self, Event::Enter);
+        self.params.drive(visitor);
+        self.skip_binder.drive(visitor);
+        visitor.visit(self, Event::Exit);
+    }
+}
+
+impl<T: DriveMut> DriveMut for Binder<T> {
+    fn drive_mut<V: VisitorMut>(&mut self, visitor: &mut V) {
+        visitor.visit(self, Event::Enter);
+        self.params.drive_mut(visitor);
+        self.skip_binder.drive_mut(visitor);
+        visitor.visit(self, Event::Exit);
     }
 }

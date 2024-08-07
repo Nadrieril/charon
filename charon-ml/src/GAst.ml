@@ -339,7 +339,8 @@ type trait_decl = {
       (** The *required* methods.
 
         The required methods are the methods declared by the trait but with
-        no default implementation.
+        no default implementation. The `FunDecl` has no body.
+        The linked `FunDecl` uses the generics of this decl, concatenated with its own generics.
      *)
   provided_methods : (trait_item_name * fun_decl_id option) list;
       (** The *provided* methods.
@@ -354,6 +355,7 @@ type trait_decl = {
         TODO: allow to optionnaly extract information. For instance: attempt
         to extract, and fail nicely if we don't succeed (definition not in
         the supported subset, etc.).
+        The linked `FunDecl` uses the generics of this decl, concatenated with its own generics.
      *)
 }
 
@@ -384,9 +386,16 @@ and trait_impl = {
   types : (trait_item_name * ty) list;
       (** The associated types declared in the trait. *)
   required_methods : (trait_item_name * fun_decl_id) list;
-      (** The implemented required methods *)
-  provided_methods : (trait_item_name * fun_decl_id) list;
-      (** The re-implemented provided methods *)
+      (** The implemented required methods
+        The linked `FunDecl` uses the generics of this impl, concatenated with its own generics.
+     *)
+  provided_methods : (trait_item_name * fun_decl_ref binder) list;
+      (** The re-implemented provided methods. If an implementation isn't given by the trait impl, we
+        refer to the default method in the trait.
+        The `Binder` contains the parameters needed for this method; the generics of this impl are
+        a prefix of that; the `FunDeclRef` then gives the correct parameters to the pointed-to
+        `FunDecl`.
+     *)
 }
 
 (** A (group of) top-level declaration(s), properly reordered.

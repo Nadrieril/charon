@@ -411,6 +411,15 @@ and global_decl_ref_of_json (js : json) : (global_decl_ref, string) result =
         Ok { global_id; global_generics }
     | _ -> Error "")
 
+and fun_decl_ref_of_json (js : json) : (fun_decl_ref, string) result =
+  combine_error_msgs js __FUNCTION__
+    (match js with
+    | `Assoc [ ("id", id); ("generics", generics) ] ->
+        let* fun_id = fun_decl_id_of_json id in
+        let* fun_generics = generic_args_of_json generics in
+        Ok { fun_id; fun_generics }
+    | _ -> Error "")
+
 and generic_args_of_json (js : json) : (generic_args, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
@@ -638,6 +647,21 @@ and generic_params_of_json (id_to_file : id_to_file_map) (js : json) :
             types_outlive;
             trait_type_constraints;
           }
+    | _ -> Error "")
+
+and binder_of_json :
+      'a0.
+      (json -> ('a0, string) result) ->
+      id_to_file_map ->
+      json ->
+      ('a0 binder, string) result =
+ fun arg0_of_json id_to_file js ->
+  combine_error_msgs js __FUNCTION__
+    (match js with
+    | `Assoc [ ("params", params); ("skip_binder", skip_binder) ] ->
+        let* params = generic_params_of_json id_to_file params in
+        let* skip_binder = arg0_of_json skip_binder in
+        Ok { params; skip_binder }
     | _ -> Error "")
 
 and impl_elem_of_json (id_to_file : id_to_file_map) (js : json) :
@@ -1310,7 +1334,8 @@ and trait_impl_of_json (id_to_file : id_to_file_map) (js : json) :
         in
         let* provided_methods =
           list_of_json
-            (pair_of_json trait_item_name_of_json fun_decl_id_of_json)
+            (pair_of_json trait_item_name_of_json
+               (binder_of_json fun_decl_ref_of_json id_to_file))
             provided_methods
         in
         Ok

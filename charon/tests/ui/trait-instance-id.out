@@ -143,7 +143,7 @@ trait core::ops::function::FnMut<Self, Args>
 fn core::array::iter::{impl core::iter::traits::iterator::Iterator for core::array::iter::IntoIter<T, const N : usize>}#2::fold<T, Acc, Fold, const N : usize>(@1: core::array::iter::IntoIter<T, const N : usize>, @2: Acc, @3: Fold) -> Acc
 where
     [@TraitClause0]: core::ops::function::FnMut<Fold, (Acc, T)>,
-    (parents(UNKNOWN(Could not find a clause for parameter: @TraitDecl3<Fold, (Acc, core::array::iter::{impl core::iter::traits::iterator::Iterator for @Adt0<T, const N : usize>}#2<T, const N : usize>::Item)> (available clauses: [Self]: core::iter::traits::iterator::Iterator<@Adt0<T, const N : usize>>; [@TraitClause0]: @TraitDecl3<Fold, (Acc, T)>) (context: core::array::iter::{impl#2}::fold)))::[@TraitClause0])::Output = Acc,
+    (parents(UNKNOWN(Could not find a clause for parameter: @TraitDecl3<Fold, (Acc, @TraitImpl2<T, const N : usize>::Item)> (available clauses: [Self]: core::iter::traits::iterator::Iterator<@Adt0<T, const N : usize>>; [@TraitClause0]: @TraitDecl3<Fold, (Acc, T)>) (context: core::array::iter::{impl#2}::fold)))::[@TraitClause0])::Output = Acc,
 
 fn core::array::iter::{impl core::iter::traits::iterator::Iterator for core::array::iter::IntoIter<T, const N : usize>}#2::count<T, const N : usize>(@1: core::array::iter::IntoIter<T, const N : usize>) -> usize
 
@@ -225,12 +225,12 @@ impl<T, const N : usize> core::array::iter::{impl core::iter::traits::iterator::
 {
     type Item = T
     fn next = core::array::iter::{impl core::iter::traits::iterator::Iterator for core::array::iter::IntoIter<T, const N : usize>}#2::next
-    fn size_hint = core::array::iter::{impl core::iter::traits::iterator::Iterator for core::array::iter::IntoIter<T, const N : usize>}#2::size_hint
-    fn fold = core::array::iter::{impl core::iter::traits::iterator::Iterator for core::array::iter::IntoIter<T, const N : usize>}#2::fold
-    fn count = core::array::iter::{impl core::iter::traits::iterator::Iterator for core::array::iter::IntoIter<T, const N : usize>}#2::count
-    fn last = core::array::iter::{impl core::iter::traits::iterator::Iterator for core::array::iter::IntoIter<T, const N : usize>}#2::last
-    fn advance_by = core::array::iter::{impl core::iter::traits::iterator::Iterator for core::array::iter::IntoIter<T, const N : usize>}#2::advance_by
-    fn __iterator_get_unchecked = core::array::iter::{impl core::iter::traits::iterator::Iterator for core::array::iter::IntoIter<T, const N : usize>}#2::__iterator_get_unchecked
+    fn size_hint<'_0, T, const N : usize> = core::array::iter::{impl core::iter::traits::iterator::Iterator for core::array::iter::IntoIter<T, const N : usize>}#2::size_hint<'_0, T, const N : usize>
+    fn fold<T, Acc, Fold, const N : usize, [@TraitClause0]: core::ops::function::FnMut<Fold, (Acc, T)>> = core::array::iter::{impl core::iter::traits::iterator::Iterator for core::array::iter::IntoIter<T, const N : usize>}#2::fold<T, Acc, Fold, const N : usize>[@TraitClause0]
+    fn count<T, const N : usize> = core::array::iter::{impl core::iter::traits::iterator::Iterator for core::array::iter::IntoIter<T, const N : usize>}#2::count<T, const N : usize>
+    fn last<T, const N : usize> = core::array::iter::{impl core::iter::traits::iterator::Iterator for core::array::iter::IntoIter<T, const N : usize>}#2::last<T, const N : usize>
+    fn advance_by<'_0, T, const N : usize> = core::array::iter::{impl core::iter::traits::iterator::Iterator for core::array::iter::IntoIter<T, const N : usize>}#2::advance_by<'_0, T, const N : usize>
+    fn __iterator_get_unchecked<'_0, T, const N : usize> = core::array::iter::{impl core::iter::traits::iterator::Iterator for core::array::iter::IntoIter<T, const N : usize>}#2::__iterator_get_unchecked<'_0, T, const N : usize>
 }
 
 fn core::array::iter::{impl core::iter::traits::collect::IntoIterator for Array<T, const N : usize>}::into_iter<T, const N : usize>(@1: Array<T, const N : usize>) -> core::array::iter::{impl core::iter::traits::collect::IntoIterator for Array<T, const N : usize>}<T, const N : usize>::IntoIter
@@ -279,34 +279,32 @@ fn core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::sli
 fn core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::fold<'a, T, B, F>(@1: core::slice::iter::Iter<'a, T>, @2: B, @3: F) -> B
 where
     [@TraitClause0]: core::ops::function::FnMut<F, (B, &'_ (T))>,
-    (parents(UNKNOWN(Could not find a clause for parameter: core::ops::function::FnMut<F, (B, core::slice::iter::{impl core::iter::traits::iterator::Iterator for @Adt2<'a, T>}#182<'_, T>::Item)> (available clauses: [Self]: core::iter::traits::iterator::Iterator<@Adt2<'a, T>>; [@TraitClause0]: core::ops::function::FnMut<F, (B, &'_ (T))>) (context: core::slice::iter::{impl#182}::fold)))::[@TraitClause0])::Output = B,
+    (parents(UNKNOWN(Could not find a clause for parameter: core::ops::function::FnMut<F, (B, @TraitImpl3<'_, T>::Item)> (available clauses: [Self]: core::iter::traits::iterator::Iterator<@Adt2<'a, T>>; [@TraitClause0]: core::ops::function::FnMut<F, (B, &'_ (T))>) (context: core::slice::iter::{impl#182}::fold)))::[@TraitClause0])::Output = B,
 
 fn core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::for_each<'a, T, F>(@1: core::slice::iter::Iter<'a, T>, @2: F)
 where
     [@TraitClause0]: core::ops::function::FnMut<F, (&'_ (T))>,
-    (parents(UNKNOWN(Could not find a clause for parameter: core::ops::function::FnMut<F, (core::slice::iter::{impl core::iter::traits::iterator::Iterator for @Adt2<'a, T>}#182<'_, T>::Item)> (available clauses: [Self]: core::iter::traits::iterator::Iterator<@Adt2<'a, T>>; [@TraitClause0]: core::ops::function::FnMut<F, (&'_ (T))>) (context: core::slice::iter::{impl#182}::for_each)))::[@TraitClause0])::Output = (),
+    (parents(UNKNOWN(Could not find a clause for parameter: core::ops::function::FnMut<F, (@TraitImpl3<'_, T>::Item)> (available clauses: [Self]: core::iter::traits::iterator::Iterator<@Adt2<'a, T>>; [@TraitClause0]: core::ops::function::FnMut<F, (&'_ (T))>) (context: core::slice::iter::{impl#182}::for_each)))::[@TraitClause0])::Output = (),
 
 fn core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::all<'a, '_1, T, F>(@1: &'_1 mut (core::slice::iter::Iter<'a, T>), @2: F) -> bool
 where
     [@TraitClause0]: core::ops::function::FnMut<F, (&'_ (T))>,
-    (parents(UNKNOWN(Could not find a clause for parameter: core::ops::function::FnMut<F, (core::slice::iter::{impl core::iter::traits::iterator::Iterator for @Adt2<'a, T>}#182<'_, T>::Item)> (available clauses: [Self]: core::iter::traits::iterator::Iterator<@Adt2<'a, T>>; [@TraitClause0]: core::ops::function::FnMut<F, (&'_ (T))>) (context: core::slice::iter::{impl#182}::all)))::[@TraitClause0])::Output = bool,
+    (parents(UNKNOWN(Could not find a clause for parameter: core::ops::function::FnMut<F, (@TraitImpl3<'_, T>::Item)> (available clauses: [Self]: core::iter::traits::iterator::Iterator<@Adt2<'a, T>>; [@TraitClause0]: core::ops::function::FnMut<F, (&'_ (T))>) (context: core::slice::iter::{impl#182}::all)))::[@TraitClause0])::Output = bool,
 
 fn core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::any<'a, '_1, T, F>(@1: &'_1 mut (core::slice::iter::Iter<'a, T>), @2: F) -> bool
 where
     [@TraitClause0]: core::ops::function::FnMut<F, (&'_ (T))>,
-    (parents(UNKNOWN(Could not find a clause for parameter: core::ops::function::FnMut<F, (core::slice::iter::{impl core::iter::traits::iterator::Iterator for @Adt2<'a, T>}#182<'_, T>::Item)> (available clauses: [Self]: core::iter::traits::iterator::Iterator<@Adt2<'a, T>>; [@TraitClause0]: core::ops::function::FnMut<F, (&'_ (T))>) (context: core::slice::iter::{impl#182}::any)))::[@TraitClause0])::Output = bool,
-
-Unknown decl: 39
+    (parents(UNKNOWN(Could not find a clause for parameter: core::ops::function::FnMut<F, (@TraitImpl3<'_, T>::Item)> (available clauses: [Self]: core::iter::traits::iterator::Iterator<@Adt2<'a, T>>; [@TraitClause0]: core::ops::function::FnMut<F, (&'_ (T))>) (context: core::slice::iter::{impl#182}::any)))::[@TraitClause0])::Output = bool,
 
 fn core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::find_map<'a, '_1, T, B, F>(@1: &'_1 mut (core::slice::iter::Iter<'a, T>), @2: F) -> core::option::Option<B>
 where
     [@TraitClause0]: core::ops::function::FnMut<F, (&'_ (T))>,
-    (parents(UNKNOWN(Could not find a clause for parameter: core::ops::function::FnMut<F, (core::slice::iter::{impl core::iter::traits::iterator::Iterator for @Adt2<'a, T>}#182<'_, T>::Item)> (available clauses: [Self]: core::iter::traits::iterator::Iterator<@Adt2<'a, T>>; [@TraitClause0]: core::ops::function::FnMut<F, (&'_ (T))>) (context: core::slice::iter::{impl#182}::find_map)))::[@TraitClause0])::Output = core::option::Option<B>,
+    (parents(UNKNOWN(Could not find a clause for parameter: core::ops::function::FnMut<F, (@TraitImpl3<'_, T>::Item)> (available clauses: [Self]: core::iter::traits::iterator::Iterator<@Adt2<'a, T>>; [@TraitClause0]: core::ops::function::FnMut<F, (&'_ (T))>) (context: core::slice::iter::{impl#182}::find_map)))::[@TraitClause0])::Output = core::option::Option<B>,
 
 fn core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::position<'a, '_1, T, P>(@1: &'_1 mut (core::slice::iter::Iter<'a, T>), @2: P) -> core::option::Option<usize>
 where
     [@TraitClause0]: core::ops::function::FnMut<P, (&'_ (T))>,
-    (parents(UNKNOWN(Could not find a clause for parameter: core::ops::function::FnMut<P, (core::slice::iter::{impl core::iter::traits::iterator::Iterator for @Adt2<'a, T>}#182<'_, T>::Item)> (available clauses: [Self]: core::iter::traits::iterator::Iterator<@Adt2<'a, T>>; [@TraitClause0]: core::ops::function::FnMut<P, (&'_ (T))>) (context: core::slice::iter::{impl#182}::position)))::[@TraitClause0])::Output = bool,
+    (parents(UNKNOWN(Could not find a clause for parameter: core::ops::function::FnMut<P, (@TraitImpl3<'_, T>::Item)> (available clauses: [Self]: core::iter::traits::iterator::Iterator<@Adt2<'a, T>>; [@TraitClause0]: core::ops::function::FnMut<P, (&'_ (T))>) (context: core::slice::iter::{impl#182}::position)))::[@TraitClause0])::Output = bool,
 
 trait core::iter::traits::exact_size::ExactSizeIterator<Self>
 {
@@ -335,27 +333,23 @@ where
 
 unsafe fn core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::__iterator_get_unchecked<'a, '_1, T>(@1: &'_1 mut (core::slice::iter::Iter<'a, T>), @2: usize) -> core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182<'_, T>::Item
 
-Unknown decl: 44
-
 impl<'a, T> core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182<'a, T> : core::iter::traits::iterator::Iterator<core::slice::iter::Iter<'a, T>>
 {
     type Item = &'a (T)
     fn next = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::next
-    fn size_hint = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::size_hint
-    fn count = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::count
-    fn nth = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::nth
-    fn advance_by = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::advance_by
-    fn last = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::last
-    fn fold = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::fold
-    fn for_each = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::for_each
-    fn all = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::all
-    fn any = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::any
-    fn find = @Fun39
-    fn find_map = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::find_map
-    fn position = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::position
-    fn rposition = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::rposition
-    fn __iterator_get_unchecked = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::__iterator_get_unchecked
-    fn is_sorted_by = @Fun44
+    fn size_hint<'a, '_1, T> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::size_hint<'a, '_1, T>
+    fn count<'a, T> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::count<'a, T>
+    fn nth<'a, '_1, T> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::nth<'a, '_1, T>
+    fn advance_by<'a, '_1, T> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::advance_by<'a, '_1, T>
+    fn last<'a, T> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::last<'a, T>
+    fn fold<'a, T, B, F, [@TraitClause0]: core::ops::function::FnMut<F, (B, &'_ (T))>> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::fold<'a, T, B, F>[@TraitClause0]
+    fn for_each<'a, T, F, [@TraitClause0]: core::ops::function::FnMut<F, (&'_ (T))>> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::for_each<'a, T, F>[@TraitClause0]
+    fn all<'a, '_1, T, F, [@TraitClause0]: core::ops::function::FnMut<F, (&'_ (T))>> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::all<'a, '_1, T, F>[@TraitClause0]
+    fn any<'a, '_1, T, F, [@TraitClause0]: core::ops::function::FnMut<F, (&'_ (T))>> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::any<'a, '_1, T, F>[@TraitClause0]
+    fn find_map<'a, '_1, T, B, F, [@TraitClause0]: core::ops::function::FnMut<F, (&'_ (T))>> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::find_map<'a, '_1, T, B, F>[@TraitClause0]
+    fn position<'a, '_1, T, P, [@TraitClause0]: core::ops::function::FnMut<P, (&'_ (T))>> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::position<'a, '_1, T, P>[@TraitClause0]
+    fn rposition<'a, '_1, T, P, [@TraitClause0]: core::ops::function::FnMut<P, ((parents(UNKNOWN(Could not find a clause for parameter: @TraitDecl9<@Adt2<'a, T>> (available clauses: [Self]: core::iter::traits::iterator::Iterator<@Adt2<'a, T>>) (context: core::slice::iter::{impl#182}::rposition)))::[@TraitClause0])::Item)>, [@TraitClause1]: core::iter::traits::exact_size::ExactSizeIterator<core::slice::iter::Iter<'_, T>>, [@TraitClause2]: core::iter::traits::double_ended::DoubleEndedIterator<core::slice::iter::Iter<'_, T>>> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::rposition<'a, '_1, T, P>[@TraitClause0, @TraitClause1, @TraitClause2]
+    fn __iterator_get_unchecked<'a, '_1, T> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Iter<'a, T>}#182::__iterator_get_unchecked<'a, '_1, T>
 }
 
 trait core::ops::arith::AddAssign<Self, Rhs>
@@ -390,11 +384,11 @@ impl<'a, T> core::slice::iter::{impl core::iter::traits::iterator::Iterator for 
 {
     type Item = &'a (Slice<T>)
     fn next = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Chunks<'a, T>}#71::next
-    fn size_hint = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Chunks<'a, T>}#71::size_hint
-    fn count = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Chunks<'a, T>}#71::count
-    fn nth = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Chunks<'a, T>}#71::nth
-    fn last = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Chunks<'a, T>}#71::last
-    fn __iterator_get_unchecked = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Chunks<'a, T>}#71::__iterator_get_unchecked
+    fn size_hint<'a, '_1, T> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Chunks<'a, T>}#71::size_hint<'a, '_1, T>
+    fn count<'a, T> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Chunks<'a, T>}#71::count<'a, T>
+    fn nth<'a, '_1, T> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Chunks<'a, T>}#71::nth<'a, '_1, T>
+    fn last<'a, T> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Chunks<'a, T>}#71::last<'a, T>
+    fn __iterator_get_unchecked<'a, '_1, T> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::Chunks<'a, T>}#71::__iterator_get_unchecked<'a, '_1, T>
 }
 
 fn core::slice::{Slice<T>}::chunks_exact<'_0, T>(@1: &'_0 (Slice<T>), @2: usize) -> core::slice::iter::ChunksExact<'_0, T>
@@ -415,11 +409,11 @@ impl<'a, T> core::slice::iter::{impl core::iter::traits::iterator::Iterator for 
 {
     type Item = &'a (Slice<T>)
     fn next = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::ChunksExact<'a, T>}#90::next
-    fn size_hint = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::ChunksExact<'a, T>}#90::size_hint
-    fn count = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::ChunksExact<'a, T>}#90::count
-    fn nth = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::ChunksExact<'a, T>}#90::nth
-    fn last = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::ChunksExact<'a, T>}#90::last
-    fn __iterator_get_unchecked = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::ChunksExact<'a, T>}#90::__iterator_get_unchecked
+    fn size_hint<'a, '_1, T> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::ChunksExact<'a, T>}#90::size_hint<'a, '_1, T>
+    fn count<'a, T> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::ChunksExact<'a, T>}#90::count<'a, T>
+    fn nth<'a, '_1, T> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::ChunksExact<'a, T>}#90::nth<'a, '_1, T>
+    fn last<'a, T> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::ChunksExact<'a, T>}#90::last<'a, T>
+    fn __iterator_get_unchecked<'a, '_1, T> = core::slice::iter::{impl core::iter::traits::iterator::Iterator for core::slice::iter::ChunksExact<'a, T>}#90::__iterator_get_unchecked<'a, '_1, T>
 }
 
 fn test_crate::main()
@@ -727,11 +721,11 @@ fn test_crate::main()
     return
 }
 
+fn core::clone::Clone::clone<'_0, Self>(@1: &'_0 (Self)) -> Self
+
 fn core::ops::function::FnMut::call_mut<'_0, Self, Args>(@1: &'_0 mut (Self), @2: Args) -> (parents(Self)::[@TraitClause0])::Output
 
 fn core::ops::function::FnOnce::call_once<Self, Args>(@1: Self, @2: Args) -> Self::Output
-
-fn core::clone::Clone::clone<'_0, Self>(@1: &'_0 (Self)) -> Self
 
 fn core::iter::traits::double_ended::DoubleEndedIterator::next_back<'_0, Self>(@1: &'_0 mut (Self)) -> core::option::Option<(parents(Self)::[@TraitClause0])::Item>
 

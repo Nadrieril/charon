@@ -388,7 +388,19 @@ impl<'tcx, 'ctx> TranslateCtx<'tcx, 'ctx> {
                         unreachable!()
                     };
                     if overrides_default {
-                        provided_methods.push((name, fun_id));
+                        // Translate the method to get its generics. If this fails, simply skip the
+                        // method.
+                        if let Ok(fun_decl) = bt_ctx.t_ctx.get_or_translate(fun_id.into()) {
+                            let fun_generics = fun_decl.generic_params();
+                            let fun = Binder {
+                                params: fun_generics.clone(),
+                                skip_binder: FunDeclRef {
+                                    id: fun_id,
+                                    generics: fun_generics.identity_args(),
+                                },
+                            };
+                            provided_methods.push((name, fun));
+                        }
                     } else {
                         required_methods.push((name, fun_id));
                     }

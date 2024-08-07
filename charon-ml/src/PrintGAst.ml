@@ -255,8 +255,20 @@ let trait_impl_to_string (env : ('a, 'b) fmt_env) (indent : string)
     let env_method (name, f) =
       indent1 ^ "fn " ^ name ^ " : " ^ fun_decl_id_to_string env f ^ "\n"
     in
+    let env_bound_method (name, binder) =
+      let params, clauses =
+        predicates_and_trait_clauses_to_string env indent indent_incr None
+          binder.params
+      in
+      let params =
+        if params = [] then "" else "<" ^ String.concat ", " params ^ ">"
+      in
+      indent1 ^ "fn " ^ name ^ params ^ clauses ^ " : "
+      ^ fun_decl_ref_to_string env binder.skip_binder
+      ^ "\n"
+    in
     let required_methods = List.map env_method def.required_methods in
-    let provided_methods = List.map env_method def.provided_methods in
+    let provided_methods = List.map env_bound_method def.provided_methods in
     let methods =
       if required_methods <> [] || provided_methods <> [] then
         List.concat

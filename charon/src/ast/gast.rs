@@ -62,7 +62,7 @@ pub struct GExprBody<T> {
     pub body: T,
 }
 
-// The derive macro doesn't handle generics well.
+// The derive macro doesn't handle generics.
 impl<T: Drive> Drive for GExprBody<T> {
     fn drive<V: Visitor>(&self, visitor: &mut V) {
         visitor.visit(self, Event::Enter);
@@ -164,6 +164,16 @@ pub struct FunDecl {
     /// Opaque functions are: external functions, or local functions tagged
     /// as opaque.
     pub body: Result<BodyId, Opaque>,
+}
+
+/// Reference to a function declaration.
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq, Hash, Drive, DriveMut)]
+pub struct FunDeclRef {
+    #[charon::rename("fun_id")]
+    pub id: FunDeclId,
+    /// Generic arguments passed to the function.
+    #[charon::rename("fun_generics")]
+    pub generics: GenericArgs,
 }
 
 /// A global variable definition
@@ -269,7 +279,8 @@ pub struct TraitDecl {
     /// The *required* methods.
     ///
     /// The required methods are the methods declared by the trait but with
-    /// no default implementation.
+    /// no default implementation. The `FunDecl` has no body.
+    /// The linked `FunDecl` uses the generics of this decl, concatenated with its own generics.
     pub required_methods: Vec<(TraitItemName, FunDeclId)>,
     /// The *provided* methods.
     ///
@@ -283,6 +294,7 @@ pub struct TraitDecl {
     /// TODO: allow to optionnaly extract information. For instance: attempt
     /// to extract, and fail nicely if we don't succeed (definition not in
     /// the supported subset, etc.).
+    /// The linked `FunDecl` uses the generics of this decl, concatenated with its own generics.
     pub provided_methods: Vec<(TraitItemName, Option<FunDeclId>)>,
 }
 
@@ -317,9 +329,14 @@ pub struct TraitImpl {
     #[charon::opaque]
     pub type_clauses: Vec<(TraitItemName, Vec<TraitRef>)>,
     /// The implemented required methods
+    /// The linked `FunDecl` uses the generics of this impl, concatenated with its own generics.
     pub required_methods: Vec<(TraitItemName, FunDeclId)>,
-    /// The re-implemented provided methods
-    pub provided_methods: Vec<(TraitItemName, FunDeclId)>,
+    /// The re-implemented provided methods. If an implementation isn't given by the trait impl, we
+    /// refer to the default method in the trait.
+    /// The `Binder` contains the parameters needed for this method; the generics of this impl are
+    /// a prefix of that; the `FunDeclRef` then gives the correct parameters to the pointed-to
+    /// `FunDecl`.
+    pub provided_methods: Vec<(TraitItemName, Binder<FunDeclRef>)>,
 }
 
 /// A function operand is used in function calls.

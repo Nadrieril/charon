@@ -23,7 +23,7 @@ fn alloc::string::{impl core::clone::Clone for alloc::string::String}#6::clone_f
 impl alloc::string::{impl core::clone::Clone for alloc::string::String}#6 : core::clone::Clone<alloc::string::String>
 {
     fn clone = alloc::string::{impl core::clone::Clone for alloc::string::String}#6::clone
-    fn clone_from = alloc::string::{impl core::clone::Clone for alloc::string::String}#6::clone_from
+    fn clone_from<'_0, '_1> = alloc::string::{impl core::clone::Clone for alloc::string::String}#6::clone_from<'_0, '_1>
 }
 
 fn core::clone::Clone::clone<'_0, Self>(@1: &'_0 (Self)) -> Self

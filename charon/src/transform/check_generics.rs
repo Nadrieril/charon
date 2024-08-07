@@ -13,6 +13,7 @@ use super::{ctx::LlbcPass, TransformCtx};
     GenericArgs(enter),
     AggregateKind(enter),
     FnPtr(enter),
+    FunDeclRef(enter),
     GlobalDeclRef(enter),
     TraitDeclRef(enter),
     TraitRefKind(enter),
@@ -95,6 +96,9 @@ impl CheckGenericsVisitor<'_, '_> {
                 self.discharged_one_generics()
             }
         }
+    }
+    fn enter_fun_decl_ref(&mut self, fun_ref: &FunDeclRef) {
+        self.generics_should_match_item(&fun_ref.generics, fun_ref.id);
     }
     fn enter_global_decl_ref(&mut self, global_ref: &GlobalDeclRef) {
         self.generics_should_match_item(&global_ref.generics, global_ref.id);
