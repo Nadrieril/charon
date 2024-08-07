@@ -1,0 +1,43 @@
+thread 'rustc' panicked at /rustc/6b0f4b5ec3aa707ecaa78230722117324a4ce23c/compiler/rustc_type_ir/src/binder.rs:713:9:
+type parameter `T/#1` (T/#1/1) out of range when instantiating, args=[Self/#0]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: Thread panicked when extracting item `test_crate::PointerFamily`.
+ --> tests/ui/non-lifetime-gats.rs:4:1
+  |
+4 | trait PointerFamily {
+  | ^^^^^^^^^^^^^^^^^^^
+
+error: Ignoring the following item due to an error: test_crate::PointerFamily
+ --> tests/ui/non-lifetime-gats.rs:4:1
+  |
+4 | trait PointerFamily {
+  | ^^^^^^^^^^^^^^^^^^^
+
+error: Could not find the type variable "T" (index: 0)
+  --> tests/ui/non-lifetime-gats.rs:13:5
+   |
+13 |     type Pointer<T> = Box<T>;
+   |     ^^^^^^^^^^^^^^^
+
+error: Ignoring the following item due to an error: test_crate::{impl#0}
+  --> tests/ui/non-lifetime-gats.rs:12:1
+   |
+12 | impl PointerFamily for BoxFamily {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: Could not find the type variable "U" (index: 1)
+  --> tests/ui/non-lifetime-gats.rs:39:9
+   |
+39 |         type Type<U> = (T, U);
+   |         ^^^^^^^^^^^^
+
+error: Ignoring the following item due to an error: test_crate::moar_variables::{impl#1}
+  --> tests/ui/non-lifetime-gats.rs:38:5
+   |
+38 |     impl<T> Trait<Option<T>> for Foo {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: aborting due to 6 previous errors
+
+[ERROR charon_driver:249] Compilation encountered 6 errors
+Error: Charon driver exited with code 1
