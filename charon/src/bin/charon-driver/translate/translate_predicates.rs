@@ -154,9 +154,11 @@ impl<'tcx, 'ctx, 'ctx1> BodyTransCtx<'tcx, 'ctx, 'ctx1> {
                 match self.translate_predicate(pred, span, origin.clone(), location)? {
                     None => (),
                     Some(pred) => match pred {
-                        Predicate::TypeOutlives(p) => self.types_outlive.push(p),
-                        Predicate::RegionOutlives(p) => self.regions_outlive.push(p),
-                        Predicate::TraitType(p) => self.trait_type_constraints.push(p),
+                        Predicate::TypeOutlives(p) => self.generic_params.types_outlive.push(p),
+                        Predicate::RegionOutlives(p) => self.generic_params.regions_outlive.push(p),
+                        Predicate::TraitType(p) => {
+                            self.generic_params.trait_type_constraints.push(p)
+                        }
                         Predicate::Trait(_) => unreachable!(),
                     },
                 }
@@ -206,7 +208,7 @@ impl<'tcx, 'ctx, 'ctx1> BodyTransCtx<'tcx, 'ctx, 'ctx1> {
         // FIXME: once `clause` can't be `None`, use `Vector::reserve_slot` to be sure we don't use
         // the same id twice.
         let clause_id = match location {
-            PredicateLocation::Base => self.param_trait_clauses.next_id(),
+            PredicateLocation::Base => self.generic_params.trait_clauses.next_id(),
             PredicateLocation::Parent(..) => self.parent_trait_clauses.next_id(),
             PredicateLocation::Item(.., item_name) => self
                 .item_trait_clauses
@@ -233,7 +235,7 @@ impl<'tcx, 'ctx, 'ctx1> BodyTransCtx<'tcx, 'ctx, 'ctx1> {
             let local_clause = clause.to_trait_clause_with_id(clause_id);
             match location {
                 PredicateLocation::Base => {
-                    self.param_trait_clauses.push(local_clause);
+                    self.generic_params.trait_clauses.push(local_clause);
                 }
                 PredicateLocation::Parent(..) => {
                     self.parent_trait_clauses.push(local_clause);
@@ -245,7 +247,7 @@ impl<'tcx, 'ctx, 'ctx1> BodyTransCtx<'tcx, 'ctx, 'ctx1> {
                         .push(local_clause);
                 }
             }
-            self.trait_clauses
+            self.trait_clauses_map
                 .entry(clause.trait_.trait_id)
                 .or_default()
                 .push(clause);
@@ -270,7 +272,7 @@ impl<'tcx, 'ctx, 'ctx1> BodyTransCtx<'tcx, 'ctx, 'ctx1> {
             PredicateOrigin::TraitSelf,
         )?;
         if let Some(clause) = clause {
-            self.trait_clauses
+            self.trait_clauses_map
                 .entry(clause.trait_.trait_id)
                 .or_default()
                 .push(clause);
@@ -651,7 +653,7 @@ impl<'tcx, 'ctx, 'ctx1> BodyTransCtx<'tcx, 'ctx, 'ctx1> {
         );
 
         // Simply explore the trait clauses
-        if let Some(clauses_for_this_trait) = self.trait_clauses.get(&trait_id) {
+        if let Some(clauses_for_this_trait) = self.trait_clauses_map.get(&trait_id) {
             for trait_clause in clauses_for_this_trait {
                 if self.match_trait_clauses(trait_id, generics, trait_clause) {
                     return trait_clause.clause_id.clone();
@@ -669,7 +671,7 @@ impl<'tcx, 'ctx, 'ctx1> BodyTransCtx<'tcx, 'ctx, 'ctx1> {
             generics.fmt_with_ctx(&fmt_ctx)
         );
         let clauses: Vec<String> = self
-            .trait_clauses
+            .trait_clauses_map
             .values()
             .flat_map(|x| x)
             .map(|x| x.fmt_with_ctx(&fmt_ctx))
