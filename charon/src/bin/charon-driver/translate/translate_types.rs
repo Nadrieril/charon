@@ -283,7 +283,14 @@ impl<'tcx, 'ctx, 'ctx1> BodyTransCtx<'tcx, 'ctx, 'ctx1> {
                             param.name, param.index
                         )
                     ),
-                    Some(var_id) => Ok(Ty::TypeVar(*var_id)),
+                    Some(var_id) => {
+                        // The DeBruijn index depends on the current stack of binders. Today we
+                        // only allow lifetimes in non-top-level binders, hence why we use
+                        // `region_vars.len()`.
+                        let db_id = self.region_vars.len() - 1;
+                        let var = DeBruijnVar::new(DeBruijnId::new(db_id), *var_id);
+                        Ok(Ty::TypeVar(var))
+                    }
                 }
             }
 

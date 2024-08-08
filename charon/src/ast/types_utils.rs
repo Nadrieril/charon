@@ -93,7 +93,7 @@ impl GenericParams {
             types: self
                 .types
                 .iter_indexed()
-                .map(|(id, _)| Ty::TypeVar(id))
+                .map(|(id, _)| Ty::TypeVar(DeBruijnVar::new(DeBruijnId::new(0), id)))
                 .collect(),
             const_generics: self
                 .const_generics

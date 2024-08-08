@@ -144,7 +144,10 @@ fn type_to_ocaml_call(ctx: &GenerateCtx, ty: &Ty) -> String {
             }
             expr.into_iter().map(|f| format!("({f})")).join(" ")
         }
-        Ty::TypeVar(var_id) => format!("arg{}_of_json", var_id.index()),
+        Ty::TypeVar(var) => {
+            assert!(var.dbid.is_zero());
+            format!("arg{}_of_json", var.varid.index())
+        }
         // Ty::Ref(_, _, _) => todo!(),
         _ => unimplemented!("{ty:?}"),
     }
@@ -203,7 +206,10 @@ fn type_to_ocaml_name(ctx: &GenerateCtx, ty: &Ty) -> String {
                 _ => unimplemented!("{ty:?}"),
             }
         }
-        Ty::TypeVar(var_id) => format!("'a{}", var_id.index()),
+        Ty::TypeVar(var) => {
+            assert!(var.dbid.is_zero());
+            format!("'a{}", var.varid.index())
+        }
         _ => unimplemented!("{ty:?}"),
     }
 }
