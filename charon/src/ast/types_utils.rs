@@ -1,6 +1,7 @@
 //! This file groups everything which is linked to implementations about [crate::types]
 use crate::ids::Vector;
 use crate::types::*;
+use derive_visitor::{Drive, DriveMut, Event, Visitor, VisitorMut};
 use std::iter::Iterator;
 
 impl DeBruijnId {
@@ -15,6 +16,25 @@ impl DeBruijnId {
     pub fn decr(&self) -> Self {
         DeBruijnId {
             index: self.index - 1,
+        }
+    }
+}
+
+impl<V> DeBruijnVar<V> {
+    pub fn new(index: DeBruijnId, var: V) -> Self {
+        DeBruijnVar {
+            dbid: index,
+            varid: var,
+        }
+    }
+
+    pub fn decr(&self) -> Self
+    where
+        V: Clone,
+    {
+        DeBruijnVar {
+            dbid: self.dbid.decr(),
+            varid: self.varid.clone(),
         }
     }
 }
@@ -68,7 +88,7 @@ impl GenericParams {
             regions: self
                 .regions
                 .iter_indexed()
-                .map(|(id, _)| Region::BVar(DeBruijnId::new(0), id))
+                .map(|(id, _)| Region::BVar(DeBruijnVar::new(DeBruijnId::new(0), id)))
                 .collect(),
             types: self
                 .types
@@ -337,5 +357,24 @@ impl Variant {
             .attributes
             .iter()
             .any(|attr| attr.is_opaque())
+    }
+}
+
+// The derive macro doesn't handle generics.
+impl<T: Drive> Drive for DeBruijnVar<T> {
+    fn drive<V: Visitor>(&self, visitor: &mut V) {
+        visitor.visit(self, Event::Enter);
+        self.dbid.drive(visitor);
+        self.varid.drive(visitor);
+        visitor.visit(self, Event::Exit);
+    }
+}
+
+impl<T: DriveMut> DriveMut for DeBruijnVar<T> {
+    fn drive_mut<V: VisitorMut>(&mut self, visitor: &mut V) {
+        visitor.visit(self, Event::Enter);
+        self.dbid.drive_mut(visitor);
+        self.varid.drive_mut(visitor);
+        visitor.visit(self, Event::Exit);
     }
 }

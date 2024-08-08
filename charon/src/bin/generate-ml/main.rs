@@ -699,6 +699,7 @@ fn main() -> Result<()> {
             template: dir.join("templates/Types.ml"),
             target: dir.join("generated/Types.ml"),
             markers: &[
+                (GenerationKind::TypeDecl(false), &["DeBruijnVar"]),
                 (GenerationKind::TypeDecl(false), &[
                     "AssumedTy",
                     "TypeId",
@@ -726,6 +727,7 @@ fn main() -> Result<()> {
                     "AttrInfo",
                     "TypeVar",
                     "RegionVar",
+                    "DeBruijnVar",
                     "Region",
                     "IntegerTy",
                     "LiteralTy",

@@ -78,8 +78,8 @@ impl<'tcx, 'ctx, 'ctx1> BodyTransCtx<'tcx, 'ctx, 'ctx1> {
                         .unwrap()
                         .get(br.var)
                         .unwrap();
-                    let br_id = DeBruijnId::new(*id);
-                    Ok(Region::BVar(br_id, *rid))
+                    let var = DeBruijnVar::new(DeBruijnId::new(*id), *rid);
+                    Ok(Region::BVar(var))
                 }
                 hax::RegionKind::ReVar(_) => {
                     // Shouldn't exist outside of type inference.
@@ -94,7 +94,8 @@ impl<'tcx, 'ctx, 'ctx1> BodyTransCtx<'tcx, 'ctx, 'ctx1> {
                             // Note that the DeBruijn index depends
                             // on the current stack of bound region groups.
                             let db_id = self.region_vars.len() - 1;
-                            Ok(Region::BVar(DeBruijnId::new(db_id), *rid))
+                            let var = DeBruijnVar::new(DeBruijnId::new(db_id), *rid);
+                            Ok(Region::BVar(var))
                         }
                         None => {
                             let err = format!(

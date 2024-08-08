@@ -191,14 +191,27 @@ and region_var_of_json (js : json) : (region_var, string) result =
         Ok { index; name }
     | _ -> Error "")
 
+and de_bruijn_var_of_json :
+      'a0.
+      (json -> ('a0, string) result) ->
+      json ->
+      ('a0 de_bruijn_var, string) result =
+ fun arg0_of_json js ->
+  combine_error_msgs js __FUNCTION__
+    (match js with
+    | `Assoc [ ("dbid", dbid); ("varid", varid) ] ->
+        let* dbid = de_bruijn_id_of_json dbid in
+        let* varid = arg0_of_json varid in
+        Ok { dbid; varid }
+    | _ -> Error "")
+
 and region_of_json (js : json) : (region, string) result =
   combine_error_msgs js __FUNCTION__
     (match js with
     | `String "Static" -> Ok RStatic
-    | `Assoc [ ("BVar", `List [ x0; x1 ]) ] ->
-        let* x0 = de_bruijn_id_of_json x0 in
-        let* x1 = region_id_of_json x1 in
-        Ok (RBVar (x0, x1))
+    | `Assoc [ ("BVar", b_var) ] ->
+        let* b_var = de_bruijn_var_of_json region_id_of_json b_var in
+        Ok (RBVar b_var)
     | `String "Erased" -> Ok RErased
     | _ -> Error "")
 

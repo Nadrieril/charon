@@ -76,7 +76,7 @@ type region_group_id = RegionGroupId.id [@@deriving show, ord]
 type disambiguator = Disambiguator.id [@@deriving show, ord]
 
 (** Region DeBruijn identifiers *)
-type region_db_id = int [@@deriving show, ord]
+type de_bruijn_id = int [@@deriving show, ord]
 
 type ('id, 'name) indexed_var = {
   index : 'id;  (** Unique index identifying the variable *)
@@ -215,11 +215,22 @@ type const_generic =
 
 type trait_item_name = string [@@deriving show, ord]
 
+(* __REPLACE0__ *)
+[@@deriving show, ord]
+
 (** Ancestor for iter visitor for {!type: Types.ty} *)
 class ['self] iter_ty_base =
   object (self : 'self)
     inherit [_] iter_const_generic
-    method visit_region_db_id : 'env -> region_db_id -> unit = fun _ _ -> ()
+    method visit_de_bruijn_id : 'env -> de_bruijn_id -> unit = fun _ _ -> ()
+
+     method visit_de_bruijn_var
+         : 'var. ('env -> 'var -> unit) -> 'env -> 'var de_bruijn_var -> unit =
+       fun visit_var env x ->
+        let { dbid; varid } = x in
+        self#visit_de_bruijn_id env dbid;
+        visit_var env varid;
+
     method visit_region_var_id : 'env -> region_var_id -> unit = fun _ _ -> ()
     method visit_region_id : 'env -> region_id -> unit = fun _ _ -> ()
     method visit_type_var_id : 'env -> type_var_id -> unit = fun _ _ -> ()
@@ -247,8 +258,20 @@ class virtual ['self] map_ty_base =
   object (self : 'self)
     inherit [_] map_const_generic
 
-    method visit_region_db_id : 'env -> region_db_id -> region_db_id =
+    method visit_de_bruijn_id : 'env -> de_bruijn_id -> de_bruijn_id =
       fun _ id -> id
+
+    method visit_de_bruijn_var
+        : 'var.
+          ('env -> 'var -> 'var) ->
+          'env ->
+          'var de_bruijn_var ->
+          'var de_bruijn_var =
+      fun visit_var env x ->
+        let { dbid; varid } = x in
+        let dbid = self#visit_de_bruijn_id env dbid in
+        let varid = visit_var env varid in
+        { dbid; varid }
 
     method visit_region_var_id : 'env -> region_var_id -> region_var_id =
       fun _ id -> id
@@ -282,7 +305,7 @@ class virtual ['self] map_ty_base =
         { index; name }
   end
 
-(* __REPLACE0__ *)
+(* __REPLACE1__ *)
 
 (* Hand-written because we add an extra variant not present on the rust side *)
 and trait_instance_id =
@@ -312,7 +335,7 @@ and trait_instance_id =
 (* Hand-written because we add an extra variant not present on the rust side *)
 and region =
   | RStatic  (** Static region *)
-  | RBVar of region_db_id * region_var_id
+  | RBVar of region_var_id de_bruijn_var
       (** Bound region. We use those in function signatures, type definitions, etc. *)
   | RFVar of region_id
       (** Free region. We use those during the symbolic execution. *)
@@ -388,7 +411,7 @@ type ety = ty
 (** Type with non-erased regions (this only has an informative purpose) *)
 and rty = ty
 
-(* __REPLACE1__ *)
+(* __REPLACE2__ *)
 
 (* Hand-written because visitors can't handle `outlives_pred` *)
 and generic_params = {
@@ -421,7 +444,7 @@ and region_outlives = region * region
 (** (T, 'a) means that T outlives 'a *)
 and type_outlives = ty * region
 
-(* __REPLACE2__ *)
+(* __REPLACE3__ *)
 [@@deriving
   show,
     ord,
@@ -444,7 +467,7 @@ and type_outlives = ty * region
         polymorphic = false;
       }]
 
-(* __REPLACE3__ *)
+(* __REPLACE4__ *)
 [@@deriving show, ord]
 
 (** A group of regions.
@@ -467,5 +490,5 @@ type region_var_group = (RegionVarId.id, RegionGroupId.id) g_region_group
 
 type region_var_groups = region_var_group list [@@deriving show]
 
-(* __REPLACE4__ *)
+(* __REPLACE5__ *)
 [@@deriving show]

@@ -76,7 +76,7 @@ type region_group_id = RegionGroupId.id [@@deriving show, ord]
 type disambiguator = Disambiguator.id [@@deriving show, ord]
 
 (** Region DeBruijn identifiers *)
-type region_db_id = int [@@deriving show, ord]
+type de_bruijn_id = int [@@deriving show, ord]
 
 type ('id, 'name) indexed_var = {
   index : 'id;  (** Unique index identifying the variable *)
@@ -215,11 +215,46 @@ type const_generic =
 
 type trait_item_name = string [@@deriving show, ord]
 
+(** Bound variable.
+
+ **Important**:
+ ==============
+ Similarly to what the Rust compiler does, we use De Bruijn indices to
+ identify *groups* of bound variables, and variable identifiers to
+ identity the variables inside the groups.
+
+ For instance, we have the following:
+ ```text
+                     we compute the De Bruijn indices from here
+                            VVVVVVVVVVVVVVVVVVVVVVV
+ fn f<'a, 'b>(x: for<'c> fn(&'a u8, &'b u16, &'c u32) -> u64) {}
+      ^^^^^^         ^^       ^       ^        ^
+        |      De Bruijn: 0   |       |        |
+  De Bruijn: 1                |       |        |
+                        De Bruijn: 1  |    De Bruijn: 0
+                           Var id: 0  |       Var id: 0
+                                      |
+                                De Bruijn: 1
+                                   Var id: 1
+ ```
+
+ This is generic in the variable type. Typical values for `V` are `RegionId` and `TypeVarId`. *)
+type 'a0 de_bruijn_var = { dbid : de_bruijn_id; varid : 'a0 }
+[@@deriving show, ord]
+
 (** Ancestor for iter visitor for {!type: Types.ty} *)
 class ['self] iter_ty_base =
   object (self : 'self)
     inherit [_] iter_const_generic
-    method visit_region_db_id : 'env -> region_db_id -> unit = fun _ _ -> ()
+    method visit_de_bruijn_id : 'env -> de_bruijn_id -> unit = fun _ _ -> ()
+
+    method visit_de_bruijn_var
+        : 'var. ('env -> 'var -> unit) -> 'env -> 'var de_bruijn_var -> unit =
+      fun visit_var env x ->
+        let { dbid; varid } = x in
+        self#visit_de_bruijn_id env dbid;
+        visit_var env varid
+
     method visit_region_var_id : 'env -> region_var_id -> unit = fun _ _ -> ()
     method visit_region_id : 'env -> region_id -> unit = fun _ _ -> ()
     method visit_type_var_id : 'env -> type_var_id -> unit = fun _ _ -> ()
@@ -247,8 +282,20 @@ class virtual ['self] map_ty_base =
   object (self : 'self)
     inherit [_] map_const_generic
 
-    method visit_region_db_id : 'env -> region_db_id -> region_db_id =
+    method visit_de_bruijn_id : 'env -> de_bruijn_id -> de_bruijn_id =
       fun _ id -> id
+
+    method visit_de_bruijn_var
+        : 'var.
+          ('env -> 'var -> 'var) ->
+          'env ->
+          'var de_bruijn_var ->
+          'var de_bruijn_var =
+      fun visit_var env x ->
+        let { dbid; varid } = x in
+        let dbid = self#visit_de_bruijn_id env dbid in
+        let varid = visit_var env varid in
+        { dbid; varid }
 
     method visit_region_var_id : 'env -> region_var_id -> region_var_id =
       fun _ id -> id
@@ -448,7 +495,7 @@ and trait_instance_id =
  *)
 and region =
   | RStatic  (** Static region *)
-  | RBVar of region_db_id * region_var_id
+  | RBVar of region_var_id de_bruijn_var
       (** Bound region. We use those in function signatures, type definitions, etc. *)
   | RFVar of region_id
       (** Free region. We use those during the symbolic execution. *)
