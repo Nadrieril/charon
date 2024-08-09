@@ -432,7 +432,7 @@ pub enum RawConstantExpr {
     #[charon::opaque]
     Ref(Box<ConstantExpr>),
     /// A const generic var
-    Var(ConstGenericVarId),
+    Var(DeBruijnVar<ConstGenericVarId>),
     /// Function pointer
     FnPtr(FnPtr),
 }

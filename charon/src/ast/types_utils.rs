@@ -98,7 +98,7 @@ impl GenericParams {
             const_generics: self
                 .const_generics
                 .iter_indexed()
-                .map(|(id, _)| ConstGeneric::Var(id))
+                .map(|(id, _)| ConstGeneric::Var(DeBruijnVar::new(DeBruijnId::new(0), id)))
                 .collect(),
             trait_refs: self
                 .trait_clauses

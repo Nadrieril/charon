@@ -110,20 +110,60 @@ let option_none_id = VariantId.of_int 0
 (** The variant id for [Option::Some] *)
 let option_some_id = VariantId.of_int 1
 
+(** Bound variable.
+
+    **Important**:
+    ==============
+    Similarly to what the Rust compiler does, we use De Bruijn indices to identify *groups* of
+    bound variables, and variable identifiers to identify the variables inside the groups. Each
+    syntactic item that introduces generics counts as one group of generics; we count type, region
+    and const generics variables together.
+
+    The exception is methods: we merge the generics of the impl/trait block with the generics of
+    the function. In other words, every top-level item (as considered by charon) has a single
+    binder for its generic parameters.
+
+    For instance, we have the following:
+    ```text
+    fn f<'a, 'b, T>(x: for<'c> fn(&'a u8, &'b u16, &'c T) -> u64) {}
+                                    ^       ^        ^ ^
+                                    |       |        | |
+                                    |       |        | |
+                              De Bruijn: 1  |        | De Bruijn: 0
+                                 Var id: 0  |        |    Var id: 0
+                                            |        |
+                                      De Bruijn: 1   |
+                                         Var id: 1   |
+                                                     |
+                                                 De Bruijn: 0
+                                                    Var id: 0
+    ```
+
+    This is generic in the variable type. Typical values for `V` are `RegionId` and `TypeVarId`.
+ *)
+type 'a0 de_bruijn_var = { dbid : de_bruijn_id; varid : 'a0 }
+[@@deriving show, ord]
+
 (** Ancestor for iter visitor for {!Types.const_generic} *)
 class ['self] iter_const_generic_base =
-  object (_self : 'self)
+  object (self : 'self)
     inherit [_] iter_literal
     method visit_type_decl_id : 'env -> type_decl_id -> unit = fun _ _ -> ()
     method visit_global_decl_id : 'env -> global_decl_id -> unit = fun _ _ -> ()
 
     method visit_const_generic_var_id : 'env -> const_generic_var_id -> unit =
       fun _ _ -> ()
+
+    method visit_de_bruijn_var
+        : 'var. ('env -> 'var -> unit) -> 'env -> 'var de_bruijn_var -> unit =
+      fun visit_var env x ->
+        let { dbid; varid } = x in
+        visit_var env varid
   end
 
 (** Ancestor for map visitor for {!Types.const_generic} *)
 class ['self] map_const_generic_base =
-  object (_self : 'self)
+  object (self : 'self)
     inherit [_] map_literal
 
     method visit_type_decl_id : 'env -> type_decl_id -> type_decl_id =
@@ -135,6 +175,17 @@ class ['self] map_const_generic_base =
     method visit_const_generic_var_id
         : 'env -> const_generic_var_id -> const_generic_var_id =
       fun _ x -> x
+
+    method visit_de_bruijn_var
+        : 'var.
+          ('env -> 'var -> 'var) ->
+          'env ->
+          'var de_bruijn_var ->
+          'var de_bruijn_var =
+      fun visit_var env x ->
+        let { dbid; varid } = x in
+        let varid = visit_var env varid in
+        { dbid; varid }
   end
 
 (** Ancestor for reduce visitor for {!Types.const_generic} *)
@@ -150,6 +201,12 @@ class virtual ['self] reduce_const_generic_base =
 
     method visit_const_generic_var_id : 'env -> const_generic_var_id -> 'a =
       fun _ _ -> self#zero
+
+    method visit_de_bruijn_var
+        : 'var. ('env -> 'var -> 'a) -> 'env -> 'var de_bruijn_var -> 'a =
+      fun visit_var env x ->
+        let { dbid; varid } = x in
+        visit_var env varid
   end
 
 (** Ancestor for mapreduce visitor for {!Types.const_generic} *)
@@ -167,14 +224,24 @@ class virtual ['self] mapreduce_const_generic_base =
     method visit_const_generic_var_id
         : 'env -> const_generic_var_id -> const_generic_var_id * 'a =
       fun _ x -> (x, self#zero)
+
+    method visit_de_bruijn_var
+        : 'var.
+          ('env -> 'var -> 'var * 'a) ->
+          'env ->
+          'var de_bruijn_var ->
+          'var de_bruijn_var * 'a =
+      fun visit_var env x ->
+        let { dbid; varid } = x in
+        let varid, acc = visit_var env varid in
+        ({ dbid; varid }, acc)
   end
 
-(** Remark: we have to use long names because otherwise we have collisions in
-    the functions derived for the visitors. *)
+(** Const Generic Values. Either a primitive value, or a variable corresponding to a primitve value *)
 type const_generic =
-  | CgGlobal of global_decl_id
-  | CgVar of const_generic_var_id
-  | CgValue of literal
+  | CgGlobal of global_decl_id  (** A global constant *)
+  | CgVar of const_generic_var_id de_bruijn_var  (** A const generic variable *)
+  | CgValue of literal  (** A concrete value *)
 [@@deriving
   show,
     ord,
@@ -215,53 +282,10 @@ type const_generic =
 
 type trait_item_name = string [@@deriving show, ord]
 
-(** Bound variable.
-
-    **Important**:
-    ==============
-    Similarly to what the Rust compiler does, we use De Bruijn indices to identify *groups* of
-    bound variables, and variable identifiers to identify the variables inside the groups. Each
-    syntactic item that introduces generics counts as one group of generics; we count type, region
-    and const generics variables together.
-
-    The exception is methods: we merge the generics of the impl/trait block with the generics of
-    the function. In other words, every top-level item (as considered by charon) has a single
-    binder for its generic parameters.
-
-    For instance, we have the following:
-    ```text
-    fn f<'a, 'b, T>(x: for<'c> fn(&'a u8, &'b u16, &'c T) -> u64) {}
-                                    ^       ^        ^ ^
-                                    |       |        | |
-                                    |       |        | |
-                              De Bruijn: 1  |        | De Bruijn: 0
-                                 Var id: 0  |        |    Var id: 0
-                                            |        |
-                                      De Bruijn: 1   |
-                                         Var id: 1   |
-                                                     |
-                                                 De Bruijn: 0
-                                                    Var id: 0
-    ```
-
-    This is generic in the variable type. Typical values for `V` are `RegionId` and `TypeVarId`.
- *)
-type 'a0 de_bruijn_var = { dbid : de_bruijn_id; varid : 'a0 }
-[@@deriving show, ord]
-
 (** Ancestor for iter visitor for {!type: Types.ty} *)
 class ['self] iter_ty_base =
   object (self : 'self)
     inherit [_] iter_const_generic
-    method visit_de_bruijn_id : 'env -> de_bruijn_id -> unit = fun _ _ -> ()
-
-    method visit_de_bruijn_var
-        : 'var. ('env -> 'var -> unit) -> 'env -> 'var de_bruijn_var -> unit =
-      fun visit_var env x ->
-        let { dbid; varid } = x in
-        self#visit_de_bruijn_id env dbid;
-        visit_var env varid
-
     method visit_region_var_id : 'env -> region_var_id -> unit = fun _ _ -> ()
     method visit_region_id : 'env -> region_id -> unit = fun _ _ -> ()
     method visit_type_var_id : 'env -> type_var_id -> unit = fun _ _ -> ()
@@ -288,21 +312,6 @@ class ['self] iter_ty_base =
 class virtual ['self] map_ty_base =
   object (self : 'self)
     inherit [_] map_const_generic
-
-    method visit_de_bruijn_id : 'env -> de_bruijn_id -> de_bruijn_id =
-      fun _ id -> id
-
-    method visit_de_bruijn_var
-        : 'var.
-          ('env -> 'var -> 'var) ->
-          'env ->
-          'var de_bruijn_var ->
-          'var de_bruijn_var =
-      fun visit_var env x ->
-        let { dbid; varid } = x in
-        let dbid = self#visit_de_bruijn_id env dbid in
-        let varid = visit_var env varid in
-        { dbid; varid }
 
     method visit_region_var_id : 'env -> region_var_id -> region_var_id =
       fun _ id -> id

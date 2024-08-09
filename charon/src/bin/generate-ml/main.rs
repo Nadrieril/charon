@@ -720,6 +720,7 @@ fn main() -> Result<()> {
                 (GenerationKind::TypeDecl(true), &["TraitTypeConstraint"]),
                 (GenerationKind::TypeDecl(false), &["ImplElem", "PathElem", "Name", "ItemMeta"]),
                 (GenerationKind::TypeDecl(false), &["Field", "Variant", "TypeDeclKind", "TypeDecl"]),
+                (GenerationKind::TypeDecl(false), &["ConstGeneric"]),
             ],
         },
         GenerateCodeFor {
