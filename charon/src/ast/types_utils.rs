@@ -85,6 +85,44 @@ impl GenericParams {
                 .collect(),
         }
     }
+
+    /// Split these params in two, according to the provided `ParamsInfo`.
+    pub fn split(&self, info: &ParamsInfo) -> (Self, Self) {
+        let mut this = self.clone();
+        let other = GenericParams {
+            regions: this.regions.split_off(info.num_region_params),
+            types: this.types.split_off(info.num_type_params),
+            const_generics: this.const_generics.split_off(info.num_const_generic_params),
+            trait_clauses: this.trait_clauses.split_off(info.num_trait_clauses),
+            regions_outlive: this.regions_outlive.split_off(info.num_regions_outlive),
+            types_outlive: this.types_outlive.split_off(info.num_types_outlive),
+            trait_type_constraints: this
+                .trait_type_constraints
+                .split_off(info.num_trait_type_constraints),
+        };
+        (this, other)
+    }
+
+    /// Merges two sets of parameters into one.
+    pub fn concat(mut self, other: Self) -> Self {
+        let Self {
+            regions,
+            types,
+            const_generics,
+            trait_clauses,
+            regions_outlive,
+            types_outlive,
+            trait_type_constraints,
+        } = other;
+        self.regions.extend(regions);
+        self.types.extend(types);
+        self.const_generics.extend(const_generics);
+        self.trait_clauses.extend(trait_clauses);
+        self.regions_outlive.extend(regions_outlive);
+        self.types_outlive.extend(types_outlive);
+        self.trait_type_constraints.extend(trait_type_constraints);
+        self
+    }
 }
 
 impl GenericArgs {
@@ -166,6 +204,21 @@ impl GenericArgs {
                 trait_refs: trait_refs.clone(),
             },
         )
+    }
+
+    /// Merges two sets of arguments into one.
+    pub fn concat(mut self, other: Self) -> Self {
+        let Self {
+            regions,
+            types,
+            const_generics,
+            trait_refs,
+        } = other;
+        self.regions.extend(regions);
+        self.types.extend(types);
+        self.const_generics.extend(const_generics);
+        self.trait_refs.extend(trait_refs);
+        self
     }
 }
 

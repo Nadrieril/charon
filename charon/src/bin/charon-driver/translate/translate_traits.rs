@@ -1,18 +1,15 @@
 use super::translate_ctx::*;
+use charon_lib::ast::*;
 use charon_lib::common::*;
 use charon_lib::formatter::IntoFormatter;
-use charon_lib::gast::*;
 use charon_lib::ids::Vector;
-use charon_lib::meta::ItemMeta;
 use charon_lib::pretty::FmtWithCtx;
-use charon_lib::types::*;
 use charon_lib::ullbc_ast as ast;
 use hax_frontend_exporter as hax;
-use hax_frontend_exporter::AssocItemContainer;
-use hax_frontend_exporter::SInto;
+use hax_frontend_exporter::{AssocItemContainer, SInto};
 use itertools::Itertools;
 use rustc_hir::def_id::DefId;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::sync::Arc;
 
 /// The context in which we are translating a clause, used to generate the appropriate ids and
@@ -373,6 +370,7 @@ impl<'tcx, 'ctx> TranslateCtx<'tcx, 'ctx> {
         let mut types: HashMap<TraitItemName, Ty> = HashMap::new();
         let mut required_methods = Vec::new();
         let mut provided_methods = Vec::new();
+        let mut implemented_methods = HashSet::new();
 
         for item in impl_items {
             let name = TraitItemName(item.name.clone());
@@ -381,6 +379,7 @@ impl<'tcx, 'ctx> TranslateCtx<'tcx, 'ctx> {
             match &item.kind {
                 hax::AssocKind::Fn => {
                     let fun_id = bt_ctx.register_fun_decl_id(item_span, rust_item_id);
+                    implemented_methods.insert(name.clone());
                     let AssocItemContainer::TraitImplContainer {
                         overrides_default, ..
                     } = item.container
@@ -442,10 +441,48 @@ impl<'tcx, 'ctx> TranslateCtx<'tcx, 'ctx> {
         for item in decl_items {
             let item_def_id = (&item.def_id).into();
             let item_span = tcx.def_span(item_def_id);
+            let name = TraitItemName(item.name.to_string());
             match &item.kind {
-                hax::AssocKind::Fn => (),
+                hax::AssocKind::Fn => {
+                    // if !implemented_methods.contains(&name) {
+                    //     // We reuse the method implementation provided by the trait.
+                    //     let fun_id = bt_ctx.register_fun_decl_id(item_span, item_def_id);
+
+                    //     // Translate the method to get its generics. If this fails, simply skip the
+                    //     // method.
+                    //     if let Ok(AnyTransItem::Fun(fun_decl)) =
+                    //         bt_ctx.t_ctx.get_or_translate(fun_id.into())
+                    //     {
+                    //         // These are the trait declaration generics concatenated with the
+                    //         // method-specific generics.
+                    //         let fun_params = &fun_decl.signature.generics;
+                    //         let params_info =
+                    //             fun_decl.signature.parent_params_info.as_ref().unwrap();
+                    //         let (_trait_params, method_params) = fun_params.split(params_info);
+                    //         // TODO:
+                    //         // - substitute implemented_trait.generics into `method_params`
+                    //         // - shift var ids and any references to them
+                    //         // - shift back to leave space for new params
+                    //         // The parameters for this new function are the impl generics
+                    //         // concatenated with the method-specific generics.
+                    //         let new_fun_params = generics.clone().concat(method_params.clone());
+                    //         // We provide type arguments to the original `FunDecl`.
+                    //         let fun_args = implemented_trait
+                    //             .generics
+                    //             .clone()
+                    //             .concat(method_params.identity_args());
+                    //         let fun = Binder {
+                    //             params: new_fun_params,
+                    //             skip_binder: FunDeclRef {
+                    //                 id: fun_id,
+                    //                 generics: fun_args,
+                    //             },
+                    //         };
+                    //         provided_methods.push((name, fun));
+                    //     }
+                    // }
+                }
                 hax::AssocKind::Const => {
-                    let name = TraitItemName(item.name.to_string());
                     // Does the trait impl provide an implementation for this const?
                     let c = match partial_consts.get(&name) {
                         Some(c) => c.clone(),
@@ -463,7 +500,6 @@ impl<'tcx, 'ctx> TranslateCtx<'tcx, 'ctx> {
                     consts.push((name, c));
                 }
                 hax::AssocKind::Type => {
-                    let name = TraitItemName(item.name.to_string());
                     // Does the trait impl provide an implementation for this type?
                     let ty = match partial_types.get(&name) {
                         Some(ty) => ty.clone(),
