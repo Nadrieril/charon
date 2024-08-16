@@ -9,7 +9,6 @@ use std::rc::Rc;
 
 use super::get_mir::{boxes_are_desugared, get_mir_for_def_id_and_level};
 use super::translate_ctx::*;
-use super::translate_types;
 use charon_lib::ast::*;
 use charon_lib::common::*;
 use charon_lib::formatter::{Formatter, IntoFormatter};
@@ -20,7 +19,6 @@ use hax_frontend_exporter as hax;
 use hax_frontend_exporter::{HasMirSetter, HasOwnerIdSetter, SInto};
 use rustc_hir::def_id::DefId;
 use rustc_middle::mir::START_BLOCK;
-use translate_types::translate_bound_region_kind_name;
 
 pub(crate) struct SubstFunId {
     pub func: FnPtr,
@@ -1478,41 +1476,15 @@ impl<'tcx, 'ctx, 'ctx1> BodyTransCtx<'tcx, 'ctx, 'ctx1> {
         let erase_regions = false;
         let span = item_meta.span.rust_span();
 
+        self.push_generics_for_def(span, def_id, &def)?;
+        let generics = self.get_generics();
+
         let signature = match &def.kind {
             hax::FullDefKind::Closure { args, .. } => &args.sig,
             hax::FullDefKind::Fn { sig, .. } => sig,
             hax::FullDefKind::AssocFn { sig, .. } => sig,
             _ => panic!("Unexpected definition for function: {def:?}"),
         };
-
-        // The parameters (and in particular the lifetimes) are split between
-        // early bound and late bound parameters. See those blog posts for explanations:
-        // https://smallcultfollowing.com/babysteps/blog/2013/10/29/intermingled-parameter-lists/
-        // https://smallcultfollowing.com/babysteps/blog/2013/11/04/intermingled-parameter-lists/
-        // Note that only lifetimes can be late bound.
-        //
-        // [TyCtxt.generics_of] gives us the early-bound parameters
-        // The late-bounds parameters are bound in the [Binder] returned by
-        // [TyCtxt.type_of].
-
-        // Add the early bound parameters and predicates.
-        self.push_generics_for_def(span, def_id, &def)?;
-
-        // Add the *late-bound* parameters (bound in the signature, can only be lifetimes).
-        let bvar_names = signature
-            .bound_vars
-            .iter()
-            // There should only be regions in the late-bound parameters
-            .map(|bvar| match bvar {
-                hax::BoundVariableKind::Region(br) => Ok(translate_bound_region_kind_name(&br)),
-                hax::BoundVariableKind::Ty(_) | hax::BoundVariableKind::Const => {
-                    error_or_panic!(self, span, format!("Unexpected bound variable: {:?}", bvar))
-                }
-            })
-            .try_collect()?;
-        self.set_first_bound_regions_group(bvar_names);
-
-        let generics = self.get_generics();
 
         // Translate the signature
         trace!("signature of {def_id:?}:\n{:?}", signature.value);

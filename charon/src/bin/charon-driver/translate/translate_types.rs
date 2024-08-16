@@ -699,6 +699,15 @@ impl<'tcx, 'ctx, 'ctx1> BodyTransCtx<'tcx, 'ctx, 'ctx1> {
         rust_id: DefId,
         def: &hax::FullDef,
     ) -> Result<(), Error> {
+        self.push_generics_for_def_inner(span, rust_id, def, true)
+    }
+    fn push_generics_for_def_inner(
+        &mut self,
+        span: rustc_span::Span,
+        rust_id: DefId,
+        def: &hax::FullDef,
+        include_late_bound: bool,
+    ) -> Result<(), Error> {
         use hax::FullDefKind;
         // Add generics from the parent item, recursively (recursivity is useful for closures, as
         // they could be nested).
@@ -709,7 +718,7 @@ impl<'tcx, 'ctx, 'ctx1> BodyTransCtx<'tcx, 'ctx, 'ctx1> {
             | FullDefKind::Closure { parent, .. } => {
                 let parent_id = parent.into();
                 let parent_def = self.t_ctx.hax_def(parent_id);
-                self.push_generics_for_def(span, parent_id, &parent_def)?;
+                self.push_generics_for_def_inner(span, parent_id, &parent_def, false)?;
             }
             _ => {}
         }
@@ -762,6 +771,28 @@ impl<'tcx, 'ctx, 'ctx1> BodyTransCtx<'tcx, 'ctx, 'ctx1> {
             };
             self.translate_predicates(predicates, origin, &location)?;
         }
+
+        let late_bound_params = match &def.kind {
+            hax::FullDefKind::Closure { args, .. } => Some(&args.sig.bound_vars),
+            hax::FullDefKind::Fn { sig, .. } => Some(&sig.bound_vars),
+            hax::FullDefKind::AssocFn { sig, .. } => Some(&sig.bound_vars),
+            _ => None,
+        };
+        // Add the late-bound params, if any, and if we're not processing parent generics.
+        if let Some(params) = late_bound_params
+            && include_late_bound
+        {
+            // The parameters (and in particular the lifetimes) are split between early bound and
+            // late bound parameters. See those blog posts for explanations:
+            // https://smallcultfollowing.com/babysteps/blog/2013/10/29/intermingled-parameter-lists/
+            // https://smallcultfollowing.com/babysteps/blog/2013/11/04/intermingled-parameter-lists/
+            // Note that only lifetimes can be late bound.
+            //
+            // [TyCtxt.generics_of] gives us the early-bound parameters The late-bounds parameters
+            // are bound in the [Binder] found in `signature.bound_vars`.
+            self.push_late_bound_params(span, params)?;
+        }
+
         Ok(())
     }
 

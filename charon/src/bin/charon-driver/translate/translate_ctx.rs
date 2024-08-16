@@ -1,5 +1,6 @@
 //! The translation contexts.
 use super::translate_predicates::NonLocalTraitClause;
+use super::translate_types::translate_bound_region_kind_name;
 use charon_lib::ast::*;
 use charon_lib::common::*;
 use charon_lib::formatter::{FmtCtx, IntoFormatter};
@@ -1018,18 +1019,32 @@ impl<'tcx, 'ctx, 'ctx1> BodyTransCtx<'tcx, 'ctx, 'ctx1> {
         rid
     }
 
-    /// Set the first bound regions group
-    pub(crate) fn set_first_bound_regions_group(&mut self, names: Vec<Option<String>>) {
+    /// Set the late bound params. They should only be regions.
+    pub(crate) fn push_late_bound_params(
+        &mut self,
+        span: rustc_span::Span,
+        bound_vars: &[hax::BoundVariableKind],
+    ) -> Result<(), Error> {
         assert!(self.bound_region_vars.is_empty());
-
-        // Register the variables
-        let var_ids: Box<[RegionId]> = names
-            .into_iter()
-            .map(|name| self.region_vars[0].push_with(|index| RegionVar { index, name }))
-            .collect();
+        // There should only be regions in the late-bound parameters
+        let var_ids: Box<[RegionId]> = bound_vars
+            .iter()
+            .map(|bvar| match bvar {
+                hax::BoundVariableKind::Region(br) => {
+                    let name = translate_bound_region_kind_name(&br);
+                    // Register the variables
+                    let id = self.region_vars[0].push_with(|index| RegionVar { index, name });
+                    Ok(id)
+                }
+                hax::BoundVariableKind::Ty(_) | hax::BoundVariableKind::Const => {
+                    error_or_panic!(self, span, format!("Unexpected bound variable: {:?}", bvar))
+                }
+            })
+            .try_collect()?;
 
         // Push the group
         self.bound_region_vars.push_front(var_ids);
+        Ok(())
     }
 
     /// Push a group of bound regions and call the continuation.
