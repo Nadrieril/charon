@@ -1369,6 +1369,25 @@ impl<'tcx, 'ctx, 'ctx1> BodyTransCtx<'tcx, 'ctx, 'ctx1> {
             hax::FullDefKind::Closure { args, .. } => &args.sig,
             hax::FullDefKind::Fn { sig, .. } => sig,
             hax::FullDefKind::AssocFn { sig, .. } => sig,
+            hax::FullDefKind::Ctor { .. } => {
+                // TODO: output is the type with identity args
+                // TODO: input is the list of fields
+                // TODO: need the variant to get the fields
+                // TODO: use looks like:
+                // std::option::Option::<u8>::Some as fn(u8) -> std::option::Option<u8> (PointerCoercion(ReifyFnPointer));
+                // TODO: test with generic parameters, lifetimes, tuple structs
+                let inputs = Vec::new();
+                // let output =
+                return Ok(FunSig {
+                    generics,
+                    is_unsafe: false,
+                    is_closure: false,
+                    closure_info: None,
+                    parent_params_info: None,
+                    inputs,
+                    output,
+                });
+            }
             _ => panic!("Unexpected definition for function: {def:?}"),
         };
 
