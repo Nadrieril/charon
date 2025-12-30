@@ -92,7 +92,7 @@
         };
         devShells.default = pkgs.mkShell {
           # Tell charon that the right toolchain is in PATH. It is added to PATH by the `charon` in `inputsFrom`.
-          CHARON_TOOLCHAIN_IS_IN_PATH = 1;
+          # CHARON_TOOLCHAIN_IS_IN_PATH = 1;
           # To run `cargo outdated` and `cargo udeps`
           LD_LIBRARY_PATH =
             pkgs.lib.makeLibraryPath [ pkgs.stdenv.cc.cc.lib pkgs.openssl pkgs.curl pkgs.zlib ];
@@ -121,8 +121,8 @@
           ];
 
           inputsFrom = [
-            self.packages.${system}.charon
-            self.packages.${system}.charon-ml
+            # self.packages.${system}.charon
+            # self.packages.${system}.charon-ml
           ];
         };
         devShells.ci = pkgs.mkShell {
