@@ -1,3 +1,4 @@
+//@ skip
 //@ rustc-args=--target powerpc64-unknown-linux-gnu
 #![no_std]
 

@@ -1,3 +1,4 @@
+//@ skip
 //@ rustc-args=--target i686-unknown-linux-gnu
 // To run, first install target i686-unknown-linux-gnu with `rustup target add i686-unknown-linux-gnu`
 

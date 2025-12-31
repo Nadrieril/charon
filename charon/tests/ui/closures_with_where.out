@@ -12,6 +12,14 @@ pub trait Sized<Self>
     non-dyn-compatible
 }
 
+// Full name: core::marker::Destruct
+#[lang_item("destruct")]
+pub trait Destruct<Self>
+{
+    fn drop_in_place = core::marker::Destruct::drop_in_place<Self>
+    vtable: core::marker::Destruct::{vtable}
+}
+
 // Full name: core::marker::Tuple
 #[lang_item("tuple_trait")]
 pub trait Tuple<Self>
@@ -50,17 +58,11 @@ pub fn from_fn<T, F, const N : usize>(@1: F) -> [T; N]
 where
     [@TraitClause0]: Sized<T>,
     [@TraitClause1]: Sized<F>,
-    [@TraitClause2]: FnMut<F, (usize)>,
-    @TraitClause2::parent_clause1::Output = T,
+    [@TraitClause2]: Destruct<T>,
+    [@TraitClause3]: FnMut<F, (usize)>,
+    [@TraitClause4]: Destruct<F>,
+    @TraitClause3::parent_clause1::Output = T,
 = <opaque>
-
-// Full name: core::marker::Destruct
-#[lang_item("destruct")]
-pub trait Destruct<Self>
-{
-    fn drop_in_place = core::marker::Destruct::drop_in_place<Self>
-    vtable: core::marker::Destruct::{vtable}
-}
 
 unsafe fn core::marker::Destruct::drop_in_place<Self>(@1: *mut Self)
 = <opaque>
@@ -202,7 +204,7 @@ where
 
     storage_live(_1)
     _1 = closure {  }
-    _0 = from_fn<T, closure<T, K>[@TraitClause0, @TraitClause1], 1 : usize>[@TraitClause0, {built_in impl Sized for closure<T, K>[@TraitClause0, @TraitClause1]}, {impl FnMut<(usize)> for closure<T, K>[@TraitClause0, @TraitClause1]}<T, K>[@TraitClause0, @TraitClause1]](move _1)
+    _0 = from_fn<T, closure<T, K>[@TraitClause0, @TraitClause1], 1 : usize>[@TraitClause0, {built_in impl Sized for closure<T, K>[@TraitClause0, @TraitClause1]}, {built_in impl Destruct for T}, {impl FnMut<(usize)> for closure<T, K>[@TraitClause0, @TraitClause1]}<T, K>[@TraitClause0, @TraitClause1], {impl Destruct for closure<T, K>[@TraitClause0, @TraitClause1]}<T, K>[@TraitClause0, @TraitClause1]](move _1)
     storage_dead(_1)
     return
 }

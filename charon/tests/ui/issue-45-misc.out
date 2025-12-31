@@ -45,12 +45,23 @@ pub trait FnMut<Self, Args>
     vtable: core::ops::function::FnMut::{vtable}<Args, Self::parent_clause1::Output>
 }
 
+// Full name: core::marker::Destruct
+#[lang_item("destruct")]
+pub trait Destruct<Self>
+{
+    fn drop_in_place = core::marker::Destruct::drop_in_place<Self>
+    vtable: core::marker::Destruct::{vtable}
+}
+
 pub fn core::array::{[T; N]}::map<T, F, U, const N : usize>(@1: [T; N], @2: F) -> [U; N]
 where
     [@TraitClause0]: Sized<T>,
     [@TraitClause1]: Sized<F>,
     [@TraitClause2]: Sized<U>,
     [@TraitClause3]: FnMut<F, (T)>,
+    [@TraitClause4]: Destruct<F>,
+    [@TraitClause5]: Destruct<U>,
+    [@TraitClause6]: Destruct<T>,
     @TraitClause3::parent_clause1::Output = U,
 = <opaque>
 
@@ -448,14 +459,6 @@ pub trait Copy<Self>
     non-dyn-compatible
 }
 
-// Full name: core::marker::Destruct
-#[lang_item("destruct")]
-pub trait Destruct<Self>
-{
-    fn drop_in_place = core::marker::Destruct::drop_in_place<Self>
-    vtable: core::marker::Destruct::{vtable}
-}
-
 unsafe fn core::marker::Destruct::drop_in_place<Self>(@1: *mut Self)
 = <opaque>
 
@@ -637,7 +640,7 @@ pub fn test_crate::map(@1: [i32; 256 : usize]) -> [i32; 256 : usize]
     _2 = copy x_1
     storage_live(_3)
     _3 = closure {  }
-    _0 = core::array::{[T; N]}::map<i32, closure, i32, 256 : usize>[{built_in impl Sized for i32}, {built_in impl Sized for closure}, {built_in impl Sized for i32}, {impl FnMut<(i32)> for closure}](move _2, move _3)
+    _0 = core::array::{[T; N]}::map<i32, closure, i32, 256 : usize>[{built_in impl Sized for i32}, {built_in impl Sized for closure}, {built_in impl Sized for i32}, {impl FnMut<(i32)> for closure}, {impl Destruct for closure}, {built_in impl Destruct for i32}, {built_in impl Destruct for i32}](move _2, move _3)
     storage_dead(_3)
     storage_dead(_2)
     return
