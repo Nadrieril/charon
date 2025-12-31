@@ -574,6 +574,7 @@ where
         storage_dead(_6)
         match _5 {
             Option::None => {
+                _0 = ()
                 break 0
             },
             Option::Some => {
@@ -617,13 +618,12 @@ where
                 storage_dead(args_11)
                 storage_dead(_9)
                 storage_dead(x_8)
-                storage_dead(_7)
-                storage_dead(_5)
-                continue 0
             },
         }
+        storage_dead(_7)
+        storage_dead(_5)
+        continue 0
     }
-    _0 = ()
     storage_dead(_7)
     storage_dead(_5)
     storage_dead(iter_4)

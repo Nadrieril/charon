@@ -93,7 +93,7 @@ fn do_test::<bool>(@1: bool, @2: bool)
     }
 
     bb1: {
-        if move _3 -> bb3 else -> bb4;
+        if move _3 -> bb4 else -> bb5;
     }
 
     bb2: {
@@ -101,8 +101,6 @@ fn do_test::<bool>(@1: bool, @2: bool)
     }
 
     bb3: {
-        storage_dead(_5);
-        storage_dead(_4);
         storage_dead(_3);
         _0 = ();
         return;
@@ -111,7 +109,37 @@ fn do_test::<bool>(@1: bool, @2: bool)
     bb4: {
         storage_dead(_5);
         storage_dead(_4);
+        goto bb3;
+    }
+
+    bb5: {
+        storage_dead(_5);
+        storage_dead(_4);
         panic(core::panicking::panic);
+    }
+
+    bb6: {
+        undefined_behavior;
+    }
+
+    bb7: {
+        unwind_terminate;
+    }
+
+    bb8: {
+        undefined_behavior;
+    }
+
+    bb9: {
+        undefined_behavior;
+    }
+
+    bb10: {
+        unwind_terminate;
+    }
+
+    bb11: {
+        undefined_behavior;
     }
 }
 

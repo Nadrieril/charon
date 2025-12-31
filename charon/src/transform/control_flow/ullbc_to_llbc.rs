@@ -1144,12 +1144,22 @@ impl ExitsInfo {
     /// are basically the points where control-flow joins.
     fn compute(ctx: &mut TransformCtx, body: &src::ExprBody, cfg_info: &CfgInfo) -> Self {
         // Compute the loop exits
-        let loop_exits = Self::compute_loop_exits(ctx, body, cfg_info);
+        let mut loop_exits = Self::compute_loop_exits(ctx, body, cfg_info);
         trace!("loop_exits:\n{:?}", loop_exits);
 
         // Compute the switch exits
-        let switch_exits = Self::compute_switch_exits(cfg_info);
+        let mut switch_exits = Self::compute_switch_exits(cfg_info);
         trace!("switch_exits:\n{:?}", switch_exits);
+
+        // Add the exit data given by rustc itself.
+        for (src_bid, src_block) in body.body.iter_indexed() {
+            if let Some(tgt_bid) = src_block.loop_break_block {
+                loop_exits.insert(src_bid, Some(tgt_bid));
+            }
+            if let Some(tgt_bid) = src_block.switch_merge_block {
+                switch_exits.insert(src_bid, Some(tgt_bid));
+            }
+        }
 
         // Compute the exit info
         let mut exits_info = ExitsInfo {

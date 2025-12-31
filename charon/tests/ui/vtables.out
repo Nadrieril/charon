@@ -411,11 +411,11 @@ fn {impl NoParam for i32}::dummy<'_0>(@1: &'_0 i32)
     _3 = copy (*self_1)
     _2 = move _3 > const 0 : i32
     if move _2 {
+        storage_dead(_3)
     } else {
         storage_dead(_3)
         panic(core::panicking::panic)
     }
-    storage_dead(_3)
     storage_dead(_2)
     _0 = ()
     return
@@ -702,13 +702,13 @@ fn {impl BaseOn<i32> for i32}::operate_on<'_0, '_1>(@1: &'_0 i32, @2: &'_1 i32)
     _5 = copy (*t_2)
     _3 = move _4 > move _5
     if move _3 {
+        storage_dead(_5)
+        storage_dead(_4)
     } else {
         storage_dead(_5)
         storage_dead(_4)
         panic(core::panicking::panic)
     }
-    storage_dead(_5)
-    storage_dead(_4)
     storage_dead(_3)
     _0 = ()
     return
@@ -790,13 +790,13 @@ fn {impl BaseOn<i64> for i32}::operate_on<'_0, '_1>(@1: &'_0 i32, @2: &'_1 i64)
     _6 = copy (*t_2)
     _3 = move _4 > move _6
     if move _3 {
+        storage_dead(_6)
+        storage_dead(_4)
     } else {
         storage_dead(_6)
         storage_dead(_4)
         panic(core::panicking::panic)
     }
-    storage_dead(_6)
-    storage_dead(_4)
     storage_dead(_3)
     _0 = ()
     return
@@ -987,13 +987,13 @@ fn {impl LifetimeTrait for i32}::lifetime_method<'a, '_1>(@1: &'_1 i32, @2: &'a 
     _5 = copy (*arg_2)
     _3 = move _4 > move _5
     if move _3 {
+        storage_dead(_5)
+        storage_dead(_4)
     } else {
         storage_dead(_5)
         storage_dead(_4)
         panic(core::panicking::panic)
     }
-    storage_dead(_5)
-    storage_dead(_4)
     storage_dead(_3)
     _0 = copy arg_2
     return
@@ -1364,15 +1364,15 @@ fn main()
             _37 = Option::None {  }
             panic(core::panicking::assert_failed)
         }
-        storage_live(_90)
-        storage_live(_91)
-        _91 = const 42 : i32
-        _90 = &_91
         storage_dead(_30)
         storage_dead(_29)
         storage_dead(_28)
         storage_dead(right_val_27)
         storage_dead(left_val_26)
+        storage_live(_90)
+        storage_live(_91)
+        _91 = const 42 : i32
+        _90 = &_91
         storage_dead(_24)
         storage_dead(_23)
         storage_dead(_20)

@@ -116,33 +116,33 @@ pub fn choose_test()
     _12 = copy x_1
     _11 = move _12 == const 1 : i32
     if move _11 {
+        storage_dead(_12)
     } else {
         storage_dead(_12)
         panic(core::panicking::panic)
     }
-    storage_dead(_12)
     storage_dead(_11)
     storage_live(_13)
     storage_live(_14)
     _14 = copy y_2
     _13 = move _14 == const 0 : i32
     if move _13 {
+        storage_dead(_14)
     } else {
         storage_dead(_14)
         panic(core::panicking::panic)
     }
-    storage_dead(_14)
     storage_dead(_13)
     storage_live(_15)
     storage_live(_16)
     _16 = copy (*z_3)
     _15 = move _16 == const 1 : i32
     if move _15 {
+        storage_dead(_16)
     } else {
         storage_dead(_16)
         panic(core::panicking::panic)
     }
-    storage_dead(_16)
     storage_dead(_15)
     _0 = ()
     storage_dead(z_3)

@@ -246,7 +246,8 @@ pub fn list_nth_mut_loop_with_id<T>(mut ls: &mut List<T>, mut i: u32) -> &mut T 
     panic!()
 }
 
-pub fn loop_break_1() {
+// These two functions have indistinguishable control-flow graphs.
+pub fn loop_break1() {
     let mut x = 0;
     loop {
         x = 1;
@@ -258,8 +259,7 @@ pub fn loop_break_1() {
     }
     x = 4;
 }
-
-pub fn loop_break_2() {
+pub fn loop_break2() {
     let mut x = 0;
     loop {
         x = 1;

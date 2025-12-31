@@ -163,26 +163,27 @@ where
 
     match (*self_1) {
         Option::Some => {
+            storage_live(item_2)
+            item_2 = &mut ((*self_1) as variant Option::Some).0
+            storage_live(item_3)
+            item_3 = &(*(*item_2))
+            storage_live(_4)
+            _4 = Option::None {  }
+            (*self_1) = move _4
+            storage_dead(_4)
+            storage_live(_5)
+            _5 = &(*item_3)
+            _0 = Option::Some { 0: move _5 }
+            storage_dead(_5)
+            storage_dead(item_3)
+            storage_dead(item_2)
+            return
         },
         _ => {
             _0 = Option::None {  }
             return
         },
     }
-    storage_live(item_2)
-    item_2 = &mut ((*self_1) as variant Option::Some).0
-    storage_live(item_3)
-    item_3 = &(*(*item_2))
-    storage_live(_4)
-    _4 = Option::None {  }
-    (*self_1) = move _4
-    storage_dead(_4)
-    storage_live(_5)
-    _5 = &(*item_3)
-    _0 = Option::Some { 0: move _5 }
-    storage_dead(_5)
-    storage_dead(item_3)
-    storage_dead(item_2)
     return
 }
 
@@ -229,6 +230,8 @@ where
             Option::Some => {
             },
             _ => {
+                _0 = ()
+                conditional_drop[{impl Destruct for Option<T>[@TraitClause0]}<@TraitClause2::Item>[(@TraitClause2::Item::[@TraitClause0])]] _4
                 break 0
             },
         }
@@ -251,8 +254,6 @@ where
         storage_dead(_4)
         continue 0
     }
-    _0 = ()
-    conditional_drop[{impl Destruct for Option<T>[@TraitClause0]}<@TraitClause2::Item>[(@TraitClause2::Item::[@TraitClause0])]] _4
     storage_dead(_4)
     conditional_drop[{built_in impl Destruct for impl for<'a> FnMut(I::Item<'a>)}] f_2
     conditional_drop[{built_in impl Destruct for I}] iter_1

@@ -58,6 +58,8 @@ impl Terminator {
         BlockData {
             statements: vec![],
             terminator: self,
+            loop_break_block: None,
+            switch_merge_block: None,
         }
     }
 }
@@ -65,10 +67,7 @@ impl Terminator {
 impl BlockData {
     /// Build a block that's just a goto terminator.
     pub fn new_goto(span: Span, target: BlockId) -> Self {
-        BlockData {
-            statements: vec![],
-            terminator: Terminator::goto(span, target),
-        }
+        Terminator::goto(span, target).into_block()
     }
 
     /// Build a block that's UB to reach.
@@ -238,10 +237,7 @@ pub struct BodyBuilder {
 }
 
 fn mk_block(span: Span, term: TerminatorKind) -> BlockData {
-    BlockData {
-        statements: vec![],
-        terminator: Terminator::new(span, term),
-    }
+    Terminator::new(span, term).into_block()
 }
 
 impl BodyBuilder {
@@ -253,10 +249,7 @@ impl BodyBuilder {
             body: IndexVec::new(),
             comments: vec![],
         };
-        let current_block = body.body.push(BlockData {
-            statements: Default::default(),
-            terminator: Terminator::new(span, TerminatorKind::Return),
-        });
+        let current_block = body.body.push(mk_block(span, TerminatorKind::Return));
         Self {
             span,
             body,

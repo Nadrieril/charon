@@ -239,6 +239,7 @@ impl BodyTransCtx<'_, '_, '_> {
             Some(id) => *id,
             // Generate a fresh id - this also registers the block
             None => {
+                // assert!(block_id < body.basic_blocks.len()); // TODO: sanity check
                 // Push to the stack of blocks awaiting translation
                 self.blocks_stack.push_back(block_id);
                 let id = self.blocks.reserve_slot();
@@ -270,9 +271,18 @@ impl BodyTransCtx<'_, '_, '_> {
         let terminator = block.terminator.as_ref().unwrap();
         let terminator = self.translate_terminator(body, terminator, &mut statements)?;
 
+        let loop_break_block = block
+            .loop_break_block
+            .map(|bid| self.translate_basic_block_id(bid));
+        let switch_merge_block = block
+            .switch_merge_block
+            .map(|bid| self.translate_basic_block_id(bid));
+
         Ok(BlockData {
             statements,
             terminator,
+            loop_break_block,
+            switch_merge_block,
         })
     }
 
@@ -1291,7 +1301,7 @@ impl BodyTransCtx<'_, '_, '_> {
 
         // For as long as there are blocks in the stack, translate them
         while let Some(hax_block_id) = self.blocks_stack.pop_front() {
-            let hax_block = body.basic_blocks.get(hax_block_id).unwrap();
+            let hax_block = &body.basic_blocks[hax_block_id];
             let block_id = self.translate_basic_block_id(hax_block_id);
             let block = self.translate_basic_block(&body, hax_block)?;
             self.blocks.set_slot(block_id, block);

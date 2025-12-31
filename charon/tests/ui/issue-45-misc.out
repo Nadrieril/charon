@@ -690,6 +690,7 @@ fn cbd(@1: [u8; 33 : usize])
         storage_dead(_6)
         match _5 {
             Option::None => {
+                _0 = ()
                 break 0
             },
             Option::Some => {
@@ -707,13 +708,12 @@ fn cbd(@1: [u8; 33 : usize])
                 storage_dead(_9)
                 storage_dead(_10)
                 storage_dead(i_8)
-                storage_dead(_7)
-                storage_dead(_5)
-                continue 0
             },
         }
+        storage_dead(_7)
+        storage_dead(_5)
+        continue 0
     }
-    _0 = ()
     storage_dead(_7)
     storage_dead(_5)
     storage_dead(iter_4)
@@ -781,6 +781,11 @@ fn select<'_0, '_1>(@1: &'_0 [u8], @2: &'_1 [u8])
         _15 = copy (*right_val_12)
         _13 = move _14 == move _15
         if move _13 {
+            storage_dead(_15)
+            storage_dead(_14)
+            storage_dead(_13)
+            storage_dead(right_val_12)
+            storage_dead(left_val_11)
         } else {
             storage_dead(_15)
             storage_dead(_14)
@@ -800,11 +805,6 @@ fn select<'_0, '_1>(@1: &'_0 [u8], @2: &'_1 [u8])
             _22 = Option::None {  }
             panic(core::panicking::assert_failed)
         }
-        storage_dead(_15)
-        storage_dead(_14)
-        storage_dead(_13)
-        storage_dead(right_val_12)
-        storage_dead(left_val_11)
         storage_dead(_9)
         storage_dead(_6)
         storage_dead(_4)

@@ -136,4 +136,6 @@ pub struct Terminator {
 pub struct BlockData {
     pub statements: Vec<Statement>,
     pub terminator: Terminator,
+    pub loop_break_block: Option<BlockId>,
+    pub switch_merge_block: Option<BlockId>,
 }

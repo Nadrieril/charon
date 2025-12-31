@@ -40,6 +40,13 @@ impl UllbcPass for Transform {
             for target in block.targets() {
                 antecedents.get_mut(target).unwrap().add(block_id, is_goto);
             }
+            // Don't merge a block that's a loop/switch exit or we won't recognize it as such.
+            if let Some(tgt_bid) = block.loop_break_block {
+                *antecedents.get_mut(tgt_bid).unwrap() = Antecedents::Many;
+            }
+            if let Some(tgt_bid) = block.switch_merge_block {
+                *antecedents.get_mut(tgt_bid).unwrap() = Antecedents::Many;
+            }
         }
         // Merge blocks with a single antecedent into their antecedent.
         for mut id in body.body.all_indices() {

@@ -249,13 +249,14 @@ where
 
     match (*self_1) {
         Option::None => {
+            _0 = const false
+            return
         },
         Option::Some => {
             _0 = const true
             return
         },
     }
-    _0 = const false
     return
 }
 

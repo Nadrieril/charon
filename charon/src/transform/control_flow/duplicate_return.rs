@@ -64,10 +64,9 @@ impl UllbcPass for Transform {
 
         // Then introduce the new blocks
         for span in new_spans {
-            let _ = b.body.push(BlockData {
-                statements: Vec::new(),
-                terminator: Terminator::new(span, TerminatorKind::Return),
-            });
+            let _ = b
+                .body
+                .push(Terminator::new(span, TerminatorKind::Return).into_block());
         }
     }
 }
