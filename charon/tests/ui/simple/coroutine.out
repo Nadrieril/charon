@@ -1,13 +1,114 @@
-error: Coroutine types are not supported yet
- --> tests/ui/simple/coroutine.rs:2:1
-  |
-2 | pub async fn f() {}
-  | ^^^^^^^^^^^^^^^^^^^
+# Final LLBC before serialization:
 
-error: Coroutines are not supported
- --> tests/ui/simple/coroutine.rs:2:18
-  |
-2 | pub async fn f() {}
-  |                  ^^
+// Full name: core::task::wake::Context
+#[lang_item("Context")]
+pub opaque type Context<mut 'a>
 
-ERROR Charon failed to translate this code (2 errors)
+// Full name: core::marker::MetaSized
+#[lang_item("meta_sized")]
+pub trait MetaSized<Self>
+
+// Full name: core::marker::Sized
+#[lang_item("sized")]
+pub trait Sized<Self>
+{
+    proof ImpliedClause0: (Self: MetaSized)
+    non-dyn-compatible
+}
+
+// Full name: core::task::poll::Poll
+#[lang_item("Poll")]
+pub enum Poll<T>
+where
+    TraitClause0: (T: Sized),
+{
+  Ready(T),
+  Pending,
+}
+
+// Full name: core::pin::Pin
+#[lang_item("pin")]
+pub opaque type Pin<Ptr>
+where
+    TraitClause0: (Ptr: Sized),
+
+// Full name: core::future::future::Future
+#[lang_item("future_trait")]
+pub trait Future<Self>
+{
+    proof ImpliedClause0: (Self: MetaSized)
+    proof ImpliedClause1: (Self::Output: Sized)
+    type Output
+    fn poll<'_0_1, '_1_1, '_2_1>;
+    vtable: core::future::future::Future::{vtable}<Self::Output>
+}
+
+// Full name: test_crate::f::coroutine
+enum coroutine {
+  Unresumed,
+  Returned,
+  Panicked,
+}
+
+// Full name: test_crate::f::{impl Future for coroutine}::poll
+fn poll(_1: Pin<&'_ mut coroutine>[{built_in impl Sized for &'_ mut coroutine}], _task_context: &'_ mut Context<'_>) -> Poll<()>[{built_in impl Sized for ()}]
+{
+    let _0: Poll<()>[{built_in impl Sized for ()}]; // return
+    let _1: Pin<&'0 mut coroutine>[{built_in impl Sized for &'0 mut coroutine}]; // arg #1
+    let _task_context: &'3 mut Context<'4>; // arg #2
+    let _3: (); // anonymous local
+    let _4: &'5 mut coroutine; // anonymous local
+
+    storage_live(_0)
+    storage_live(_3)
+    storage_live(_4)
+    _4 = copy (_1).0
+    match (*_4) {
+        coroutine::Unresumed => {
+        },
+        coroutine::Returned => {
+            storage_dead(_4)
+            storage_dead(_3)
+            storage_dead(_task_context)
+            storage_dead(_1)
+            panic
+        },
+        _ => {
+            storage_dead(_4)
+            storage_dead(_3)
+            storage_dead(_task_context)
+            storage_dead(_1)
+            undefined_behavior
+        },
+    }
+    _3 = ()
+    _0 = Poll::Ready { 0: move _3 }
+    @discriminant((*_4)) = 1
+    storage_dead(_4)
+    storage_dead(_3)
+    storage_dead(_task_context)
+    storage_dead(_1)
+    return
+}
+
+// Full name: test_crate::f::{impl Future for coroutine}
+impl "impl_Future_for_coroutine" Future for coroutine {
+    proof ImpliedClause0: (coroutine: MetaSized) = {built_in impl MetaSized for coroutine}
+    proof ImpliedClause1: ((): Sized) = {built_in impl Sized for ()}
+    type Output = ()
+    fn poll = poll
+    non-dyn-compatible
+}
+
+// Full name: test_crate::f
+pub fn f() -> coroutine
+{
+    let _0: coroutine; // return
+
+    storage_live(_0)
+    _0 = coroutine::Unresumed {  }
+    return
+}
+
+
+

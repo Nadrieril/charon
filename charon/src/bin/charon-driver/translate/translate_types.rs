@@ -249,6 +249,10 @@ impl<'tcx, 'ctx> ItemTransCtx<'tcx, 'ctx> {
                 let tref = self.translate_closure_type_ref(span, args)?;
                 TyKind::Adt(tref)
             }
+            hax::TyKind::Coroutine(args) => {
+                let tref = self.translate_coroutine_type_ref(span, args)?;
+                TyKind::Adt(tref)
+            }
 
             hax::TyKind::Dynamic(dyn_binder, region) => {
                 // self.check_no_monomorphize(span)?;
@@ -295,9 +299,6 @@ impl<'tcx, 'ctx> ItemTransCtx<'tcx, 'ctx> {
 
             hax::TyKind::Infer(_) => {
                 raise_error!(self, span, "Unsupported type: infer type")
-            }
-            hax::TyKind::Coroutine(..) => {
-                raise_error!(self, span, "Coroutine types are not supported yet")
             }
             hax::TyKind::Bound(_, _) => {
                 raise_error!(self, span, "Unexpected type kind: bound")
@@ -503,6 +504,13 @@ impl<'tcx, 'ctx> ItemTransCtx<'tcx, 'ctx> {
     pub fn translate_layout(&mut self, def: &hax::FullDef<'tcx>) -> Option<Layout> {
         let item = def.this();
         use rustc_abi as r_abi;
+
+        if matches!(def.kind(), hax::FullDefKind::Coroutine { .. }) {
+            // Rustc coroutines are laid out like state machines, but they are not ADTs. The
+            // generic enum layout path below asks rustc for ADT discriminant tags and panics on
+            // coroutine types.
+            return None;
+        }
 
         fn translate_variant_layout(
             variant_layout: &r_abi::VariantLayout<r_abi::FieldIdx>,

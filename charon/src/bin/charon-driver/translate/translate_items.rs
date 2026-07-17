@@ -157,6 +157,9 @@ impl<'tcx> TranslateCtx<'tcx> {
                     &TraitImplSource::Closure(kind) => {
                         bt_ctx.translate_closure_trait_impl(id, item_meta, &def, kind)?
                     }
+                    TraitImplSource::CoroutineFuture => {
+                        bt_ctx.translate_coroutine_future_trait_impl(id, item_meta, &def)?
+                    }
                     TraitImplSource::ImplicitDestruct => {
                         bt_ctx.translate_implicit_destruct_impl(id, item_meta, &def)?
                     }
@@ -175,6 +178,13 @@ impl<'tcx> TranslateCtx<'tcx> {
                     unreachable!()
                 };
                 let fun_decl = bt_ctx.translate_stateless_closure_as_fn(id, item_meta, &def)?;
+                self.translated.fun_decls.set_slot(id, fun_decl);
+            }
+            TransItemSourceKind::CoroutinePollMethod => {
+                let Some(ItemId::Fun(id)) = trans_id else {
+                    unreachable!()
+                };
+                let fun_decl = bt_ctx.translate_coroutine_poll_method(id, item_meta, &def)?;
                 self.translated.fun_decls.set_slot(id, fun_decl);
             }
             &TransItemSourceKind::DropGlueMethod(impl_kind) => {
@@ -351,6 +361,7 @@ impl<'tcx> ItemTransCtx<'tcx, '_> {
                 let info = self.translate_closure_info(span, args)?;
                 return Ok(ItemSource::Closure { info });
             }
+            hax::FullDefKind::Coroutine { .. } => return Ok(ItemSource::TopLevel),
             _ => return Ok(ItemSource::TopLevel),
         };
         Ok(match &assoc.container {
@@ -442,6 +453,7 @@ impl<'tcx> ItemTransCtx<'tcx, '_> {
             }
             hax::FullDefKind::Adt { .. } => self.translate_adt_def(trans_id, span, &item_meta, def),
             hax::FullDefKind::Closure { args, .. } => self.translate_closure_adt(span, args),
+            hax::FullDefKind::Coroutine { args, .. } => self.translate_coroutine_adt(span, args),
             _ => panic!("Unexpected item when translating types: {def:?}"),
         };
 

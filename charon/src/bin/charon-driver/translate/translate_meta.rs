@@ -268,7 +268,14 @@ impl<'tcx> TranslateCtx<'tcx> {
             // TODO: this is not very satisfactory, but on the other hand
             // we should be able to extract closures in local let-bindings
             // (i.e., we shouldn't have to introduce top-level let-bindings).
-            DefPathItem::Closure => Some(PathElem::Ident("closure".to_string(), disambiguator)),
+            DefPathItem::Closure => {
+                let full_def = self.hax_def_for_item(item)?;
+                let name = match full_def.kind() {
+                    hax::FullDefKind::Coroutine { .. } => "coroutine",
+                    _ => "closure",
+                };
+                Some(PathElem::Ident(name.to_string(), disambiguator))
+            }
             // Do nothing, functions in `extern` blocks are in the same namespace as the
             // block.
             DefPathItem::ForeignMod => None,
@@ -385,11 +392,12 @@ impl<'tcx> TranslateCtx<'tcx> {
 
             TransItemSourceKind::TraitImpl(
                 kind @ (TraitImplSource::Closure(..)
+                | TraitImplSource::CoroutineFuture
                 | TraitImplSource::ImplicitDestruct
                 | TraitImplSource::TraitAlias),
             ) => {
-                if let TraitImplSource::Closure(..) = kind {
-                    let _ = name.name.pop(); // Pop the `{closure}`
+                if let TraitImplSource::Closure(..) | TraitImplSource::CoroutineFuture = kind {
+                    let _ = name.name.pop(); // Pop the closure/coroutine state-machine item.
                 }
                 let impl_id = self.register_and_enqueue(&None, src.clone()).unwrap();
                 name.name.push(PathElem::Impl(ImplElem::Trait(impl_id)));
@@ -408,6 +416,10 @@ impl<'tcx> TranslateCtx<'tcx> {
             TransItemSourceKind::ClosureAsFnCast => {
                 name.name
                     .push(PathElem::Ident("as_fn".into(), Disambiguator::ZERO));
+            }
+            TransItemSourceKind::CoroutinePollMethod => {
+                name.name
+                    .push(PathElem::Ident("poll".into(), Disambiguator::ZERO));
             }
             TransItemSourceKind::VTable
             | TransItemSourceKind::VTableInstance(..)
@@ -608,7 +620,8 @@ impl<'tcx> TranslateCtx<'tcx> {
         match def.kind() {
             hax::FullDefKind::Fn { inline, .. }
             | hax::FullDefKind::AssocFn { inline, .. }
-            | hax::FullDefKind::Closure { inline, .. } => match inline {
+            | hax::FullDefKind::Closure { inline, .. }
+            | hax::FullDefKind::Coroutine { inline, .. } => match inline {
                 hax::InlineAttr::None => None,
                 hax::InlineAttr::Hint => Some(InlineAttr::Hint),
                 hax::InlineAttr::Never => Some(InlineAttr::Never),
@@ -691,8 +704,10 @@ impl<'tcx> TranslateCtx<'tcx> {
         let span = self.translate_span(span);
         let is_local = def.def_id().is_local();
         let (attr_info, lang_item) = if !item_src.is_derived_item()
-            || matches!(item_src.kind, TransItemSourceKind::ClosureMethod(..))
-        {
+            || matches!(
+                item_src.kind,
+                TransItemSourceKind::ClosureMethod(..) | TransItemSourceKind::CoroutinePollMethod
+            ) {
             let attr_info = self.translate_attr_info(def);
             let lang_item = def.lang_item.or(def.diagnostic_item).map(|s| s.to_string());
             (attr_info, lang_item)

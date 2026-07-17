@@ -69,6 +69,8 @@ pub enum TransItemSourceKind {
     ClosureMethod(ClosureKind),
     /// A cast of a state-less closure as a function pointer.
     ClosureAsFnCast,
+    /// The `poll` method of the `TraitImplSource::CoroutineFuture` impl.
+    CoroutinePollMethod,
     /// The `drop_glue` method of a `Destruct` impl. It contains the drop glue that calls
     /// `Drop::drop` for the type and then drops its fields. This is a method implementation (and
     /// the DefId is that of the ADT or closure for which to generate the drop glue).
@@ -96,6 +98,8 @@ pub enum TraitImplSource {
     TraitAlias,
     /// An impl of the appropriate `Fn*` trait for a closure. The `DefId` is that of the closure.
     Closure(ClosureKind),
+    /// An impl of `Future` for an async coroutine. The `DefId` is that of the coroutine.
+    CoroutineFuture,
     /// A fictitious `impl Destruct for T` that contains the drop glue code for the given ADT. The
     /// `DefId` is that of the ADT.
     ImplicitDestruct,
@@ -161,6 +165,9 @@ impl TransItemSource {
         let parent_kind = match self.kind {
             TransItemSourceKind::ClosureMethod(kind) => {
                 TransItemSourceKind::TraitImpl(TraitImplSource::Closure(kind))
+            }
+            TransItemSourceKind::CoroutinePollMethod => {
+                TransItemSourceKind::TraitImpl(TraitImplSource::CoroutineFuture)
             }
             TransItemSourceKind::DropGlueMethod(impl_kind)
             | TransItemSourceKind::VTableInstance(impl_kind)
@@ -320,6 +327,7 @@ impl<'tcx> TranslateCtx<'tcx> {
                     Fun
                     | ClosureMethod(..)
                     | ClosureAsFnCast
+                    | CoroutinePollMethod
                     | DropGlueMethod(..)
                     | VTableInstanceInitializer(..)
                     | VTableMethod
@@ -657,6 +665,32 @@ impl<'tcx, 'ctx> ItemTransCtx<'tcx, 'ctx> {
                     // If we're in the process of translating this same closure item (possibly with
                     // a different `TransItemSourceKind`), we can reuse the generics they have in
                     // common.
+                    if self.item_src.def_id() == &args.item.def_id {
+                        let depth = self.binding_levels.depth();
+                        for (a, b) in generics.regions.iter_mut().zip(
+                            self.outermost_binder()
+                                .params
+                                .identity_args_at_depth(depth)
+                                .regions,
+                        ) {
+                            *a = b;
+                        }
+                    }
+                }
+                hax::FullDefKind::Coroutine { args, .. } => {
+                    let upvar_regions = if self.item_src.def_id() == &args.item.def_id {
+                        assert!(self.outermost_binder().closure_upvar_tys.is_some());
+                        self.outermost_binder().closure_upvar_regions.len()
+                    } else {
+                        let adt_decl_id: ItemId =
+                            self.register_item(span, hax_item, TransItemSourceKind::Type);
+                        let adt_decl = self.get_or_translate(adt_decl_id)?;
+                        let adt_generics = adt_decl.generic_params();
+                        adt_generics.regions.len() - generics.regions.len()
+                    };
+                    generics
+                        .regions
+                        .extend((0..upvar_regions).map(|_| self.translate_erased_region()));
                     if self.item_src.def_id() == &args.item.def_id {
                         let depth = self.binding_levels.depth();
                         for (a, b) in generics.regions.iter_mut().zip(

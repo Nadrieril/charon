@@ -142,6 +142,30 @@ where
     }
 }
 
+fn coroutine_ty_from_parent_fn<'tcx, S>(
+    s: &S,
+    def_id: RDefId,
+    args: Option<ty::GenericArgsRef<'tcx>>,
+) -> Option<ty::Ty<'tcx>>
+where
+    S: UnderOwnerState<'tcx>,
+{
+    let tcx = s.base().tcx;
+    let parent_def_id = tcx.opt_parent(def_id)?;
+    if !matches!(
+        tcx.def_kind(parent_def_id),
+        RDefKind::Fn | RDefKind::AssocFn
+    ) {
+        return None;
+    }
+    let sig = inst_binder(tcx, s.typing_env(), args, tcx.fn_sig(parent_def_id));
+    let output = sig.skip_binder().output();
+    match output.kind() {
+        ty::TyKind::Coroutine(coroutine_def_id, _) if *coroutine_def_id == def_id => Some(output),
+        _ => None,
+    }
+}
+
 impl DefId {
     /// Get the full definition of this item.
     pub fn full_def<'tcx, S>(&self, s: &S) -> Arc<FullDef<'tcx>>
@@ -409,6 +433,18 @@ pub enum FullDefKind<'tcx> {
         /// The signature of the `call` method, if applicable, with `Self` replaced by `dyn
         /// Trait` (like vtable_sig in `AssocFn`).
         call_vtable_sig: Option<PolyFnSig>,
+    },
+    /// A coroutine state machine, including async blocks/functions.
+    Coroutine {
+        /// This has the same parent-generic behavior as closures.
+        param_env: ParamEnv,
+        args: CoroutineArgs,
+        is_const: bool,
+        inline: InlineAttr,
+        /// Info required to construct a virtual `Future` impl for async coroutines.
+        future_impl: Option<Box<VirtualTraitImpl>>,
+        /// Info required to construct a virtual `Drop` impl for this coroutine.
+        destruct_impl: Box<VirtualTraitImpl>,
     },
 
     // Constants
@@ -824,43 +860,70 @@ where
             }
         }
         RDefKind::Closure { .. } => {
-            use ty::ClosureKind::{Fn, FnMut};
-            let closure_ty = type_of_self();
-            let ty::TyKind::Closure(_, closure_args) = closure_ty.kind() else {
-                unreachable!()
-            };
-            let closure = closure_args.as_closure();
-            // We lose lifetime information here. Eventually would be nice not to.
-            let input_ty = erase_free_regions(tcx, closure.sig().input(0).skip_binder());
-            let trait_args = [closure_ty, input_ty];
-            let fn_once_trait = tcx.lang_items().fn_once_trait().unwrap();
-            let fn_mut_trait = tcx.lang_items().fn_mut_trait().unwrap();
-            let fn_trait = tcx.lang_items().fn_trait().unwrap();
+            let self_ty = type_of_self();
             let destruct_trait = tcx.lang_items().destruct_trait().unwrap();
+            match self_ty.kind() {
+                ty::TyKind::Closure(_, closure_args) => {
+                    let destruct_impl =
+                        virtual_impl_for(s, ty::TraitRef::new(tcx, destruct_trait, [self_ty]));
+                    use ty::ClosureKind::{Fn, FnMut};
+                    let closure = closure_args.as_closure();
+                    // We lose lifetime information here. Eventually would be nice not to.
+                    let input_ty = erase_free_regions(tcx, closure.sig().input(0).skip_binder());
+                    let trait_args = [self_ty, input_ty];
+                    let fn_once_trait = tcx.lang_items().fn_once_trait().unwrap();
+                    let fn_mut_trait = tcx.lang_items().fn_mut_trait().unwrap();
+                    let fn_trait = tcx.lang_items().fn_trait().unwrap();
 
-            let fn_once_tref = ty::TraitRef::new(tcx, fn_once_trait, trait_args);
-            let fn_mut_tref = matches!(closure.kind(), FnMut | Fn)
-                .then(|| ty::TraitRef::new(tcx, fn_mut_trait, trait_args));
-            let fn_tref =
-                matches!(closure.kind(), Fn).then(|| ty::TraitRef::new(tcx, fn_trait, trait_args));
+                    let fn_once_tref = ty::TraitRef::new(tcx, fn_once_trait, trait_args);
+                    let fn_mut_tref = matches!(closure.kind(), FnMut | Fn)
+                        .then(|| ty::TraitRef::new(tcx, fn_mut_trait, trait_args));
+                    let fn_tref = matches!(closure.kind(), Fn)
+                        .then(|| ty::TraitRef::new(tcx, fn_trait, trait_args));
 
-            FullDefKind::Closure {
-                param_env: get_param_env(s, args),
-                is_const: tcx.constness(def_id) == rustc_hir::Constness::Const,
-                inline: tcx.codegen_fn_attrs(def_id).inline.sinto(s),
-                args: ClosureArgs::sfrom(s, def_id, closure_args),
-                destruct_impl: virtual_impl_for(
-                    s,
-                    ty::TraitRef::new(tcx, destruct_trait, [type_of_self()]),
-                ),
-                fn_once_impl: virtual_impl_for(s, fn_once_tref),
-                fn_mut_impl: fn_mut_tref.map(|tref| virtual_impl_for(s, tref)),
-                fn_impl: fn_tref.map(|tref| virtual_impl_for(s, tref)),
-                call_mut_vtable_sig: gen_closure_sig(s, fn_mut_tref, true),
-                call_vtable_sig: gen_closure_sig(s, fn_tref, true),
-                call_once_sig: gen_closure_sig(s, Some(fn_once_tref), false).unwrap(),
-                call_mut_sig: gen_closure_sig(s, fn_mut_tref, false),
-                call_sig: gen_closure_sig(s, fn_tref, false),
+                    FullDefKind::Closure {
+                        param_env: get_param_env(s, args),
+                        is_const: tcx.constness(def_id) == rustc_hir::Constness::Const,
+                        inline: tcx.codegen_fn_attrs(def_id).inline.sinto(s),
+                        args: ClosureArgs::sfrom(s, def_id, closure_args),
+                        destruct_impl,
+                        fn_once_impl: virtual_impl_for(s, fn_once_tref),
+                        fn_mut_impl: fn_mut_tref.map(|tref| virtual_impl_for(s, tref)),
+                        fn_impl: fn_tref.map(|tref| virtual_impl_for(s, tref)),
+                        call_mut_vtable_sig: gen_closure_sig(s, fn_mut_tref, true),
+                        call_vtable_sig: gen_closure_sig(s, fn_tref, true),
+                        call_once_sig: gen_closure_sig(s, Some(fn_once_tref), false).unwrap(),
+                        call_mut_sig: gen_closure_sig(s, fn_mut_tref, false),
+                        call_sig: gen_closure_sig(s, fn_tref, false),
+                    }
+                }
+                ty::TyKind::Coroutine(..) => {
+                    let self_ty = coroutine_ty_from_parent_fn(s, def_id, Some(args_or_default()))
+                        .unwrap_or(self_ty);
+                    let ty::TyKind::Coroutine(_, coroutine_args) = self_ty.kind() else {
+                        unreachable!()
+                    };
+                    let destruct_impl =
+                        virtual_impl_for(s, ty::TraitRef::new(tcx, destruct_trait, [self_ty]));
+                    let future_impl = if tcx.coroutine_is_async(def_id) {
+                        let future_trait = tcx.lang_items().future_trait().unwrap();
+                        Some(virtual_impl_for(
+                            s,
+                            ty::TraitRef::new(tcx, future_trait, [self_ty]),
+                        ))
+                    } else {
+                        None
+                    };
+                    FullDefKind::Coroutine {
+                        param_env: get_param_env(s, args),
+                        is_const: tcx.constness(def_id) == rustc_hir::Constness::Const,
+                        inline: tcx.codegen_fn_attrs(def_id).inline.sinto(s),
+                        args: CoroutineArgs::sfrom(s, def_id, coroutine_args),
+                        future_impl,
+                        destruct_impl,
+                    }
+                }
+                _ => unreachable!(),
             }
         }
         kind @ (RDefKind::Const { .. }

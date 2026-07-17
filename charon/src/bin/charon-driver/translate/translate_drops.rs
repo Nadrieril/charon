@@ -64,7 +64,9 @@ impl<'tcx> ItemTransCtx<'tcx, '_> {
 
         let trait_pred = match def.kind() {
             // Charon-generated `Destruct` impl for an ADT.
-            FullDefKind::Adt { destruct_impl, .. } | FullDefKind::Closure { destruct_impl, .. } => {
+            FullDefKind::Adt { destruct_impl, .. }
+            | FullDefKind::Closure { destruct_impl, .. }
+            | FullDefKind::Coroutine { destruct_impl, .. } => {
                 assert_eq!(impl_kind, TraitImplSource::ImplicitDestruct);
                 &destruct_impl.trait_pred
             }
@@ -171,8 +173,9 @@ impl<'tcx> ItemTransCtx<'tcx, '_> {
     ) -> Result<TraitImpl, Error> {
         let span = item_meta.span;
 
-        let (FullDefKind::Adt { destruct_impl, .. } | FullDefKind::Closure { destruct_impl, .. }) =
-            def.kind()
+        let (FullDefKind::Adt { destruct_impl, .. }
+        | FullDefKind::Closure { destruct_impl, .. }
+        | FullDefKind::Coroutine { destruct_impl, .. }) = def.kind()
         else {
             unreachable!("{:?}", def.def_id())
         };

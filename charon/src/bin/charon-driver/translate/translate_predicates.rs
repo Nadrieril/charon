@@ -343,6 +343,7 @@ impl<'tcx, 'ctx> ItemTransCtx<'tcx, 'ctx> {
                 {
                     let (hax::TyKind::Adt(item)
                     | hax::TyKind::Closure(hax::ClosureArgs { item, .. })
+                    | hax::TyKind::Coroutine(hax::CoroutineArgs { item, .. })
                     | hax::TyKind::Array(item)
                     | hax::TyKind::Slice(item)
                     | hax::TyKind::Tuple(item)) = ty.kind()

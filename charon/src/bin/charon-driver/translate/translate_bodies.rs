@@ -840,6 +840,17 @@ impl<'tcx> BlockTransCtx<'tcx, '_, '_, '_> {
                             let field_proj = FieldProjKind::Adt(type_id, None);
                             ProjectionElem::Field(field_proj, field_id)
                         }
+                        // Prefix fields of coroutines are projected without an explicit downcast;
+                        // Charon represents them as fields on the unresumed variant.
+                        ty::Coroutine(..) => {
+                            let type_id = *tref.id.as_adt().unwrap();
+                            let variant = place_ty
+                                .variant_index
+                                .unwrap_or(rustc_abi::VariantIdx::ZERO);
+                            let variant_id = Some(self.translate_variant_id(variant));
+                            let field_proj = FieldProjKind::Adt(type_id, variant_id);
+                            ProjectionElem::Field(field_proj, field_id)
+                        }
                         _ => panic!(),
                     }
                 }
@@ -1173,6 +1184,12 @@ impl<'tcx> BlockTransCtx<'tcx, '_, '_, '_> {
                         let akind = AggregateKind::Adt(tref, None, None);
                         Ok(Rvalue::Aggregate(akind, operands_t))
                     }
+                    mir::AggregateKind::Coroutine(def_id, generics) => {
+                        let args = hax::CoroutineArgs::sfrom(&self.hax_state, *def_id, generics);
+                        let tref = self.translate_coroutine_type_ref(span, &args)?;
+                        let akind = AggregateKind::Adt(tref, Some(VariantId::ZERO), None);
+                        Ok(Rvalue::Aggregate(akind, operands_t))
+                    }
                     mir::AggregateKind::RawPtr(ty, mutability) => {
                         // TODO: replace with a call to `ptr::from_raw_parts`.
                         let t_ty = self.translate_rustc_ty(span, ty)?;
@@ -1186,8 +1203,7 @@ impl<'tcx> BlockTransCtx<'tcx, '_, '_, '_> {
 
                         Ok(Rvalue::Aggregate(akind, operands_t))
                     }
-                    mir::AggregateKind::Coroutine(..)
-                    | mir::AggregateKind::CoroutineClosure(..) => {
+                    mir::AggregateKind::CoroutineClosure(..) => {
                         raise_error!(self, span, "Coroutines are not supported");
                     }
                 }
@@ -1353,18 +1369,27 @@ impl<'tcx> BlockTransCtx<'tcx, '_, '_, '_> {
                 target,
                 unwind,
             } => {
-                let on_unwind = self.translate_unwind_action(span, unwind);
-                let kind = self.translate_assert_kind(span, msg)?;
-                let assert = Assert {
-                    cond: self.translate_operand(span, cond)?,
-                    expected: *expected,
-                    check_kind: Some(kind),
-                };
-                let target = self.translate_basic_block_id(*target);
-                ullbc_ast::TerminatorKind::Assert {
-                    assert,
-                    target,
-                    on_unwind,
+                if matches!(
+                    msg,
+                    mir::AssertKind::ResumedAfterDrop(..)
+                        | mir::AssertKind::ResumedAfterPanic(..)
+                        | mir::AssertKind::ResumedAfterReturn(..)
+                ) {
+                    ullbc_ast::TerminatorKind::Abort(AbortKind::Panic(None))
+                } else {
+                    let on_unwind = self.translate_unwind_action(span, unwind);
+                    let kind = self.translate_assert_kind(span, msg)?;
+                    let assert = Assert {
+                        cond: self.translate_operand(span, cond)?,
+                        expected: *expected,
+                        check_kind: Some(kind),
+                    };
+                    let target = self.translate_basic_block_id(*target);
+                    ullbc_ast::TerminatorKind::Assert {
+                        assert,
+                        target,
+                        on_unwind,
+                    }
                 }
             }
             TerminatorKind::FalseEdge {

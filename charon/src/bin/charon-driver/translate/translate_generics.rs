@@ -377,6 +377,17 @@ impl<'tcx, 'ctx> ItemTransCtx<'tcx, 'ctx> {
             assert!(innermost_binder.bound_region_vars.is_empty());
             innermost_binder.push_params_from_binder(sig.rebind(()))?;
         }
+        if let hax::FullDefKind::Coroutine { .. } = def.kind()
+            && let Some(parent_item) = def.typing_parent(self.hax_state())
+        {
+            let parent_def = self.hax_def(&parent_item)?;
+            if let hax::FullDefKind::Fn { sig, .. } | hax::FullDefKind::AssocFn { sig, .. } =
+                parent_def.kind()
+            {
+                self.innermost_binder_mut()
+                    .push_params_from_binder(sig.rebind(()))?;
+            }
+        }
         Ok(())
     }
 
@@ -418,6 +429,7 @@ impl<'tcx, 'ctx> ItemTransCtx<'tcx, 'ctx> {
             FullDefKind::Fn { .. }
             | FullDefKind::AssocFn { .. }
             | FullDefKind::Closure { .. }
+            | FullDefKind::Coroutine { .. }
             | FullDefKind::Const { .. }
             | FullDefKind::AssocConst { .. }
             | FullDefKind::Static { .. } => PredicateOrigin::WhereClauseOnFn,
@@ -487,6 +499,16 @@ impl<'tcx, 'ctx> ItemTransCtx<'tcx, 'ctx> {
                     .push_with(|index| RegionParam::new(index, None));
                 self.the_only_binder_mut().closure_call_method_region = Some(rid);
             }
+        }
+        if let hax::FullDefKind::Coroutine { args, .. } = def.kind() {
+            // Coroutines have the same upvar lifetime issue as closures: rustc uses erased
+            // regions in captured references, but Charon needs stable parameters on the ADT.
+            let upvar_tys = self.translate_coroutine_upvar_tys(span, args)?;
+            let upvar_tys = upvar_tys.replace_erased_regions(|| {
+                let region_id = self.the_only_binder_mut().push_upvar_region();
+                Region::Var(DeBruijnVar::new_at_zero(region_id))
+            });
+            self.the_only_binder_mut().closure_upvar_tys = Some(upvar_tys);
         }
 
         if matches!(

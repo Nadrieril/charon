@@ -772,8 +772,10 @@ pub enum TyKind {
     Ref(Region, Box<Ty>, Mutability),
     #[custom_arm(FROM_TYPE::Dynamic(preds, region) => TyKind::Dynamic(resolve_for_dyn(s, preds, |_, _| ()), region.sinto(s)),)]
     Dynamic(DynBinder<()>, Region),
-    #[custom_arm(FROM_TYPE::Coroutine(def_id, generics) => TO_TYPE::Coroutine(translate_item_ref(s, *def_id, generics)),)]
-    Coroutine(ItemRef),
+    #[custom_arm(
+        FROM_TYPE::Coroutine(def_id, generics) => TO_TYPE::Coroutine(CoroutineArgs::sfrom(s, *def_id, generics)),
+    )]
+    Coroutine(CoroutineArgs),
     Never,
     #[custom_arm(FROM_TYPE::Alias(alias_ty) => Alias::from(s, alias_ty),)]
     Alias(Alias),
@@ -1522,6 +1524,73 @@ pub enum ClosureKind {
     Fn,
     FnMut,
     FnOnce,
+}
+
+/// Reflects the public pieces of [`ty::CoroutineArgs`] that we need to translate an async state
+/// machine.
+#[derive(Clone, Debug, Hash, PartialEq, Eq)]
+pub struct CoroutineArgs {
+    pub item: ItemRef,
+    pub resume_ty: Ty,
+    pub yield_ty: Ty,
+    pub return_ty: Ty,
+    pub upvar_tys: Vec<Ty>,
+    pub is_async: bool,
+}
+
+impl CoroutineArgs {
+    pub fn sfrom<'tcx, S>(s: &S, def_id: RDefId, from: ty::GenericArgsRef<'tcx>) -> Self
+    where
+        S: UnderOwnerState<'tcx>,
+    {
+        use rustc_type_ir::{TypeFoldable, TypeSuperFoldable};
+
+        struct BoundRegionEraser<'tcx> {
+            tcx: ty::TyCtxt<'tcx>,
+        }
+
+        impl<'tcx> ty::TypeFolder<ty::TyCtxt<'tcx>> for BoundRegionEraser<'tcx> {
+            fn cx(&self) -> ty::TyCtxt<'tcx> {
+                self.tcx
+            }
+
+            fn fold_ty(&mut self, ty: ty::Ty<'tcx>) -> ty::Ty<'tcx> {
+                ty.super_fold_with(self)
+            }
+
+            fn fold_region(&mut self, r: ty::Region<'tcx>) -> ty::Region<'tcx> {
+                if matches!(r.kind(), ty::ReBound(..)) {
+                    self.tcx.lifetimes.re_erased
+                } else {
+                    r
+                }
+            }
+        }
+
+        let tcx = s.base().tcx;
+        let coroutine = from.as_coroutine();
+        let item = {
+            // Coroutines inherit the generics of their parent. The trailing synthetic args encode
+            // coroutine internals and are not Charon item generics.
+            let parent_args = tcx.mk_args(coroutine.parent_args());
+            translate_item_ref(s, def_id, parent_args)
+        };
+        CoroutineArgs {
+            item,
+            resume_ty: coroutine.resume_ty().sinto(s),
+            yield_ty: coroutine.yield_ty().sinto(s),
+            return_ty: coroutine.return_ty().sinto(s),
+            upvar_tys: coroutine
+                .upvar_tys()
+                .iter()
+                .map(|rustc_ty| {
+                    let ty = rustc_ty.fold_with(&mut BoundRegionEraser { tcx });
+                    erase_free_regions(tcx, ty).sinto(s)
+                })
+                .collect(),
+            is_async: tcx.coroutine_is_async(def_id),
+        }
+    }
 }
 
 sinto_todo!(rustc_middle::ty, NormalizesTo<'tcx>);

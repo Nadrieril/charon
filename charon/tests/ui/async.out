@@ -1,0 +1,466 @@
+# Final LLBC before serialization:
+
+// Full name: core::task::wake::Context
+#[lang_item("Context")]
+pub opaque type Context<mut 'a>
+
+// Full name: core::marker::MetaSized
+#[lang_item("meta_sized")]
+pub trait MetaSized<Self>
+
+// Full name: core::marker::Sized
+#[lang_item("sized")]
+pub trait Sized<Self>
+{
+    proof ImpliedClause0: (Self: MetaSized)
+    non-dyn-compatible
+}
+
+// Full name: core::task::poll::Poll
+#[lang_item("Poll")]
+pub enum Poll<T>
+where
+    TraitClause0: (T: Sized),
+{
+  Ready(T),
+  Pending,
+}
+
+// Full name: core::pin::Pin
+#[lang_item("pin")]
+pub opaque type Pin<Ptr>
+where
+    TraitClause0: (Ptr: Sized),
+
+// Full name: core::future::future::Future
+#[lang_item("future_trait")]
+pub trait Future<Self>
+{
+    proof ImpliedClause0: (Self: MetaSized)
+    proof ImpliedClause1: (Self::Output: Sized)
+    type Output
+    fn poll<'_0_1, '_1_1, '_2_1>;
+    vtable: core::future::future::Future::{vtable}<Self::Output>
+}
+
+// Full name: core::future::into_future::{impl IntoFuture for F}::into_future
+pub fn into_future<F>(_1: F) -> F
+where
+    TraitClause0: (F: Sized),
+    TraitClause1: (F: Future),
+= <opaque>
+
+// Full name: core::marker::Destruct
+#[lang_item("destruct")]
+pub trait Destruct<Self>
+{
+    fn drop_glue<'_0_1>;
+    non-dyn-compatible
+}
+
+// Full name: core::ops::deref::Deref
+#[lang_item("deref")]
+pub trait Deref<Self>
+{
+    proof ImpliedClause0: (Self::Target: MetaSized)
+    type Target
+    fn deref<'_0_1>;
+    vtable: core::ops::deref::Deref::{vtable}<Self::Target>
+}
+
+// Full name: core::ops::deref::{impl Deref for &'_0 mut T}::deref
+pub fn deref<'_0, '_1, T>(_1: &'_1 &'_0 mut T) -> &'_1 T
+where
+    TraitClause0: (T: MetaSized),
+= <opaque>
+
+// Full name: core::ops::deref::{impl Deref for &'_0 mut T}
+impl<'_0, T> Deref for &'_0 mut T
+where
+    TraitClause0: (T: MetaSized),
+{
+    proof ImpliedClause0: (T: MetaSized) = TraitClause0
+    type Target = T
+    fn deref<'_0_1> = deref<'_0, '_0_1, T>[TraitClause0]
+    vtable: {impl Deref for &'_0 mut T}::{vtable}<'_0, T>[TraitClause0]
+}
+
+// Full name: core::pin::{Pin<Ptr>[TraitClause0]}::new_unchecked
+#[lang_item("new_unchecked")]
+pub unsafe fn new_unchecked<Ptr>(_1: Ptr) -> Pin<Ptr>[TraitClause0]
+where
+    TraitClause0: (Ptr: Sized),
+    TraitClause1: (Ptr: Deref),
+= <opaque>
+
+enum test_crate::foo::coroutine<'_0> {
+  Unresumed(&'_0 i32),
+  Returned,
+  Panicked,
+}
+
+// Full name: test_crate::foo::{impl Future for test_crate::foo::coroutine<'_0>}::poll
+fn {impl Future for test_crate::foo::coroutine<'_0>}::poll<'_0>(_1: Pin<&'_ mut test_crate::foo::coroutine<'_0>>[{built_in impl Sized for &'_ mut test_crate::foo::coroutine<'_0>}], _task_context: &'_ mut Context<'_>) -> Poll<()>[{built_in impl Sized for ()}]
+{
+    let _0: Poll<()>[{built_in impl Sized for ()}]; // return
+    let _1: Pin<&'0 mut test_crate::foo::coroutine<'_0>>[{built_in impl Sized for &'0 mut test_crate::foo::coroutine<'_0>}]; // arg #1
+    let _task_context: &'3 mut Context<'4>; // arg #2
+    let _x: &'5 i32; // local
+    let _4: (); // anonymous local
+    let _5: &'6 mut test_crate::foo::coroutine<'_0>; // anonymous local
+
+    storage_live(_0)
+    storage_live(_4)
+    storage_live(_5)
+    _5 = copy (_1).0
+    match (*_5) {
+        test_crate::foo::coroutine::Unresumed => {
+        },
+        test_crate::foo::coroutine::Returned => {
+            storage_dead(_5)
+            storage_dead(_4)
+            storage_dead(_task_context)
+            storage_dead(_1)
+            panic
+        },
+        _ => {
+            storage_dead(_5)
+            storage_dead(_4)
+            storage_dead(_task_context)
+            storage_dead(_1)
+            undefined_behavior
+        },
+    }
+    storage_live(_x)
+    _x = copy ((*_5) as variant test_crate::foo::coroutine::Unresumed).0
+    _4 = ()
+    storage_dead(_x)
+    _0 = Poll::Ready { 0: move _4 }
+    @discriminant((*_5)) = 1
+    storage_dead(_5)
+    storage_dead(_4)
+    storage_dead(_task_context)
+    storage_dead(_1)
+    return
+}
+
+// Full name: test_crate::foo::{impl Future for test_crate::foo::coroutine<'_0>}
+impl<'_0> Future for test_crate::foo::coroutine<'_0> {
+    proof ImpliedClause0: (test_crate::foo::coroutine<'_0>: MetaSized) = {built_in impl MetaSized for test_crate::foo::coroutine<'_0>}
+    proof ImpliedClause1: ((): Sized) = {built_in impl Sized for ()}
+    type Output = ()
+    fn poll = {impl Future for test_crate::foo::coroutine<'_0>}::poll<'_0>
+    non-dyn-compatible
+}
+
+// Full name: test_crate::foo::coroutine::{impl Destruct for test_crate::foo::coroutine<'_0>}::drop_glue
+unsafe fn drop_glue<'_0, '_1>(_1: &'_1 mut test_crate::foo::coroutine<'_0>)
+= <missing>
+
+// Full name: test_crate::foo::coroutine::{impl Destruct for test_crate::foo::coroutine<'_0>}
+impl<'_0> "impl_Destruct_for_coroutine" Destruct for test_crate::foo::coroutine<'_0> {
+    fn drop_glue<'_0_1> = drop_glue<'_0, '_0_1>
+    non-dyn-compatible
+}
+
+// Full name: test_crate::foo
+fn foo<'_0>(_x: &'_0 i32) -> test_crate::foo::coroutine<'_>
+{
+    let _0: test_crate::foo::coroutine<'0>; // return
+    let _x: &'2 i32; // arg #1
+
+    storage_live(_0)
+    _0 = test_crate::foo::coroutine::Unresumed { 0: copy _x }
+    storage_dead(_x)
+    return
+}
+
+enum test_crate::bar::coroutine {
+  Unresumed,
+  Returned,
+  Panicked,
+  Suspend0(i32, i32, test_crate::foo::coroutine<'_>),
+}
+
+// Full name: test_crate::bar::{impl Future for test_crate::bar::coroutine}::poll
+fn {impl Future for test_crate::bar::coroutine}::poll(_1: Pin<&'_ mut test_crate::bar::coroutine>[{built_in impl Sized for &'_ mut test_crate::bar::coroutine}], _task_context: &'_ mut Context<'_>) -> Poll<()>[{built_in impl Sized for ()}]
+{
+    let _0: Poll<()>[{built_in impl Sized for ()}]; // return
+    let _1: Pin<&'0 mut test_crate::bar::coroutine>[{built_in impl Sized for &'0 mut test_crate::bar::coroutine}]; // arg #1
+    let _task_context: &'3 mut Context<'4>; // arg #2
+    let _3: bool; // anonymous local
+    let y: i32; // local
+    let _5: test_crate::foo::coroutine<'7>; // anonymous local
+    let _6: test_crate::foo::coroutine<'8>; // anonymous local
+    let _7: &'10 i32; // anonymous local
+    let _8: &'11 i32; // anonymous local
+    let _9: i32; // anonymous local
+    let _10: i32; // anonymous local
+    let _11: i32; // anonymous local
+    let _12: Poll<()>[{built_in impl Sized for ()}]; // anonymous local
+    let _13: Pin<&'29 mut test_crate::foo::coroutine<'30>>[{built_in impl Sized for &'29 mut test_crate::foo::coroutine<'30>}]; // anonymous local
+    let _14: &'35 mut test_crate::foo::coroutine<'36>; // anonymous local
+    let _15: &'37 mut test_crate::foo::coroutine<'38>; // anonymous local
+    let _16: &'39 mut Context<'40>; // anonymous local
+    let _17: &'41 mut Context<'42>; // anonymous local
+    let _18: &'43 mut Context<'44>; // anonymous local
+    let result: (); // local
+    let _20: &'45 mut Context<'46>; // anonymous local
+    let _21: i32; // anonymous local
+    let _22: (); // anonymous local
+    let _23: &'47 mut test_crate::bar::coroutine; // anonymous local
+
+    storage_live(_0)
+    storage_live(_11)
+    storage_live(_21)
+    storage_live(_22)
+    storage_live(_23)
+    _23 = copy (_1).0
+    match (*_23) {
+        test_crate::bar::coroutine::Unresumed => {
+            ((*_23) as variant test_crate::bar::coroutine::Suspend0).0 = const 42i32
+            storage_live(_3)
+            _3 = const true
+            if move _3 {
+                storage_live(y)
+                y = const 0i32
+                storage_live(_5)
+                storage_live(_6)
+                storage_live(_7)
+                storage_live(_8)
+                storage_live(_9)
+                _9 = copy ((*_23) as variant test_crate::bar::coroutine::Suspend0).0
+                storage_live(_10)
+                _10 = copy y
+                _11 = copy _9 panic.+ copy _10
+                ((*_23) as variant test_crate::bar::coroutine::Suspend0).1 = move _11
+                storage_dead(_10)
+                storage_dead(_9)
+                _8 = &((*_23) as variant test_crate::bar::coroutine::Suspend0).1
+                _7 = &(*_8)
+                _6 = foo<'81>(move _7)
+                ↳⚡ storage_dead(_7)
+                    storage_dead(_6)
+                    storage_dead(_8)
+                    storage_dead(_5)
+                    storage_dead(y)
+                    storage_dead(_3)
+                    @discriminant((*_23)) = 2
+                    storage_dead(_23)
+                    storage_dead(_22)
+                    storage_dead(_21)
+                    storage_dead(_11)
+                    storage_dead(_task_context)
+                    storage_dead(_1)
+                    unwind_continue
+                storage_dead(_7)
+                _5 = into_future<test_crate::foo::coroutine<'94>>[{built_in impl Sized for test_crate::foo::coroutine<'94>}, {built_in impl Future for test_crate::foo::coroutine<'94> where Output  = ()}](move _6)
+                ↳⚡ storage_dead(_6)
+                    storage_dead(_8)
+                    storage_dead(_5)
+                    storage_dead(y)
+                    storage_dead(_3)
+                    @discriminant((*_23)) = 2
+                    storage_dead(_23)
+                    storage_dead(_22)
+                    storage_dead(_21)
+                    storage_dead(_11)
+                    storage_dead(_task_context)
+                    storage_dead(_1)
+                    unwind_continue
+                storage_dead(_6)
+                ((*_23) as variant test_crate::bar::coroutine::Suspend0).2 = move _5
+            } else {
+                storage_dead(_3)
+                _21 = copy ((*_23) as variant test_crate::bar::coroutine::Suspend0).0 panic.+ const 1i32
+                ((*_23) as variant test_crate::bar::coroutine::Suspend0).0 = move _21
+                _22 = ()
+                _0 = Poll::Ready { 0: move _22 }
+                @discriminant((*_23)) = 1
+                storage_dead(_23)
+                storage_dead(_22)
+                storage_dead(_21)
+                storage_dead(_11)
+                storage_dead(_task_context)
+                storage_dead(_1)
+                return
+            }
+        },
+        test_crate::bar::coroutine::Returned => {
+            storage_dead(_23)
+            storage_dead(_22)
+            storage_dead(_21)
+            storage_dead(_11)
+            storage_dead(_task_context)
+            storage_dead(_1)
+            panic
+        },
+        test_crate::bar::coroutine::Panicked => {
+            storage_dead(_23)
+            storage_dead(_22)
+            storage_dead(_21)
+            storage_dead(_11)
+            storage_dead(_task_context)
+            storage_dead(_1)
+            panic
+        },
+        test_crate::bar::coroutine::Suspend0 => {
+            storage_live(_3)
+            storage_live(y)
+            storage_live(_5)
+            storage_live(_8)
+            storage_live(_20)
+            _20 = move _task_context
+            _task_context = move _20
+            storage_dead(_20)
+        },
+    }
+    storage_live(_12)
+    storage_live(_13)
+    storage_live(_14)
+    storage_live(_15)
+    _15 = &mut ((*_23) as variant test_crate::bar::coroutine::Suspend0).2
+    _14 = &two-phase-mut (*_15)
+    _13 = new_unchecked<&'55 mut test_crate::foo::coroutine<'56>>[{built_in impl Sized for &'55 mut test_crate::foo::coroutine<'56>}, {impl Deref for &'_0 mut T}<'55, test_crate::foo::coroutine<'56>>[{built_in impl MetaSized for test_crate::foo::coroutine<'56>}]](move _14)
+    ↳⚡ storage_dead(_14)
+        storage_dead(_13)
+        storage_dead(_15)
+        storage_dead(_12)
+        drop[drop_glue<'110, '111>] ((*_23) as variant test_crate::bar::coroutine::Suspend0).2
+        ↳⚡ storage_dead(_23)
+            storage_dead(_22)
+            storage_dead(_21)
+            storage_dead(_11)
+            storage_dead(_task_context)
+            storage_dead(_1)
+            unwind_terminate
+        storage_dead(_8)
+        storage_dead(_5)
+        storage_dead(y)
+        storage_dead(_3)
+        @discriminant((*_23)) = 2
+        storage_dead(_23)
+        storage_dead(_22)
+        storage_dead(_21)
+        storage_dead(_11)
+        storage_dead(_task_context)
+        storage_dead(_1)
+        unwind_continue
+    storage_dead(_14)
+    storage_live(_16)
+    storage_live(_17)
+    storage_live(_18)
+    _18 = copy _task_context
+    _17 = move _18
+    _16 = &two-phase-mut (*_17)
+    storage_dead(_18)
+    _12 = {built_in impl Future for test_crate::foo::coroutine<'85> where Output  = ()}::poll<'89, '90, '91>(move _13, move _16)
+    ↳⚡ storage_dead(_16)
+        storage_dead(_13)
+        storage_dead(_17)
+        storage_dead(_15)
+        storage_dead(_12)
+        drop[drop_glue<'110, '111>] ((*_23) as variant test_crate::bar::coroutine::Suspend0).2
+        ↳⚡ storage_dead(_23)
+            storage_dead(_22)
+            storage_dead(_21)
+            storage_dead(_11)
+            storage_dead(_task_context)
+            storage_dead(_1)
+            unwind_terminate
+        storage_dead(_8)
+        storage_dead(_5)
+        storage_dead(y)
+        storage_dead(_3)
+        @discriminant((*_23)) = 2
+        storage_dead(_23)
+        storage_dead(_22)
+        storage_dead(_21)
+        storage_dead(_11)
+        storage_dead(_task_context)
+        storage_dead(_1)
+        unwind_continue
+    storage_dead(_16)
+    storage_dead(_13)
+    match _12 {
+        Poll::Ready => {
+        },
+        Poll::Pending => {
+            storage_dead(_17)
+            storage_dead(_15)
+            storage_dead(_12)
+            storage_live(_20)
+            _0 = Poll::Pending {  }
+            storage_dead(_3)
+            storage_dead(y)
+            storage_dead(_5)
+            storage_dead(_8)
+            storage_dead(_20)
+            @discriminant((*_23)) = 3
+            storage_dead(_23)
+            storage_dead(_22)
+            storage_dead(_21)
+            storage_dead(_11)
+            storage_dead(_task_context)
+            storage_dead(_1)
+            return
+        },
+    }
+    storage_live(result)
+    result = copy (_12 as variant Poll::Ready).0
+    storage_dead(result)
+    storage_dead(_17)
+    storage_dead(_15)
+    storage_dead(_12)
+    drop[drop_glue<'117, '118>] ((*_23) as variant test_crate::bar::coroutine::Suspend0).2
+    ↳⚡ storage_dead(_8)
+        storage_dead(_5)
+        storage_dead(y)
+        storage_dead(_3)
+        @discriminant((*_23)) = 2
+        storage_dead(_23)
+        storage_dead(_22)
+        storage_dead(_21)
+        storage_dead(_11)
+        storage_dead(_task_context)
+        storage_dead(_1)
+        unwind_continue
+    storage_dead(_8)
+    storage_dead(_5)
+    storage_dead(y)
+    storage_dead(_3)
+    _21 = copy ((*_23) as variant test_crate::bar::coroutine::Suspend0).0 panic.+ const 1i32
+    ((*_23) as variant test_crate::bar::coroutine::Suspend0).0 = move _21
+    _22 = ()
+    _0 = Poll::Ready { 0: move _22 }
+    @discriminant((*_23)) = 1
+    storage_dead(_23)
+    storage_dead(_22)
+    storage_dead(_21)
+    storage_dead(_11)
+    storage_dead(_task_context)
+    storage_dead(_1)
+    return
+}
+
+// Full name: test_crate::bar::{impl Future for test_crate::bar::coroutine}
+impl Future for test_crate::bar::coroutine {
+    proof ImpliedClause0: (test_crate::bar::coroutine: MetaSized) = {built_in impl MetaSized for test_crate::bar::coroutine}
+    proof ImpliedClause1: ((): Sized) = {built_in impl Sized for ()}
+    type Output = ()
+    fn poll = {impl Future for test_crate::bar::coroutine}::poll
+    non-dyn-compatible
+}
+
+// Full name: test_crate::bar
+fn bar() -> test_crate::bar::coroutine
+{
+    let _0: test_crate::bar::coroutine; // return
+
+    storage_live(_0)
+    _0 = test_crate::bar::coroutine::Unresumed {  }
+    return
+}
+
+
+
