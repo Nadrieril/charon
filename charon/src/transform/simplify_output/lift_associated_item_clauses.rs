@@ -82,7 +82,7 @@ impl TransformPass for Transform {
                     };
                     let new_id = (|| {
                         let new_id = *trait_item_clause_ids
-                            .get(tref.trait_decl_ref.skip_binder.id)?
+                            .get(tref.trait_decl_ref.id)?
                             .get(type_id)?
                             .get(item_clause_id)?;
                         Some(new_id)
