@@ -452,6 +452,9 @@ and region =
           body. *)
   | RErased  (** Erased region *)
 
+(** Region arguments used to instantiate a [[RegionBinder]]. *)
+and region_args = { regions : region list }
+
 (** A value of type [T] bound by regions. We should use [binder] instead but
     this causes name clash issues in the derived ocaml visitors. *)
 and 'a0 region_binder = {
@@ -532,7 +535,7 @@ and trait_ref_contents = {
 and trait_ref_kind =
   | TraitImpl of trait_impl_ref
       (** A specific top-level implementation item. *)
-  | Clause of trait_clause_id de_bruijn_var
+  | Clause of trait_clause_id de_bruijn_var * region_args
       (** One of the local clauses.
 
           Example:
@@ -541,7 +544,7 @@ and trait_ref_kind =
                                ^^^^^^^
                                Clause(0)
           ]} *)
-  | ParentClause of trait_ref * trait_clause_id
+  | ParentClause of trait_ref * trait_clause_id * region_args
       (** A parent clause
 
           Example:
@@ -562,7 +565,8 @@ and trait_ref_kind =
                                 parent clause 1 of clause 0
             }
           ]} *)
-  | ItemClause of trait_ref * assoc_type_id * trait_clause_id
+  | ItemClause of
+      trait_ref * assoc_type_id * generic_args * trait_clause_id * region_args
       (** A clause defined on an associated type. This variant is only used
           during translation; after the [lift_associated_item_clauses] pass,
           clauses on items become [ParentClause]s.
@@ -578,11 +582,24 @@ and trait_ref_kind =
             fn f<T : Foo>(x : T::W) {
               x.bar1();
               ^^^^^^^
-              ItemClause(Clause(0), W, 1)
-                                    ^^^^
-                                    clause 1 from item W (from local clause 0)
+              ItemClause {
+                  trait_ref: Clause(0),
+                  type_id: W,
+                  generics: [],
+                  clause_id: 1,
+                  clause_args: [],
+              }
+              ^^^^^^^^^^^^^^^^^ clause 1 from item W (from local clause 0)
             }
-          ]} *)
+          ]}
+
+          Fields:
+          - [trait_ref]
+          - [type_id]
+          - [generics]: Generic arguments of the associated type itself.
+          - [clause_id]
+          - [clause_args]: Region arguments that instantiate the higher-ranked
+            item clause. *)
   | Self
       (** The implicit [Self: Trait] clause. Present inside trait declarations,
           including trait method declarations. Not present in trait

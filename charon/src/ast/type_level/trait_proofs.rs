@@ -98,7 +98,7 @@ pub enum TraitRefKind {
     ///                    ^^^^^^^
     ///                    Clause(0)
     /// ```
-    Clause(ClauseDbVar),
+    Clause(ClauseDbVar, RegionArgs),
 
     /// A parent clause
     ///
@@ -120,7 +120,7 @@ pub enum TraitRefKind {
     ///                     parent clause 1 of clause 0
     /// }
     /// ```
-    ParentClause(TraitRef, TraitClauseId),
+    ParentClause(TraitRef, TraitClauseId, RegionArgs),
 
     /// A clause defined on an associated type. This variant is only used during translation; after
     /// the `lift_associated_item_clauses` pass, clauses on items become `ParentClause`s.
@@ -136,12 +136,25 @@ pub enum TraitRefKind {
     /// fn f<T : Foo>(x : T::W) {
     ///   x.bar1();
     ///   ^^^^^^^
-    ///   ItemClause(Clause(0), W, 1)
-    ///                         ^^^^
-    ///                         clause 1 from item W (from local clause 0)
+    ///   ItemClause {
+    ///       trait_ref: Clause(0),
+    ///       type_id: W,
+    ///       generics: [],
+    ///       clause_id: 1,
+    ///       clause_args: [],
+    ///   }
+    ///   ^^^^^^^^^^^^^^^^^ clause 1 from item W (from local clause 0)
     /// }
     /// ```
-    ItemClause(TraitRef, AssocTypeId, TraitClauseId),
+    ItemClause {
+        trait_ref: TraitRef,
+        type_id: AssocTypeId,
+        /// Generic arguments of the associated type itself.
+        generics: GenericArgs,
+        clause_id: TraitClauseId,
+        /// Region arguments that instantiate the higher-ranked item clause.
+        clause_args: RegionArgs,
+    },
 
     /// The implicit `Self: Trait` clause. Present inside trait declarations, including trait
     /// method declarations. Not present in trait implementations as we can use `TraitImpl` intead.
@@ -268,10 +281,13 @@ impl TraitRef {
             .trait_
             .clone()
             .substitute_with_tref(&self);
-        Some(PolyTraitRef::new(
-            TraitRefKind::ParentClause(self, clause_id),
-            trait_decl_ref,
-        ))
+        let args = trait_decl_ref.identity_region_args();
+        Some(PolyTraitRef(trait_decl_ref.map(|trait_decl_ref| {
+            TraitRef::new(
+                TraitRefKind::ParentClause(self.move_under_binder(), clause_id, args),
+                trait_decl_ref,
+            )
+        })))
     }
 
     pub fn vtable_ref<'a>(&'a self, krate: &'a TranslatedCrate) -> Option<&'a GlobalDeclRef> {
@@ -309,6 +325,11 @@ impl PolyTraitRef {
     /// Instantiate the bound regions with erased regions.
     pub fn erase(self) -> TraitRef {
         self.0.erase()
+    }
+
+    /// Instantiate this proof's bound regions with the provided arguments.
+    pub fn apply(self, args: &RegionArgs) -> TraitRef {
+        self.0.apply(args)
     }
 
     pub fn trait_id(&self) -> TraitDeclId {

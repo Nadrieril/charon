@@ -48,7 +48,7 @@ pub(crate) struct BindingLevel {
     /// The map from rust const generic variables to translated const generic variable indices.
     pub const_generic_vars_map: HashMap<u32, ConstGenericVarId>,
     /// The map from trait predicates to translated trait clause indices.
-    pub trait_preds: HashMap<hax::GenericPredicateId, TraitClauseId>,
+    pub trait_preds: HashMap<hax::GenericPredicateId, (TraitClauseId, usize)>,
     /// The types of the captured variables, when we're translating a closure item. This is
     /// translated early because this translation requires adding new lifetime generics to the
     /// current binder.
@@ -379,11 +379,16 @@ impl<'tcx, 'ctx> ItemTransCtx<'tcx, 'ctx> {
         &mut self,
         span: Span,
         id: &hax::GenericPredicateId,
-    ) -> Result<ClauseDbVar, Error> {
-        self.lookup_param(
+    ) -> Result<(ClauseDbVar, usize), Error> {
+        for (dbid, binder) in self.binding_levels.iter_enumerated() {
+            if let Some(&(clause_id, bound_regions)) = binder.trait_preds.get(id) {
+                return Ok((DeBruijnVar::bound(dbid, clause_id), bound_regions));
+            }
+        }
+        raise_error!(
+            self,
             span,
-            |bl| bl.trait_preds.get(id).copied(),
-            || format!("the trait clause variable {id:?}"),
+            "Unexpected error: could not find the trait clause variable {id:?}"
         )
     }
 

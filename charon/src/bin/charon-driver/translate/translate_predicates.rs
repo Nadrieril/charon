@@ -100,9 +100,16 @@ impl<'tcx, 'ctx> ItemTransCtx<'tcx, 'ctx> {
                 })
                 .enumerate()
             {
+                let bound_regions = pred
+                    .clause
+                    .kind
+                    .bound_vars
+                    .iter()
+                    .filter(|var| matches!(var, hax::BoundVariableKind::Region(..)))
+                    .count();
                 self.innermost_binder_mut()
                     .trait_preds
-                    .insert(pred.id.clone(), next_clause_id + i);
+                    .insert(pred.id.clone(), (next_clause_id + i, bound_regions));
             }
         }
 
@@ -176,7 +183,7 @@ impl<'tcx, 'ctx> ItemTransCtx<'tcx, 'ctx> {
                         .trait_preds
                         .get(&pred.id)
                         .unwrap();
-                    debug_assert_eq!(clause_id, *expected_clause_id);
+                    debug_assert_eq!(clause_id, expected_clause_id.0);
                 }
             }
             ClauseKind::RegionOutlives(p) => {
@@ -288,26 +295,39 @@ impl<'tcx, 'ctx> ItemTransCtx<'tcx, 'ctx> {
             }
             TraitProofKind::SelfProof => TraitRefKind::SelfId,
             TraitProofKind::LocalBound(id) => match self.lookup_clause_var(span, id) {
-                Ok(var) => TraitRefKind::Clause(var),
+                Ok((var, bound_regions)) => TraitRefKind::Clause(
+                    var,
+                    RegionArgs::new(std::iter::repeat_n(Region::Erased, bound_regions).collect()),
+                ),
                 Err(err) => TraitRefKind::Unknown(err.msg),
             },
             TraitProofKind::Derived {
                 base,
                 path: path_elem,
             } => {
-                let trait_ref = self.translate_trait_proof(span, base)?.erase();
+                let trait_ref = self.translate_trait_proof(span, base)?;
+                let base_args = trait_ref.0.erased_region_args();
+                let trait_ref = trait_ref.apply(&base_args);
+                let args = trait_decl_ref.erased_region_args();
                 match path_elem {
                     hax::TraitProofImpliedPredicate::AssocItem { item, index, .. } => {
                         let assoc_type_id =
                             self.translate_assoc_type_id(trait_ref.trait_id(), &item.def_id)?;
-                        TraitRefKind::ItemClause(
+                        let generics = self.translate_generic_args(
+                            span,
+                            &item.generic_args,
+                            &item.trait_proofs,
+                        )?;
+                        TraitRefKind::ItemClause {
                             trait_ref,
-                            assoc_type_id,
-                            TraitClauseId::new(*index),
-                        )
+                            type_id: assoc_type_id,
+                            generics,
+                            clause_id: TraitClauseId::new(*index),
+                            clause_args: args,
+                        }
                     }
                     hax::TraitProofImpliedPredicate::Parent { index, .. } => {
-                        TraitRefKind::ParentClause(trait_ref, TraitClauseId::new(*index))
+                        TraitRefKind::ParentClause(trait_ref, TraitClauseId::new(*index), args)
                     }
                 }
             }

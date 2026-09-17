@@ -923,14 +923,19 @@ impl<'tcx> ItemTransCtx<'tcx, '_> {
                     // clause available in trait declarations.
                     struct ReplaceSelfVisitor;
                     impl VarsVisitor for ReplaceSelfVisitor {
-                        fn visit_clause_var(&mut self, v: ClauseDbVar) -> Option<TraitRefKind> {
+                        fn visit_clause(
+                            &mut self,
+                            v: ClauseDbVar,
+                            args: &RegionArgs,
+                            depth: DeBruijnId,
+                        ) -> Option<TraitRefKind> {
                             if let DeBruijnVar::Bound(DeBruijnId::ZERO, clause_id) = v {
                                 // Replace clause 0 and decrement the others.
                                 Some(if let Some(new_id) = clause_id.index().checked_sub(1) {
-                                    TraitRefKind::Clause(DeBruijnVar::Bound(
-                                        DeBruijnId::ZERO,
-                                        TraitClauseId::new(new_id),
-                                    ))
+                                    TraitRefKind::Clause(
+                                        DeBruijnVar::Bound(depth, TraitClauseId::new(new_id)),
+                                        args.clone(),
+                                    )
                                 } else {
                                     TraitRefKind::SelfId
                                 })
@@ -1180,13 +1185,14 @@ impl<'tcx> ItemTransCtx<'tcx, '_> {
                                         TransItemSourceKind::Fun,
                                     )?;
                                     // FIXME(#513): the regions may not match.
-                                    let late_bound_regions = ctx
-                                        .innermost_binder()
-                                        .bound_region_vars
-                                        .iter()
-                                        .map(|rid| Region::Var(DeBruijnVar::new_at_zero(*rid)))
-                                        .collect();
-                                    let fn_ptr = bound_fn_ptr.apply(late_bound_regions);
+                                    let late_bound_regions = RegionArgs::new(
+                                        ctx.innermost_binder()
+                                            .bound_region_vars
+                                            .iter()
+                                            .map(|rid| Region::Var(DeBruijnVar::new_at_zero(*rid)))
+                                            .collect(),
+                                    );
+                                    let fn_ptr = bound_fn_ptr.apply(&late_bound_regions);
                                     Ok(FunDeclRef {
                                         id: *fn_ptr.kind.as_fun().unwrap(),
                                         generics: fn_ptr.generics,
@@ -1392,13 +1398,13 @@ impl<'tcx> ItemTransCtx<'tcx, '_> {
                 ) -> ControlFlow<Self::Break> {
                     match kind {
                         TraitRefKind::SelfId => return ControlFlow::Break(UnhandledSelf),
-                        TraitRefKind::ParentClause(sub, clause_id)
+                        TraitRefKind::ParentClause(sub, clause_id, args)
                             if matches!(sub.kind, TraitRefKind::SelfId) =>
                         {
-                            *kind = TraitRefKind::Clause(DeBruijnVar::bound(
-                                self.binder_depth,
-                                *clause_id,
-                            ))
+                            *kind = TraitRefKind::Clause(
+                                DeBruijnVar::bound(self.binder_depth, *clause_id),
+                                args.clone(),
+                            )
                         }
                         _ => (),
                     }

@@ -53,7 +53,12 @@ fn dynify<T: TyVisitable>(mut x: T, new_self: Option<Ty>, for_method: bool) -> T
             }
         }
 
-        fn visit_clause_var(&mut self, v: ClauseDbVar) -> Option<TraitRefKind> {
+        fn visit_clause(
+            &mut self,
+            v: ClauseDbVar,
+            _args: &RegionArgs,
+            _depth: DeBruijnId,
+        ) -> Option<TraitRefKind> {
             if let DeBruijnVar::Bound(DeBruijnId::ZERO, clause_id) = v {
                 if self.for_method && clause_id == TraitClauseId::ZERO {
                     // That's the `Self` clause.
@@ -142,14 +147,19 @@ impl<'tcx> ItemTransCtx<'tcx, '_> {
         if self.monomorphize() {
             struct ShiftDynClauseVars;
             impl VarsVisitor for ShiftDynClauseVars {
-                fn visit_clause_var(&mut self, v: ClauseDbVar) -> Option<TraitRefKind> {
+                fn visit_clause(
+                    &mut self,
+                    v: ClauseDbVar,
+                    args: &RegionArgs,
+                    depth: DeBruijnId,
+                ) -> Option<TraitRefKind> {
                     if let DeBruijnVar::Bound(DeBruijnId::ZERO, clause_id) = v
                         && let Some(new_id) = clause_id.index().checked_sub(1)
                     {
-                        return Some(TraitRefKind::Clause(DeBruijnVar::Bound(
-                            DeBruijnId::ZERO,
-                            TraitClauseId::new(new_id),
-                        )));
+                        return Some(TraitRefKind::Clause(
+                            DeBruijnVar::Bound(depth, TraitClauseId::new(new_id)),
+                            args.clone(),
+                        ));
                     }
                     None
                 }
@@ -1446,13 +1456,13 @@ impl<'tcx> ItemTransCtx<'tcx, '_> {
                 let bound_sig = self.translate_region_binder(span, vtable_sig, |ctx, sig| {
                     ctx.translate_fun_sig(span, sig)
                 })?;
-                bound_sig.apply(
+                bound_sig.apply(&RegionArgs::new(
                     self.the_only_binder()
                         .closure_call_method_region
                         .iter()
                         .map(|r| Region::Var(DeBruijnVar::new_at_zero(*r)))
                         .collect(),
-                )
+                ))
             };
             // The receiver is `&closure`, `&mut closure` or `closure` depending on the trait.
             target_receiver = {

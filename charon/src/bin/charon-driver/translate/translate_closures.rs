@@ -713,15 +713,16 @@ impl<'tcx> ItemTransCtx<'tcx, '_> {
         item: &hax::ItemRef,
         signature: &FunSig,
     ) -> Result<Body, Error> {
-        let late_bound_regions = self
-            .innermost_binder()
-            .bound_region_vars
-            .iter()
-            .map(|rid| Region::Var(DeBruijnVar::new_at_zero(*rid)))
-            .collect();
+        let late_bound_regions = RegionArgs::new(
+            self.innermost_binder()
+                .bound_region_vars
+                .iter()
+                .map(|rid| Region::Var(DeBruijnVar::new_at_zero(*rid)))
+                .collect(),
+        );
         let fn_ptr = self
             .translate_bound_fn_ptr(span, item, TransItemSourceKind::Fun)?
-            .apply(late_bound_regions);
+            .apply(&late_bound_regions);
         let fn_op = FnOperand::Regular(fn_ptr);
 
         let mut builder = BodyBuilder::new(span, 2);
@@ -788,13 +789,13 @@ impl<'tcx> ItemTransCtx<'tcx, '_> {
         // Translate the function signature
         let bound_sig = self.translate_callable_method_sig(def, span, callable, target_kind)?;
         // We give it the lifetime parameter we had prepared for that purpose.
-        let signature = bound_sig.apply(
+        let signature = bound_sig.apply(&RegionArgs::new(
             self.the_only_binder()
                 .closure_call_method_region
                 .iter()
                 .map(|r| Region::Var(DeBruijnVar::new_at_zero(*r)))
                 .collect(),
-        );
+        ));
 
         let body = if item_meta.opacity.with_private_contents().is_opaque() {
             Body::Opaque

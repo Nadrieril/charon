@@ -1031,6 +1031,14 @@ and region_of_postcard (ctx : of_postcard_ctx) (st : postcard_state) :
      | 3 -> Ok RErased
      | _ -> Error ("unknown enum variant tag: " ^ string_of_int __tag))
 
+and region_args_of_postcard (ctx : of_postcard_ctx) (st : postcard_state) :
+    (region_args, string) result =
+  combine_error_msgs st __FUNCTION__
+    (let* regions =
+       index_vec_of_postcard region_id_of_postcard region_of_postcard ctx st
+     in
+     Ok ({ regions } : region_args))
+
 and region_binder_of_postcard :
     'a0.
     (of_postcard_ctx -> postcard_state -> ('a0, string) result) ->
@@ -1244,16 +1252,20 @@ and trait_ref_kind_of_postcard (ctx : of_postcard_ctx) (st : postcard_state) :
          let* _0 =
            de_bruijn_var_of_postcard trait_clause_id_of_postcard ctx st
          in
-         Ok (Clause _0)
+         let* _1 = region_args_of_postcard ctx st in
+         Ok (Clause (_0, _1))
      | 2 ->
          let* _0 = trait_ref_of_postcard ctx st in
          let* _1 = trait_clause_id_of_postcard ctx st in
-         Ok (ParentClause (_0, _1))
+         let* _2 = region_args_of_postcard ctx st in
+         Ok (ParentClause (_0, _1, _2))
      | 3 ->
-         let* _0 = trait_ref_of_postcard ctx st in
-         let* _1 = assoc_type_id_of_postcard ctx st in
-         let* _2 = trait_clause_id_of_postcard ctx st in
-         Ok (ItemClause (_0, _1, _2))
+         let* trait_ref = trait_ref_of_postcard ctx st in
+         let* type_id = assoc_type_id_of_postcard ctx st in
+         let* generics = generic_args_of_postcard ctx st in
+         let* clause_id = trait_clause_id_of_postcard ctx st in
+         let* clause_args = region_args_of_postcard ctx st in
+         Ok (ItemClause (trait_ref, type_id, generics, clause_id, clause_args))
      | 4 -> Ok Self
      | 5 ->
          let* builtin_data = builtin_impl_data_of_postcard ctx st in

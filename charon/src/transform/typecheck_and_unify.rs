@@ -154,16 +154,112 @@ impl TypeCheckVisitor<'_> {
     }
 
     fn match_trait_ref_against_itself(&mut self, tref: &TraitRef) -> Result<(), TypeError> {
-        if let TraitRefKind::TraitImpl(trait_impl_ref) = &tref.kind
-            && let Some(timpl) = self.ctx.translated.trait_impls.get(trait_impl_ref.id)
-            && let Ok(target_pred) = timpl
-                .impl_trait
-                .clone()
-                .try_substitute(&trait_impl_ref.generics)
-        {
+        let target_pred = match &tref.kind {
+            TraitRefKind::TraitImpl(trait_impl_ref) => self
+                .ctx
+                .translated
+                .trait_impls
+                .get(trait_impl_ref.id)
+                .and_then(|timpl| {
+                    timpl
+                        .impl_trait
+                        .clone()
+                        .try_substitute(&trait_impl_ref.generics)
+                        .ok()
+                }),
+            TraitRefKind::Clause(var, args) => {
+                let (depth, _) = self.binder_stack.as_bound_var(*var);
+                let pred = self
+                    .binder_stack
+                    .get_var::<_, GenericParams>(*var)
+                    .map(|clause| clause.trait_.clone().move_under_binders(depth));
+                pred.map(|pred| Self::apply_poly_predicate(pred, args))
+                    .transpose()?
+            }
+            TraitRefKind::ParentClause(parent, clause_id, args) => self
+                .ctx
+                .translated
+                .trait_decls
+                .get(parent.trait_id())
+                .and_then(|tdecl| tdecl.implied_clauses.get(*clause_id))
+                .map(|clause| {
+                    let pred = clause
+                        .trait_
+                        .clone()
+                        .try_substitute_with_tref(parent)
+                        .map_err(|_| TypeError)?;
+                    Self::apply_poly_predicate(pred, args)
+                })
+                .transpose()?,
+            TraitRefKind::ItemClause {
+                trait_ref,
+                type_id,
+                generics,
+                clause_id,
+                clause_args,
+            } => {
+                let decl_and_assoc_ty = self
+                    .ctx
+                    .translated
+                    .trait_decls
+                    .get(trait_ref.trait_id())
+                    .and_then(|tdecl| tdecl.types.get(*type_id).map(|assoc_ty| (tdecl, assoc_ty)));
+                decl_and_assoc_ty
+                    .map(|(tdecl, assoc_ty)| {
+                        if !generics.matches(&assoc_ty.params) {
+                            return Err(TypeError);
+                        }
+                        let clause = assoc_ty
+                            .skip_binder
+                            .implied_clauses
+                            .get(*clause_id)
+                            .ok_or(TypeError)?;
+                        if !Self::region_args_match(&clause.trait_, clause_args) {
+                            return Err(TypeError);
+                        }
+                        let clause = clause.trait_.clone().apply(clause_args);
+                        // The clause is under the trait's generics, then the GAT's generics.
+                        // Flatten those two binders so that we substitute both layers at once.
+                        let pred = Binder {
+                            params: tdecl.generics.clone(),
+                            skip_binder: assoc_ty.clone().map(|_| clause),
+                            kind: BinderKind::Other,
+                        }
+                        .flatten();
+                        let generics = trait_ref
+                            .trait_decl_ref
+                            .generics
+                            .as_ref()
+                            .clone()
+                            .concat(generics);
+                        let pred = pred
+                            .skip_binder
+                            .try_substitute_with_self(&generics, &trait_ref.kind)
+                            .map_err(|_| TypeError)?;
+                        Ok(pred)
+                    })
+                    .transpose()?
+            }
+            _ => None,
+        };
+        if let Some(target_pred) = target_pred {
             self.match_trait_decl_refs(&tref.trait_decl_ref, &target_pred)?;
         }
         Ok(())
+    }
+
+    fn region_args_match<T>(binder: &RegionBinder<T>, args: &RegionArgs) -> bool {
+        binder.regions.len() == args.regions.len()
+    }
+
+    fn apply_poly_predicate(
+        pred: PolyTraitDeclRef,
+        args: &RegionArgs,
+    ) -> Result<TraitDeclRef, TypeError> {
+        if !Self::region_args_match(&pred, args) {
+            return Err(TypeError);
+        }
+        Ok(pred.apply(args))
     }
 
     fn match_poly_trait_ref_against_itself(
@@ -476,7 +572,7 @@ impl VisitAst for TypeCheckVisitor<'_> {
     }
     fn enter_trait_ref(&mut self, x: &TraitRef) {
         match &x.kind {
-            TraitRefKind::Clause(var) if self.binder_stack.get_var(*var).is_none() => {
+            TraitRefKind::Clause(var, _) if self.binder_stack.get_var(*var).is_none() => {
                 self.error(format!("Found incorrect clause var: {var}"));
             }
             TraitRefKind::BuiltinOrAuto {

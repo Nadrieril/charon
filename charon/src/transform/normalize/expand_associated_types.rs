@@ -186,11 +186,9 @@ mod trait_ref_path {
         ) -> Option<TraitRef> {
             assert!(self.base.is_self_clause());
             for &parent_id in &self.parent_path {
-                let tdecl = krate.get_item(tref.trait_id())?;
-                let tdecl = tdecl.as_trait_decl()?;
-                let clause = &tdecl.implied_clauses[parent_id];
-                let pred = clause.trait_.clone().try_substitute_with_tref(&tref).ok()?;
-                tref = TraitRef::new(TraitRefKind::ParentClause(tref, parent_id), pred.erase());
+                let proof = tref.project_parent_clause(krate, parent_id)?;
+                let args = proof.0.erased_region_args();
+                tref = proof.apply(&args);
             }
             Some(tref)
         }
@@ -238,18 +236,18 @@ mod trait_ref_path {
                     parent_path: vec![],
                     trait_decl_id,
                 }),
-                TraitRefKind::Clause(id) => Some(TraitRefPath {
+                TraitRefKind::Clause(id, _) => Some(TraitRefPath {
                     base: BaseClause::Local(*id),
                     parent_path: vec![],
                     trait_decl_id,
                 }),
-                TraitRefKind::ParentClause(tref, id) => {
+                TraitRefKind::ParentClause(tref, id, _) => {
                     let mut path = tref.to_path()?;
                     path.parent_path.push(*id);
                     path.trait_decl_id = trait_decl_id;
                     Some(path)
                 }
-                TraitRefKind::ItemClause(..)
+                TraitRefKind::ItemClause { .. }
                 | TraitRefKind::TraitImpl(..)
                 | TraitRefKind::BuiltinOrAuto { .. }
                 | TraitRefKind::Dyn
@@ -843,9 +841,11 @@ impl<'a> ComputeItemModifications<'a> {
                 );
                 // Inherit known constraints from implied clauses.
                 for (clause_id, clause) in tr.implied_clauses.iter_enumerated() {
+                    let args = clause.trait_.erased_region_args();
+                    let pred = clause.trait_.clone().apply(&args);
                     let tref = TraitRef::new(
-                        TraitRefKind::ParentClause(self_tref.clone(), clause_id),
-                        clause.trait_.clone().erase(),
+                        TraitRefKind::ParentClause(self_tref.clone(), clause_id, args),
+                        pred,
                     );
                     self.add_constraints_for_tref(&mut type_constraints, &tref);
                 }
@@ -1024,11 +1024,11 @@ impl UpdateItemBody<'_> {
                 let path = path.on_tref(&tref.to_path().unwrap());
                 self.lookup_type_replacement(&path)
             }
-            TraitRefKind::ParentClause(parent, clause_id) => {
+            TraitRefKind::ParentClause(parent, clause_id, _) => {
                 let path = path.on_tref(&TraitRefPath::parent_clause(*clause_id, tref.trait_id()));
                 self.lookup_path_on_trait_ref(&path, parent)
             }
-            TraitRefKind::ItemClause(..) => None,
+            TraitRefKind::ItemClause { .. } => None,
             TraitRefKind::BuiltinOrAuto {
                 parent_trait_refs,
                 types,
@@ -1161,8 +1161,28 @@ impl UpdateItemBody<'_> {
         self_path: TraitRefKind,
     ) {
         trace!("{tref:?}, {self_path:?}");
+        let args = tref.identity_region_args();
         self.under_binder(Default::default(), |this| {
-            let self_path = self_path.move_under_binder();
+            let self_path = match self_path.move_under_binder() {
+                TraitRefKind::Clause(var, _) => TraitRefKind::Clause(var, args),
+                TraitRefKind::ParentClause(tref, clause_id, _) => {
+                    TraitRefKind::ParentClause(tref, clause_id, args)
+                }
+                TraitRefKind::ItemClause {
+                    trait_ref,
+                    type_id,
+                    generics,
+                    clause_id,
+                    ..
+                } => TraitRefKind::ItemClause {
+                    trait_ref,
+                    type_id,
+                    generics,
+                    clause_id,
+                    clause_args: args,
+                },
+                _ => panic!("expected a polymorphic trait proof path"),
+            };
             this.process_trait_decl_ref(&mut tref.skip_binder, self_path)
         });
     }
@@ -1284,7 +1304,8 @@ impl VisitAstMut for UpdateItemBody<'_> {
             },
         );
         for (clause_id, clause) in tdecl.implied_clauses.iter_mut_enumerated() {
-            let self_path = TraitRefKind::ParentClause(self_tref.clone(), clause_id);
+            let self_path =
+                TraitRefKind::ParentClause(self_tref.clone(), clause_id, RegionArgs::empty());
             self.process_poly_trait_decl_ref(&mut clause.trait_, self_path);
         }
         for (type_id, assoc_ty) in tdecl.types.iter_mut_enumerated() {
@@ -1295,7 +1316,13 @@ impl VisitAstMut for UpdateItemBody<'_> {
                 for (clause_id, clause) in
                     assoc_ty.skip_binder.implied_clauses.iter_mut_enumerated()
                 {
-                    let self_path = TraitRefKind::ItemClause(self_tref.clone(), type_id, clause_id);
+                    let self_path = TraitRefKind::ItemClause {
+                        trait_ref: self_tref.clone(),
+                        type_id,
+                        generics: assoc_ty.params.identity_args(),
+                        clause_id,
+                        clause_args: RegionArgs::empty(),
+                    };
                     this.process_poly_trait_decl_ref(&mut clause.trait_, self_path);
                 }
             });
@@ -1303,7 +1330,8 @@ impl VisitAstMut for UpdateItemBody<'_> {
     }
     fn enter_generic_params(&mut self, params: &mut GenericParams) {
         for (clause_id, clause) in params.trait_clauses.iter_mut_enumerated() {
-            let self_path = TraitRefKind::Clause(DeBruijnVar::new_at_zero(clause_id));
+            let self_path =
+                TraitRefKind::Clause(DeBruijnVar::new_at_zero(clause_id), RegionArgs::empty());
             self.process_poly_trait_decl_ref(&mut clause.trait_, self_path);
         }
     }
@@ -1317,7 +1345,10 @@ impl VisitAstMut for UpdateItemBody<'_> {
             // Inside method declarations, the implicit `Self` clause is the first clause.
             FunSource::TraitDefault { trait_ref, .. } => self.process_trait_decl_ref(
                 trait_ref,
-                TraitRefKind::Clause(DeBruijnVar::new_at_zero(TraitClauseId::ZERO)),
+                TraitRefKind::Clause(
+                    DeBruijnVar::new_at_zero(TraitClauseId::ZERO),
+                    RegionArgs::empty(),
+                ),
             ),
             FunSource::TraitImpl {
                 impl_ref,
@@ -1333,7 +1364,10 @@ impl VisitAstMut for UpdateItemBody<'_> {
             // Inside trait default values, the implicit `Self` clause is the first clause.
             GlobalSource::TraitDefault { trait_ref, .. } => self.process_trait_decl_ref(
                 trait_ref,
-                TraitRefKind::Clause(DeBruijnVar::new_at_zero(TraitClauseId::ZERO)),
+                TraitRefKind::Clause(
+                    DeBruijnVar::new_at_zero(TraitClauseId::ZERO),
+                    RegionArgs::empty(),
+                ),
             ),
             GlobalSource::TraitImpl {
                 impl_ref,

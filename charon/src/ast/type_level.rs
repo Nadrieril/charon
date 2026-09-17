@@ -38,6 +38,36 @@ pub struct GenericArgs {
     pub trait_refs: IndexVec<TraitClauseId, PolyTraitRef>,
 }
 
+/// Region arguments used to instantiate a [`RegionBinder`].
+#[derive(
+    Clone,
+    PartialEq,
+    Eq,
+    PartialOrd,
+    Ord,
+    Hash,
+    SerializeState,
+    DeserializeState,
+    Drive,
+    DriveMut,
+    DriveTwo,
+)]
+pub struct RegionArgs {
+    pub regions: IndexVec<RegionId, Region>,
+}
+
+impl RegionArgs {
+    pub fn empty() -> Self {
+        Self {
+            regions: Default::default(),
+        }
+    }
+
+    pub fn new(regions: IndexVec<RegionId, Region>) -> Self {
+        Self { regions }
+    }
+}
+
 /// A quantified trait predicate, e.g. `for<'a> Type<'a>: Trait<'a, Args>`.
 pub type PolyTraitDeclRef = RegionBinder<TraitDeclRef>;
 
@@ -430,13 +460,18 @@ impl GenericParams {
         // The contents of `other` may refer to its own trait clauses, so we must shift clause ids.
         struct ShiftClausesVisitor(usize);
         impl VarsVisitor for ShiftClausesVisitor {
-            fn visit_clause_var(&mut self, v: ClauseDbVar) -> Option<TraitRefKind> {
+            fn visit_clause(
+                &mut self,
+                v: ClauseDbVar,
+                args: &RegionArgs,
+                depth: DeBruijnId,
+            ) -> Option<TraitRefKind> {
                 if let DeBruijnVar::Bound(DeBruijnId::ZERO, clause_id) = v {
                     // Replace clause 0 and decrement the others.
-                    Some(TraitRefKind::Clause(DeBruijnVar::Bound(
-                        DeBruijnId::ZERO,
-                        clause_id + self.0,
-                    )))
+                    Some(TraitRefKind::Clause(
+                        DeBruijnVar::Bound(depth, clause_id + self.0),
+                        args.clone(),
+                    ))
                 } else {
                     None
                 }
@@ -571,7 +606,7 @@ impl<T: AstVisitable> Binder<Binder<T>> {
                 }
             }
             fn enter_trait_ref_kind(&mut self, x: &mut TraitRefKind) {
-                if let TraitRefKind::Clause(var) = x
+                if let TraitRefKind::Clause(var, _) = x
                     && let Some(id) = var.bound_at_depth_mut(self.binder_depth)
                 {
                     *id += self.shift_by.trait_clauses.len();
@@ -681,14 +716,28 @@ impl<T> RegionBinder<T> {
         })
     }
 
+    /// Region arguments that instantiate this binder with its own bound regions. The returned
+    /// arguments are meant to be used inside the binder.
+    pub fn identity_region_args(&self) -> RegionArgs {
+        RegionArgs::new(
+            self.regions
+                .map_ref_indexed(|id, _| Region::Var(DeBruijnVar::bound(DeBruijnId::ZERO, id))),
+        )
+    }
+
+    /// Region arguments that instantiate this binder with erased regions.
+    pub fn erased_region_args(&self) -> RegionArgs {
+        RegionArgs::new(self.regions.map_ref(|_| Region::Erased))
+    }
+
     /// Substitute the bound variables with the given lifetimes.
-    pub fn apply(self, regions: IndexVec<RegionId, Region>) -> T
+    pub fn apply(self, args: &RegionArgs) -> T
     where
         T: TyVisitable,
     {
-        assert_eq!(regions.len(), self.regions.len());
+        assert_eq!(args.regions.len(), self.regions.len());
         let args = GenericArgs {
-            regions,
+            regions: args.regions.clone(),
             ..GenericArgs::empty()
         };
         self.skip_binder.substitute_inner_binder(&args)
@@ -709,8 +758,8 @@ impl<T> RegionBinder<T> {
     where
         T: TyVisitable,
     {
-        let regions = self.regions.map_ref_indexed(|_, _| Region::Erased);
-        self.apply(regions)
+        let args = self.erased_region_args();
+        self.apply(&args)
     }
 }
 

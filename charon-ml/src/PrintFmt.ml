@@ -680,11 +680,11 @@ and dyn_trait_type_constraint_to_string (env : fmt_env)
     (ttc : trait_type_constraint) : (trait_clause_id * string) option =
   let rec target_clause_and_path path (tref : trait_ref) =
     match tref.kind with
-    | ParentClause (parent, clause_id) ->
+    | ParentClause (parent, clause_id, _) ->
         target_clause_and_path
           (trait_clause_id_format_as_implied clause_id :: path)
           parent
-    | Clause (Bound (_, clause_id)) | Clause (Free clause_id) ->
+    | Clause (Bound (_, clause_id), _) | Clause (Free clause_id, _) ->
         Some (clause_id, List.rev path)
     | _ -> None
   in
@@ -789,6 +789,13 @@ and pp_generic_args_for_fn (env : fmt_env) (fmt : Format.formatter)
     (generics : generic_args) : unit =
   pp_generic_args env fmt generics
 
+and pp_region_args (env : fmt_env) (fmt : Format.formatter) (args : region_args)
+    : unit =
+  if args.regions <> [] then
+    Format.fprintf fmt "<%a>"
+      (pp_sep_list ", " pp_string)
+      (List.map (region_to_string env) args.regions)
+
 and pp_trait_ref_kind (env : fmt_env) (implements : trait_decl_ref option)
     (fmt : Format.formatter) (kind : trait_ref_kind) : unit =
   match kind with
@@ -810,16 +817,22 @@ and pp_trait_ref_kind (env : fmt_env) (implements : trait_decl_ref option)
                Format.fprintf fmt "%s  = %a" name (pp_ty env) assoc_ty.value))
           types;
       pp_string fmt "}"
-  | Clause id -> pp_string fmt (trait_db_var_to_string env id)
-  | ParentClause (tref, clause_id) ->
-      Format.fprintf fmt "%a::%s" (pp_trait_ref env) tref
+  | Clause (id, args) ->
+      Format.fprintf fmt "%s%a"
+        (trait_db_var_to_string env id)
+        (pp_region_args env) args
+  | ParentClause (tref, clause_id, args) ->
+      Format.fprintf fmt "%a::%s%a" (pp_trait_ref env) tref
         (trait_clause_id_format_as_implied clause_id)
-  | ItemClause (tref, type_id, clause_id) ->
+        (pp_region_args env) args
+  | ItemClause (tref, type_id, generics, clause_id, clause_args) ->
       let type_name =
         GAstUtils.get_assoc_type_name env.crate tref.trait_decl_ref.id type_id
       in
-      Format.fprintf fmt "%a::%s::%s" (pp_trait_ref env) tref type_name
+      Format.fprintf fmt "%a::%s%a::%s%a" (pp_trait_ref env) tref type_name
+        (pp_generic_args env) generics
         (trait_clause_id_format_as_implied clause_id)
+        (pp_region_args env) clause_args
   | Dyn -> pp_trait_decl_ref env fmt (Option.get implements)
   | UnknownTrait msg -> Format.fprintf fmt "UNKNOWN(%s)" msg
 

@@ -21,7 +21,14 @@ pub trait VarsVisitor {
     fn visit_const_generic_var(&mut self, _v: ConstGenericDbVar) -> Option<ConstantExprKind> {
         None
     }
-    fn visit_clause_var(&mut self, _v: ClauseDbVar) -> Option<TraitRefKind> {
+    /// Visit a clause reference. `v` is viewed from outside the binders around the reference,
+    /// while `args` and the returned kind are viewed from the reference's actual location.
+    fn visit_clause(
+        &mut self,
+        _v: ClauseDbVar,
+        _args: &RegionArgs,
+        _depth: DeBruijnId,
+    ) -> Option<TraitRefKind> {
         None
     }
     fn visit_self_clause(&mut self) -> Option<TraitRefKind> {
@@ -108,21 +115,39 @@ impl VarsVisitor for SubstVisitor<'_> {
                 .map(|c| c.kind().clone())
         })
     }
-    fn visit_clause_var(&mut self, v: ClauseDbVar) -> Option<TraitRefKind> {
+    fn visit_clause(
+        &mut self,
+        v: ClauseDbVar,
+        args: &RegionArgs,
+        depth: DeBruijnId,
+    ) -> Option<TraitRefKind> {
         if self.explicits_only {
             None
         } else {
-            self.process_var(v, |id| {
-                Some(
-                    self.generics
-                        .trait_refs
-                        .get(id)?
-                        .clone()
-                        .erase()
-                        .kind
-                        .clone(),
-                )
-            })
+            match v {
+                DeBruijnVar::Bound(dbid, id) => {
+                    if let Some(dbid) = dbid.sub(DeBruijnId::one()) {
+                        Some(TraitRefKind::Clause(
+                            DeBruijnVar::Bound(dbid.plus(depth), id),
+                            args.clone(),
+                        ))
+                    } else {
+                        let Some(trait_ref) = self.generics.trait_refs.get(id) else {
+                            self.had_error = true;
+                            return None;
+                        };
+                        Some(
+                            trait_ref
+                                .clone()
+                                .move_under_binders(depth)
+                                .apply(args)
+                                .kind
+                                .clone(),
+                        )
+                    }
+                }
+                DeBruijnVar::Free(..) => None,
+            }
         }
     }
     fn visit_self_clause(&mut self) -> Option<TraitRefKind> {
@@ -199,11 +224,11 @@ pub trait TyVisitable: Sized + AstVisitable {
                             *kind = new_kind.move_under_binders(self.depth);
                         }
                     }
-                    TraitRefKind::Clause(var) => {
+                    TraitRefKind::Clause(var, args) => {
                         if let Some(var) = var.move_out_from_depth(self.depth)
-                            && let Some(new_kind) = self.v.visit_clause_var(var)
+                            && let Some(new_kind) = self.v.visit_clause(var, args, self.depth)
                         {
-                            *kind = new_kind.move_under_binders(self.depth);
+                            *kind = new_kind;
                         }
                     }
                     _ => {}

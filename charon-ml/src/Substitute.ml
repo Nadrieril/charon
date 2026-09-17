@@ -25,7 +25,7 @@ type subst = {
   ty_subst : TypeVarId.id de_bruijn_var -> ty;
   cg_subst : ConstGenericVarId.id de_bruijn_var -> constant_expr_kind;
       (** Substitution from *local* trait clause to trait instance *)
-  tr_subst : TraitClauseId.id de_bruijn_var -> trait_ref_kind;
+  tr_subst : TraitClauseId.id de_bruijn_var -> region_args -> trait_ref_kind;
       (** Substitution for the [Self] trait instance *)
   tr_self : trait_ref_kind;
 }
@@ -36,7 +36,7 @@ type single_binder_subst = {
   r_sb_subst : RegionId.id -> region;
   ty_sb_subst : TypeVarId.id -> ty;
   cg_sb_subst : ConstGenericVarId.id -> constant_expr_kind;
-  tr_sb_subst : TraitClauseId.id -> trait_ref_kind;
+  tr_sb_subst : TraitClauseId.id -> region_args -> trait_ref_kind;
       (** Substitution for the [Self] trait instance *)
   tr_sb_self : trait_ref_kind;
 }
@@ -46,7 +46,7 @@ let empty_subst : subst =
     r_subst = (fun var -> RVar var);
     ty_subst = (fun var -> TVar var);
     cg_subst = (fun var -> CVar var);
-    tr_subst = (fun var -> Clause var);
+    tr_subst = (fun var args -> Clause (var, args));
     tr_self = Self;
   }
 
@@ -56,7 +56,7 @@ let empty_bound_sb_subst : single_binder_subst =
     r_sb_subst = compose empty_subst.r_subst zero_db_var;
     ty_sb_subst = compose empty_subst.ty_subst zero_db_var;
     cg_sb_subst = compose empty_subst.cg_subst zero_db_var;
-    tr_sb_subst = compose empty_subst.tr_subst zero_db_var;
+    tr_sb_subst = (fun id -> empty_subst.tr_subst (zero_db_var id));
     tr_sb_self = empty_subst.tr_self;
   }
 
@@ -67,7 +67,7 @@ let empty_free_sb_subst : single_binder_subst =
     r_sb_subst = compose empty_subst.r_subst free;
     ty_sb_subst = compose empty_subst.ty_subst free;
     cg_sb_subst = compose empty_subst.cg_subst free;
-    tr_sb_subst = compose empty_subst.tr_subst free;
+    tr_sb_subst = (fun id -> empty_subst.tr_subst (free id));
     tr_sb_self = empty_subst.tr_self;
   }
 
@@ -77,7 +77,7 @@ let error_sb_subst : single_binder_subst =
     r_sb_subst = compose empty_subst.r_subst error;
     ty_sb_subst = compose empty_subst.ty_subst error;
     cg_sb_subst = compose empty_subst.cg_subst error;
-    tr_sb_subst = compose empty_subst.tr_subst error;
+    tr_sb_subst = (fun id -> empty_subst.tr_subst (error id));
     tr_sb_self = empty_subst.tr_self;
   }
 
@@ -91,7 +91,11 @@ let subst_free_vars (subst : single_binder_subst) : subst =
     r_subst = subst_free subst.r_sb_subst empty_subst.r_subst;
     ty_subst = subst_free subst.ty_sb_subst empty_subst.ty_subst;
     cg_subst = subst_free subst.cg_sb_subst empty_subst.cg_subst;
-    tr_subst = subst_free subst.tr_sb_subst empty_subst.tr_subst;
+    tr_subst =
+      (fun var args ->
+        match var with
+        | Free id -> subst.tr_sb_subst id args
+        | var -> empty_subst.tr_subst var args);
     tr_self = subst.tr_sb_self;
   }
 
@@ -106,7 +110,11 @@ let subst_at_binder_zero (subst : single_binder_subst) : subst =
     r_subst = subst_if_zero subst.r_sb_subst empty_subst.r_subst;
     ty_subst = subst_if_zero subst.ty_sb_subst empty_subst.ty_subst;
     cg_subst = subst_if_zero subst.cg_sb_subst empty_subst.cg_subst;
-    tr_subst = subst_if_zero subst.tr_sb_subst empty_subst.tr_subst;
+    tr_subst =
+      (fun var args ->
+        match var with
+        | Bound (dbid, id) when dbid = 0 -> subst.tr_sb_subst id args
+        | var -> empty_subst.tr_subst var args);
     tr_self = subst.tr_sb_self;
   }
 
@@ -122,7 +130,13 @@ let subst_remove_binder_zero (subst : single_binder_subst) : subst =
     r_subst = subst_remove_zero subst.r_sb_subst empty_subst.r_subst;
     ty_subst = subst_remove_zero subst.ty_sb_subst empty_subst.ty_subst;
     cg_subst = subst_remove_zero subst.cg_sb_subst empty_subst.cg_subst;
-    tr_subst = subst_remove_zero subst.tr_sb_subst empty_subst.tr_subst;
+    tr_subst =
+      (fun var args ->
+        match var with
+        | Bound (dbid, id) when dbid = 0 -> subst.tr_sb_subst id args
+        | Bound (dbid, id) when dbid > 0 ->
+            empty_subst.tr_subst (Bound (dbid - 1, id)) args
+        | var -> empty_subst.tr_subst var args);
     tr_self = subst.tr_sb_self;
   }
 
@@ -136,7 +150,7 @@ let move_under_binder_subst : subst =
     r_subst = compose empty_subst.r_subst shift;
     ty_subst = compose empty_subst.ty_subst shift;
     cg_subst = compose empty_subst.cg_subst shift;
-    tr_subst = compose empty_subst.tr_subst shift;
+    tr_subst = (fun var -> empty_subst.tr_subst (shift var));
     tr_self = empty_subst.tr_self;
   }
 
@@ -164,9 +178,10 @@ let shift_subst (subst : subst) : subst =
         (st_shift_visitor#visit_constant_expr_kind 1)
         (compose subst.cg_subst decr_db_var);
     tr_subst =
-      compose
-        (st_shift_visitor#visit_trait_ref_kind 1)
-        (compose subst.tr_subst decr_db_var);
+      (fun var args ->
+        let args = st_shift_visitor#visit_region_args (-1) args in
+        st_shift_visitor#visit_trait_ref_kind 1
+          (subst.tr_subst (decr_db_var var) args));
     tr_self = subst.tr_self;
   }
 
@@ -198,7 +213,10 @@ let st_substitute_visitor =
     method! visit_RVar (subst : subst) var = subst.r_subst var
     method! visit_TVar (subst : subst) var = subst.ty_subst var
     method! visit_CVar (subst : subst) var = subst.cg_subst var
-    method! visit_Clause (subst : subst) var = subst.tr_subst var
+
+    method! visit_Clause (subst : subst) var args =
+      subst.tr_subst var (self#visit_region_args subst args)
+
     method! visit_Self (subst : subst) = subst.tr_self
   end
 
@@ -307,6 +325,17 @@ let make_region_subst_from_vars (vars : region_param list)
     (regions : region list) : RegionId.id -> region =
   make_region_subst (List.map (fun (x : region_param) -> x.index) vars) regions
 
+let poly_trait_ref_apply (tr : poly_trait_ref) (args : region_args) : trait_ref
+    =
+  let subst =
+    subst_remove_binder_zero
+      {
+        error_sb_subst with
+        r_sb_subst = make_region_subst_from_vars tr.binder_regions args.regions;
+      }
+  in
+  trait_ref_substitute subst tr.binder_value
+
 (** Create a type substitution from a list of type variable ids and a list of
     types (with which to substitute the type variable ids) *)
 let make_type_subst (var_ids : TypeVarId.id list) (tys : ty list) :
@@ -337,15 +366,16 @@ let make_const_generic_subst_from_vars (vars : const_generic_param list)
 (** Create a trait substitution from a list of trait clause ids and a list of
     trait refs *)
 let make_trait_subst (var_ids : TraitClauseId.id list)
-    (trs : trait_ref_kind list) : TraitClauseId.id -> trait_ref_kind =
+    (trs : poly_trait_ref list) :
+    TraitClauseId.id -> region_args -> trait_ref_kind =
   let map = TraitClauseId.Map.of_list (List.combine var_ids trs) in
-  fun varid -> TraitClauseId.Map.find varid map
+  fun varid args ->
+    (poly_trait_ref_apply (TraitClauseId.Map.find varid map) args).kind
 
 let make_trait_subst_from_clauses (clauses : trait_param list)
-    (trs : poly_trait_ref list) : TraitClauseId.id -> trait_ref_kind =
-  make_trait_subst
-    (List.map (fun (x : trait_param) -> x.clause_id) clauses)
-    (List.map (fun x -> (poly_trait_ref_erase_regions x).kind) trs)
+    (trs : poly_trait_ref list) :
+    TraitClauseId.id -> region_args -> trait_ref_kind =
+  make_trait_subst (List.map (fun (x : trait_param) -> x.clause_id) clauses) trs
 
 let make_sb_subst_from_generics (params : generic_params) (args : generic_args)
     (tr_self : trait_ref_kind) : single_binder_subst =
@@ -569,7 +599,8 @@ let fuse_binders (substitutor : subst -> 'a -> 'a)
         r_sb_subst = compose empty_free_sb_subst.r_sb_subst shift_region_varid;
         ty_sb_subst = compose empty_free_sb_subst.ty_sb_subst shift_ty_varid;
         cg_sb_subst = compose empty_free_sb_subst.cg_sb_subst shift_cg_varid;
-        tr_sb_subst = compose empty_free_sb_subst.tr_sb_subst shift_clause_varid;
+        tr_sb_subst =
+          (fun id -> empty_free_sb_subst.tr_sb_subst (shift_clause_varid id));
         tr_sb_self = empty_subst.tr_self;
       }
   in
@@ -723,12 +754,20 @@ let bound_identity_args (params : generic_params) : generic_args =
     trait_refs =
       List.map
         (fun (clause : trait_param) ->
-          let kind = s.tr_sb_subst clause.clause_id in
+          let args =
+            {
+              regions =
+                List.map
+                  (fun (region : region_param) ->
+                    RVar (Bound (0, region.index)))
+                  clause.trait.binder_regions;
+            }
+          in
           {
             binder_regions = clause.trait.binder_regions;
             binder_value =
               {
-                kind = trait_ref_kind_substitute move_under_binder_subst kind;
+                kind = Clause (Bound (1, clause.clause_id), args);
                 trait_decl_ref = clause.trait.binder_value;
               };
           })

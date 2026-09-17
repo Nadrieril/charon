@@ -1103,6 +1103,17 @@ and region_of_json (ctx : of_json_ctx) (js : json) : (region, string) result =
     | `String "Erased" -> Ok RErased
     | _ -> Error "")
 
+and region_args_of_json (ctx : of_json_ctx) (js : json) :
+    (region_args, string) result =
+  combine_error_msgs js __FUNCTION__
+    (match js with
+    | `Assoc [ ("regions", regions) ] ->
+        let* regions =
+          index_vec_of_json region_id_of_json region_of_json ctx regions
+        in
+        Ok ({ regions } : region_args)
+    | _ -> Error "")
+
 and region_binder_of_json :
     'a0.
     (of_json_ctx -> json -> ('a0, string) result) ->
@@ -1388,18 +1399,33 @@ and trait_ref_kind_of_json (ctx : of_json_ctx) (js : json) :
     | `Assoc [ ("TraitImpl", _0) ] ->
         let* _0 = trait_impl_ref_of_json ctx _0 in
         Ok (TraitImpl _0)
-    | `Assoc [ ("Clause", _0) ] ->
+    | `Assoc [ ("Clause", `List [ _0; _1 ]) ] ->
         let* _0 = de_bruijn_var_of_json trait_clause_id_of_json ctx _0 in
-        Ok (Clause _0)
-    | `Assoc [ ("ParentClause", `List [ _0; _1 ]) ] ->
+        let* _1 = region_args_of_json ctx _1 in
+        Ok (Clause (_0, _1))
+    | `Assoc [ ("ParentClause", `List [ _0; _1; _2 ]) ] ->
         let* _0 = trait_ref_of_json ctx _0 in
         let* _1 = trait_clause_id_of_json ctx _1 in
-        Ok (ParentClause (_0, _1))
-    | `Assoc [ ("ItemClause", `List [ _0; _1; _2 ]) ] ->
-        let* _0 = trait_ref_of_json ctx _0 in
-        let* _1 = assoc_type_id_of_json ctx _1 in
-        let* _2 = trait_clause_id_of_json ctx _2 in
-        Ok (ItemClause (_0, _1, _2))
+        let* _2 = region_args_of_json ctx _2 in
+        Ok (ParentClause (_0, _1, _2))
+    | `Assoc
+        [
+          ( "ItemClause",
+            `Assoc
+              [
+                ("trait_ref", trait_ref);
+                ("type_id", type_id);
+                ("generics", generics);
+                ("clause_id", clause_id);
+                ("clause_args", clause_args);
+              ] );
+        ] ->
+        let* trait_ref = trait_ref_of_json ctx trait_ref in
+        let* type_id = assoc_type_id_of_json ctx type_id in
+        let* generics = generic_args_of_json ctx generics in
+        let* clause_id = trait_clause_id_of_json ctx clause_id in
+        let* clause_args = region_args_of_json ctx clause_args in
+        Ok (ItemClause (trait_ref, type_id, generics, clause_id, clause_args))
     | `String "SelfId" -> Ok Self
     | `Assoc
         [
