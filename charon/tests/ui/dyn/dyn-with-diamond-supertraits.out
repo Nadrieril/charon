@@ -1,8 +1,12 @@
 # Final LLBC before serialization:
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::ops::arith::{impl Add<i32> for &'_0 i32}::add
 #[track_caller]
-pub fn add<'_0>(_1: &'_0 i32, _2: i32) -> i32
+pub fn add<'_0>(_1: &'_0 i32, _2: i32, _3: &'static Location<'static>) -> i32
 = <opaque>
 
 opaque type core::marker::MetaSized::{vtable}
@@ -25,12 +29,24 @@ struct () {}
 
 vtable core::marker::MetaSized::{vtable}<Self>: core::marker::MetaSized::{vtable} = Opaque(VTable was chosen to be opaque)
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
+
 struct (_, _)<A, B>
 where
     TraitClause0: (A: Sized),
 {
   _0: A,
   _1: B,
+}
+
+struct str {
+  _0: [u8],
 }
 
 struct test_crate::Super::{vtable}<T> {
@@ -132,6 +148,9 @@ trait Join<Self, T>
     vtable: test_crate::Join::{vtable}<T, Self::ImpliedClause1::Left, Self::ImpliedClause1::ImpliedClause1::Internal, Self::ImpliedClause2::Right, Self::ImpliedClause1::ImpliedClause1::Internal>
 }
 
+// Full name: test_crate::{impl Super<i32> for i32}::super_method::{promoted_const}
+pub const test_crate::impl_Super_i32_for_i32::super_method::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 100u8, 121u8, 110u8, 47u8, 100u8, 121u8, 110u8, 45u8, 119u8, 105u8, 116u8, 104u8, 45u8, 100u8, 105u8, 97u8, 109u8, 111u8, 110u8, 100u8, 45u8, 115u8, 117u8, 112u8, 101u8, 114u8, 116u8, 114u8, 97u8, 105u8, 116u8, 115u8, 46u8, 114u8, 115u8] } with_metadata(44usize)
+
 // Full name: test_crate::{impl Super<i32> for i32}::super_method
 fn super_method<'_0>(self: &'_0 i32, arg: i32) -> i32
 {
@@ -140,13 +159,28 @@ fn super_method<'_0>(self: &'_0 i32, arg: i32) -> i32
     let arg: i32; // arg #2
     let _3: &'2 i32; // anonymous local
     let _4: i32; // anonymous local
+    let _5: *const str is !null; // anonymous local
+    let _6: NonNull<str>; // anonymous local
+    let _7: PhantomData<&'12 str>; // anonymous local
+    let _8: Location<'9>; // anonymous local
+    let _9: &'7 Location<'8>; // anonymous local
 
     storage_live(_0)
     storage_live(_3)
     _3 = copy self
     storage_live(_4)
     _4 = copy arg
-    _0 = add<'3>(move _3, move _4)
+    storage_live(_5)
+    _5 = &raw const test_crate::impl_Super_i32_for_i32::super_method::{promoted_const} with_metadata(const 44usize)
+    storage_live(_6)
+    _6 = NonNull { 0: move _5 }
+    storage_live(_7)
+    _7 = PhantomData {  }
+    storage_live(_8)
+    _8 = Location { 0: move _6, 1: const 24u32, 2: const 9u32, 3: move _7 }
+    storage_live(_9)
+    _9 = &_8
+    _0 = add<'3>(move _3, move _4, move _9)
     ↳⚡ storage_dead(arg)
         storage_dead(self)
         unwind_continue
@@ -154,6 +188,11 @@ fn super_method<'_0>(self: &'_0 i32, arg: i32) -> i32
     storage_dead(_3)
     storage_dead(arg)
     storage_dead(self)
+    storage_dead(_9)
+    storage_dead(_8)
+    storage_dead(_7)
+    storage_dead(_6)
+    storage_dead(_5)
     return
 }
 

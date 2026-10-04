@@ -42,6 +42,10 @@ where
     non-dyn-compatible
 }
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
 // Full name: core::ops::control_flow::ControlFlow
 #[diagnostic_item("ControlFlow")]
 pub enum ControlFlow<B, C>
@@ -63,6 +67,14 @@ where
     TypeOutlives0: B: '_0,
     TypeOutlives1: C: '_0,
 = <opaque>
+
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
 
 // Full name: core::result::Result
 #[diagnostic_item("Result")]
@@ -93,7 +105,7 @@ where
 
 // Full name: core::result::{impl FromResidual<Result<!, E>[{built_in impl Sized for !}, TraitClause1]> for Result<T, F>[TraitClause0, TraitClause2]}::from_residual
 #[track_caller]
-pub fn from_residual<T, E, F>(_1: Result<!, E>[{built_in impl Sized for !}, TraitClause1]) -> Result<T, F>[TraitClause0, TraitClause2]
+pub fn from_residual<T, E, F>(_1: Result<!, E>[{built_in impl Sized for !}, TraitClause1], _2: &'static Location<'static>) -> Result<T, F>[TraitClause0, TraitClause2]
 where
     TraitClause0: (T: Sized),
     TraitClause1: (E: Sized),
@@ -104,6 +116,12 @@ where
 // Full name: alloc::string::String
 #[lang_item(String)]
 pub opaque type String
+
+struct str {
+  _0: [u8],
+}
+
+pub const test_crate::example::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 102u8, 105u8, 108u8, 116u8, 101u8, 114u8, 105u8, 110u8, 103u8, 47u8, 105u8, 115u8, 115u8, 117u8, 101u8, 45u8, 49u8, 50u8, 55u8, 48u8, 45u8, 115u8, 116u8, 97u8, 114u8, 116u8, 45u8, 102u8, 114u8, 111u8, 109u8, 45u8, 112u8, 117u8, 98u8, 45u8, 115u8, 107u8, 105u8, 112u8, 45u8, 102u8, 111u8, 114u8, 101u8, 105u8, 103u8, 110u8, 45u8, 112u8, 117u8, 98u8, 46u8, 114u8, 115u8] } with_metadata(64usize)
 
 // Full name: test_crate::example
 pub fn example(x: Result<u32, String>[{built_in impl Sized for u32}, {built_in impl Sized for String}]) -> Result<u32, String>[{built_in impl Sized for u32}, {built_in impl Sized for String}]
@@ -116,6 +134,11 @@ pub fn example(x: Result<u32, String>[{built_in impl Sized for u32}, {built_in i
     let residual: Result<!, String>[{built_in impl Sized for !}, {built_in impl Sized for String}]; // local
     let _6: Result<!, String>[{built_in impl Sized for !}, {built_in impl Sized for String}]; // anonymous local
     let val: u32; // local
+    let _8: *const str is !null; // anonymous local
+    let _9: NonNull<str>; // anonymous local
+    let _10: PhantomData<&'12 str>; // anonymous local
+    let _11: Location<'9>; // anonymous local
+    let _12: &'7 Location<'8>; // anonymous local
 
     storage_live(_0)
     storage_live(_2)
@@ -125,9 +148,19 @@ pub fn example(x: Result<u32, String>[{built_in impl Sized for u32}, {built_in i
     _3 = branch<u32, String>[{built_in impl Sized for u32}, {built_in impl Sized for String}](move _4)
     ↳⚡ conditional_drop[impl_Destruct_for_Result::drop_glue<'0, u32, String>[{built_in impl Sized for u32}, {built_in impl Sized for String}]] _4
         ↳⚡ storage_dead(x)
+            storage_dead(_12)
+            storage_dead(_11)
+            storage_dead(_10)
+            storage_dead(_9)
+            storage_dead(_8)
             unwind_terminate
         conditional_drop[impl_Destruct_for_Result::drop_glue<'1, u32, String>[{built_in impl Sized for u32}, {built_in impl Sized for String}]] x
         ↳⚡ storage_dead(x)
+            storage_dead(_12)
+            storage_dead(_11)
+            storage_dead(_10)
+            storage_dead(_9)
+            storage_dead(_8)
             unwind_terminate
         storage_dead(x)
         unwind_continue
@@ -140,44 +173,94 @@ pub fn example(x: Result<u32, String>[{built_in impl Sized for u32}, {built_in i
             residual = move (_3 as variant ControlFlow::Break)._0
             storage_live(_6)
             _6 = move residual
-            _0 = from_residual<u32, String, String>[{built_in impl Sized for u32}, {built_in impl Sized for String}, {built_in impl Sized for String}, impl_From_for_T<String>[{built_in impl Sized for String}]](move _6)
-            ↳⚡ conditional_drop[impl_Destruct_for_Result::drop_glue<'4, !, String>[{built_in impl Sized for !}, {built_in impl Sized for String}]] _6
+            storage_live(_8)
+            _8 = &raw const test_crate::example::{promoted_const} with_metadata(const 64usize)
+            storage_live(_9)
+            _9 = NonNull { 0: move _8 }
+            storage_live(_10)
+            _10 = PhantomData {  }
+            storage_live(_11)
+            _11 = Location { 0: move _9, 1: const 3u32, 2: const 8u32, 3: move _10 }
+            storage_live(_12)
+            _12 = &_11
+            _0 = from_residual<u32, String, String>[{built_in impl Sized for u32}, {built_in impl Sized for String}, {built_in impl Sized for String}, impl_From_for_T<String>[{built_in impl Sized for String}]](move _6, move _12)
+            ↳⚡ conditional_drop[impl_Destruct_for_Result::drop_glue<'13, !, String>[{built_in impl Sized for !}, {built_in impl Sized for String}]] _6
                 ↳⚡ storage_dead(x)
+                    storage_dead(_12)
+                    storage_dead(_11)
+                    storage_dead(_10)
+                    storage_dead(_9)
+                    storage_dead(_8)
                     unwind_terminate
-                conditional_drop[impl_Destruct_for_Result::drop_glue<'6, !, String>[{built_in impl Sized for !}, {built_in impl Sized for String}]] residual
+                conditional_drop[impl_Destruct_for_Result::drop_glue<'15, !, String>[{built_in impl Sized for !}, {built_in impl Sized for String}]] residual
                 ↳⚡ storage_dead(x)
+                    storage_dead(_12)
+                    storage_dead(_11)
+                    storage_dead(_10)
+                    storage_dead(_9)
+                    storage_dead(_8)
                     unwind_terminate
-                conditional_drop[impl_Destruct_for_ControlFlow::drop_glue<'8, Result<!, String>[{built_in impl Sized for !}, {built_in impl Sized for String}], u32>[{built_in impl Sized for Result<!, String>[{built_in impl Sized for !}, {built_in impl Sized for String}]}, {built_in impl Sized for u32}]] _3
+                conditional_drop[impl_Destruct_for_ControlFlow::drop_glue<'17, Result<!, String>[{built_in impl Sized for !}, {built_in impl Sized for String}], u32>[{built_in impl Sized for Result<!, String>[{built_in impl Sized for !}, {built_in impl Sized for String}]}, {built_in impl Sized for u32}]] _3
                 ↳⚡ storage_dead(x)
+                    storage_dead(_12)
+                    storage_dead(_11)
+                    storage_dead(_10)
+                    storage_dead(_9)
+                    storage_dead(_8)
                     unwind_terminate
                 conditional_drop[impl_Destruct_for_Result::drop_glue<'1, u32, String>[{built_in impl Sized for u32}, {built_in impl Sized for String}]] x
                 ↳⚡ storage_dead(x)
+                    storage_dead(_12)
+                    storage_dead(_11)
+                    storage_dead(_10)
+                    storage_dead(_9)
+                    storage_dead(_8)
                     unwind_terminate
                 storage_dead(x)
                 unwind_continue
             storage_dead(_6)
-            conditional_drop[impl_Destruct_for_Result::drop_glue<'5, !, String>[{built_in impl Sized for !}, {built_in impl Sized for String}]] residual
-            ↳⚡ conditional_drop[impl_Destruct_for_ControlFlow::drop_glue<'8, Result<!, String>[{built_in impl Sized for !}, {built_in impl Sized for String}], u32>[{built_in impl Sized for Result<!, String>[{built_in impl Sized for !}, {built_in impl Sized for String}]}, {built_in impl Sized for u32}]] _3
+            conditional_drop[impl_Destruct_for_Result::drop_glue<'14, !, String>[{built_in impl Sized for !}, {built_in impl Sized for String}]] residual
+            ↳⚡ conditional_drop[impl_Destruct_for_ControlFlow::drop_glue<'17, Result<!, String>[{built_in impl Sized for !}, {built_in impl Sized for String}], u32>[{built_in impl Sized for Result<!, String>[{built_in impl Sized for !}, {built_in impl Sized for String}]}, {built_in impl Sized for u32}]] _3
                 ↳⚡ storage_dead(x)
+                    storage_dead(_12)
+                    storage_dead(_11)
+                    storage_dead(_10)
+                    storage_dead(_9)
+                    storage_dead(_8)
                     unwind_terminate
                 conditional_drop[impl_Destruct_for_Result::drop_glue<'1, u32, String>[{built_in impl Sized for u32}, {built_in impl Sized for String}]] x
                 ↳⚡ storage_dead(x)
+                    storage_dead(_12)
+                    storage_dead(_11)
+                    storage_dead(_10)
+                    storage_dead(_9)
+                    storage_dead(_8)
                     unwind_terminate
                 storage_dead(x)
                 unwind_continue
             storage_dead(residual)
             storage_dead(_2)
-            conditional_drop[impl_Destruct_for_ControlFlow::drop_glue<'7, Result<!, String>[{built_in impl Sized for !}, {built_in impl Sized for String}], u32>[{built_in impl Sized for Result<!, String>[{built_in impl Sized for !}, {built_in impl Sized for String}]}, {built_in impl Sized for u32}]] _3
+            conditional_drop[impl_Destruct_for_ControlFlow::drop_glue<'16, Result<!, String>[{built_in impl Sized for !}, {built_in impl Sized for String}], u32>[{built_in impl Sized for Result<!, String>[{built_in impl Sized for !}, {built_in impl Sized for String}]}, {built_in impl Sized for u32}]] _3
             ↳⚡ conditional_drop[impl_Destruct_for_Result::drop_glue<'1, u32, String>[{built_in impl Sized for u32}, {built_in impl Sized for String}]] x
                 ↳⚡ storage_dead(x)
+                    storage_dead(_12)
+                    storage_dead(_11)
+                    storage_dead(_10)
+                    storage_dead(_9)
+                    storage_dead(_8)
                     unwind_terminate
                 storage_dead(x)
                 unwind_continue
             storage_dead(_3)
-            conditional_drop[impl_Destruct_for_Result::drop_glue<'9, u32, String>[{built_in impl Sized for u32}, {built_in impl Sized for String}]] x
+            conditional_drop[impl_Destruct_for_Result::drop_glue<'18, u32, String>[{built_in impl Sized for u32}, {built_in impl Sized for String}]] x
             ↳⚡ storage_dead(x)
                 unwind_continue
             storage_dead(x)
+            storage_dead(_12)
+            storage_dead(_11)
+            storage_dead(_10)
+            storage_dead(_9)
+            storage_dead(_8)
             return
         },
     }
@@ -190,6 +273,11 @@ pub fn example(x: Result<u32, String>[{built_in impl Sized for u32}, {built_in i
     conditional_drop[impl_Destruct_for_ControlFlow::drop_glue<'2, Result<!, String>[{built_in impl Sized for !}, {built_in impl Sized for String}], u32>[{built_in impl Sized for Result<!, String>[{built_in impl Sized for !}, {built_in impl Sized for String}]}, {built_in impl Sized for u32}]] _3
     ↳⚡ conditional_drop[impl_Destruct_for_Result::drop_glue<'1, u32, String>[{built_in impl Sized for u32}, {built_in impl Sized for String}]] x
         ↳⚡ storage_dead(x)
+            storage_dead(_12)
+            storage_dead(_11)
+            storage_dead(_10)
+            storage_dead(_9)
+            storage_dead(_8)
             unwind_terminate
         storage_dead(x)
         unwind_continue
@@ -198,6 +286,11 @@ pub fn example(x: Result<u32, String>[{built_in impl Sized for u32}, {built_in i
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(x)
+    storage_dead(_12)
+    storage_dead(_11)
+    storage_dead(_10)
+    storage_dead(_9)
+    storage_dead(_8)
     return
 }
 

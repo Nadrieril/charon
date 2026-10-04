@@ -71,6 +71,10 @@ impl "impl_Copy_for_u32" Copy for u32 {
     non-dyn-compatible
 }
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
 struct () {}
 
 // Full name: core::marker::Destruct
@@ -155,13 +159,21 @@ where
     TraitClause1: (T: ZeroablePrimitive),
 = <opaque>
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::option::{Option<T>[TraitClause0]}::unwrap
 #[track_caller]
 #[diagnostic_item("option_unwrap")]
-pub fn unwrap<T>(_1: Option<T>[TraitClause0]) -> T
+pub fn unwrap<T>(_1: Option<T>[TraitClause0], _2: &'static Location<'static>) -> T
 where
     TraitClause0: (T: Sized),
 = <opaque>
+
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
 
 // Full name: alloc::alloc::Global
 #[lang_item(GlobalAlloc)]
@@ -199,6 +211,10 @@ where
     TypeOutlives1: A: '_0,
 = <opaque>
 
+struct str {
+  _0: [u8],
+}
+
 struct (_, _)<A, B>
 where
     TraitClause0: (A: Sized),
@@ -235,6 +251,8 @@ where
     return
 }
 
+pub const test_crate::test_new_non_zero_u32::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 101u8, 120u8, 116u8, 101u8, 114u8, 110u8, 97u8, 108u8, 46u8, 114u8, 115u8] } with_metadata(20usize)
+
 // Full name: test_crate::test_new_non_zero_u32
 pub fn test_new_non_zero_u32(x: u32) -> NonZero<u32>[{built_in impl Sized for u32}, impl_ZeroablePrimitive_for_u32]
 {
@@ -242,6 +260,11 @@ pub fn test_new_non_zero_u32(x: u32) -> NonZero<u32>[{built_in impl Sized for u3
     let x: u32; // arg #1
     let _2: Option<NonZero<u32>[{built_in impl Sized for u32}, impl_ZeroablePrimitive_for_u32]>[{built_in impl Sized for NonZero<u32>[{built_in impl Sized for u32}, impl_ZeroablePrimitive_for_u32]}]; // anonymous local
     let _3: u32; // anonymous local
+    let _4: *const str is !null; // anonymous local
+    let _5: NonNull<str>; // anonymous local
+    let _6: PhantomData<&'8 str>; // anonymous local
+    let _7: Location<'5>; // anonymous local
+    let _8: &'3 Location<'4>; // anonymous local
 
     storage_live(_0)
     storage_live(_2)
@@ -251,11 +274,26 @@ pub fn test_new_non_zero_u32(x: u32) -> NonZero<u32>[{built_in impl Sized for u3
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(_3)
-    _0 = unwrap<NonZero<u32>[{built_in impl Sized for u32}, impl_ZeroablePrimitive_for_u32]>[{built_in impl Sized for NonZero<u32>[{built_in impl Sized for u32}, impl_ZeroablePrimitive_for_u32]}](move _2)
+    storage_live(_4)
+    _4 = &raw const test_crate::test_new_non_zero_u32::{promoted_const} with_metadata(const 20usize)
+    storage_live(_5)
+    _5 = NonNull { 0: move _4 }
+    storage_live(_6)
+    _6 = PhantomData {  }
+    storage_live(_7)
+    _7 = Location { 0: move _5, 1: const 10u32, 2: const 5u32, 3: move _6 }
+    storage_live(_8)
+    _8 = &_7
+    _0 = unwrap<NonZero<u32>[{built_in impl Sized for u32}, impl_ZeroablePrimitive_for_u32]>[{built_in impl Sized for NonZero<u32>[{built_in impl Sized for u32}, impl_ZeroablePrimitive_for_u32]}](move _2, move _8)
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(_2)
     storage_dead(x)
+    storage_dead(_8)
+    storage_dead(_7)
+    storage_dead(_6)
+    storage_dead(_5)
+    storage_dead(_4)
     return
 }
 

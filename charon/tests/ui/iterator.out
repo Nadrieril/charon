@@ -916,9 +916,13 @@ where
     TraitClause3: (S: Sum<T>),
 = <opaque>
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::array::iter::{impl Iterator for IntoIter<T, N>[TraitClause0]}::array_chunks
 #[track_caller]
-pub fn impl_Iterator_for_IntoIter::array_chunks<T, const N : usize, const N : usize>(_1: IntoIter<T, N>[TraitClause0]) -> ArrayChunks<IntoIter<T, N>[TraitClause0], N>[TraitClause1, impl_Iterator_for_IntoIter<T, N>[TraitClause0]]
+pub fn impl_Iterator_for_IntoIter::array_chunks<T, const N : usize, const N : usize>(_1: IntoIter<T, N>[TraitClause0], _2: &'static Location<'static>) -> ArrayChunks<IntoIter<T, N>[TraitClause0], N>[TraitClause1, impl_Iterator_for_IntoIter<T, N>[TraitClause0]]
 where
     TraitClause0: (T: Sized),
     TraitClause1: (IntoIter<T, N>[TraitClause0]: Sized),
@@ -1708,7 +1712,7 @@ where
 
 // Full name: core::ops::arith::{impl AddAssign<&'_0 i32> for i32}::add_assign
 #[track_caller]
-pub fn add_assign<'_0, '_1>(_1: &'_1 mut i32, _2: &'_0 i32)
+pub fn add_assign<'_0, '_1>(_1: &'_1 mut i32, _2: &'_0 i32, _3: &'static Location<'static>)
 = <opaque>
 
 // Full name: core::iter::adapters::zip::TrustedRandomAccessNoCoerce::size
@@ -2390,7 +2394,7 @@ where
 = <opaque>
 
 #[track_caller]
-pub fn core::iter::traits::iterator::Iterator::array_chunks<Self, const N : usize>(_1: Self) -> ArrayChunks<Self, N>[TraitClause1, TraitClause0]
+pub fn core::iter::traits::iterator::Iterator::array_chunks<Self, const N : usize>(_1: Self, _2: &'static Location<'static>) -> ArrayChunks<Self, N>[TraitClause1, TraitClause0]
 where
     TraitClause0: (Self: Iterator),
     TraitClause1: (Self: Sized),
@@ -2557,12 +2561,20 @@ where
     TypeOutlives0: Self: '_0,
 = <opaque>
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
 // Full name: core::panicking::AssertKind
 pub enum AssertKind {
   Eq,
   Ne,
   Match,
 }
+
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
 
 // Full name: core::slice::iter::Iter
 #[diagnostic_item("SliceIter")]
@@ -2928,7 +2940,7 @@ where
 
 // Full name: core::slice::iter::{impl Iterator for Iter<'a, T>[TraitClause0]}::array_chunks
 #[track_caller]
-pub fn impl_Iterator_for_Iter::array_chunks<'a, T, const N : usize>(_1: Iter<'a, T>[TraitClause0]) -> ArrayChunks<Iter<'a, T>[TraitClause0], N>[TraitClause1, impl_Iterator_for_Iter<'a, T>[TraitClause0]]
+pub fn impl_Iterator_for_Iter::array_chunks<'a, T, const N : usize>(_1: Iter<'a, T>[TraitClause0], _2: &'static Location<'static>) -> ArrayChunks<Iter<'a, T>[TraitClause0], N>[TraitClause1, impl_Iterator_for_Iter<'a, T>[TraitClause0]]
 where
     TraitClause0: (T: Sized),
     TraitClause1: (Iter<'a, T>[TraitClause0]: Sized),
@@ -3796,7 +3808,7 @@ where
 
 // Full name: core::slice::iter::{impl Iterator for Chunks<'a, T>[TraitClause0]}::array_chunks
 #[track_caller]
-pub fn impl_Iterator_for_Chunks::array_chunks<'a, T, const N : usize>(_1: Chunks<'a, T>[TraitClause0]) -> ArrayChunks<Chunks<'a, T>[TraitClause0], N>[TraitClause1, impl_Iterator_for_Chunks<'a, T>[TraitClause0]]
+pub fn impl_Iterator_for_Chunks::array_chunks<'a, T, const N : usize>(_1: Chunks<'a, T>[TraitClause0], _2: &'static Location<'static>) -> ArrayChunks<Chunks<'a, T>[TraitClause0], N>[TraitClause1, impl_Iterator_for_Chunks<'a, T>[TraitClause0]]
 where
     TraitClause0: (T: Sized),
     TraitClause1: (Chunks<'a, T>[TraitClause0]: Sized),
@@ -4791,7 +4803,7 @@ where
 
 // Full name: core::slice::iter::{impl Iterator for ChunksExact<'a, T>[TraitClause0]}::array_chunks
 #[track_caller]
-pub fn impl_Iterator_for_ChunksExact::array_chunks<'a, T, const N : usize>(_1: ChunksExact<'a, T>[TraitClause0]) -> ArrayChunks<ChunksExact<'a, T>[TraitClause0], N>[TraitClause1, impl_Iterator_for_ChunksExact<'a, T>[TraitClause0]]
+pub fn impl_Iterator_for_ChunksExact::array_chunks<'a, T, const N : usize>(_1: ChunksExact<'a, T>[TraitClause0], _2: &'static Location<'static>) -> ArrayChunks<ChunksExact<'a, T>[TraitClause0], N>[TraitClause1, impl_Iterator_for_ChunksExact<'a, T>[TraitClause0]]
 where
     TraitClause0: (T: Sized),
     TraitClause1: (ChunksExact<'a, T>[TraitClause0]: Sized),
@@ -5551,7 +5563,7 @@ where
 
 // Full name: core::slice::{[T]}::chunks
 #[track_caller]
-pub fn chunks<'_0, T>(_1: &'_0 [T], _2: usize) -> Chunks<'_0, T>[TraitClause0]
+pub fn chunks<'_0, T>(_1: &'_0 [T], _2: usize, _3: &'static Location<'static>) -> Chunks<'_0, T>[TraitClause0]
 where
     TraitClause0: (T: Sized),
     TypeOutlives0: T: '_0,
@@ -5559,11 +5571,21 @@ where
 
 // Full name: core::slice::{[T]}::chunks_exact
 #[track_caller]
-pub fn chunks_exact<'_0, T>(_1: &'_0 [T], _2: usize) -> ChunksExact<'_0, T>[TraitClause0]
+pub fn chunks_exact<'_0, T>(_1: &'_0 [T], _2: usize, _3: &'static Location<'static>) -> ChunksExact<'_0, T>[TraitClause0]
 where
     TraitClause0: (T: Sized),
     TypeOutlives0: T: '_0,
 = <opaque>
+
+struct str {
+  _0: [u8],
+}
+
+pub const test_crate::main::{promoted_const#2}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 105u8, 116u8, 101u8, 114u8, 97u8, 116u8, 111u8, 114u8, 46u8, 114u8, 115u8] } with_metadata(20usize)
+
+pub const test_crate::main::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 105u8, 116u8, 101u8, 114u8, 97u8, 116u8, 111u8, 114u8, 46u8, 114u8, 115u8] } with_metadata(20usize)
+
+pub const test_crate::main::{promoted_const#1}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 105u8, 116u8, 101u8, 114u8, 97u8, 116u8, 111u8, 114u8, 46u8, 114u8, 115u8] } with_metadata(20usize)
 
 // Full name: test_crate::main
 fn main()
@@ -5627,6 +5649,21 @@ fn main()
     let _56: &'91 i32; // anonymous local
     let _57: &'92 i32; // anonymous local
     let _58: Option<Arguments<'101>>[{built_in impl Sized for Arguments<'101>}]; // anonymous local
+    let _59: *const str is !null; // anonymous local
+    let _60: NonNull<str>; // anonymous local
+    let _61: PhantomData<&'153 str>; // anonymous local
+    let _62: Location<'152>; // anonymous local
+    let _63: &'150 Location<'151>; // anonymous local
+    let _64: *const str is !null; // anonymous local
+    let _65: NonNull<str>; // anonymous local
+    let _66: PhantomData<&'146 str>; // anonymous local
+    let _67: Location<'143>; // anonymous local
+    let _68: &'141 Location<'142>; // anonymous local
+    let _69: *const str is !null; // anonymous local
+    let _70: NonNull<str>; // anonymous local
+    let _71: PhantomData<&'175 str>; // anonymous local
+    let _72: Location<'174>; // anonymous local
+    let _73: &'172 Location<'173>; // anonymous local
 
     storage_live(_0)
     storage_live(_12)
@@ -5668,6 +5705,21 @@ fn main()
             storage_dead(_42)
             storage_dead(_33)
             storage_dead(_12)
+            storage_dead(_73)
+            storage_dead(_72)
+            storage_dead(_71)
+            storage_dead(_70)
+            storage_dead(_69)
+            storage_dead(_68)
+            storage_dead(_67)
+            storage_dead(_66)
+            storage_dead(_65)
+            storage_dead(_64)
+            storage_dead(_63)
+            storage_dead(_62)
+            storage_dead(_61)
+            storage_dead(_60)
+            storage_dead(_59)
             unwind_terminate
         storage_dead(_58)
         storage_dead(_57)
@@ -5701,6 +5753,21 @@ fn main()
                 storage_dead(_42)
                 storage_dead(_33)
                 storage_dead(_12)
+                storage_dead(_73)
+                storage_dead(_72)
+                storage_dead(_71)
+                storage_dead(_70)
+                storage_dead(_69)
+                storage_dead(_68)
+                storage_dead(_67)
+                storage_dead(_66)
+                storage_dead(_65)
+                storage_dead(_64)
+                storage_dead(_63)
+                storage_dead(_62)
+                storage_dead(_61)
+                storage_dead(_60)
+                storage_dead(_59)
                 unwind_terminate
             conditional_drop[drop_glue<'109, i32, 7usize>[{built_in impl Sized for i32}]] _3
             ↳⚡ storage_dead(_58)
@@ -5713,6 +5780,21 @@ fn main()
                 storage_dead(_42)
                 storage_dead(_33)
                 storage_dead(_12)
+                storage_dead(_73)
+                storage_dead(_72)
+                storage_dead(_71)
+                storage_dead(_70)
+                storage_dead(_69)
+                storage_dead(_68)
+                storage_dead(_67)
+                storage_dead(_66)
+                storage_dead(_65)
+                storage_dead(_64)
+                storage_dead(_63)
+                storage_dead(_62)
+                storage_dead(_61)
+                storage_dead(_60)
+                storage_dead(_59)
                 unwind_terminate
             storage_dead(_58)
             storage_dead(_57)
@@ -5759,6 +5841,21 @@ fn main()
             storage_dead(_42)
             storage_dead(_33)
             storage_dead(_12)
+            storage_dead(_73)
+            storage_dead(_72)
+            storage_dead(_71)
+            storage_dead(_70)
+            storage_dead(_69)
+            storage_dead(_68)
+            storage_dead(_67)
+            storage_dead(_66)
+            storage_dead(_65)
+            storage_dead(_64)
+            storage_dead(_63)
+            storage_dead(_62)
+            storage_dead(_61)
+            storage_dead(_60)
+            storage_dead(_59)
             unwind_terminate
         storage_dead(_58)
         storage_dead(_57)
@@ -5854,7 +5951,17 @@ fn main()
         _23 = &two-phase-mut i
         storage_live(_24)
         _24 = copy v_21
-        _22 = add_assign<'135, '137>(move _23, move _24)
+        storage_live(_64)
+        _64 = &raw const test_crate::main::{promoted_const#1} with_metadata(const 20usize)
+        storage_live(_65)
+        _65 = NonNull { 0: move _64 }
+        storage_live(_66)
+        _66 = PhantomData {  }
+        storage_live(_67)
+        _67 = Location { 0: move _65, 1: const 11u32, 2: const 9u32, 3: move _66 }
+        storage_live(_68)
+        _68 = &_67
+        _22 = add_assign<'135, '137>(move _23, move _24, move _68)
         ↳⚡ storage_dead(_58)
             storage_dead(_57)
             storage_dead(_56)
@@ -5886,7 +5993,17 @@ fn main()
     _27 = as_slice<'_, i32, 7usize>[{built_in impl Sized for i32}](move _28)
     ↳⚡ undefined_behavior
     storage_dead(_28)
-    _26 = chunks<'140, i32>[{built_in impl Sized for i32}](move _27, const 2usize)
+    storage_live(_59)
+    _59 = &raw const test_crate::main::{promoted_const} with_metadata(const 20usize)
+    storage_live(_60)
+    _60 = NonNull { 0: move _59 }
+    storage_live(_61)
+    _61 = PhantomData {  }
+    storage_live(_62)
+    _62 = Location { 0: move _60, 1: const 13u32, 2: const 14u32, 3: move _61 }
+    storage_live(_63)
+    _63 = &_62
+    _26 = chunks<'149, i32>[{built_in impl Sized for i32}](move _27, const 2usize, move _63)
     ↳⚡ storage_dead(_58)
         storage_dead(_57)
         storage_dead(_56)
@@ -5899,7 +6016,7 @@ fn main()
         storage_dead(_12)
         unwind_continue
     storage_dead(_27)
-    _25 = impl_IntoIterator_for_T::into_iter<Chunks<'142, i32>[{built_in impl Sized for i32}]>[{built_in impl Sized for Chunks<'142, i32>[{built_in impl Sized for i32}]}, impl_Iterator_for_Chunks<'142, i32>[{built_in impl Sized for i32}]](move _26)
+    _25 = impl_IntoIterator_for_T::into_iter<Chunks<'155, i32>[{built_in impl Sized for i32}]>[{built_in impl Sized for Chunks<'155, i32>[{built_in impl Sized for i32}]}, impl_Iterator_for_Chunks<'155, i32>[{built_in impl Sized for i32}]](move _26)
     ↳⚡ storage_dead(_58)
         storage_dead(_57)
         storage_dead(_56)
@@ -5920,7 +6037,7 @@ fn main()
         storage_live(_32)
         _32 = &mut iter_29
         _31 = &two-phase-mut (*_32)
-        _30 = impl_Iterator_for_Chunks::next<'153, '155, i32>[{built_in impl Sized for i32}](move _31)
+        _30 = impl_Iterator_for_Chunks::next<'166, '168, i32>[{built_in impl Sized for i32}](move _31)
         ↳⚡ storage_dead(_58)
             storage_dead(_57)
             storage_dead(_56)
@@ -5958,7 +6075,17 @@ fn main()
     _36 = as_slice<'_, i32, 7usize>[{built_in impl Sized for i32}](move _37)
     ↳⚡ undefined_behavior
     storage_dead(_37)
-    _35 = chunks_exact<'158, i32>[{built_in impl Sized for i32}](move _36, const 2usize)
+    storage_live(_69)
+    _69 = &raw const test_crate::main::{promoted_const#2} with_metadata(const 20usize)
+    storage_live(_70)
+    _70 = NonNull { 0: move _69 }
+    storage_live(_71)
+    _71 = PhantomData {  }
+    storage_live(_72)
+    _72 = Location { 0: move _70, 1: const 16u32, 2: const 14u32, 3: move _71 }
+    storage_live(_73)
+    _73 = &_72
+    _35 = chunks_exact<'171, i32>[{built_in impl Sized for i32}](move _36, const 2usize, move _73)
     ↳⚡ storage_dead(_58)
         storage_dead(_57)
         storage_dead(_56)
@@ -5971,7 +6098,7 @@ fn main()
         storage_dead(_12)
         unwind_continue
     storage_dead(_36)
-    _34 = impl_IntoIterator_for_T::into_iter<ChunksExact<'160, i32>[{built_in impl Sized for i32}]>[{built_in impl Sized for ChunksExact<'160, i32>[{built_in impl Sized for i32}]}, impl_Iterator_for_ChunksExact<'160, i32>[{built_in impl Sized for i32}]](move _35)
+    _34 = impl_IntoIterator_for_T::into_iter<ChunksExact<'177, i32>[{built_in impl Sized for i32}]>[{built_in impl Sized for ChunksExact<'177, i32>[{built_in impl Sized for i32}]}, impl_Iterator_for_ChunksExact<'177, i32>[{built_in impl Sized for i32}]](move _35)
     ↳⚡ storage_dead(_58)
         storage_dead(_57)
         storage_dead(_56)
@@ -5992,7 +6119,7 @@ fn main()
         storage_live(_41)
         _41 = &mut iter_38
         _40 = &two-phase-mut (*_41)
-        _39 = impl_Iterator_for_ChunksExact::next<'171, '173, i32>[{built_in impl Sized for i32}](move _40)
+        _39 = impl_Iterator_for_ChunksExact::next<'188, '190, i32>[{built_in impl Sized for i32}](move _40)
         ↳⚡ storage_dead(_58)
             storage_dead(_57)
             storage_dead(_56)
@@ -6062,6 +6189,21 @@ fn main()
         _56 = &(*_57)
         storage_live(_58)
         _58 = Option::None {  }
+        storage_dead(_73)
+        storage_dead(_72)
+        storage_dead(_71)
+        storage_dead(_70)
+        storage_dead(_69)
+        storage_dead(_68)
+        storage_dead(_67)
+        storage_dead(_66)
+        storage_dead(_65)
+        storage_dead(_64)
+        storage_dead(_63)
+        storage_dead(_62)
+        storage_dead(_61)
+        storage_dead(_60)
+        storage_dead(_59)
         panic(core::panicking::assert_failed)
         ↳⚡ storage_dead(_58)
             storage_dead(_57)
@@ -6095,6 +6237,21 @@ fn main()
     storage_dead(_42)
     storage_dead(_33)
     storage_dead(_12)
+    storage_dead(_73)
+    storage_dead(_72)
+    storage_dead(_71)
+    storage_dead(_70)
+    storage_dead(_69)
+    storage_dead(_68)
+    storage_dead(_67)
+    storage_dead(_66)
+    storage_dead(_65)
+    storage_dead(_64)
+    storage_dead(_63)
+    storage_dead(_62)
+    storage_dead(_61)
+    storage_dead(_60)
+    storage_dead(_59)
     return
 }
 

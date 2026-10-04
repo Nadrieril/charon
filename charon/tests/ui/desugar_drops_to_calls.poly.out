@@ -32,6 +32,13 @@ where
     TypeOutlives0: T: '_0,
 = <opaque>
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T>
+where
+    TraitClause0: (T: Destruct),
+{}
+
 // Full name: core::ops::drop::Drop
 #[lang_item(Drop)]
 pub trait Drop<Self>
@@ -47,6 +54,10 @@ where
     TraitClause0: (Self: Drop),
     TypeOutlives0: Self: '_0,
 = <opaque>
+
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
 
 // Full name: core::ptr::drop_glue
 #[lang_item(DropGlue)]
@@ -75,8 +86,14 @@ where
     return
 }
 
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
+where
+    TraitClause0: (T: Destruct),
+
 // Full name: core::slice::index::{impl SliceIndex<[T]> for usize}::index_mut
-pub fn impl_SliceIndex_slice_for_usize::index_mut<'_0, T>(_1: usize, _2: &'_0 mut [T]) -> &'_0 mut T
+pub fn impl_SliceIndex_slice_for_usize::index_mut<'_0, T>(_1: usize, _2: &'_0 mut [T], _3: &'static Location<'static>) -> &'_0 mut T
 where
     TraitClause0: (T: Sized),
     TraitClause1: (T: Destruct),
@@ -115,7 +132,7 @@ where
 // Full name: alloc::boxed::{Box<T>[TraitClause0::ImpliedClause0, {built_in impl Sized for Global}, TraitClause1, {built_in impl Destruct for Global}]}::new
 #[track_caller]
 #[diagnostic_item("box_new")]
-pub fn new<T>(_1: T) -> Box<T>[TraitClause0::ImpliedClause0, {built_in impl Sized for Global}, TraitClause1, {built_in impl Destruct for Global}]
+pub fn new<T>(_1: T, _2: &'static Location<'static>) -> Box<T>[TraitClause0::ImpliedClause0, {built_in impl Sized for Global}, TraitClause1, {built_in impl Destruct for Global}]
 where
     TraitClause0: (T: Sized),
     TraitClause1: (T: Destruct),
@@ -546,6 +563,10 @@ impl "impl_Drop_for_Point" Drop for Point {
     vtable: lazy
 }
 
+pub const test_crate::main::{promoted_const#1}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 100u8, 101u8, 115u8, 117u8, 103u8, 97u8, 114u8, 95u8, 100u8, 114u8, 111u8, 112u8, 115u8, 95u8, 116u8, 111u8, 95u8, 99u8, 97u8, 108u8, 108u8, 115u8, 46u8, 114u8, 115u8] } with_metadata(34usize)
+
+pub const test_crate::main::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 100u8, 101u8, 115u8, 117u8, 103u8, 97u8, 114u8, 95u8, 100u8, 114u8, 111u8, 112u8, 115u8, 95u8, 116u8, 111u8, 95u8, 99u8, 97u8, 108u8, 108u8, 115u8, 46u8, 114u8, 115u8] } with_metadata(34usize)
+
 // Full name: test_crate::main
 fn main()
 {
@@ -557,20 +578,60 @@ fn main()
     let drop_ret_5: (); // local
     let drop_arg_6: &'_ mut Point; // local
     let drop_ret_7: (); // local
+    let _8: *const str is !null; // anonymous local
+    let _9: NonNull<str>[{built_in impl Destruct for str}]; // anonymous local
+    let _10: PhantomData<&'10 str>[{built_in impl Destruct for &'10 str}]; // anonymous local
+    let _11: Location<'5>; // anonymous local
+    let _12: &'3 Location<'4>; // anonymous local
+    let _13: *const str is !null; // anonymous local
+    let _14: NonNull<str>[{built_in impl Destruct for str}]; // anonymous local
+    let _15: PhantomData<&'15 str>[{built_in impl Destruct for &'15 str}]; // anonymous local
+    let _16: Location<'14>; // anonymous local
+    let _17: &'12 Location<'13>; // anonymous local
 
     storage_live(_0)
     _0 = ()
     storage_live(p)
     storage_live(_2)
-    _2 = new<i32>[{built_in impl Sized for i32}, {built_in impl Destruct for i32}](const 1i32)
+    storage_live(_8)
+    _8 = &raw const test_crate::main::{promoted_const} with_metadata(const 34usize)
+    storage_live(_9)
+    _9 = NonNull { 0: move _8 }
+    storage_live(_10)
+    _10 = PhantomData {  }
+    storage_live(_11)
+    _11 = Location { 0: move _9, 1: const 27u32, 2: const 12u32, 3: move _10 }
+    storage_live(_12)
+    _12 = &_11
+    _2 = new<i32>[{built_in impl Sized for i32}, {built_in impl Destruct for i32}](const 1i32, move _12)
     ↳⚡ unwind_continue
     storage_live(_3)
-    _3 = new<i32>[{built_in impl Sized for i32}, {built_in impl Destruct for i32}](const 2i32)
+    storage_live(_13)
+    _13 = &raw const test_crate::main::{promoted_const#1} with_metadata(const 34usize)
+    storage_live(_14)
+    _14 = NonNull { 0: move _13 }
+    storage_live(_15)
+    _15 = PhantomData {  }
+    storage_live(_16)
+    _16 = Location { 0: move _14, 1: const 28u32, 2: const 12u32, 3: move _15 }
+    storage_live(_17)
+    _17 = &_16
+    _3 = new<i32>[{built_in impl Sized for i32}, {built_in impl Destruct for i32}](const 2i32, move _17)
     ↳⚡ storage_live(drop_arg_4)
         drop_arg_4 = &mut _2
         storage_live(drop_ret_5)
-        drop_ret_5 = impl_Destruct_for_Box::drop_glue<'0, i32, Global>[{built_in impl MetaSized for i32}, {built_in impl Sized for Global}, {built_in impl Destruct for i32}, {built_in impl Destruct for Global}](move drop_arg_4)
-        ↳⚡ storage_dead(drop_ret_7)
+        drop_ret_5 = impl_Destruct_for_Box::drop_glue<'17, i32, Global>[{built_in impl MetaSized for i32}, {built_in impl Sized for Global}, {built_in impl Destruct for i32}, {built_in impl Destruct for Global}](move drop_arg_4)
+        ↳⚡ storage_dead(_17)
+            storage_dead(_16)
+            storage_dead(_15)
+            storage_dead(_14)
+            storage_dead(_13)
+            storage_dead(_12)
+            storage_dead(_11)
+            storage_dead(_10)
+            storage_dead(_9)
+            storage_dead(_8)
+            storage_dead(drop_ret_7)
             storage_dead(drop_arg_6)
             storage_dead(drop_ret_5)
             storage_dead(drop_arg_4)
@@ -583,9 +644,19 @@ fn main()
     storage_live(drop_arg_6)
     drop_arg_6 = &mut p
     storage_live(drop_ret_7)
-    drop_ret_7 = impl_Destruct_for_Point::drop_glue<'1>(move drop_arg_6)
+    drop_ret_7 = impl_Destruct_for_Point::drop_glue<'18>(move drop_arg_6)
     ↳⚡ unwind_continue
     storage_dead(p)
+    storage_dead(_17)
+    storage_dead(_16)
+    storage_dead(_15)
+    storage_dead(_14)
+    storage_dead(_13)
+    storage_dead(_12)
+    storage_dead(_11)
+    storage_dead(_10)
+    storage_dead(_9)
+    storage_dead(_8)
     storage_dead(drop_ret_7)
     storage_dead(drop_arg_6)
     storage_dead(drop_ret_5)

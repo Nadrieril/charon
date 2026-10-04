@@ -14,6 +14,10 @@ pub trait Sized<Self>
     non-dyn-compatible
 }
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
 // Full name: core::ops::index::Index
 #[lang_item(Index)]
 pub trait Index<Self, Idx>
@@ -39,7 +43,19 @@ pub trait IndexMut<Self, Idx>
     vtable: core::ops::index::IndexMut::{vtable}<Idx, Self::ImpliedClause1::Output>
 }
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
+
 struct () {}
+
+struct str {
+  _0: [u8],
+}
 
 // Full name: test_crate::Wrap
 pub struct Wrap {
@@ -47,24 +63,25 @@ pub struct Wrap {
 }
 
 // Full name: test_crate::{impl Index<usize> for Wrap}::index
-pub fn index<'_0>(self: &'_0 Wrap, i: usize) -> &'_0 u64
+pub fn index<'_0>(self: &'_0 Wrap, i: usize, caller_location: &'static Location<'static>) -> &'_0 u64
 {
     let _0: &'1 u64; // return
     let self: &'3 Wrap; // arg #1
     let i: usize; // arg #2
-    let _3: &'4 u64; // anonymous local
-    let _4: usize; // anonymous local
+    let caller_location: &'static Location<'static>; // arg #3
+    let _4: &'4 u64; // anonymous local
+    let _5: usize; // anonymous local
 
     bb0: {
         storage_live(_0);
-        storage_live(_3);
         storage_live(_4);
-        _4 = copy i;
+        storage_live(_5);
+        _5 = copy i;
         fake_read((*self)._0);
-        _3 = &(*self)._0[copy _4];
-        _0 = &(*_3);
+        _4 = &(*self)._0[copy _5];
+        _0 = &(*_4);
+        storage_dead(_5);
         storage_dead(_4);
-        storage_dead(_3);
         return;
     }
 }
@@ -80,28 +97,29 @@ impl "impl_Index_usize_for_Wrap" Index<usize> for Wrap {
 }
 
 // Full name: test_crate::{impl IndexMut<usize> for Wrap}::index_mut
-pub fn index_mut<'_0>(self: &'_0 mut Wrap, i: usize) -> &'_0 mut u64
+pub fn index_mut<'_0>(self: &'_0 mut Wrap, i: usize, caller_location: &'static Location<'static>) -> &'_0 mut u64
 {
     let _0: &'1 mut u64; // return
     let self: &'3 mut Wrap; // arg #1
     let i: usize; // arg #2
-    let _3: &'4 mut u64; // anonymous local
-    let _4: &'5 mut u64; // anonymous local
-    let _5: usize; // anonymous local
+    let caller_location: &'static Location<'static>; // arg #3
+    let _4: &'4 mut u64; // anonymous local
+    let _5: &'5 mut u64; // anonymous local
+    let _6: usize; // anonymous local
 
     bb0: {
         storage_live(_0);
-        storage_live(_3);
         storage_live(_4);
         storage_live(_5);
-        _5 = copy i;
+        storage_live(_6);
+        _6 = copy i;
         fake_read((*self)._0);
-        _4 = &mut (*self)._0[copy _5];
-        _3 = &mut (*_4);
-        _0 = &mut (*_3);
+        _5 = &mut (*self)._0[copy _6];
+        _4 = &mut (*_5);
+        _0 = &mut (*_4);
+        storage_dead(_6);
         storage_dead(_5);
         storage_dead(_4);
-        storage_dead(_3);
         return;
     }
 }
@@ -115,6 +133,8 @@ impl "impl_IndexMut_usize_for_Wrap" IndexMut<usize> for Wrap {
     vtable: lazy
 }
 
+pub const test_crate::shr_into_index::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 105u8, 115u8, 115u8, 117u8, 101u8, 45u8, 49u8, 48u8, 52u8, 49u8, 45u8, 115u8, 104u8, 105u8, 102u8, 116u8, 45u8, 116u8, 104u8, 114u8, 111u8, 117u8, 103u8, 104u8, 45u8, 105u8, 110u8, 100u8, 101u8, 120u8, 45u8, 109u8, 117u8, 116u8, 46u8, 114u8, 115u8] } with_metadata(46usize)
+
 // Full name: test_crate::shr_into_index
 pub fn shr_into_index<'_0>(x: u64, out: &'_0 mut Wrap)
 {
@@ -125,6 +145,11 @@ pub fn shr_into_index<'_0>(x: u64, out: &'_0 mut Wrap)
     let _4: &'3 mut u64; // anonymous local
     let _5: &'4 mut Wrap; // anonymous local
     let _6: u64; // anonymous local
+    let _7: *const str is !null; // anonymous local
+    let _8: NonNull<str>; // anonymous local
+    let _9: PhantomData<&'15 str>; // anonymous local
+    let _10: Location<'12>; // anonymous local
+    let _11: &'10 Location<'11>; // anonymous local
 
     bb0: {
         storage_live(_6);
@@ -136,7 +161,17 @@ pub fn shr_into_index<'_0>(x: u64, out: &'_0 mut Wrap)
         storage_live(_4);
         storage_live(_5);
         _5 = &mut (*out);
-        _4 = index_mut<'6>(move _5, const 0usize) -> bb1 (unwind: bb2);
+        storage_live(_7);
+        _7 = &raw const test_crate::shr_into_index::{promoted_const} with_metadata(const 46usize);
+        storage_live(_8);
+        _8 = NonNull { 0: move _7 };
+        storage_live(_9);
+        _9 = PhantomData {  };
+        storage_live(_10);
+        _10 = Location { 0: move _8, 1: const 25u32, 2: const 8u32, 3: move _9 };
+        storage_live(_11);
+        _11 = &_10;
+        _4 = index_mut<'6>(move _5, const 0usize, move _11) -> bb1 (unwind: bb2);
     }
 
     bb1: {
@@ -153,6 +188,8 @@ pub fn shr_into_index<'_0>(x: u64, out: &'_0 mut Wrap)
     }
 }
 
+pub const test_crate::shl_into_index_by_var::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 105u8, 115u8, 115u8, 117u8, 101u8, 45u8, 49u8, 48u8, 52u8, 49u8, 45u8, 115u8, 104u8, 105u8, 102u8, 116u8, 45u8, 116u8, 104u8, 114u8, 111u8, 117u8, 103u8, 104u8, 45u8, 105u8, 110u8, 100u8, 101u8, 120u8, 45u8, 109u8, 117u8, 116u8, 46u8, 114u8, 115u8] } with_metadata(46usize)
+
 // Full name: test_crate::shl_into_index_by_var
 pub fn shl_into_index_by_var<'_0>(x: u64, n: u32, out: &'_0 mut Wrap)
 {
@@ -165,6 +202,11 @@ pub fn shl_into_index_by_var<'_0>(x: u64, n: u32, out: &'_0 mut Wrap)
     let _6: &'3 mut u64; // anonymous local
     let _7: &'4 mut Wrap; // anonymous local
     let _8: u64; // anonymous local
+    let _9: *const str is !null; // anonymous local
+    let _10: NonNull<str>; // anonymous local
+    let _11: PhantomData<&'15 str>; // anonymous local
+    let _12: Location<'12>; // anonymous local
+    let _13: &'10 Location<'11>; // anonymous local
 
     bb0: {
         storage_live(_8);
@@ -178,7 +220,17 @@ pub fn shl_into_index_by_var<'_0>(x: u64, n: u32, out: &'_0 mut Wrap)
         storage_live(_6);
         storage_live(_7);
         _7 = &mut (*out);
-        _6 = index_mut<'6>(move _7, const 1usize) -> bb1 (unwind: bb2);
+        storage_live(_9);
+        _9 = &raw const test_crate::shl_into_index_by_var::{promoted_const} with_metadata(const 46usize);
+        storage_live(_10);
+        _10 = NonNull { 0: move _9 };
+        storage_live(_11);
+        _11 = PhantomData {  };
+        storage_live(_12);
+        _12 = Location { 0: move _10, 1: const 29u32, 2: const 8u32, 3: move _11 };
+        storage_live(_13);
+        _13 = &_12;
+        _6 = index_mut<'6>(move _7, const 1usize, move _13) -> bb1 (unwind: bb2);
     }
 
     bb1: {

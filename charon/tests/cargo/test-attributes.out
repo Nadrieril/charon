@@ -78,6 +78,10 @@ pub unsafe trait Send<Self>
 #[diagnostic_item("Sync")]
 pub unsafe trait Sync<Self>
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
 // Full name: core::marker::Tuple
 #[fundamental]
 #[lang_item(Tuple)]
@@ -140,10 +144,14 @@ where
   Some { _0: T },
 }
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::panicking::panic_fmt
 #[track_caller]
 #[lang_item(PanicFmt)]
-pub fn panic_fmt<'_0>(_1: Arguments<'_0>) -> !
+pub fn panic_fmt<'_0>(_1: Arguments<'_0>, _2: &'static Location<'static>) -> !
 = <opaque>
 
 // Full name: std::process::ExitCode
@@ -175,12 +183,12 @@ pub struct Global {}
 
 // Full name: alloc::alloc::{impl Allocator for Global}::deallocate
 #[track_caller]
-pub unsafe fn deallocate<'_0>(_1: &'_0 Global, _2: NonNull<u8>, _3: Layout)
+pub unsafe fn deallocate<'_0>(_1: &'_0 Global, _2: NonNull<u8>, _3: Layout, _4: &'static Location<'static>)
 = <opaque>
 
 // Full name: alloc::alloc::{impl Allocator for Global}::allocate
 #[track_caller]
-pub fn allocate<'_0>(_1: &'_0 Global, _2: Layout) -> Result<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}]
+pub fn allocate<'_0>(_1: &'_0 Global, _2: Layout, _3: &'static Location<'static>) -> Result<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}]
 = <opaque>
 
 // Full name: alloc::alloc::{impl Allocator for Global}
@@ -346,6 +354,8 @@ unsafe fn impl_Destruct_for_TestFn::drop_glue<'_0>(_1: &'_0 mut TestFn)
 unsafe fn impl_Destruct_for_TestDesc::drop_glue<'_0>(_1: &'_0 mut TestDesc)
 = <opaque>
 
+pub const test_attributes::tests::test_should_panic#1::{promoted_const}: str = str { _0: [115u8, 114u8, 99u8, 47u8, 108u8, 105u8, 98u8, 46u8, 114u8, 115u8] } with_metadata(10usize)
+
 // Full name: test_attributes::foo
 fn foo()
 {
@@ -495,6 +505,11 @@ fn test_attributes::tests::test_should_panic#1()
     let _0: (); // return
     let _1: !; // anonymous local
     let _2: Arguments<'1>; // anonymous local
+    let _3: *const str is !null; // anonymous local
+    let _4: NonNull<str>; // anonymous local
+    let _5: PhantomData<&'14 str>; // anonymous local
+    let _6: Location<'12>; // anonymous local
+    let _7: &'10 Location<'11>; // anonymous local
 
     storage_live(_0)
     _0 = ()
@@ -502,7 +517,17 @@ fn test_attributes::tests::test_should_panic#1()
     storage_live(_2)
     _2 = from_str<'2>(const "This test should panic")
     ↳⚡ unwind_continue
-    _1 = panic_fmt<'6>(move _2)
+    storage_live(_3)
+    _3 = &raw const test_attributes::tests::test_should_panic#1::{promoted_const} with_metadata(const 10usize)
+    storage_live(_4)
+    _4 = NonNull { 0: move _3 }
+    storage_live(_5)
+    _5 = PhantomData {  }
+    storage_live(_6)
+    _6 = Location { 0: move _4, 1: const 13u32, 2: const 9u32, 3: move _5 }
+    storage_live(_7)
+    _7 = &_6
+    _1 = panic_fmt<'6>(move _2, move _7)
     ↳⚡ unwind_continue
 }
 

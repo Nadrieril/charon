@@ -4,21 +4,6 @@
 #[lang_item(AllocLayout)]
 pub opaque type Layout
 
-// Full name: core::alloc::layout::{Layout}::from_size_align_unchecked
-#[track_caller]
-pub unsafe fn from_size_align_unchecked(_1: usize, _2: usize) -> Layout
-= <opaque>
-
-struct () {}
-
-// Full name: core::marker::Destruct
-#[lang_item(Destruct)]
-pub trait Destruct<Self>
-{
-    fn drop_glue<'_0_1>;
-    non-dyn-compatible
-}
-
 // Full name: core::marker::MetaSized
 #[fundamental]
 #[lang_item(MetaSized)]
@@ -30,6 +15,44 @@ pub trait MetaSized<Self>
 pub trait Sized<Self>
 {
     proof ImpliedClause0: (Self: MetaSized)
+    non-dyn-compatible
+}
+
+struct str {
+  _0: [u8],
+}
+
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub struct NonNull<T> {
+  pointer: *const T is !null,
+}
+
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub struct Location<'a> {
+  filename: NonNull<str>,
+  line: u32,
+  col: u32,
+  _filename: PhantomData<&'a str>,
+}
+
+// Full name: core::alloc::layout::{Layout}::from_size_align_unchecked
+#[track_caller]
+pub unsafe fn from_size_align_unchecked(_1: usize, _2: usize, _3: &'static Location<'static>) -> Layout
+= <opaque>
+
+struct () {}
+
+// Full name: core::marker::Destruct
+#[lang_item(Destruct)]
+pub trait Destruct<Self>
+{
+    fn drop_glue<'_0_1>;
     non-dyn-compatible
 }
 
@@ -139,34 +162,6 @@ impl "impl_Clone_for_usize" Clone for usize {
 pub fn abort() -> !
 = <intrinsic:abort>
 
-struct str {
-  _0: [u8],
-}
-
-// Full name: core::ptr::non_null::NonNull
-#[lang_item(NonNull)]
-pub struct NonNull<T> {
-  pointer: *const T is !null,
-}
-
-// Full name: core::marker::PhantomData
-#[lang_item(PhantomData)]
-pub struct PhantomData<T> {}
-
-// Full name: core::panic::location::Location
-#[lang_item(PanicLocation)]
-pub struct Location<'a> {
-  filename: NonNull<str>,
-  line: u32,
-  col: u32,
-  _filename: PhantomData<&'a str>,
-}
-
-// Full name: core::intrinsics::caller_location
-#[rustc_intrinsic]
-pub fn caller_location() -> &'static Location<'static>
-= <intrinsic:caller_location>
-
 // Full name: core::marker::Copy
 #[lang_item(Copy)]
 #[diagnostic_item("Copy")]
@@ -246,81 +241,86 @@ fn core::panic::panic_info::{PanicInfo<'a>}::new<'a>(message: &'a Arguments<'a>,
 
 // Full name: core::panic::location::{Location<'a>}::caller
 #[track_caller]
-pub fn caller<'a>() -> &'static Location<'static>
+pub fn caller<'a>(caller_location: &'static Location<'static>) -> &'static Location<'static>
 {
     let _0: &'3 Location<'4>; // return
+    let caller_location: &'static Location<'static>; // arg #1
 
     storage_live(_0)
-    _0 = caller_location()
-    ↳⚡ undefined_behavior
+    _0 = copy caller_location
+    storage_dead(caller_location)
     return
 }
 
 #[track_caller]
-fn core::panicking::panic_nounwind_fmt::runtime<'_0>(fmt: Arguments<'_0>, force_no_backtrace: bool) -> !
+fn core::panicking::panic_nounwind_fmt::runtime<'_0>(fmt: Arguments<'_0>, force_no_backtrace: bool, caller_location: &'static Location<'static>) -> !
 {
     let _0: !; // return
     let fmt: Arguments<'1>; // arg #1
     let force_no_backtrace: bool; // arg #2
-    let _3: bool; // anonymous local
-    let _4: !; // anonymous local
+    let caller_location: &'static Location<'static>; // arg #3
+    let _4: bool; // anonymous local
+    let _5: !; // anonymous local
     let pi: PanicInfo<'3>; // local
-    let _6: &'6 Arguments<'7>; // anonymous local
-    let _7: &'8 Arguments<'9>; // anonymous local
-    let _8: &'13 Location<'14>; // anonymous local
-    let _9: bool; // anonymous local
-    let _10: &'17 PanicInfo<'18>; // anonymous local
-    let _11: &'19 PanicInfo<'20>; // anonymous local
+    let _7: &'6 Arguments<'7>; // anonymous local
+    let _8: &'8 Arguments<'9>; // anonymous local
+    let _9: &'13 Location<'14>; // anonymous local
+    let _10: bool; // anonymous local
+    let _11: &'17 PanicInfo<'18>; // anonymous local
+    let _12: &'19 PanicInfo<'20>; // anonymous local
 
     storage_live(_0)
-    storage_live(_3)
-    _3 = const false
-    if move _3 {
+    storage_live(_4)
+    _4 = const false
+    if move _4 {
     } else {
-        storage_dead(_3)
+        storage_dead(_4)
         storage_live(pi)
-        storage_live(_6)
         storage_live(_7)
-        _7 = &fmt
-        _6 = &(*_7) with_metadata(copy _7.metadata)
         storage_live(_8)
-        _8 = caller<'22>()
-        ↳⚡ storage_dead(_11)
-            storage_dead(_10)
-            storage_dead(pi)
-            storage_dead(_4)
-            storage_dead(force_no_backtrace)
-            storage_dead(fmt)
-            unwind_continue
+        _8 = &fmt
+        _7 = &(*_8) with_metadata(copy _8.metadata)
         storage_live(_9)
-        _9 = copy force_no_backtrace
-        pi = core::panic::panic_info::{PanicInfo<'a>}::new<'23>(move _6, move _8, const false, move _9)
-        ↳⚡ storage_dead(_11)
-            storage_dead(_10)
+        _9 = caller<'22>(copy caller_location)
+        ↳⚡ storage_dead(_12)
+            storage_dead(_11)
             storage_dead(pi)
-            storage_dead(_4)
+            storage_dead(_5)
+            storage_dead(caller_location)
             storage_dead(force_no_backtrace)
             storage_dead(fmt)
             unwind_continue
-        storage_dead(_9)
-        storage_dead(_8)
-        storage_dead(_6)
-        storage_dead(_7)
         storage_live(_10)
-        storage_live(_11)
-        _11 = &pi
-        _10 = &(*_11)
-        _0 = core::panicking::panic_nounwind_fmt::runtime::panic_impl<'27, '28>(move _10)
-        ↳⚡ storage_dead(_11)
-            storage_dead(_10)
+        _10 = copy force_no_backtrace
+        pi = core::panic::panic_info::{PanicInfo<'a>}::new<'23>(move _7, move _9, const false, move _10)
+        ↳⚡ storage_dead(_12)
+            storage_dead(_11)
             storage_dead(pi)
-            storage_dead(_4)
+            storage_dead(_5)
+            storage_dead(caller_location)
+            storage_dead(force_no_backtrace)
+            storage_dead(fmt)
+            unwind_continue
+        storage_dead(_10)
+        storage_dead(_9)
+        storage_dead(_7)
+        storage_dead(_8)
+        storage_live(_11)
+        storage_live(_12)
+        _12 = &pi
+        _11 = &(*_12)
+        _0 = core::panicking::panic_nounwind_fmt::runtime::panic_impl<'27, '28>(move _11)
+        ↳⚡ storage_dead(_12)
+            storage_dead(_11)
+            storage_dead(pi)
+            storage_dead(_5)
+            storage_dead(caller_location)
             storage_dead(force_no_backtrace)
             storage_dead(fmt)
             unwind_continue
     }
-    storage_live(_4)
-    _4 = abort()
+    storage_live(_5)
+    _5 = abort()
     ↳⚡ undefined_behavior
 }
 
@@ -422,6 +422,8 @@ pub struct Alignment {
   _inner_repr_trick: AlignmentEnum,
 }
 
+pub const core::mem::alignment::{Alignment}::new::{promoted_const}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 109u8, 101u8, 109u8, 47u8, 97u8, 108u8, 105u8, 103u8, 110u8, 109u8, 101u8, 110u8, 116u8, 46u8, 114u8, 115u8] } with_metadata(133usize)
+
 // Full name: core::option::Option
 #[lang_item(Option)]
 #[diagnostic_item("Option")]
@@ -509,114 +511,123 @@ where
 
 // Full name: core::panicking::panic_nounwind_fmt
 #[track_caller]
-pub fn panic_nounwind_fmt<'_0>(fmt: Arguments<'_0>, force_no_backtrace: bool) -> !
+pub fn panic_nounwind_fmt<'_0>(fmt: Arguments<'_0>, force_no_backtrace: bool, caller_location: &'static Location<'static>) -> !
 {
     let _0: !; // return
     let fmt: Arguments<'1>; // arg #1
     let force_no_backtrace: bool; // arg #2
-    let _3: (Arguments<'9>, bool); // anonymous local
-    let _4: Arguments<'13>; // anonymous local
-    let _5: bool; // anonymous local
+    let caller_location: &'static Location<'static>; // arg #3
+    let _4: (Arguments<'9>, bool); // anonymous local
+    let _5: Arguments<'13>; // anonymous local
+    let _6: bool; // anonymous local
 
     storage_live(_0)
-    storage_live(_3)
     storage_live(_4)
-    _4 = copy fmt
     storage_live(_5)
-    _5 = copy force_no_backtrace
-    _3 = (move _4, move _5)
+    _5 = copy fmt
+    storage_live(_6)
+    _6 = copy force_no_backtrace
+    _4 = (move _5, move _6)
+    storage_dead(_6)
     storage_dead(_5)
-    storage_dead(_4)
-    _0 = core::panicking::panic_nounwind_fmt::runtime<'19>(move _3._0, move _3._1)
-    ↳⚡ storage_dead(_3)
+    _0 = core::panicking::panic_nounwind_fmt::runtime<'19>(move _4._0, move _4._1, copy caller_location)
+    ↳⚡ storage_dead(_4)
+        storage_dead(caller_location)
         storage_dead(force_no_backtrace)
         storage_dead(fmt)
         unwind_terminate
 }
 
 #[track_caller]
-fn core::mem::alignment::{Alignment}::new_unchecked::precondition_check(align: usize)
+fn core::mem::alignment::{Alignment}::new_unchecked::precondition_check(align: usize, caller_location: &'static Location<'static>)
 {
     let _0: (); // return
     let align: usize; // arg #1
-    let _2: bool; // anonymous local
-    let _3: usize; // anonymous local
+    let caller_location: &'static Location<'static>; // arg #2
+    let _3: bool; // anonymous local
+    let _4: usize; // anonymous local
     let msg: &'1 str; // local
-    let _5: !; // anonymous local
-    let _6: Arguments<'3>; // anonymous local
-    let _7: &'4 str; // anonymous local
+    let _6: !; // anonymous local
+    let _7: Arguments<'3>; // anonymous local
+    let _8: &'4 str; // anonymous local
 
     storage_live(_0)
     _0 = ()
-    storage_live(_2)
     storage_live(_3)
-    _3 = copy align
-    _2 = is_power_of_two(move _3)
-    ↳⚡ storage_dead(_6)
-        storage_dead(_5)
+    storage_live(_4)
+    _4 = copy align
+    _3 = is_power_of_two(move _4)
+    ↳⚡ storage_dead(_7)
+        storage_dead(_6)
         storage_dead(msg)
+        storage_dead(caller_location)
         storage_dead(align)
         unwind_terminate
-    if move _2 {
+    if move _3 {
     } else {
-        storage_dead(_3)
+        storage_dead(_4)
         storage_live(msg)
         msg = const "unsafe precondition(s) violated: Alignment::new_unchecked requires a power of two\n\nThis indicates a bug in the program. This Undefined Behavior check is optional, and cannot be relied on for safety."
-        storage_live(_5)
         storage_live(_6)
         storage_live(_7)
-        _7 = &(*msg) with_metadata(copy msg.metadata)
-        _6 = from_str<'6>(move _7)
-        ↳⚡ storage_dead(_6)
-            storage_dead(_5)
+        storage_live(_8)
+        _8 = &(*msg) with_metadata(copy msg.metadata)
+        _7 = from_str<'6>(move _8)
+        ↳⚡ storage_dead(_7)
+            storage_dead(_6)
             storage_dead(msg)
+            storage_dead(caller_location)
             storage_dead(align)
             unwind_terminate
-        storage_dead(_7)
-        _5 = panic_nounwind_fmt<'8>(move _6, const false)
+        storage_dead(_8)
+        _6 = panic_nounwind_fmt<'8>(move _7, const false, copy caller_location)
         ↳⚡ undefined_behavior
     }
-    storage_dead(_3)
+    storage_dead(_4)
     _0 = ()
-    storage_dead(_2)
+    storage_dead(_3)
+    storage_dead(_7)
     storage_dead(_6)
-    storage_dead(_5)
     storage_dead(msg)
+    storage_dead(caller_location)
     storage_dead(align)
     return
 }
 
 // Full name: core::mem::alignment::{Alignment}::new_unchecked
 #[track_caller]
-pub unsafe fn new_unchecked(align: usize) -> Alignment
+pub unsafe fn new_unchecked(align: usize, caller_location: &'static Location<'static>) -> Alignment
 {
     let _0: Alignment; // return
     let align: usize; // arg #1
-    let _2: bool; // anonymous local
-    let _3: (); // anonymous local
-    let _4: usize; // anonymous local
+    let caller_location: &'static Location<'static>; // arg #2
+    let _3: bool; // anonymous local
+    let _4: (); // anonymous local
     let _5: usize; // anonymous local
+    let _6: usize; // anonymous local
 
     storage_live(_0)
-    storage_live(_2)
-    _2 = check_language_ub()
-    ↳⚡ storage_dead(align)
+    storage_live(_3)
+    _3 = check_language_ub()
+    ↳⚡ storage_dead(caller_location)
+        storage_dead(align)
         unwind_continue
-    if move _2 {
-        storage_live(_3)
+    if move _3 {
         storage_live(_4)
-        _4 = copy align
-        _3 = core::mem::alignment::{Alignment}::new_unchecked::precondition_check(move _4)
+        storage_live(_5)
+        _5 = copy align
+        _4 = core::mem::alignment::{Alignment}::new_unchecked::precondition_check(move _5, copy caller_location)
         ↳⚡ undefined_behavior
+        storage_dead(_5)
         storage_dead(_4)
-        storage_dead(_3)
     } else {
     }
-    storage_dead(_2)
-    storage_live(_5)
-    _5 = copy align
-    _0 = transmute<usize, Alignment>(move _5)
-    storage_dead(_5)
+    storage_dead(_3)
+    storage_live(_6)
+    _6 = copy align
+    _0 = transmute<usize, Alignment>(move _6)
+    storage_dead(_6)
+    storage_dead(caller_location)
     storage_dead(align)
     return
 }
@@ -629,6 +640,11 @@ pub fn core::mem::alignment::{Alignment}::new(align: usize) -> Option<Alignment>
     let _3: usize; // anonymous local
     let _4: Alignment; // anonymous local
     let _5: usize; // anonymous local
+    let _6: *const str is !null; // anonymous local
+    let _7: NonNull<str>; // anonymous local
+    let _8: PhantomData<&'8 str>; // anonymous local
+    let _9: Location<'5>; // anonymous local
+    let _10: &'3 Location<'4>; // anonymous local
 
     storage_live(_0)
     storage_live(_2)
@@ -643,13 +659,28 @@ pub fn core::mem::alignment::{Alignment}::new(align: usize) -> Option<Alignment>
         _0 = Option::None {  }
         storage_dead(_2)
         storage_dead(align)
+        storage_dead(_10)
+        storage_dead(_9)
+        storage_dead(_8)
+        storage_dead(_7)
+        storage_dead(_6)
         return
     }
     storage_dead(_3)
     storage_live(_4)
     storage_live(_5)
     _5 = copy align
-    _4 = new_unchecked(move _5)
+    storage_live(_6)
+    _6 = &raw const core::mem::alignment::{Alignment}::new::{promoted_const} with_metadata(const 133usize)
+    storage_live(_7)
+    _7 = NonNull { pointer: move _6 }
+    storage_live(_8)
+    _8 = PhantomData {  }
+    storage_live(_9)
+    _9 = Location { filename: move _7, line: const 173u32, col: const 27u32, _filename: move _8 }
+    storage_live(_10)
+    _10 = &_9
+    _4 = new_unchecked(move _5, move _10)
     ↳⚡ storage_dead(align)
         unwind_continue
     storage_dead(_5)
@@ -657,6 +688,11 @@ pub fn core::mem::alignment::{Alignment}::new(align: usize) -> Option<Alignment>
     storage_dead(_4)
     storage_dead(_2)
     storage_dead(align)
+    storage_dead(_10)
+    storage_dead(_9)
+    storage_dead(_8)
+    storage_dead(_7)
+    storage_dead(_6)
     return
 }
 
@@ -742,15 +778,32 @@ where
     TraitClause0: (Self: SizedTypeProperties),
  = MAX_SLICE_LEN<Self>[TraitClause0]()
 
+pub const core::mem::SizedTypeProperties::LAYOUT::{promoted_const}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 109u8, 101u8, 109u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(127usize)
+
 // Full name: core::mem::SizedTypeProperties::LAYOUT
 pub fn LAYOUT<Self>() -> Layout
 where
     TraitClause0: (Self: SizedTypeProperties),
 {
     let _0: Layout; // return
+    let _1: *const str is !null; // anonymous local
+    let _2: NonNull<str>; // anonymous local
+    let _3: PhantomData<&'8 str>; // anonymous local
+    let _4: Location<'5>; // anonymous local
+    let _5: &'3 Location<'4>; // anonymous local
 
     storage_live(_0)
-    _0 = from_size_align_unchecked(const TraitClause0::SIZE, const TraitClause0::ALIGN)
+    storage_live(_1)
+    _1 = &raw const core::mem::SizedTypeProperties::LAYOUT::{promoted_const} with_metadata(const 127usize)
+    storage_live(_2)
+    _2 = NonNull { pointer: move _1 }
+    storage_live(_3)
+    _3 = PhantomData {  }
+    storage_live(_4)
+    _4 = Location { filename: move _2, line: const 1512u32, col: const 18u32, _filename: move _3 }
+    storage_live(_5)
+    _5 = &_4
+    _0 = from_size_align_unchecked(const TraitClause0::SIZE, const TraitClause0::ALIGN, move _5)
     ↳⚡ unwind_continue
     return
 }
@@ -779,28 +832,33 @@ where
     TraitClause0: (Self: SizedTypeProperties),
  = IS_ZST<Self>[TraitClause0]()
 
+pub const core::mem::SizedTypeProperties::ALIGNMENT::{promoted_const}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 109u8, 101u8, 109u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(127usize)
+
 // Full name: core::option::unwrap_failed
 #[track_caller]
-fn unwrap_failed() -> !
+fn unwrap_failed(caller_location: &'static Location<'static>) -> !
 {
     let _0: !; // return
+    let caller_location: &'static Location<'static>; // arg #1
 
     storage_live(_0)
     panic(core::panicking::panic)
-    ↳⚡ unwind_continue
+    ↳⚡ storage_dead(caller_location)
+        unwind_continue
 }
 
 // Full name: core::option::{Option<T>[TraitClause0]}::unwrap
 #[track_caller]
 #[diagnostic_item("option_unwrap")]
-pub fn unwrap<T>(self: Option<T>[TraitClause0]) -> T
+pub fn unwrap<T>(self: Option<T>[TraitClause0], caller_location: &'static Location<'static>) -> T
 where
     TraitClause0: (T: Sized),
 {
     let _0: T; // return
     let self: Option<T>[TraitClause0]; // arg #1
+    let caller_location: &'static Location<'static>; // arg #2
     let val: T; // local
-    let _3: !; // anonymous local
+    let _4: !; // anonymous local
 
     storage_live(_0)
     match self {
@@ -811,14 +869,16 @@ where
             val = move (self as variant Option::Some)._0
             _0 = move val
             storage_dead(val)
-            storage_dead(_3)
+            storage_dead(_4)
+            storage_dead(caller_location)
             storage_dead(self)
             return
         },
     }
-    storage_live(_3)
-    _3 = unwrap_failed()
-    ↳⚡ storage_dead(_3)
+    storage_live(_4)
+    _4 = unwrap_failed(copy caller_location)
+    ↳⚡ storage_dead(_4)
+        storage_dead(caller_location)
         storage_dead(self)
         unwind_continue
 }
@@ -830,12 +890,27 @@ where
 {
     let _0: Alignment; // return
     let _1: Option<Alignment>[{built_in impl Sized for Alignment}]; // anonymous local
+    let _2: *const str is !null; // anonymous local
+    let _3: NonNull<str>; // anonymous local
+    let _4: PhantomData<&'8 str>; // anonymous local
+    let _5: Location<'5>; // anonymous local
+    let _6: &'3 Location<'4>; // anonymous local
 
     storage_live(_0)
     storage_live(_1)
     _1 = core::mem::alignment::{Alignment}::new(const TraitClause0::ALIGN)
     ↳⚡ unwind_continue
-    _0 = unwrap<Alignment>[{built_in impl Sized for Alignment}](move _1)
+    storage_live(_2)
+    _2 = &raw const core::mem::SizedTypeProperties::ALIGNMENT::{promoted_const} with_metadata(const 127usize)
+    storage_live(_3)
+    _3 = NonNull { pointer: move _2 }
+    storage_live(_4)
+    _4 = PhantomData {  }
+    storage_live(_5)
+    _5 = Location { filename: move _3, line: const 1474u32, col: const 9u32, _filename: move _4 }
+    storage_live(_6)
+    _6 = &_5
+    _0 = unwrap<Alignment>[{built_in impl Sized for Alignment}](move _1, move _6)
     ↳⚡ unwind_continue
     storage_dead(_1)
     return
@@ -929,12 +1004,12 @@ where
 }
 
 #[track_caller]
-fn core::ptr::copy_nonoverlapping::precondition_check(_1: *const (), _2: *mut (), _3: usize, _4: usize, _5: usize)
+fn core::ptr::copy_nonoverlapping::precondition_check(_1: *const (), _2: *mut (), _3: usize, _4: usize, _5: usize, _6: &'static Location<'static>)
 = <opaque>
 
 #[track_caller]
 #[diagnostic_item("ptr_copy_nonoverlapping")]
-pub unsafe fn core::ptr::copy_nonoverlapping<T>(src: *const T, dst: *mut T, count: usize)
+pub unsafe fn core::ptr::copy_nonoverlapping<T>(src: *const T, dst: *mut T, count: usize, caller_location: &'static Location<'static>)
 where
     TraitClause0: (T: Sized),
 {
@@ -942,86 +1017,93 @@ where
     let src: *const T; // arg #1
     let dst: *mut T; // arg #2
     let count: usize; // arg #3
-    let _4: bool; // anonymous local
-    let _5: (); // anonymous local
-    let _6: *const (); // anonymous local
-    let _7: *const T; // anonymous local
-    let _8: *mut (); // anonymous local
-    let _9: *mut T; // anonymous local
-    let _10: usize; // anonymous local
+    let caller_location: &'static Location<'static>; // arg #4
+    let _5: bool; // anonymous local
+    let _6: (); // anonymous local
+    let _7: *const (); // anonymous local
+    let _8: *const T; // anonymous local
+    let _9: *mut (); // anonymous local
+    let _10: *mut T; // anonymous local
     let _11: usize; // anonymous local
     let _12: usize; // anonymous local
-    let _13: *const T; // anonymous local
-    let _14: *mut T; // anonymous local
-    let _15: usize; // anonymous local
-    let _16: (); // anonymous local
+    let _13: usize; // anonymous local
+    let _14: *const T; // anonymous local
+    let _15: *mut T; // anonymous local
+    let _16: usize; // anonymous local
+    let _17: (); // anonymous local
 
     storage_live(_0)
-    storage_live(_16)
+    storage_live(_17)
     _0 = ()
-    storage_live(_4)
-    _4 = check_language_ub()
-    ↳⚡ storage_dead(_16)
+    storage_live(_5)
+    _5 = check_language_ub()
+    ↳⚡ storage_dead(_17)
+        storage_dead(caller_location)
         storage_dead(count)
         storage_dead(dst)
         storage_dead(src)
         unwind_continue
-    if move _4 {
-        storage_live(_5)
+    if move _5 {
         storage_live(_6)
         storage_live(_7)
-        _7 = copy src
-        _6 = cast<*const T, *const ()>(move _7)
-        storage_dead(_7)
         storage_live(_8)
+        _8 = copy src
+        _7 = cast<*const T, *const ()>(move _8)
+        storage_dead(_8)
         storage_live(_9)
-        _9 = copy dst
-        _8 = cast<*mut T, *mut ()>(move _9)
-        storage_dead(_9)
         storage_live(_10)
-        _10 = core::mem::size_of<T>[TraitClause0]()
-        ↳⚡ storage_dead(_16)
-            storage_dead(count)
-            storage_dead(dst)
-            storage_dead(src)
-            unwind_continue
+        _10 = copy dst
+        _9 = cast<*mut T, *mut ()>(move _10)
+        storage_dead(_10)
         storage_live(_11)
-        _11 = core::mem::align_of<T>[TraitClause0]()
-        ↳⚡ storage_dead(_16)
+        _11 = core::mem::size_of<T>[TraitClause0]()
+        ↳⚡ storage_dead(_17)
+            storage_dead(caller_location)
             storage_dead(count)
             storage_dead(dst)
             storage_dead(src)
             unwind_continue
         storage_live(_12)
-        _12 = copy count
-        _5 = core::ptr::copy_nonoverlapping::precondition_check(move _6, move _8, move _10, move _11, move _12)
+        _12 = core::mem::align_of<T>[TraitClause0]()
+        ↳⚡ storage_dead(_17)
+            storage_dead(caller_location)
+            storage_dead(count)
+            storage_dead(dst)
+            storage_dead(src)
+            unwind_continue
+        storage_live(_13)
+        _13 = copy count
+        _6 = core::ptr::copy_nonoverlapping::precondition_check(move _7, move _9, move _11, move _12, move _13, copy caller_location)
         ↳⚡ undefined_behavior
+        storage_dead(_13)
         storage_dead(_12)
         storage_dead(_11)
-        storage_dead(_10)
-        storage_dead(_8)
+        storage_dead(_9)
+        storage_dead(_7)
         storage_dead(_6)
-        storage_dead(_5)
     } else {
     }
-    storage_dead(_4)
-    storage_live(_13)
-    _13 = copy src
+    storage_dead(_5)
     storage_live(_14)
-    _14 = copy dst
+    _14 = copy src
     storage_live(_15)
-    _15 = copy count
-    _16 = core::intrinsics::copy_nonoverlapping<T>[TraitClause0](move _13, move _14, move _15)
+    _15 = copy dst
+    storage_live(_16)
+    _16 = copy count
+    _17 = core::intrinsics::copy_nonoverlapping<T>[TraitClause0](move _14, move _15, move _16)
     ↳⚡ undefined_behavior
+    storage_dead(_16)
     storage_dead(_15)
     storage_dead(_14)
-    storage_dead(_13)
-    storage_dead(_16)
+    storage_dead(_17)
+    storage_dead(caller_location)
     storage_dead(count)
     storage_dead(dst)
     storage_dead(src)
     return
 }
+
+pub const test_crate::write::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 99u8, 111u8, 112u8, 121u8, 95u8, 110u8, 111u8, 110u8, 111u8, 118u8, 101u8, 114u8, 108u8, 97u8, 112u8, 112u8, 105u8, 110u8, 103u8, 46u8, 114u8, 115u8] } with_metadata(31usize)
 
 // Full name: test_crate::write
 fn write<'_0, '_1, T>(x: &'_0 mut T, y: &'_1 T)
@@ -1036,6 +1118,11 @@ where
     let _3: (); // anonymous local
     let _4: *const T; // anonymous local
     let _5: *mut T; // anonymous local
+    let _6: *const str is !null; // anonymous local
+    let _7: NonNull<str>; // anonymous local
+    let _8: PhantomData<&'12 str>; // anonymous local
+    let _9: Location<'9>; // anonymous local
+    let _10: &'7 Location<'8>; // anonymous local
 
     storage_live(_0)
     _0 = ()
@@ -1044,7 +1131,17 @@ where
     _4 = &raw const (*y)
     storage_live(_5)
     _5 = &raw mut (*x)
-    _3 = core::ptr::copy_nonoverlapping<T>[TraitClause0](move _4, move _5, const 1usize)
+    storage_live(_6)
+    _6 = &raw const test_crate::write::{promoted_const} with_metadata(const 31usize)
+    storage_live(_7)
+    _7 = NonNull { pointer: move _6 }
+    storage_live(_8)
+    _8 = PhantomData {  }
+    storage_live(_9)
+    _9 = Location { filename: move _7, line: const 12u32, col: const 9u32, _filename: move _8 }
+    storage_live(_10)
+    _10 = &_9
+    _3 = core::ptr::copy_nonoverlapping<T>[TraitClause0](move _4, move _5, const 1usize, move _10)
     ↳⚡ storage_dead(y)
         storage_dead(x)
         unwind_continue
@@ -1054,6 +1151,11 @@ where
     _0 = ()
     storage_dead(y)
     storage_dead(x)
+    storage_dead(_10)
+    storage_dead(_9)
+    storage_dead(_8)
+    storage_dead(_7)
+    storage_dead(_6)
     return
 }
 

@@ -20,6 +20,18 @@ struct () {}
 
 vtable core::marker::MetaSized::{vtable}<Self>: core::marker::MetaSized::{vtable} = Opaque(VTable was chosen to be opaque)
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
+
 // Full name: alloc::alloc::Global
 #[lang_item(GlobalAlloc)]
 pub struct Global {}
@@ -44,10 +56,14 @@ where
 // Full name: alloc::boxed::{Box<T>[TraitClause0::ImpliedClause0, {built_in impl Sized for Global}]}::new
 #[track_caller]
 #[diagnostic_item("box_new")]
-pub fn new<T>(_1: T) -> Box<T>[TraitClause0::ImpliedClause0, {built_in impl Sized for Global}]
+pub fn new<T>(_1: T, _2: &'static Location<'static>) -> Box<T>[TraitClause0::ImpliedClause0, {built_in impl Sized for Global}]
 where
     TraitClause0: (T: Sized),
 = <opaque>
+
+struct str {
+  _0: [u8],
+}
 
 struct test_crate::Consume::{vtable} {
   size: usize,
@@ -250,6 +266,8 @@ impl Consume for *mut u32 {
     vtable: {impl Consume for *mut u32}::{vtable}
 }
 
+pub const test_crate::mk::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 100u8, 121u8, 110u8, 47u8, 98u8, 121u8, 45u8, 118u8, 97u8, 108u8, 117u8, 101u8, 45u8, 115u8, 101u8, 108u8, 102u8, 45u8, 118u8, 116u8, 97u8, 98u8, 108u8, 101u8, 46u8, 114u8, 115u8] } with_metadata(36usize)
+
 // Full name: test_crate::mk
 fn mk() -> Box<(dyn Consume + 'static)>[{built_in impl MetaSized for (dyn Consume + 'static)}, {built_in impl Sized for Global}]
 {
@@ -257,25 +275,47 @@ fn mk() -> Box<(dyn Consume + 'static)>[{built_in impl MetaSized for (dyn Consum
     let _1: Box<(dyn Consume + '9)>[{built_in impl MetaSized for (dyn Consume + '11)}, {built_in impl Sized for Global}]; // anonymous local
     let _2: Box<S>[{built_in impl MetaSized for S}, {built_in impl Sized for Global}]; // anonymous local
     let _3: S; // anonymous local
+    let _4: *const str is !null; // anonymous local
+    let _5: NonNull<str>; // anonymous local
+    let _6: PhantomData<&'20 str>; // anonymous local
+    let _7: Location<'17>; // anonymous local
+    let _8: &'15 Location<'16>; // anonymous local
 
     storage_live(_0)
     storage_live(_1)
     storage_live(_2)
     storage_live(_3)
     _3 = S { _0: const 42u32 }
-    _2 = new<S>[{built_in impl Sized for S}](move _3)
+    storage_live(_4)
+    _4 = &raw const test_crate::mk::{promoted_const} with_metadata(const 36usize)
+    storage_live(_5)
+    _5 = NonNull { 0: move _4 }
+    storage_live(_6)
+    _6 = PhantomData {  }
+    storage_live(_7)
+    _7 = Location { 0: move _5, 1: const 32u32, 2: const 5u32, 3: move _6 }
+    storage_live(_8)
+    _8 = &_7
+    _2 = new<S>[{built_in impl Sized for S}](move _3, move _8)
     ↳⚡ unwind_continue
-    _1 = unsize_cast<Box<S>[{built_in impl MetaSized for S}, {built_in impl Sized for Global}], Box<(dyn Consume + '12)>[{built_in impl MetaSized for (dyn Consume + '14)}, {built_in impl Sized for Global}], &impl_Consume_for_S::{vtable}>(move _2)
-    conditional_drop[drop_glue<'15, S, Global>[{built_in impl MetaSized for S}, {built_in impl Sized for Global}]] _2
+    _1 = unsize_cast<Box<S>[{built_in impl MetaSized for S}, {built_in impl Sized for Global}], Box<(dyn Consume + '21)>[{built_in impl MetaSized for (dyn Consume + '23)}, {built_in impl Sized for Global}], &impl_Consume_for_S::{vtable}>(move _2)
+    conditional_drop[drop_glue<'24, S, Global>[{built_in impl MetaSized for S}, {built_in impl Sized for Global}]] _2
     ↳⚡ unwind_continue
     storage_dead(_3)
     storage_dead(_2)
-    _0 = unsize_cast<Box<(dyn Consume + '9)>[{built_in impl MetaSized for (dyn Consume + '11)}, {built_in impl Sized for Global}], Box<(dyn Consume + '16)>[{built_in impl MetaSized for (dyn Consume + '18)}, {built_in impl Sized for Global}],  at []>(move _1)
-    conditional_drop[drop_glue<'33, (dyn Consume + '28), Global>[{built_in impl MetaSized for (dyn Consume + '28)}, {built_in impl Sized for Global}]] _1
+    _0 = unsize_cast<Box<(dyn Consume + '9)>[{built_in impl MetaSized for (dyn Consume + '11)}, {built_in impl Sized for Global}], Box<(dyn Consume + '25)>[{built_in impl MetaSized for (dyn Consume + '27)}, {built_in impl Sized for Global}],  at []>(move _1)
+    conditional_drop[drop_glue<'42, (dyn Consume + '37), Global>[{built_in impl MetaSized for (dyn Consume + '37)}, {built_in impl Sized for Global}]] _1
     ↳⚡ unwind_continue
     storage_dead(_1)
+    storage_dead(_8)
+    storage_dead(_7)
+    storage_dead(_6)
+    storage_dead(_5)
+    storage_dead(_4)
     return
 }
+
+pub const test_crate::mk_ptr::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 100u8, 121u8, 110u8, 47u8, 98u8, 121u8, 45u8, 118u8, 97u8, 108u8, 117u8, 101u8, 45u8, 115u8, 101u8, 108u8, 102u8, 45u8, 118u8, 116u8, 97u8, 98u8, 108u8, 101u8, 46u8, 114u8, 115u8] } with_metadata(36usize)
 
 // Full name: test_crate::mk_ptr
 fn mk_ptr(x: *mut u32) -> Box<(dyn Consume + 'static)>[{built_in impl MetaSized for (dyn Consume + 'static)}, {built_in impl Sized for Global}]
@@ -285,27 +325,47 @@ fn mk_ptr(x: *mut u32) -> Box<(dyn Consume + 'static)>[{built_in impl MetaSized 
     let _2: Box<(dyn Consume + '9)>[{built_in impl MetaSized for (dyn Consume + '11)}, {built_in impl Sized for Global}]; // anonymous local
     let _3: Box<*mut u32>[{built_in impl MetaSized for *mut u32}, {built_in impl Sized for Global}]; // anonymous local
     let _4: *mut u32; // anonymous local
+    let _5: *const str is !null; // anonymous local
+    let _6: NonNull<str>; // anonymous local
+    let _7: PhantomData<&'20 str>; // anonymous local
+    let _8: Location<'17>; // anonymous local
+    let _9: &'15 Location<'16>; // anonymous local
 
     storage_live(_0)
     storage_live(_2)
     storage_live(_3)
     storage_live(_4)
     _4 = copy x
-    _3 = new<*mut u32>[{built_in impl Sized for *mut u32}](move _4)
+    storage_live(_5)
+    _5 = &raw const test_crate::mk_ptr::{promoted_const} with_metadata(const 36usize)
+    storage_live(_6)
+    _6 = NonNull { 0: move _5 }
+    storage_live(_7)
+    _7 = PhantomData {  }
+    storage_live(_8)
+    _8 = Location { 0: move _6, 1: const 36u32, 2: const 5u32, 3: move _7 }
+    storage_live(_9)
+    _9 = &_8
+    _3 = new<*mut u32>[{built_in impl Sized for *mut u32}](move _4, move _9)
     ↳⚡ storage_dead(x)
         unwind_continue
-    _2 = unsize_cast<Box<*mut u32>[{built_in impl MetaSized for *mut u32}, {built_in impl Sized for Global}], Box<(dyn Consume + '12)>[{built_in impl MetaSized for (dyn Consume + '14)}, {built_in impl Sized for Global}], &{impl Consume for *mut u32}::{vtable}>(move _3)
-    conditional_drop[drop_glue<'15, *mut u32, Global>[{built_in impl MetaSized for *mut u32}, {built_in impl Sized for Global}]] _3
+    _2 = unsize_cast<Box<*mut u32>[{built_in impl MetaSized for *mut u32}, {built_in impl Sized for Global}], Box<(dyn Consume + '21)>[{built_in impl MetaSized for (dyn Consume + '23)}, {built_in impl Sized for Global}], &{impl Consume for *mut u32}::{vtable}>(move _3)
+    conditional_drop[drop_glue<'24, *mut u32, Global>[{built_in impl MetaSized for *mut u32}, {built_in impl Sized for Global}]] _3
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(_4)
     storage_dead(_3)
-    _0 = unsize_cast<Box<(dyn Consume + '9)>[{built_in impl MetaSized for (dyn Consume + '11)}, {built_in impl Sized for Global}], Box<(dyn Consume + '16)>[{built_in impl MetaSized for (dyn Consume + '18)}, {built_in impl Sized for Global}],  at []>(move _2)
-    conditional_drop[drop_glue<'33, (dyn Consume + '28), Global>[{built_in impl MetaSized for (dyn Consume + '28)}, {built_in impl Sized for Global}]] _2
+    _0 = unsize_cast<Box<(dyn Consume + '9)>[{built_in impl MetaSized for (dyn Consume + '11)}, {built_in impl Sized for Global}], Box<(dyn Consume + '25)>[{built_in impl MetaSized for (dyn Consume + '27)}, {built_in impl Sized for Global}],  at []>(move _2)
+    conditional_drop[drop_glue<'42, (dyn Consume + '37), Global>[{built_in impl MetaSized for (dyn Consume + '37)}, {built_in impl Sized for Global}]] _2
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(_2)
     storage_dead(x)
+    storage_dead(_9)
+    storage_dead(_8)
+    storage_dead(_7)
+    storage_dead(_6)
+    storage_dead(_5)
     return
 }
 

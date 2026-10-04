@@ -32,6 +32,17 @@ where
     TypeOutlives0: T: '_0,
 = <opaque>
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T>
+where
+    TraitClause0: (T: Destruct),
+{}
+
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::ptr::drop_glue
 #[lang_item(DropGlue)]
 unsafe fn drop_glue<'_0, T>(_1: &'_0 mut T)
@@ -52,8 +63,14 @@ where
     return
 }
 
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
+where
+    TraitClause0: (T: Destruct),
+
 // Full name: core::slice::index::{impl SliceIndex<[T]> for usize}::index_mut
-pub fn impl_SliceIndex_slice_for_usize::index_mut<'_0, T>(_1: usize, _2: &'_0 mut [T]) -> &'_0 mut T
+pub fn impl_SliceIndex_slice_for_usize::index_mut<'_0, T>(_1: usize, _2: &'_0 mut [T], _3: &'static Location<'static>) -> &'_0 mut T
 where
     TraitClause0: (T: Sized),
     TraitClause1: (T: Destruct),
@@ -88,11 +105,15 @@ where
 // Full name: alloc::boxed::{Box<T>[TraitClause0::ImpliedClause0, {built_in impl Sized for Global}, TraitClause1, {built_in impl Destruct for Global}]}::new
 #[track_caller]
 #[diagnostic_item("box_new")]
-pub fn new<T>(_1: T) -> Box<T>[TraitClause0::ImpliedClause0, {built_in impl Sized for Global}, TraitClause1, {built_in impl Destruct for Global}]
+pub fn new<T>(_1: T, _2: &'static Location<'static>) -> Box<T>[TraitClause0::ImpliedClause0, {built_in impl Sized for Global}, TraitClause1, {built_in impl Destruct for Global}]
 where
     TraitClause0: (T: Sized),
     TraitClause1: (T: Destruct),
 = <opaque>
+
+struct str {
+  _0: [u8],
+}
 
 // Full name: {impl Destruct for [T]}::drop_glue
 unsafe fn impl_Destruct_for_slice::drop_glue<'_0, T>(_1: &'_0 mut [T])
@@ -251,6 +272,8 @@ fn use_box(_1: Box<u32>[{built_in impl MetaSized for u32}, {built_in impl Sized 
     return
 }
 
+pub const test_crate::main::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 115u8, 105u8, 109u8, 112u8, 108u8, 101u8, 47u8, 99u8, 111u8, 110u8, 100u8, 105u8, 116u8, 105u8, 111u8, 110u8, 97u8, 108u8, 45u8, 100u8, 114u8, 111u8, 112u8, 46u8, 114u8, 115u8] } with_metadata(35usize)
+
 // Full name: test_crate::main
 fn main()
 {
@@ -259,11 +282,26 @@ fn main()
     let _2: bool; // anonymous local
     let _3: (); // anonymous local
     let _4: Box<u32>[{built_in impl MetaSized for u32}, {built_in impl Sized for Global}, {built_in impl Destruct for u32}, {built_in impl Destruct for Global}]; // anonymous local
+    let _5: *const str is !null; // anonymous local
+    let _6: NonNull<str>[{built_in impl Destruct for str}]; // anonymous local
+    let _7: PhantomData<&'10 str>[{built_in impl Destruct for &'10 str}]; // anonymous local
+    let _8: Location<'5>; // anonymous local
+    let _9: &'3 Location<'4>; // anonymous local
 
     storage_live(_0)
     _0 = ()
     storage_live(b)
-    b = new<u32>[{built_in impl Sized for u32}, {built_in impl Destruct for u32}](const 1u32)
+    storage_live(_5)
+    _5 = &raw const test_crate::main::{promoted_const} with_metadata(const 35usize)
+    storage_live(_6)
+    _6 = NonNull { 0: move _5 }
+    storage_live(_7)
+    _7 = PhantomData {  }
+    storage_live(_8)
+    _8 = Location { 0: move _6, 1: const 5u32, 2: const 13u32, 3: move _7 }
+    storage_live(_9)
+    _9 = &_8
+    b = new<u32>[{built_in impl Sized for u32}, {built_in impl Destruct for u32}](const 1u32, move _9)
     ↳⚡ unwind_continue
     storage_live(_2)
     _2 = const false
@@ -281,9 +319,14 @@ fn main()
     }
     storage_dead(_2)
     // `b` is dropped implicitly here
-    conditional_drop[impl_Destruct_for_Box::drop_glue<'0, u32, Global>[{built_in impl MetaSized for u32}, {built_in impl Sized for Global}, {built_in impl Destruct for u32}, {built_in impl Destruct for Global}]] b
+    conditional_drop[impl_Destruct_for_Box::drop_glue<'12, u32, Global>[{built_in impl MetaSized for u32}, {built_in impl Sized for Global}, {built_in impl Destruct for u32}, {built_in impl Destruct for Global}]] b
     ↳⚡ unwind_continue
     storage_dead(b)
+    storage_dead(_9)
+    storage_dead(_8)
+    storage_dead(_7)
+    storage_dead(_6)
+    storage_dead(_5)
     return
 }
 

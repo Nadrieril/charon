@@ -14,12 +14,35 @@ pub trait Sized<Self>
     non-dyn-compatible
 }
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
 // Full name: core::marker::Destruct
 #[lang_item(Destruct)]
 pub trait Destruct<Self>
 {
     fn drop_glue<'_0_1>;
     non-dyn-compatible
+}
+
+struct str {
+  _0: [u8],
+}
+
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub struct NonNull<T> {
+  pointer: *const T is !null,
+}
+
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub struct Location<'a> {
+  filename: NonNull<str>,
+  line: u32,
+  col: u32,
+  _filename: PhantomData<&'a str>,
 }
 
 // Full name: core::result::Result
@@ -33,17 +56,13 @@ where
   Err { _0: E },
 }
 
-struct str {
-  _0: [u8],
-}
-
 // Full name: core::result::unwrap_failed
 #[track_caller]
-fn unwrap_failed<'_0, '_1>(_1: &'_0 str, _2: &'_1 (dyn Debug + '_1)) -> !
+fn unwrap_failed<'_0, '_1>(_1: &'_0 str, _2: &'_1 (dyn Debug + '_1), _3: &'static Location<'static>) -> !
 = <missing>
 
 #[track_caller]
-pub fn core::result::{Result<T, E>[TraitClause0, TraitClause1]}::unwrap<T, E>(self: Result<T, E>[TraitClause0, TraitClause1]) -> T
+pub fn core::result::{Result<T, E>[TraitClause0, TraitClause1]}::unwrap<T, E>(self: Result<T, E>[TraitClause0, TraitClause1], caller_location: &'static Location<'static>) -> T
 where
     TraitClause0: (T: Sized),
     TraitClause1: (E: Sized),
@@ -51,62 +70,88 @@ where
 {
     let t: T; // return
     let self: Result<T, E>[TraitClause0, TraitClause1]; // arg #1
+    let caller_location: &'static Location<'static>; // arg #2
     let e: E; // local
-    let _3: !; // anonymous local
-    let _4: &'3 (dyn Debug + '4); // anonymous local
-    let _5: &'6 E; // anonymous local
+    let _4: !; // anonymous local
+    let _5: &'3 (dyn Debug + '4); // anonymous local
+    let _6: &'6 E; // anonymous local
 
     storage_live(t)
-    storage_live(_3)
+    storage_live(_4)
     match self {
         Result::Ok => {
         },
         Result::Err => {
             storage_live(e)
             e = move (self as variant Result::Err)._0
-            storage_live(_4)
             storage_live(_5)
-            _5 = &e
-            _4 = unsize_cast<&'6 E, &'7 (dyn Debug + '8), &vtable_of(TraitClause2)>(copy _5)
-            _3 = unwrap_failed<'11, '12>(const "called `Result::unwrap()` on an `Err` value", move _4)
+            storage_live(_6)
+            _6 = &e
+            _5 = unsize_cast<&'6 E, &'7 (dyn Debug + '8), &vtable_of(TraitClause2)>(copy _6)
+            _4 = unwrap_failed<'11, '12>(const "called `Result::unwrap()` on an `Err` value", move _5, copy caller_location)
             ↳⚡ drop[{built_in impl Destruct for E}::drop_glue<'15>] e
-                ↳⚡ storage_dead(_5)
+                ↳⚡ storage_dead(_6)
+                    storage_dead(_5)
                     storage_dead(_4)
-                    storage_dead(_3)
                     storage_dead(e)
+                    storage_dead(caller_location)
                     storage_dead(self)
                     unwind_terminate
+                storage_dead(_6)
                 storage_dead(_5)
                 storage_dead(_4)
-                storage_dead(_3)
                 storage_dead(e)
+                storage_dead(caller_location)
                 storage_dead(self)
                 unwind_continue
         },
     }
     t = move (self as variant Result::Ok)._0
+    storage_dead(_6)
     storage_dead(_5)
     storage_dead(_4)
-    storage_dead(_3)
     storage_dead(e)
+    storage_dead(caller_location)
     storage_dead(self)
     return
 }
+
+pub const test_crate::unwrap::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 114u8, 101u8, 115u8, 117u8, 108u8, 116u8, 45u8, 117u8, 110u8, 119u8, 114u8, 97u8, 112u8, 46u8, 114u8, 115u8] } with_metadata(25usize)
 
 fn test_crate::unwrap(res: Result<u32, u32>[{built_in impl Sized for u32}, {built_in impl Sized for u32}]) -> u32
 {
     let _0: u32; // return
     let res: Result<u32, u32>[{built_in impl Sized for u32}, {built_in impl Sized for u32}]; // arg #1
     let _2: Result<u32, u32>[{built_in impl Sized for u32}, {built_in impl Sized for u32}]; // anonymous local
+    let _3: *const str is !null; // anonymous local
+    let _4: NonNull<str>; // anonymous local
+    let _5: PhantomData<&'8 str>; // anonymous local
+    let _6: Location<'5>; // anonymous local
+    let _7: &'3 Location<'4>; // anonymous local
 
     storage_live(_0)
     storage_live(_2)
     _2 = copy res
-    _0 = core::result::{Result<T, E>[TraitClause0, TraitClause1]}::unwrap<u32, u32>[{built_in impl Sized for u32}, {built_in impl Sized for u32}, {impl#6}](move _2)
+    storage_live(_3)
+    _3 = &raw const test_crate::unwrap::{promoted_const} with_metadata(const 25usize)
+    storage_live(_4)
+    _4 = NonNull { pointer: move _3 }
+    storage_live(_5)
+    _5 = PhantomData {  }
+    storage_live(_6)
+    _6 = Location { filename: move _4, line: const 5u32, col: const 5u32, _filename: move _5 }
+    storage_live(_7)
+    _7 = &_6
+    _0 = core::result::{Result<T, E>[TraitClause0, TraitClause1]}::unwrap<u32, u32>[{built_in impl Sized for u32}, {built_in impl Sized for u32}, {impl#6}](move _2, move _7)
     ↳⚡ storage_dead(res)
         unwind_continue
     storage_dead(_2)
     storage_dead(res)
+    storage_dead(_7)
+    storage_dead(_6)
+    storage_dead(_5)
+    storage_dead(_4)
+    storage_dead(_3)
     return
 }
 

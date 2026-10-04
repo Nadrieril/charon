@@ -1,5 +1,13 @@
 # Final LLBC before serialization:
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 struct str {
   _0: [u8],
 }
@@ -7,8 +15,12 @@ struct str {
 // Full name: core::panicking::panic
 #[track_caller]
 #[lang_item(Panic)]
-pub fn panic(_1: &'static str) -> !
+pub fn panic(_1: &'static str, _2: &'static Location<'static>) -> !
 = <opaque>
+
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
 
 struct () {}
 
@@ -34,10 +46,31 @@ where
 {
     let _0: TraitClause1::Assoc; // return
     let _1: !; // anonymous local
+    let _2: str; // anonymous local
+    let _3: *const str; // anonymous local
+    let _4: *const str is !null; // anonymous local
+    let _5: NonNull<str>; // anonymous local
+    let _6: PhantomData<&'9 str>; // anonymous local
+    let _7: Location<'7>; // anonymous local
+    let _8: &'5 Location<'6>; // anonymous local
 
     storage_live(_0)
     storage_live(_1)
-    _1 = panic(const "not yet implemented")
+    storage_live(_2)
+    _2 = str { _0: const [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 115u8, 105u8, 109u8, 112u8, 108u8, 101u8, 47u8, 100u8, 101u8, 102u8, 97u8, 117u8, 108u8, 116u8, 45u8, 109u8, 101u8, 116u8, 104u8, 111u8, 100u8, 45u8, 119u8, 105u8, 116u8, 104u8, 45u8, 99u8, 108u8, 97u8, 117u8, 115u8, 101u8, 45u8, 97u8, 110u8, 100u8, 45u8, 109u8, 97u8, 114u8, 107u8, 101u8, 114u8, 45u8, 116u8, 114u8, 97u8, 105u8, 116u8, 46u8, 114u8, 115u8] }
+    storage_live(_3)
+    _3 = &raw const _2
+    storage_live(_4)
+    _4 = unsize_cast<*const str, *const str is !null, 62usize>(move _3)
+    storage_live(_5)
+    _5 = NonNull { 0: move _4 }
+    storage_live(_6)
+    _6 = PhantomData {  }
+    storage_live(_7)
+    _7 = Location { 0: move _5, 1: const 12u32, 2: const 9u32, 3: move _6 }
+    storage_live(_8)
+    _8 = &_7
+    _1 = panic(const "not yet implemented", move _8)
     ↳⚡ unwind_continue
 }
 

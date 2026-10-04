@@ -60,6 +60,10 @@ impl "impl_Debug_for_u32" Debug for u32 {
     vtable: lazy
 }
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
 // Full name: core::marker::Tuple
 #[fundamental]
 #[lang_item(Tuple)]
@@ -94,6 +98,10 @@ where
   Some { _0: T },
 }
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::panicking::AssertKind
 pub enum AssertKind {
   Eq,
@@ -103,7 +111,7 @@ pub enum AssertKind {
 
 // Full name: core::panicking::assert_failed
 #[track_caller]
-pub fn assert_failed<'_0, '_1, '_2, T, U>(_1: AssertKind, _2: &'_0 T, _3: &'_1 U, _4: Option<Arguments<'_2>>[{built_in impl Sized for Arguments<'_2>}]) -> !
+pub fn assert_failed<'_0, '_1, '_2, T, U>(_1: AssertKind, _2: &'_0 T, _3: &'_1 U, _4: Option<Arguments<'_2>>[{built_in impl Sized for Arguments<'_2>}], _5: &'static Location<'static>) -> !
 where
     TraitClause0: (T: MetaSized),
     TraitClause1: (U: MetaSized),
@@ -112,6 +120,10 @@ where
     TypeOutlives0: T: '_0,
     TypeOutlives1: U: '_1,
 = <opaque>
+
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
 
 struct (_,)<A> {
   _0: A,
@@ -135,6 +147,10 @@ where
   _1: B,
 }
 
+struct str {
+  _0: [u8],
+}
+
 // Full name: test_cargo_dependencies::main::{promoted_const}
 fn {promoted_const}() -> &'_ u32
 {
@@ -150,6 +166,8 @@ fn {promoted_const}() -> &'_ u32
 
 // Full name: test_cargo_dependencies::main::{promoted_const}
 const {promoted_const}: &'_ u32 = {promoted_const}()
+
+pub const test_cargo_dependencies::main::{promoted_const#2}: str = str { _0: [115u8, 114u8, 99u8, 47u8, 109u8, 97u8, 105u8, 110u8, 46u8, 114u8, 115u8] } with_metadata(11usize)
 
 // Full name: test_cargo_dependencies::main::silly_incr::{closure}
 struct {closure} {}
@@ -239,6 +257,11 @@ fn main()
     let _19: &'24 u32; // anonymous local
     let _20: Option<Arguments<'33>>[{built_in impl Sized for Arguments<'33>}]; // anonymous local
     let _21: &'37 u32; // anonymous local
+    let _22: *const str is !null; // anonymous local
+    let _23: NonNull<str>; // anonymous local
+    let _24: PhantomData<&'69 str>; // anonymous local
+    let _25: Location<'66>; // anonymous local
+    let _26: &'64 Location<'65>; // anonymous local
 
     storage_live(_0)
     storage_live(_21)
@@ -295,7 +318,17 @@ fn main()
         _18 = &(*_19)
         storage_live(_20)
         _20 = Option::None {  }
-        _14 = assert_failed<'58, '59, '60, u32, u32>[{built_in impl MetaSized for u32}, {built_in impl MetaSized for u32}, impl_Debug_for_u32, impl_Debug_for_u32](move _15, move _16, move _18, move _20)
+        storage_live(_22)
+        _22 = &raw const test_cargo_dependencies::main::{promoted_const#2} with_metadata(const 11usize)
+        storage_live(_23)
+        _23 = NonNull { 0: move _22 }
+        storage_live(_24)
+        _24 = PhantomData {  }
+        storage_live(_25)
+        _25 = Location { 0: move _23, 1: const 14u32, 2: const 5u32, 3: move _24 }
+        storage_live(_26)
+        _26 = &_25
+        _14 = assert_failed<'58, '59, '60, u32, u32>[{built_in impl MetaSized for u32}, {built_in impl MetaSized for u32}, impl_Debug_for_u32, impl_Debug_for_u32](move _15, move _16, move _18, move _20, move _26)
         ↳⚡ unwind_continue
     }
     storage_dead(_12)

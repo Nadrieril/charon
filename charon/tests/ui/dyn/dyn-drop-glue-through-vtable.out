@@ -62,18 +62,22 @@ pub unsafe trait Allocator<Self>
     vtable: core::alloc::Allocator::{vtable}
 }
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: alloc::alloc::Global
 #[lang_item(GlobalAlloc)]
 pub struct Global {}
 
 // Full name: alloc::alloc::{impl Allocator for Global}::deallocate
 #[track_caller]
-pub unsafe fn deallocate<'_0>(_1: &'_0 Global, _2: NonNull<u8>[{built_in impl Destruct for u8}], _3: Layout)
+pub unsafe fn deallocate<'_0>(_1: &'_0 Global, _2: NonNull<u8>[{built_in impl Destruct for u8}], _3: Layout, _4: &'static Location<'static>)
 = <opaque>
 
 // Full name: alloc::alloc::{impl Allocator for Global}::allocate
 #[track_caller]
-pub fn allocate<'_0>(_1: &'_0 Global, _2: Layout) -> Result<NonNull<[u8]>[{built_in impl Destruct for [u8]}], AllocError>[{built_in impl Sized for NonNull<[u8]>[{built_in impl Destruct for [u8]}]}, {built_in impl Sized for AllocError}, {built_in impl Destruct for NonNull<[u8]>[{built_in impl Destruct for [u8]}]}, {built_in impl Destruct for AllocError}]
+pub fn allocate<'_0>(_1: &'_0 Global, _2: Layout, _3: &'static Location<'static>) -> Result<NonNull<[u8]>[{built_in impl Destruct for [u8]}], AllocError>[{built_in impl Sized for NonNull<[u8]>[{built_in impl Destruct for [u8]}]}, {built_in impl Sized for AllocError}, {built_in impl Destruct for NonNull<[u8]>[{built_in impl Destruct for [u8]}]}, {built_in impl Destruct for AllocError}]
 = <opaque>
 
 // Full name: alloc::alloc::{impl Allocator for Global}

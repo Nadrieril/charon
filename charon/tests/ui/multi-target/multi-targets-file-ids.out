@@ -86,6 +86,9 @@ pub unsafe fn core::core_arch::x86::sse2::_mm_loadu_si128(_1: *const core::core_
 pub unsafe fn core::core_arch::x86::sse2::_mm_storeu_si128(_1: *mut core::core_arch::x86::__m128i, _2: core::core_arch::x86::__m128i)
 = <opaque>
 
+#[lang_item(PanicLocation)]
+pub opaque type core::panic::location::Location<'a>
+
 #[lang_item(Index)]
 pub trait core::ops::index::Index<Self, Idx>
 {
@@ -98,7 +101,7 @@ pub trait core::ops::index::Index<Self, Idx>
     vtable: core::ops::index::Index::{vtable}<Idx, Self::Output>
 }
 
-pub fn core::array::{impl core::ops::index::Index<I> for [T; N]}::index<'_0, T, I, const N : usize>(_1: &'_0 [T; N], _2: I) -> &'_0 TraitClause2::Output
+pub fn core::array::{impl core::ops::index::Index<I> for [T; N]}::index<'_0, T, I, const N : usize>(_1: &'_0 [T; N], _2: I, _3: &'static core::panic::location::Location<'static>) -> &'_0 TraitClause2::Output
 where
     TraitClause0: (T: core::marker::Sized),
     TraitClause1: (I: core::marker::Sized),
@@ -119,7 +122,7 @@ pub trait core::ops::index::IndexMut<Self, Idx>
     vtable: core::ops::index::IndexMut::{vtable}<Idx, Self::ImpliedClause1::Output>
 }
 
-pub fn core::array::{impl core::ops::index::IndexMut<I> for [T; N]}::index_mut<'_0, T, I, const N : usize>(_1: &'_0 mut [T; N], _2: I) -> &'_0 mut TraitClause2::ImpliedClause1::Output
+pub fn core::array::{impl core::ops::index::IndexMut<I> for [T; N]}::index_mut<'_0, T, I, const N : usize>(_1: &'_0 mut [T; N], _2: I, _3: &'static core::panic::location::Location<'static>) -> &'_0 mut TraitClause2::ImpliedClause1::Output
 where
     TraitClause0: (T: core::marker::Sized),
     TraitClause1: (I: core::marker::Sized),
@@ -330,7 +333,7 @@ pub unsafe trait core::slice::index::SliceIndex<Self, T>
     vtable: core::slice::index::SliceIndex::{vtable}<T, Self::Output>
 }
 
-pub fn core::slice::index::{impl core::ops::index::Index<I> for [T]}::index<'_0, T, I>(_1: &'_0 [T], _2: I) -> &'_0 TraitClause2::Output
+pub fn core::slice::index::{impl core::ops::index::Index<I> for [T]}::index<'_0, T, I>(_1: &'_0 [T], _2: I, _3: &'static core::panic::location::Location<'static>) -> &'_0 TraitClause2::Output
 where
     TraitClause0: (T: core::marker::Sized),
     TraitClause1: (I: core::marker::Sized),
@@ -355,7 +358,7 @@ where
     vtable: lazy
 }
 
-pub fn core::slice::index::{impl core::ops::index::IndexMut<I> for [T]}::index_mut<'_0, T, I>(_1: &'_0 mut [T], _2: I) -> &'_0 mut TraitClause2::Output
+pub fn core::slice::index::{impl core::ops::index::IndexMut<I> for [T]}::index_mut<'_0, T, I>(_1: &'_0 mut [T], _2: I, _3: &'static core::panic::location::Location<'static>) -> &'_0 mut TraitClause2::Output
 where
     TraitClause0: (T: core::marker::Sized),
     TraitClause1: (I: core::marker::Sized),
@@ -379,26 +382,26 @@ where
     vtable: lazy
 }
 
-pub fn core::slice::index::{impl core::slice::index::SliceIndex<[T]> for usize}::index_mut<'_0, T>(_1: usize, _2: &'_0 mut [T]) -> &'_0 mut T
+pub fn core::slice::index::{impl core::slice::index::SliceIndex<[T]> for usize}::index_mut<'_0, T>(_1: usize, _2: &'_0 mut [T], _3: &'static core::panic::location::Location<'static>) -> &'_0 mut T
 where
     TraitClause0: (T: core::marker::Sized),
     TypeOutlives0: T: '_0,
 = <opaque>
 
-pub fn core::slice::index::{impl core::slice::index::SliceIndex<[T]> for usize}::index<'_0, T>(_1: usize, _2: &'_0 [T]) -> &'_0 T
+pub fn core::slice::index::{impl core::slice::index::SliceIndex<[T]> for usize}::index<'_0, T>(_1: usize, _2: &'_0 [T], _3: &'static core::panic::location::Location<'static>) -> &'_0 T
 where
     TraitClause0: (T: core::marker::Sized),
     TypeOutlives0: T: '_0,
 = <opaque>
 
 #[track_caller]
-pub unsafe fn core::slice::index::{impl core::slice::index::SliceIndex<[T]> for usize}::get_unchecked_mut<T>(_1: usize, _2: *mut [T]) -> *mut T
+pub unsafe fn core::slice::index::{impl core::slice::index::SliceIndex<[T]> for usize}::get_unchecked_mut<T>(_1: usize, _2: *mut [T], _3: &'static core::panic::location::Location<'static>) -> *mut T
 where
     TraitClause0: (T: core::marker::Sized),
 = <opaque>
 
 #[track_caller]
-pub unsafe fn core::slice::index::{impl core::slice::index::SliceIndex<[T]> for usize}::get_unchecked<T>(_1: usize, _2: *const [T]) -> *const T
+pub unsafe fn core::slice::index::{impl core::slice::index::SliceIndex<[T]> for usize}::get_unchecked<T>(_1: usize, _2: *const [T], _3: &'static core::panic::location::Location<'static>) -> *const T
 where
     TraitClause0: (T: core::marker::Sized),
 = <opaque>

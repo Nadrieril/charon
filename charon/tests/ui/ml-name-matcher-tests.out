@@ -21,6 +21,10 @@ where
     TypeOutlives0: T: '_0,
 = <opaque>
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
 struct () {}
 
 // Full name: core::marker::Destruct
@@ -58,6 +62,14 @@ where
     TypeOutlives0: T: '_0,
 = <opaque>
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
+
 // Full name: core::slice::index::SliceIndex
 #[diagnostic_item("SliceIndex")]
 pub unsafe trait SliceIndex<Self, T>
@@ -78,7 +90,7 @@ pub unsafe trait SliceIndex<Self, T>
 }
 
 // Full name: core::slice::index::{impl Index<I> for [T]}::index
-pub fn impl_Index_for_slice::index<'_0, T, I>(_1: &'_0 [T], _2: I) -> &'_0 TraitClause2::Output
+pub fn impl_Index_for_slice::index<'_0, T, I>(_1: &'_0 [T], _2: I, _3: &'static Location<'static>) -> &'_0 TraitClause2::Output
 where
     TraitClause0: (T: Sized),
     TraitClause1: (I: Sized),
@@ -89,14 +101,14 @@ where
 = <opaque>
 
 // Full name: core::slice::index::{impl SliceIndex<[T]> for RangeFrom<usize>[{built_in impl Sized for usize}]}::index_mut
-pub fn impl_SliceIndex_slice_for_RangeFrom_usize::index_mut<'_0, T>(_1: RangeFrom<usize>[{built_in impl Sized for usize}], _2: &'_0 mut [T]) -> &'_0 mut [T]
+pub fn impl_SliceIndex_slice_for_RangeFrom_usize::index_mut<'_0, T>(_1: RangeFrom<usize>[{built_in impl Sized for usize}], _2: &'_0 mut [T], _3: &'static Location<'static>) -> &'_0 mut [T]
 where
     TraitClause0: (T: Sized),
     TypeOutlives0: T: '_0,
 = <opaque>
 
 // Full name: core::slice::index::{impl SliceIndex<[T]> for RangeFrom<usize>[{built_in impl Sized for usize}]}::index
-pub fn impl_SliceIndex_slice_for_RangeFrom_usize::index<'_0, T>(_1: RangeFrom<usize>[{built_in impl Sized for usize}], _2: &'_0 [T]) -> &'_0 [T]
+pub fn impl_SliceIndex_slice_for_RangeFrom_usize::index<'_0, T>(_1: RangeFrom<usize>[{built_in impl Sized for usize}], _2: &'_0 [T], _3: &'static Location<'static>) -> &'_0 [T]
 where
     TraitClause0: (T: Sized),
     TypeOutlives0: T: '_0,
@@ -166,12 +178,12 @@ where
   _1: B,
 }
 
-struct (_,)<A> {
-  _0: A,
-}
-
 struct str {
   _0: [u8],
+}
+
+struct (_,)<A> {
+  _0: A,
 }
 
 // Full name: test_crate::foo::bar
@@ -283,6 +295,8 @@ impl "impl_Trait_u32_for_tuple_u8_bool" Trait<u32> for (u8, bool) {
     non-dyn-compatible
 }
 
+pub const test_crate::foo::{promoted_const#4}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 109u8, 108u8, 45u8, 110u8, 97u8, 109u8, 101u8, 45u8, 109u8, 97u8, 116u8, 99u8, 104u8, 101u8, 114u8, 45u8, 116u8, 101u8, 115u8, 116u8, 115u8, 46u8, 114u8, 115u8] } with_metadata(33usize)
+
 fn test_crate::foo::{promoted_const}() -> &'_ [bool; 1usize]
 {
     let _0: &'0 [bool; 1usize]; // return
@@ -336,6 +350,11 @@ fn foo()
     let _9: RangeFrom<usize>[{built_in impl Sized for usize}]; // anonymous local
     let _10: &'10 [bool; 1usize]; // anonymous local
     let _11: &'11 Option<i32>[{built_in impl Sized for i32}]; // anonymous local
+    let _12: *const str is !null; // anonymous local
+    let _13: NonNull<str>; // anonymous local
+    let _14: PhantomData<&'28 str>; // anonymous local
+    let _15: Location<'25>; // anonymous local
+    let _16: &'23 Location<'24>; // anonymous local
 
     storage_live(_0)
     storage_live(_10)
@@ -367,7 +386,17 @@ fn foo()
     _8 = &(*slice) with_metadata(copy slice.metadata)
     storage_live(_9)
     _9 = RangeFrom { start: const 1usize }
-    _7 = impl_Index_for_slice::index<'19, bool, RangeFrom<usize>[{built_in impl Sized for usize}]>[{built_in impl Sized for bool}, {built_in impl Sized for RangeFrom<usize>[{built_in impl Sized for usize}]}, impl_SliceIndex_slice_for_RangeFrom_usize<bool>[{built_in impl Sized for bool}]](move _8, move _9)
+    storage_live(_12)
+    _12 = &raw const test_crate::foo::{promoted_const#4} with_metadata(const 33usize)
+    storage_live(_13)
+    _13 = NonNull { 0: move _12 }
+    storage_live(_14)
+    _14 = PhantomData {  }
+    storage_live(_15)
+    _15 = Location { 0: move _13, 1: const 83u32, 2: const 19u32, 3: move _14 }
+    storage_live(_16)
+    _16 = &_15
+    _7 = impl_Index_for_slice::index<'19, bool, RangeFrom<usize>[{built_in impl Sized for usize}]>[{built_in impl Sized for bool}, {built_in impl Sized for RangeFrom<usize>[{built_in impl Sized for usize}]}, impl_SliceIndex_slice_for_RangeFrom_usize<bool>[{built_in impl Sized for bool}]](move _8, move _9, move _16)
     ↳⚡ unwind_continue
     storage_dead(_9)
     storage_dead(_8)

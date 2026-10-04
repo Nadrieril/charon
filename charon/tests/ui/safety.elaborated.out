@@ -1,5 +1,9 @@
 # Final LLBC before serialization:
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 opaque type core::marker::MetaSized::{vtable}
 
 // Full name: core::marker::MetaSized
@@ -30,7 +34,7 @@ pub trait Sized<Self>
 }
 
 // Full name: core::array::{impl Index<I> for [T; N]}::index
-pub fn impl_Index_for_array::index<'_0, T, I, const N : usize>(_1: &'_0 [T; N], _2: I) -> &'_0 TraitClause2::Output
+pub fn impl_Index_for_array::index<'_0, T, I, const N : usize>(_1: &'_0 [T; N], _2: I, _3: &'static Location<'static>) -> &'_0 TraitClause2::Output
 where
     TraitClause0: (T: Sized),
     TraitClause1: (I: Sized),
@@ -297,7 +301,7 @@ pub unsafe trait SliceIndex<Self, T>
 }
 
 // Full name: core::slice::index::{impl Index<I> for [T]}::index
-pub fn impl_Index_for_slice::index<'_0, T, I>(_1: &'_0 [T], _2: I) -> &'_0 TraitClause2::Output
+pub fn impl_Index_for_slice::index<'_0, T, I>(_1: &'_0 [T], _2: I, _3: &'static Location<'static>) -> &'_0 TraitClause2::Output
 where
     TraitClause0: (T: Sized),
     TraitClause1: (I: Sized),
@@ -323,14 +327,14 @@ where
 }
 
 // Full name: core::slice::index::{impl SliceIndex<[T]> for usize}::index_mut
-pub fn impl_SliceIndex_slice_for_usize::index_mut<'_0, T>(_1: usize, _2: &'_0 mut [T]) -> &'_0 mut T
+pub fn impl_SliceIndex_slice_for_usize::index_mut<'_0, T>(_1: usize, _2: &'_0 mut [T], _3: &'static Location<'static>) -> &'_0 mut T
 where
     TraitClause0: (T: Sized),
     TypeOutlives0: T: '_0,
 = <opaque>
 
 // Full name: core::slice::index::{impl SliceIndex<[T]> for usize}::index
-pub fn impl_SliceIndex_slice_for_usize::index<'_0, T>(_1: usize, _2: &'_0 [T]) -> &'_0 T
+pub fn impl_SliceIndex_slice_for_usize::index<'_0, T>(_1: usize, _2: &'_0 [T], _3: &'static Location<'static>) -> &'_0 T
 where
     TraitClause0: (T: Sized),
     TypeOutlives0: T: '_0,
@@ -339,7 +343,7 @@ where
 // Full name: core::slice::index::{impl SliceIndex<[T]> for usize}::get_unchecked_mut
 // unsafe to call
 #[track_caller]
-pub unsafe fn impl_SliceIndex_slice_for_usize::get_unchecked_mut<T>(_1: usize, _2: *mut [T]) -> *mut T
+pub unsafe fn impl_SliceIndex_slice_for_usize::get_unchecked_mut<T>(_1: usize, _2: *mut [T], _3: &'static Location<'static>) -> *mut T
 where
     TraitClause0: (T: Sized),
 = <opaque>
@@ -347,7 +351,7 @@ where
 // Full name: core::slice::index::{impl SliceIndex<[T]> for usize}::get_unchecked
 // unsafe to call
 #[track_caller]
-pub unsafe fn impl_SliceIndex_slice_for_usize::get_unchecked<T>(_1: usize, _2: *const [T]) -> *const T
+pub unsafe fn impl_SliceIndex_slice_for_usize::get_unchecked<T>(_1: usize, _2: *const [T], _3: &'static Location<'static>) -> *const T
 where
     TraitClause0: (T: Sized),
 = <opaque>

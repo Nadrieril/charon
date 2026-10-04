@@ -1,5 +1,9 @@
 # Final LLBC before serialization:
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::marker::MetaSized
 #[fundamental]
 #[lang_item(MetaSized)]
@@ -28,7 +32,7 @@ pub trait Sized<Self>
 }
 
 // Full name: core::array::{impl Index<I> for [T; N]}::index
-pub fn impl_Index_for_array::index<'_0, T, I, const N : usize>(_1: &'_0 [T; N], _2: I) -> &'_0 TraitClause2::Output
+pub fn impl_Index_for_array::index<'_0, T, I, const N : usize>(_1: &'_0 [T; N], _2: I, _3: &'static Location<'static>) -> &'_0 TraitClause2::Output
 where
     TraitClause0: (T: Sized),
     TraitClause1: (I: Sized),
@@ -366,6 +370,14 @@ where
     TraitClause1: (I: Iterator),
 = <opaque>
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
+
 // Full name: core::slice::index::SliceIndex
 #[diagnostic_item("SliceIndex")]
 pub unsafe trait SliceIndex<Self, T>
@@ -386,7 +398,7 @@ pub unsafe trait SliceIndex<Self, T>
 }
 
 // Full name: core::slice::index::{impl Index<I> for [T]}::index
-pub fn impl_Index_for_slice::index<'_0, T, I>(_1: &'_0 [T], _2: I) -> &'_0 TraitClause2::Output
+pub fn impl_Index_for_slice::index<'_0, T, I>(_1: &'_0 [T], _2: I, _3: &'static Location<'static>) -> &'_0 TraitClause2::Output
 where
     TraitClause0: (T: Sized),
     TraitClause1: (I: Sized),
@@ -412,14 +424,14 @@ where
 }
 
 // Full name: core::slice::index::{impl SliceIndex<[T]> for usize}::index_mut
-pub fn impl_SliceIndex_slice_for_usize::index_mut<'_0, T>(_1: usize, _2: &'_0 mut [T]) -> &'_0 mut T
+pub fn impl_SliceIndex_slice_for_usize::index_mut<'_0, T>(_1: usize, _2: &'_0 mut [T], _3: &'static Location<'static>) -> &'_0 mut T
 where
     TraitClause0: (T: Sized),
     TypeOutlives0: T: '_0,
 = <opaque>
 
 // Full name: core::slice::index::{impl SliceIndex<[T]> for usize}::index
-pub fn impl_SliceIndex_slice_for_usize::index<'_0, T>(_1: usize, _2: &'_0 [T]) -> &'_0 T
+pub fn impl_SliceIndex_slice_for_usize::index<'_0, T>(_1: usize, _2: &'_0 [T], _3: &'static Location<'static>) -> &'_0 T
 where
     TraitClause0: (T: Sized),
     TypeOutlives0: T: '_0,
@@ -427,14 +439,14 @@ where
 
 // Full name: core::slice::index::{impl SliceIndex<[T]> for usize}::get_unchecked_mut
 #[track_caller]
-pub unsafe fn impl_SliceIndex_slice_for_usize::get_unchecked_mut<T>(_1: usize, _2: *mut [T]) -> *mut T
+pub unsafe fn impl_SliceIndex_slice_for_usize::get_unchecked_mut<T>(_1: usize, _2: *mut [T], _3: &'static Location<'static>) -> *mut T
 where
     TraitClause0: (T: Sized),
 = <opaque>
 
 // Full name: core::slice::index::{impl SliceIndex<[T]> for usize}::get_unchecked
 #[track_caller]
-pub unsafe fn impl_SliceIndex_slice_for_usize::get_unchecked<T>(_1: usize, _2: *const [T]) -> *const T
+pub unsafe fn impl_SliceIndex_slice_for_usize::get_unchecked<T>(_1: usize, _2: *const [T], _3: &'static Location<'static>) -> *const T
 where
     TraitClause0: (T: Sized),
 = <opaque>
@@ -499,7 +511,7 @@ where
 = <opaque>
 
 // Full name: alloc::vec::{impl IndexMut<I> for Vec<T>[TraitClause0, TraitClause2]}::index_mut
-pub fn impl_IndexMut_for_Vec::index_mut<'_0, T, I, A>(_1: &'_0 mut Vec<T>[TraitClause0, TraitClause2], _2: I) -> &'_0 mut TraitClause3::Output
+pub fn impl_IndexMut_for_Vec::index_mut<'_0, T, I, A>(_1: &'_0 mut Vec<T>[TraitClause0, TraitClause2], _2: I, _3: &'static Location<'static>) -> &'_0 mut TraitClause3::Output
 where
     TraitClause0: (T: Sized),
     TraitClause1: (I: Sized),
@@ -1686,6 +1698,8 @@ pub fn sum_array<const N : usize>(a: [u32; N]) -> u32
     return
 }
 
+pub const test_crate::clear::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 99u8, 111u8, 110u8, 116u8, 114u8, 111u8, 108u8, 45u8, 102u8, 108u8, 111u8, 119u8, 47u8, 108u8, 111u8, 111u8, 112u8, 115u8, 46u8, 114u8, 115u8] } with_metadata(30usize)
+
 // Full name: test_crate::clear
 pub fn clear<'_0>(v: &'_0 mut Vec<u32>[{built_in impl Sized for u32}, {built_in impl Sized for Global}])
 {
@@ -1700,6 +1714,11 @@ pub fn clear<'_0>(v: &'_0 mut Vec<u32>[{built_in impl Sized for u32}, {built_in 
     let _8: &'6 mut Vec<u32>[{built_in impl Sized for u32}, {built_in impl Sized for Global}]; // anonymous local
     let _9: usize; // anonymous local
     let _10: usize; // anonymous local
+    let _11: *const str is !null; // anonymous local
+    let _12: NonNull<str>; // anonymous local
+    let _13: PhantomData<&'19 str>; // anonymous local
+    let _14: Location<'16>; // anonymous local
+    let _15: &'14 Location<'15>; // anonymous local
 
     storage_live(_0)
     storage_live(_10)
@@ -1731,7 +1750,17 @@ pub fn clear<'_0>(v: &'_0 mut Vec<u32>[{built_in impl Sized for u32}, {built_in 
         _8 = &mut (*v)
         storage_live(_9)
         _9 = copy i
-        _7 = impl_IndexMut_for_Vec::index_mut<'10, u32, usize, Global>[{built_in impl Sized for u32}, {built_in impl Sized for usize}, {built_in impl Sized for Global}, impl_SliceIndex_slice_for_usize<u32>[{built_in impl Sized for u32}]](move _8, move _9)
+        storage_live(_11)
+        _11 = &raw const test_crate::clear::{promoted_const} with_metadata(const 30usize)
+        storage_live(_12)
+        _12 = NonNull { 0: move _11 }
+        storage_live(_13)
+        _13 = PhantomData {  }
+        storage_live(_14)
+        _14 = Location { 0: move _12, 1: const 211u32, 2: const 10u32, 3: move _13 }
+        storage_live(_15)
+        _15 = &_14
+        _7 = impl_IndexMut_for_Vec::index_mut<'10, u32, usize, Global>[{built_in impl Sized for u32}, {built_in impl Sized for usize}, {built_in impl Sized for Global}, impl_SliceIndex_slice_for_usize<u32>[{built_in impl Sized for u32}]](move _8, move _9, move _15)
         ↳⚡ storage_dead(_10)
             storage_dead(v)
             unwind_continue
@@ -1751,6 +1780,11 @@ pub fn clear<'_0>(v: &'_0 mut Vec<u32>[{built_in impl Sized for u32}, {built_in 
     storage_dead(i)
     storage_dead(_10)
     storage_dead(v)
+    storage_dead(_15)
+    storage_dead(_14)
+    storage_dead(_13)
+    storage_dead(_12)
+    storage_dead(_11)
     return
 }
 

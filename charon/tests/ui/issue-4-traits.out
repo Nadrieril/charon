@@ -114,9 +114,21 @@ impl "impl_Copy_for_u8" Copy for u8 {
     non-dyn-compatible
 }
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
+
 // Full name: core::result::{Result<T, E>[TraitClause0, TraitClause1]}::unwrap
 #[track_caller]
-pub fn unwrap<T, E>(_1: Result<T, E>[TraitClause0, TraitClause1]) -> T
+pub fn unwrap<T, E>(_1: Result<T, E>[TraitClause0, TraitClause1], _2: &'static Location<'static>) -> T
 where
     TraitClause0: (T: Sized),
     TraitClause1: (E: Sized),
@@ -124,6 +136,12 @@ where
 = <opaque>
 
 struct () {}
+
+struct str {
+  _0: [u8],
+}
+
+pub const test_crate::trait_error::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 105u8, 115u8, 115u8, 117u8, 101u8, 45u8, 52u8, 45u8, 116u8, 114u8, 97u8, 105u8, 116u8, 115u8, 46u8, 114u8, 115u8] } with_metadata(26usize)
 
 // Full name: test_crate::trait_error
 fn trait_error<'_0>(s: &'_0 [u8])
@@ -133,6 +151,11 @@ fn trait_error<'_0>(s: &'_0 [u8])
     let _array: [u8; 4usize]; // local
     let _3: Result<[u8; 4usize], TryFromSliceError>[{built_in impl Sized for [u8; 4usize]}, {built_in impl Sized for TryFromSliceError}]; // anonymous local
     let _4: &'2 [u8]; // anonymous local
+    let _5: *const str is !null; // anonymous local
+    let _6: NonNull<str>; // anonymous local
+    let _7: PhantomData<&'22 str>; // anonymous local
+    let _8: Location<'19>; // anonymous local
+    let _9: &'17 Location<'18>; // anonymous local
 
     storage_live(_0)
     _0 = ()
@@ -144,7 +167,17 @@ fn trait_error<'_0>(s: &'_0 [u8])
     ↳⚡ storage_dead(s)
         unwind_continue
     storage_dead(_4)
-    _array = unwrap<[u8; 4usize], TryFromSliceError>[{built_in impl Sized for [u8; 4usize]}, {built_in impl Sized for TryFromSliceError}, impl_Debug_for_TryFromSliceError](move _3)
+    storage_live(_5)
+    _5 = &raw const test_crate::trait_error::{promoted_const} with_metadata(const 26usize)
+    storage_live(_6)
+    _6 = NonNull { 0: move _5 }
+    storage_live(_7)
+    _7 = PhantomData {  }
+    storage_live(_8)
+    _8 = Location { 0: move _6, 1: const 3u32, 2: const 27u32, 3: move _7 }
+    storage_live(_9)
+    _9 = &_8
+    _array = unwrap<[u8; 4usize], TryFromSliceError>[{built_in impl Sized for [u8; 4usize]}, {built_in impl Sized for TryFromSliceError}, impl_Debug_for_TryFromSliceError](move _3, move _9)
     ↳⚡ storage_dead(s)
         unwind_continue
     storage_dead(_3)
@@ -153,6 +186,11 @@ fn trait_error<'_0>(s: &'_0 [u8])
     _0 = ()
     storage_dead(_array)
     storage_dead(s)
+    storage_dead(_9)
+    storage_dead(_8)
+    storage_dead(_7)
+    storage_dead(_6)
+    storage_dead(_5)
     return
 }
 

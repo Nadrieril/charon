@@ -25,9 +25,13 @@ pub trait From<Self, T>
     non-dyn-compatible
 }
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::convert::{impl Into<U> for T}::into
 #[track_caller]
-pub fn into<T, U>(self: T) -> U
+pub fn into<T, U>(self: T, caller_location: &'static Location<'static>) -> U
 where
     TraitClause0: (T: Sized),
     TraitClause1: (U: Sized),
@@ -35,15 +39,18 @@ where
 {
     let _0: U; // return
     let self: T; // arg #1
-    let _2: T; // anonymous local
+    let caller_location: &'static Location<'static>; // arg #2
+    let _3: T; // anonymous local
 
     storage_live(_0)
-    storage_live(_2)
-    _2 = move self
-    _0 = TraitClause2::from(move _2)
-    ↳⚡ storage_dead(self)
+    storage_live(_3)
+    _3 = move self
+    _0 = TraitClause2::from(move _3)
+    ↳⚡ storage_dead(caller_location)
+        storage_dead(self)
         unwind_continue
-    storage_dead(_2)
+    storage_dead(_3)
+    storage_dead(caller_location)
     storage_dead(self)
     return
 }
@@ -136,6 +143,10 @@ impl "impl_From_u32_for_u64" From<u32> for u64 {
     non-dyn-compatible
 }
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
 // Full name: core::option::Option
 #[lang_item(Option)]
 #[diagnostic_item("Option")]
@@ -172,9 +183,15 @@ where
     return
 }
 
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
+
 struct str {
   _0: [u8],
 }
+
+pub const test_crate::foo::{promoted_const#4}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 102u8, 105u8, 108u8, 116u8, 101u8, 114u8, 105u8, 110u8, 103u8, 47u8, 111u8, 112u8, 97u8, 99u8, 105u8, 116u8, 121u8, 46u8, 114u8, 115u8] } with_metadata(29usize)
 
 // Full name: test_crate::foo
 fn foo()
@@ -189,11 +206,16 @@ fn foo()
     let _7: &'7 i32; // anonymous local
     let _8: &'8 Option<i32>[{built_in impl Sized for i32}]; // anonymous local
     let _9: &'9 Option<i32>[{built_in impl Sized for i32}]; // anonymous local
-    let _10: &'12 i32; // anonymous local
-    let _11: &'15 Option<i32>[{built_in impl Sized for i32}]; // anonymous local
+    let _10: &'21 i32; // anonymous local
+    let _11: &'24 Option<i32>[{built_in impl Sized for i32}]; // anonymous local
     let _12: Option<i32>[{built_in impl Sized for i32}]; // anonymous local
-    let _13: &'16 i32; // anonymous local
+    let _13: &'25 i32; // anonymous local
     let _14: i32; // anonymous local
+    let _15: *const str is !null; // anonymous local
+    let _16: NonNull<str>; // anonymous local
+    let _17: PhantomData<&'20 str>; // anonymous local
+    let _18: Location<'17>; // anonymous local
+    let _19: &'15 Location<'16>; // anonymous local
 
     storage_live(_9)
     storage_live(_11)
@@ -216,7 +238,17 @@ fn foo()
     storage_dead(_2)
     storage_dead(_1)
     storage_live(_3)
-    _3 = into<u32, u64>[{built_in impl Sized for u32}, {built_in impl Sized for u64}, impl_From_u32_for_u64](const 42u32)
+    storage_live(_15)
+    _15 = &raw const test_crate::foo::{promoted_const#4} with_metadata(const 29usize)
+    storage_live(_16)
+    _16 = NonNull { 0: move _15 }
+    storage_live(_17)
+    _17 = PhantomData {  }
+    storage_live(_18)
+    _18 = Location { 0: move _16, 1: const 18u32, 2: const 18u32, 3: move _17 }
+    storage_live(_19)
+    _19 = &_18
+    _3 = into<u32, u64>[{built_in impl Sized for u32}, {built_in impl Sized for u64}, impl_From_u32_for_u64](const 42u32, move _19)
     ↳⚡ storage_dead(_8)
         storage_dead(_7)
         unwind_continue
@@ -234,7 +266,7 @@ fn foo()
     _7 = move _10
     _6 = &(*_7)
     _5 = &(*_6)
-    _4 = from_ref<'14, i32>[{built_in impl Sized for i32}](move _5)
+    _4 = from_ref<'23, i32>[{built_in impl Sized for i32}](move _5)
     ↳⚡ storage_dead(_8)
         storage_dead(_7)
         unwind_continue
@@ -244,6 +276,11 @@ fn foo()
     _0 = ()
     storage_dead(_8)
     storage_dead(_7)
+    storage_dead(_19)
+    storage_dead(_18)
+    storage_dead(_17)
+    storage_dead(_16)
+    storage_dead(_15)
     storage_dead(_14)
     storage_dead(_13)
     storage_dead(_12)

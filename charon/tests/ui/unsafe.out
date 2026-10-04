@@ -175,6 +175,10 @@ pub trait Copy<Self>
 #[diagnostic_item("Sync")]
 pub unsafe trait Sync<Self>
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
 // Full name: core::marker::Freeze
 #[lang_item(Freeze)]
 pub unsafe trait Freeze<Self>
@@ -183,9 +187,13 @@ pub unsafe trait Freeze<Self>
 #[lang_item(Unpin)]
 pub trait Unpin<Self>
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::ptr::const_ptr::{*const T}::read
 #[track_caller]
-pub unsafe fn read<T>(_1: *const T) -> T
+pub unsafe fn read<T>(_1: *const T, _2: &'static Location<'static>) -> T
 where
     TraitClause0: (T: Sized),
 = <opaque>
@@ -214,6 +222,14 @@ where
     TraitClause0: (T: Thin),
 = <opaque>
 
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
+
+struct str {
+  _0: [u8],
+}
+
 struct (_, _)<A, B>
 where
     TraitClause0: (A: Sized),
@@ -222,9 +238,7 @@ where
   _1: B,
 }
 
-struct str {
-  _0: [u8],
-}
+pub const test_crate::call_unsafe_fn::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 117u8, 110u8, 115u8, 97u8, 102u8, 101u8, 46u8, 114u8, 115u8] } with_metadata(18usize)
 
 // Full name: test_crate::call_unsafe_fn
 fn call_unsafe_fn()
@@ -233,6 +247,11 @@ fn call_unsafe_fn()
     let x: *const u32; // local
     let _2: u32; // anonymous local
     let _3: *const u32; // anonymous local
+    let _4: *const str is !null; // anonymous local
+    let _5: NonNull<str>; // anonymous local
+    let _6: PhantomData<&'8 str>; // anonymous local
+    let _7: Location<'5>; // anonymous local
+    let _8: &'3 Location<'4>; // anonymous local
 
     storage_live(_0)
     _0 = ()
@@ -244,12 +263,27 @@ fn call_unsafe_fn()
     storage_live(_2)
     storage_live(_3)
     _3 = copy x
-    _2 = read<u32>[{built_in impl Sized for u32}](move _3)
+    storage_live(_4)
+    _4 = &raw const test_crate::call_unsafe_fn::{promoted_const} with_metadata(const 18usize)
+    storage_live(_5)
+    _5 = NonNull { 0: move _4 }
+    storage_live(_6)
+    _6 = PhantomData {  }
+    storage_live(_7)
+    _7 = Location { 0: move _5, 1: const 9u32, 2: const 22u32, 3: move _6 }
+    storage_live(_8)
+    _8 = &_7
+    _2 = read<u32>[{built_in impl Sized for u32}](move _3, move _8)
     ↳⚡ unwind_continue
     storage_dead(_3)
     storage_dead(_2)
     _0 = ()
     storage_dead(x)
+    storage_dead(_8)
+    storage_dead(_7)
+    storage_dead(_6)
+    storage_dead(_5)
+    storage_dead(_4)
     return
 }
 

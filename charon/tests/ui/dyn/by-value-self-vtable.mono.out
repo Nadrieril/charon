@@ -7,11 +7,32 @@ opaque type core::marker::MetaSized::{vtable}
 #[lang_item(MetaSized)]
 pub trait MetaSized<Self>
 
+// Full name: core::marker::Sized
+#[fundamental]
+#[lang_item(Sized)]
+pub trait Sized<Self>
+{
+    proof ImpliedClause0: (Self: MetaSized)
+    non-dyn-compatible
+}
+
 struct () {}
 
 vtable core::marker::MetaSized::{vtable}::<S>: core::marker::MetaSized::{vtable} = Opaque(VTable was chosen to be opaque)
 
 vtable core::marker::MetaSized::{vtable}::<*mut u32>: core::marker::MetaSized::{vtable} = Opaque(VTable was chosen to be opaque)
+
+// Full name: core::marker::PhantomData::<&'_ str>
+#[lang_item(PhantomData)]
+pub struct PhantomData::<&'_ str> {}
+
+// Full name: core::panic::location::Location::<'_>
+#[lang_item(PanicLocation)]
+pub opaque type Location::<'_>
+
+// Full name: core::ptr::non_null::NonNull::<str>
+#[lang_item(NonNull)]
+pub opaque type NonNull::<str>
 
 // Full name: alloc::boxed::Box::<S>
 #[fundamental]
@@ -47,13 +68,17 @@ struct S {
 
 #[track_caller]
 #[diagnostic_item("box_new")]
-pub fn alloc::boxed::{Box::<S, Global>}::new::<S>(_1: S) -> Box::<S, Global>
+pub fn alloc::boxed::{Box::<S, Global>}::new::<S>(_1: S, _2: &'static Location::<'_>) -> Box::<S, Global>
 = <opaque>
 
 #[track_caller]
 #[diagnostic_item("box_new")]
-pub fn alloc::boxed::{Box::<*mut u32, Global>}::new::<*mut u32>(_1: *mut u32) -> Box::<*mut u32, Global>
+pub fn alloc::boxed::{Box::<*mut u32, Global>}::new::<*mut u32>(_1: *mut u32, _2: &'static Location::<'_>) -> Box::<*mut u32, Global>
 = <opaque>
+
+struct str {
+  _0: [u8],
+}
 
 struct test_crate::Consume::{vtable} {
   size: usize,
@@ -245,6 +270,8 @@ impl Consume for *mut u32 {
     vtable: {impl Consume for *mut u32}::{vtable}
 }
 
+pub const test_crate::mk::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 100u8, 121u8, 110u8, 47u8, 98u8, 121u8, 45u8, 118u8, 97u8, 108u8, 117u8, 101u8, 45u8, 115u8, 101u8, 108u8, 102u8, 45u8, 118u8, 116u8, 97u8, 98u8, 108u8, 101u8, 46u8, 114u8, 115u8] } with_metadata(36usize)
+
 // Full name: test_crate::mk
 fn mk() -> Box::<(dyn Consume), Global>
 {
@@ -252,25 +279,47 @@ fn mk() -> Box::<(dyn Consume), Global>
     let _1: Box::<(dyn Consume), Global>; // anonymous local
     let _2: Box::<S, Global>; // anonymous local
     let _3: S; // anonymous local
+    let _4: *const str is !null; // anonymous local
+    let _5: NonNull::<str>; // anonymous local
+    let _6: PhantomData::<&'_ str>; // anonymous local
+    let _7: Location::<'_>; // anonymous local
+    let _8: &'1 Location::<'_>; // anonymous local
 
     storage_live(_0)
     storage_live(_1)
     storage_live(_2)
     storage_live(_3)
     _3 = S { _0: const 42u32 }
-    _2 = alloc::boxed::{Box::<S, Global>}::new::<S>(move _3)
+    storage_live(_4)
+    _4 = &raw const test_crate::mk::{promoted_const} with_metadata(const 36usize)
+    storage_live(_5)
+    _5 = NonNull::<str> { 0: move _4 }
+    storage_live(_6)
+    _6 = PhantomData::<&'_ str> {  }
+    storage_live(_7)
+    _7 = Location::<'_> { 0: move _5, 1: const 32u32, 2: const 5u32, 3: move _6 }
+    storage_live(_8)
+    _8 = &_7
+    _2 = alloc::boxed::{Box::<S, Global>}::new::<S>(move _3, move _8)
     ↳⚡ unwind_continue
     _1 = unsize_cast<Box::<S, Global>, Box::<(dyn Consume), Global>, &impl_Consume_for_S::{vtable}>(move _2)
-    conditional_drop[{impl Destruct for Box::<S, Global>}::drop_glue::<S, Global><'0>] _2
+    conditional_drop[{impl Destruct for Box::<S, Global>}::drop_glue::<S, Global><'2>] _2
     ↳⚡ unwind_continue
     storage_dead(_3)
     storage_dead(_2)
     _0 = unsize_cast<Box::<(dyn Consume), Global>, Box::<(dyn Consume), Global>,  at []>(move _1)
-    conditional_drop[{impl Destruct for Box::<(dyn Consume), Global>}::drop_glue::<(dyn Consume), Global><'1>] _1
+    conditional_drop[{impl Destruct for Box::<(dyn Consume), Global>}::drop_glue::<(dyn Consume), Global><'3>] _1
     ↳⚡ unwind_continue
     storage_dead(_1)
+    storage_dead(_8)
+    storage_dead(_7)
+    storage_dead(_6)
+    storage_dead(_5)
+    storage_dead(_4)
     return
 }
+
+pub const test_crate::mk_ptr::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 100u8, 121u8, 110u8, 47u8, 98u8, 121u8, 45u8, 118u8, 97u8, 108u8, 117u8, 101u8, 45u8, 115u8, 101u8, 108u8, 102u8, 45u8, 118u8, 116u8, 97u8, 98u8, 108u8, 101u8, 46u8, 114u8, 115u8] } with_metadata(36usize)
 
 // Full name: test_crate::mk_ptr
 fn mk_ptr(x: *mut u32) -> Box::<(dyn Consume), Global>
@@ -280,27 +329,47 @@ fn mk_ptr(x: *mut u32) -> Box::<(dyn Consume), Global>
     let _2: Box::<(dyn Consume), Global>; // anonymous local
     let _3: Box::<*mut u32, Global>; // anonymous local
     let _4: *mut u32; // anonymous local
+    let _5: *const str is !null; // anonymous local
+    let _6: NonNull::<str>; // anonymous local
+    let _7: PhantomData::<&'_ str>; // anonymous local
+    let _8: Location::<'_>; // anonymous local
+    let _9: &'1 Location::<'_>; // anonymous local
 
     storage_live(_0)
     storage_live(_2)
     storage_live(_3)
     storage_live(_4)
     _4 = copy x
-    _3 = alloc::boxed::{Box::<*mut u32, Global>}::new::<*mut u32>(move _4)
+    storage_live(_5)
+    _5 = &raw const test_crate::mk_ptr::{promoted_const} with_metadata(const 36usize)
+    storage_live(_6)
+    _6 = NonNull::<str> { 0: move _5 }
+    storage_live(_7)
+    _7 = PhantomData::<&'_ str> {  }
+    storage_live(_8)
+    _8 = Location::<'_> { 0: move _6, 1: const 36u32, 2: const 5u32, 3: move _7 }
+    storage_live(_9)
+    _9 = &_8
+    _3 = alloc::boxed::{Box::<*mut u32, Global>}::new::<*mut u32>(move _4, move _9)
     ↳⚡ storage_dead(x)
         unwind_continue
     _2 = unsize_cast<Box::<*mut u32, Global>, Box::<(dyn Consume), Global>, &{impl Consume for *mut u32}::{vtable}>(move _3)
-    conditional_drop[{impl Destruct for Box::<*mut u32, Global>}::drop_glue::<*mut u32, Global><'0>] _3
+    conditional_drop[{impl Destruct for Box::<*mut u32, Global>}::drop_glue::<*mut u32, Global><'2>] _3
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(_4)
     storage_dead(_3)
     _0 = unsize_cast<Box::<(dyn Consume), Global>, Box::<(dyn Consume), Global>,  at []>(move _2)
-    conditional_drop[{impl Destruct for Box::<(dyn Consume), Global>}::drop_glue::<(dyn Consume), Global><'1>] _2
+    conditional_drop[{impl Destruct for Box::<(dyn Consume), Global>}::drop_glue::<(dyn Consume), Global><'3>] _2
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(_2)
     storage_dead(x)
+    storage_dead(_9)
+    storage_dead(_8)
+    storage_dead(_7)
+    storage_dead(_6)
+    storage_dead(_5)
     return
 }
 

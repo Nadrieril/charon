@@ -1,8 +1,12 @@
 # Final LLBC before serialization:
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::ops::arith::{impl Add<&'_0 u32> for &'_1 u32}::add
 #[track_caller]
-pub fn add<'_0, '_1>(_1: &'_1 u32, _2: &'_0 u32) -> u32
+pub fn add<'_0, '_1>(_1: &'_1 u32, _2: &'_0 u32, _3: &'static Location<'static>) -> u32
 = <opaque>
 
 // Full name: core::marker::MetaSized
@@ -19,6 +23,14 @@ pub trait Sized<Self>
     non-dyn-compatible
 }
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
+
 struct () {}
 
 struct (_, _)<A, B>
@@ -28,6 +40,12 @@ where
   _0: A,
   _1: B,
 }
+
+struct str {
+  _0: [u8],
+}
+
+pub const test_crate::six::{promoted_const#4}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 115u8, 105u8, 109u8, 112u8, 108u8, 101u8, 47u8, 109u8, 117u8, 108u8, 116u8, 105u8, 112u8, 108u8, 101u8, 45u8, 112u8, 114u8, 111u8, 109u8, 111u8, 116u8, 101u8, 100u8, 115u8, 46u8, 114u8, 115u8] } with_metadata(37usize)
 
 // Full name: test_crate::six
 fn six() -> u32
@@ -43,12 +61,17 @@ fn six() -> u32
     let _8: &'6 u32; // anonymous local
     let _9: &'7 u32; // anonymous local
     let _10: &'8 u32; // anonymous local
-    let _11: &'11 u32; // anonymous local
+    let _11: &'20 u32; // anonymous local
     let _12: u32; // anonymous local
     let _13: u32; // anonymous local
-    let _14: &'12 u32; // anonymous local
+    let _14: &'21 u32; // anonymous local
     let _15: u32; // anonymous local
     let _16: u32; // anonymous local
+    let _17: *const str is !null; // anonymous local
+    let _18: NonNull<str>; // anonymous local
+    let _19: PhantomData<&'19 str>; // anonymous local
+    let _20: Location<'16>; // anonymous local
+    let _21: &'14 Location<'15>; // anonymous local
 
     storage_live(_0)
     storage_live(_2)
@@ -83,7 +106,17 @@ fn six() -> u32
     _5 = copy x
     storage_live(_6)
     _6 = copy y
-    _0 = add<'9, '10>(move _5, move _6)
+    storage_live(_17)
+    _17 = &raw const test_crate::six::{promoted_const#4} with_metadata(const 37usize)
+    storage_live(_18)
+    _18 = NonNull { 0: move _17 }
+    storage_live(_19)
+    _19 = PhantomData {  }
+    storage_live(_20)
+    _20 = Location { 0: move _18, 1: const 5u32, 2: const 5u32, 3: move _19 }
+    storage_live(_21)
+    _21 = &_20
+    _0 = add<'9, '10>(move _5, move _6, move _21)
     ↳⚡ storage_dead(_8)
         storage_dead(_7)
         storage_dead(_4)
@@ -97,6 +130,11 @@ fn six() -> u32
     storage_dead(_7)
     storage_dead(_4)
     storage_dead(_2)
+    storage_dead(_21)
+    storage_dead(_20)
+    storage_dead(_19)
+    storage_dead(_18)
+    storage_dead(_17)
     storage_dead(_16)
     storage_dead(_15)
     storage_dead(_14)

@@ -48,6 +48,10 @@ where
 pub unsafe fn assume(b_1: bool)
 = <intrinsic:assume>
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
 // Full name: core::marker::Tuple
 #[fundamental]
 #[lang_item(Tuple)]
@@ -84,6 +88,14 @@ pub trait FnMut<Self, Args>
     vtable: core::ops::function::FnMut::{vtable}<Args, Self::ImpliedClause1::Output>
 }
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
+
 // Full name: core::result::Result
 #[diagnostic_item("Result")]
 pub enum Result<T, E>
@@ -95,17 +107,29 @@ where
   Err { _0: E },
 }
 
+struct str {
+  _0: [u8],
+}
+
+pub const core::slice::{[T]}::binary_search_by::{promoted_const#3}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 115u8, 108u8, 105u8, 99u8, 101u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(129usize)
+
+pub const core::slice::{[T]}::binary_search_by::{promoted_const#2}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 115u8, 108u8, 105u8, 99u8, 101u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(129usize)
+
+pub const core::slice::{[T]}::binary_search_by::{promoted_const#1}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 115u8, 108u8, 105u8, 99u8, 101u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(129usize)
+
+pub const core::slice::{[T]}::binary_search_by::{promoted_const}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 115u8, 108u8, 105u8, 99u8, 101u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(129usize)
+
 struct (_,)<A> {
   _0: A,
 }
 
 #[track_caller]
-fn core::hint::assert_unchecked::precondition_check(_1: bool)
+fn core::hint::assert_unchecked::precondition_check(_1: bool, _2: &'static Location<'static>)
 = <opaque>
 
 // Full name: core::slice::index::{impl SliceIndex<[T]> for usize}::get_unchecked::precondition_check
 #[track_caller]
-fn impl_SliceIndex_slice_for_usize::get_unchecked::precondition_check(_1: usize, _2: usize)
+fn impl_SliceIndex_slice_for_usize::get_unchecked::precondition_check(_1: usize, _2: usize, _3: &'static Location<'static>)
 = <opaque>
 
 // Full name: core::slice::{[T]}::binary_search_by
@@ -170,6 +194,26 @@ where
     let _49: (); // anonymous local
     let _50: (); // anonymous local
     let _51: Result<usize, usize>[{built_in impl Sized for usize}, {built_in impl Sized for usize}]; // anonymous local
+    let _52: *const str is !null; // anonymous local
+    let _53: NonNull<str>; // anonymous local
+    let _54: PhantomData<&'24 str>; // anonymous local
+    let _55: Location<'21>; // anonymous local
+    let _56: &'19 Location<'20>; // anonymous local
+    let _57: *const str is !null; // anonymous local
+    let _58: NonNull<str>; // anonymous local
+    let _59: PhantomData<&'33 str>; // anonymous local
+    let _60: Location<'32>; // anonymous local
+    let _61: &'30 Location<'31>; // anonymous local
+    let _62: *const str is !null; // anonymous local
+    let _63: NonNull<str>; // anonymous local
+    let _64: PhantomData<&'43 str>; // anonymous local
+    let _65: Location<'42>; // anonymous local
+    let _66: &'40 Location<'41>; // anonymous local
+    let _67: *const str is !null; // anonymous local
+    let _68: NonNull<str>; // anonymous local
+    let _69: PhantomData<&'47 str>; // anonymous local
+    let _70: Location<'46>; // anonymous local
+    let _71: &'44 Location<'45>; // anonymous local
 
     bb0: {
         storage_live(_0);
@@ -222,6 +266,26 @@ where
         storage_dead(base);
         storage_dead(f);
         storage_dead(self);
+        storage_dead(_71);
+        storage_dead(_70);
+        storage_dead(_69);
+        storage_dead(_68);
+        storage_dead(_67);
+        storage_dead(_66);
+        storage_dead(_65);
+        storage_dead(_64);
+        storage_dead(_63);
+        storage_dead(_62);
+        storage_dead(_61);
+        storage_dead(_60);
+        storage_dead(_59);
+        storage_dead(_58);
+        storage_dead(_57);
+        storage_dead(_56);
+        storage_dead(_55);
+        storage_dead(_54);
+        storage_dead(_53);
+        storage_dead(_52);
         storage_dead(_51);
         return;
     }
@@ -246,6 +310,26 @@ where
         storage_dead(base);
         storage_dead(f);
         storage_dead(self);
+        storage_dead(_71);
+        storage_dead(_70);
+        storage_dead(_69);
+        storage_dead(_68);
+        storage_dead(_67);
+        storage_dead(_66);
+        storage_dead(_65);
+        storage_dead(_64);
+        storage_dead(_63);
+        storage_dead(_62);
+        storage_dead(_61);
+        storage_dead(_60);
+        storage_dead(_59);
+        storage_dead(_58);
+        storage_dead(_57);
+        storage_dead(_56);
+        storage_dead(_55);
+        storage_dead(_54);
+        storage_dead(_53);
+        storage_dead(_52);
         storage_dead(_51);
         unwind_continue;
     }
@@ -289,7 +373,17 @@ where
     bb7: {
         storage_live(_31);
         _31 = copy self.metadata;
-        _30 = impl_SliceIndex_slice_for_usize::get_unchecked::precondition_check(copy mid, move _31) -> bb8 (unwind: bb9);
+        storage_live(_52);
+        _52 = &raw const core::slice::{[T]}::binary_search_by::{promoted_const} with_metadata(const 129usize);
+        storage_live(_53);
+        _53 = NonNull { 0: move _52 };
+        storage_live(_54);
+        _54 = PhantomData {  };
+        storage_live(_55);
+        _55 = Location { 0: move _53, 1: const 3007u32, 2: const 39u32, 3: move _54 };
+        storage_live(_56);
+        _56 = &_55;
+        _30 = impl_SliceIndex_slice_for_usize::get_unchecked::precondition_check(copy mid, move _31, move _56) -> bb8 (unwind: bb9);
     }
 
     bb8: {
@@ -316,7 +410,7 @@ where
         _15 = &(*_29);
         storage_dead(_29);
         _14 = (copy _15,);
-        cmp_12 = TraitClause2::call_mut<'20>(move _13, move _14) -> bb12 (unwind: bb17);
+        cmp_12 = TraitClause2::call_mut<'29>(move _13, move _14) -> bb12 (unwind: bb17);
     }
 
     bb12: {
@@ -344,7 +438,7 @@ where
     }
 
     bb14 (cleanup): {
-        drop[TraitClause3::drop_glue<'26>] f -> bb15 (unwind: bb16);
+        drop[TraitClause3::drop_glue<'39>] f -> bb15 (unwind: bb16);
     }
 
     bb15 (cleanup): {
@@ -367,6 +461,26 @@ where
         storage_dead(base);
         storage_dead(f);
         storage_dead(self);
+        storage_dead(_71);
+        storage_dead(_70);
+        storage_dead(_69);
+        storage_dead(_68);
+        storage_dead(_67);
+        storage_dead(_66);
+        storage_dead(_65);
+        storage_dead(_64);
+        storage_dead(_63);
+        storage_dead(_62);
+        storage_dead(_61);
+        storage_dead(_60);
+        storage_dead(_59);
+        storage_dead(_58);
+        storage_dead(_57);
+        storage_dead(_56);
+        storage_dead(_55);
+        storage_dead(_54);
+        storage_dead(_53);
+        storage_dead(_52);
         storage_dead(_51);
         unwind_continue;
     }
@@ -391,12 +505,32 @@ where
         storage_dead(base);
         storage_dead(f);
         storage_dead(self);
+        storage_dead(_71);
+        storage_dead(_70);
+        storage_dead(_69);
+        storage_dead(_68);
+        storage_dead(_67);
+        storage_dead(_66);
+        storage_dead(_65);
+        storage_dead(_64);
+        storage_dead(_63);
+        storage_dead(_62);
+        storage_dead(_61);
+        storage_dead(_60);
+        storage_dead(_59);
+        storage_dead(_58);
+        storage_dead(_57);
+        storage_dead(_56);
+        storage_dead(_55);
+        storage_dead(_54);
+        storage_dead(_53);
+        storage_dead(_52);
         storage_dead(_51);
         unwind_terminate;
     }
 
     bb17 (cleanup): {
-        drop[TraitClause3::drop_glue<'26>] f -> bb18 (unwind: bb19);
+        drop[TraitClause3::drop_glue<'39>] f -> bb18 (unwind: bb19);
     }
 
     bb18 (cleanup): {
@@ -419,6 +553,26 @@ where
         storage_dead(base);
         storage_dead(f);
         storage_dead(self);
+        storage_dead(_71);
+        storage_dead(_70);
+        storage_dead(_69);
+        storage_dead(_68);
+        storage_dead(_67);
+        storage_dead(_66);
+        storage_dead(_65);
+        storage_dead(_64);
+        storage_dead(_63);
+        storage_dead(_62);
+        storage_dead(_61);
+        storage_dead(_60);
+        storage_dead(_59);
+        storage_dead(_58);
+        storage_dead(_57);
+        storage_dead(_56);
+        storage_dead(_55);
+        storage_dead(_54);
+        storage_dead(_53);
+        storage_dead(_52);
         storage_dead(_51);
         unwind_continue;
     }
@@ -443,6 +597,26 @@ where
         storage_dead(base);
         storage_dead(f);
         storage_dead(self);
+        storage_dead(_71);
+        storage_dead(_70);
+        storage_dead(_69);
+        storage_dead(_68);
+        storage_dead(_67);
+        storage_dead(_66);
+        storage_dead(_65);
+        storage_dead(_64);
+        storage_dead(_63);
+        storage_dead(_62);
+        storage_dead(_61);
+        storage_dead(_60);
+        storage_dead(_59);
+        storage_dead(_58);
+        storage_dead(_57);
+        storage_dead(_56);
+        storage_dead(_55);
+        storage_dead(_54);
+        storage_dead(_53);
+        storage_dead(_52);
         storage_dead(_51);
         unwind_terminate;
     }
@@ -469,7 +643,17 @@ where
     bb22: {
         storage_live(_37);
         _37 = copy self.metadata;
-        _36 = impl_SliceIndex_slice_for_usize::get_unchecked::precondition_check(copy index, move _37) -> bb23 (unwind: bb24);
+        storage_live(_57);
+        _57 = &raw const core::slice::{[T]}::binary_search_by::{promoted_const#1} with_metadata(const 129usize);
+        storage_live(_58);
+        _58 = NonNull { 0: move _57 };
+        storage_live(_59);
+        _59 = PhantomData {  };
+        storage_live(_60);
+        _60 = Location { 0: move _58, 1: const 3026u32, 2: const 35u32, 3: move _59 };
+        storage_live(_61);
+        _61 = &_60;
+        _36 = impl_SliceIndex_slice_for_usize::get_unchecked::precondition_check(copy index, move _37, move _61) -> bb23 (unwind: bb24);
     }
 
     bb23: {
@@ -495,7 +679,7 @@ where
         storage_dead(_35);
         storage_dead(index);
         _20 = (copy _21,);
-        cmp_18 = TraitClause2::call_mut<'25>(move _19, move _20) -> bb27 (unwind: bb43);
+        cmp_18 = TraitClause2::call_mut<'38>(move _19, move _20) -> bb27 (unwind: bb43);
     }
 
     bb27: {
@@ -517,7 +701,17 @@ where
     }
 
     bb29: {
-        _41 = core::hint::assert_unchecked::precondition_check(copy cond_23) -> bb31 (unwind: bb30);
+        storage_live(_62);
+        _62 = &raw const core::slice::{[T]}::binary_search_by::{promoted_const#2} with_metadata(const 129usize);
+        storage_live(_63);
+        _63 = NonNull { 0: move _62 };
+        storage_live(_64);
+        _64 = PhantomData {  };
+        storage_live(_65);
+        _65 = Location { 0: move _63, 1: const 3029u32, 2: const 22u32, 3: move _64 };
+        storage_live(_66);
+        _66 = &_65;
+        _41 = core::hint::assert_unchecked::precondition_check(copy cond_23, move _66) -> bb31 (unwind: bb30);
     }
 
     bb30 (cleanup): {
@@ -555,7 +749,17 @@ where
     }
 
     bb35: {
-        _42 = core::hint::assert_unchecked::precondition_check(copy cond_28) -> bb37 (unwind: bb36);
+        storage_live(_67);
+        _67 = &raw const core::slice::{[T]}::binary_search_by::{promoted_const#3} with_metadata(const 129usize);
+        storage_live(_68);
+        _68 = NonNull { 0: move _67 };
+        storage_live(_69);
+        _69 = PhantomData {  };
+        storage_live(_70);
+        _70 = Location { 0: move _68, 1: const 3035u32, 2: const 22u32, 3: move _69 };
+        storage_live(_71);
+        _71 = &_70;
+        _42 = core::hint::assert_unchecked::precondition_check(copy cond_28, move _71) -> bb37 (unwind: bb36);
     }
 
     bb36 (cleanup): {
@@ -576,7 +780,7 @@ where
     bb39: {
         storage_dead(cmp_18);
         storage_dead(size);
-        drop[TraitClause3::drop_glue<'27>] f -> bb40 (unwind: bb41);
+        drop[TraitClause3::drop_glue<'48>] f -> bb40 (unwind: bb41);
     }
 
     bb40: {
@@ -599,6 +803,26 @@ where
         storage_dead(base);
         storage_dead(f);
         storage_dead(self);
+        storage_dead(_71);
+        storage_dead(_70);
+        storage_dead(_69);
+        storage_dead(_68);
+        storage_dead(_67);
+        storage_dead(_66);
+        storage_dead(_65);
+        storage_dead(_64);
+        storage_dead(_63);
+        storage_dead(_62);
+        storage_dead(_61);
+        storage_dead(_60);
+        storage_dead(_59);
+        storage_dead(_58);
+        storage_dead(_57);
+        storage_dead(_56);
+        storage_dead(_55);
+        storage_dead(_54);
+        storage_dead(_53);
+        storage_dead(_52);
         storage_dead(_51);
         return;
     }
@@ -623,6 +847,26 @@ where
         storage_dead(base);
         storage_dead(f);
         storage_dead(self);
+        storage_dead(_71);
+        storage_dead(_70);
+        storage_dead(_69);
+        storage_dead(_68);
+        storage_dead(_67);
+        storage_dead(_66);
+        storage_dead(_65);
+        storage_dead(_64);
+        storage_dead(_63);
+        storage_dead(_62);
+        storage_dead(_61);
+        storage_dead(_60);
+        storage_dead(_59);
+        storage_dead(_58);
+        storage_dead(_57);
+        storage_dead(_56);
+        storage_dead(_55);
+        storage_dead(_54);
+        storage_dead(_53);
+        storage_dead(_52);
         storage_dead(_51);
         unwind_continue;
     }
@@ -632,7 +876,7 @@ where
     }
 
     bb43 (cleanup): {
-        drop[TraitClause3::drop_glue<'26>] f -> bb44 (unwind: bb45);
+        drop[TraitClause3::drop_glue<'39>] f -> bb44 (unwind: bb45);
     }
 
     bb44 (cleanup): {
@@ -655,6 +899,26 @@ where
         storage_dead(base);
         storage_dead(f);
         storage_dead(self);
+        storage_dead(_71);
+        storage_dead(_70);
+        storage_dead(_69);
+        storage_dead(_68);
+        storage_dead(_67);
+        storage_dead(_66);
+        storage_dead(_65);
+        storage_dead(_64);
+        storage_dead(_63);
+        storage_dead(_62);
+        storage_dead(_61);
+        storage_dead(_60);
+        storage_dead(_59);
+        storage_dead(_58);
+        storage_dead(_57);
+        storage_dead(_56);
+        storage_dead(_55);
+        storage_dead(_54);
+        storage_dead(_53);
+        storage_dead(_52);
         storage_dead(_51);
         unwind_continue;
     }
@@ -679,6 +943,26 @@ where
         storage_dead(base);
         storage_dead(f);
         storage_dead(self);
+        storage_dead(_71);
+        storage_dead(_70);
+        storage_dead(_69);
+        storage_dead(_68);
+        storage_dead(_67);
+        storage_dead(_66);
+        storage_dead(_65);
+        storage_dead(_64);
+        storage_dead(_63);
+        storage_dead(_62);
+        storage_dead(_61);
+        storage_dead(_60);
+        storage_dead(_59);
+        storage_dead(_58);
+        storage_dead(_57);
+        storage_dead(_56);
+        storage_dead(_55);
+        storage_dead(_54);
+        storage_dead(_53);
+        storage_dead(_52);
         storage_dead(_51);
         unwind_terminate;
     }

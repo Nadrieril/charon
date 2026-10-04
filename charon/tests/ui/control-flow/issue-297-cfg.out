@@ -44,15 +44,27 @@ where
     TraitClause1: (I: Iterator),
 = <opaque>
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
+
 // Full name: core::slice::index::{impl SliceIndex<[T]> for usize}::index
-pub fn impl_SliceIndex_slice_for_usize::index<'_0, T>(_1: usize, _2: &'_0 [T]) -> &'_0 T
+pub fn impl_SliceIndex_slice_for_usize::index<'_0, T>(_1: usize, _2: &'_0 [T], _3: &'static Location<'static>) -> &'_0 T
 where
     TraitClause0: (T: Sized),
     TypeOutlives0: T: '_0,
 = <opaque>
 
 // Full name: core::slice::index::{impl SliceIndex<[T]> for usize}::index_mut
-pub fn impl_SliceIndex_slice_for_usize::index_mut<'_0, T>(_1: usize, _2: &'_0 mut [T]) -> &'_0 mut T
+pub fn impl_SliceIndex_slice_for_usize::index_mut<'_0, T>(_1: usize, _2: &'_0 mut [T], _3: &'static Location<'static>) -> &'_0 mut T
 where
     TraitClause0: (T: Sized),
     TypeOutlives0: T: '_0,
@@ -89,7 +101,7 @@ where
 
 // Full name: core::slice::{[T]}::chunks
 #[track_caller]
-pub fn chunks<'_0, T>(_1: &'_0 [T], _2: usize) -> Chunks<'_0, T>[TraitClause0]
+pub fn chunks<'_0, T>(_1: &'_0 [T], _2: usize, _3: &'static Location<'static>) -> Chunks<'_0, T>[TraitClause0]
 where
     TraitClause0: (T: Sized),
     TypeOutlives0: T: '_0,
@@ -103,6 +115,10 @@ where
 {
   _0: A,
   _1: B,
+}
+
+struct str {
+  _0: [u8],
 }
 
 struct (_,)<A> {
@@ -201,6 +217,8 @@ fn FIELD_MODULUS() -> i16
 // Full name: test_crate::FIELD_MODULUS
 const FIELD_MODULUS: i16 = FIELD_MODULUS()
 
+pub const test_crate::f2::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 99u8, 111u8, 110u8, 116u8, 114u8, 111u8, 108u8, 45u8, 102u8, 108u8, 111u8, 119u8, 47u8, 105u8, 115u8, 115u8, 117u8, 101u8, 45u8, 50u8, 57u8, 55u8, 45u8, 99u8, 102u8, 103u8, 46u8, 114u8, 115u8] } with_metadata(38usize)
+
 // Full name: test_crate::f2
 fn f2<'_0, '_1>(a: &'_0 [u8], result: &'_1 mut [i16]) -> usize
 {
@@ -249,16 +267,21 @@ fn f2<'_0, '_1>(a: &'_0 [u8], result: &'_1 mut [i16]) -> usize
     let _42: i16; // anonymous local
     let _43: usize; // anonymous local
     let _44: usize; // anonymous local
-    let _45: &'_ mut [i16]; // anonymous local
-    let _46: &'_ mut i16; // anonymous local
-    let _47: &'_ mut [i16]; // anonymous local
-    let _48: &'_ mut i16; // anonymous local
-    let _49: &'_ [u8]; // anonymous local
-    let _50: &'_ u8; // anonymous local
-    let _51: &'_ [u8]; // anonymous local
-    let _52: &'_ u8; // anonymous local
-    let _53: &'_ [u8]; // anonymous local
-    let _54: &'_ u8; // anonymous local
+    let _45: *const str is !null; // anonymous local
+    let _46: NonNull<str>; // anonymous local
+    let _47: PhantomData<&'37 str>; // anonymous local
+    let _48: Location<'34>; // anonymous local
+    let _49: &'32 Location<'33>; // anonymous local
+    let _50: &'_ mut [i16]; // anonymous local
+    let _51: &'_ mut i16; // anonymous local
+    let _52: &'_ mut [i16]; // anonymous local
+    let _53: &'_ mut i16; // anonymous local
+    let _54: &'_ [u8]; // anonymous local
+    let _55: &'_ u8; // anonymous local
+    let _56: &'_ [u8]; // anonymous local
+    let _57: &'_ u8; // anonymous local
+    let _58: &'_ [u8]; // anonymous local
+    let _59: &'_ u8; // anonymous local
 
     storage_live(_0)
     storage_live(_37)
@@ -270,14 +293,24 @@ fn f2<'_0, '_1>(a: &'_0 [u8], result: &'_1 mut [i16]) -> usize
     storage_live(_5)
     storage_live(_6)
     _6 = &(*a) with_metadata(copy a.metadata)
-    _5 = chunks<'28, u8>[{built_in impl Sized for u8}](move _6, const 3usize)
+    storage_live(_45)
+    _45 = &raw const test_crate::f2::{promoted_const} with_metadata(const 38usize)
+    storage_live(_46)
+    _46 = NonNull { 0: move _45 }
+    storage_live(_47)
+    _47 = PhantomData {  }
+    storage_live(_48)
+    _48 = Location { 0: move _46, 1: const 13u32, 2: const 18u32, 3: move _47 }
+    storage_live(_49)
+    _49 = &_48
+    _5 = chunks<'28, u8>[{built_in impl Sized for u8}](move _6, const 3usize, move _49)
     ↳⚡ storage_dead(_44)
         storage_dead(_37)
         storage_dead(result)
         storage_dead(a)
         unwind_continue
     storage_dead(_6)
-    _4 = into_iter<Chunks<'30, u8>[{built_in impl Sized for u8}]>[{built_in impl Sized for Chunks<'30, u8>[{built_in impl Sized for u8}]}, impl_Iterator_for_Chunks<'30, u8>[{built_in impl Sized for u8}]](move _5)
+    _4 = into_iter<Chunks<'39, u8>[{built_in impl Sized for u8}]>[{built_in impl Sized for Chunks<'39, u8>[{built_in impl Sized for u8}]}, impl_Iterator_for_Chunks<'39, u8>[{built_in impl Sized for u8}]](move _5)
     ↳⚡ storage_dead(_44)
         storage_dead(_37)
         storage_dead(result)
@@ -292,7 +325,7 @@ fn f2<'_0, '_1>(a: &'_0 [u8], result: &'_1 mut [i16]) -> usize
         storage_live(_10)
         _10 = &mut iter
         _9 = &two-phase-mut (*_10)
-        _8 = next<'41, '43, u8>[{built_in impl Sized for u8}](move _9)
+        _8 = next<'50, '52, u8>[{built_in impl Sized for u8}](move _9)
         ↳⚡ storage_dead(_44)
             storage_dead(_37)
             storage_dead(result)
@@ -312,12 +345,12 @@ fn f2<'_0, '_1>(a: &'_0 [u8], result: &'_1 mut [i16]) -> usize
         storage_live(_13)
         storage_live(_14)
         _14 = const 0usize
-        storage_live(_49)
-        _49 = &(*bytes) with_metadata(copy bytes.metadata)
-        storage_live(_50)
-        _50 = impl_SliceIndex_slice_for_usize::index<'_, u8>[{built_in impl Sized for u8}](copy _14, move _49)
+        storage_live(_54)
+        _54 = &(*bytes) with_metadata(copy bytes.metadata)
+        storage_live(_55)
+        _55 = impl_SliceIndex_slice_for_usize::index<'_, u8>[{built_in impl Sized for u8}](copy _14, move _54)
         ↳⚡ undefined_behavior
-        _13 = copy (*_50)
+        _13 = copy (*_55)
         b1 = cast<u8, i16>(move _13)
         storage_dead(_13)
         fake_read(b1)
@@ -326,12 +359,12 @@ fn f2<'_0, '_1>(a: &'_0 [u8], result: &'_1 mut [i16]) -> usize
         storage_live(_16)
         storage_live(_17)
         _17 = const 1usize
-        storage_live(_51)
-        _51 = &(*bytes) with_metadata(copy bytes.metadata)
-        storage_live(_52)
-        _52 = impl_SliceIndex_slice_for_usize::index<'_, u8>[{built_in impl Sized for u8}](copy _17, move _51)
+        storage_live(_56)
+        _56 = &(*bytes) with_metadata(copy bytes.metadata)
+        storage_live(_57)
+        _57 = impl_SliceIndex_slice_for_usize::index<'_, u8>[{built_in impl Sized for u8}](copy _17, move _56)
         ↳⚡ undefined_behavior
-        _16 = copy (*_52)
+        _16 = copy (*_57)
         b2 = cast<u8, i16>(move _16)
         storage_dead(_16)
         fake_read(b2)
@@ -340,12 +373,12 @@ fn f2<'_0, '_1>(a: &'_0 [u8], result: &'_1 mut [i16]) -> usize
         storage_live(_19)
         storage_live(_20)
         _20 = const 2usize
-        storage_live(_53)
-        _53 = &(*bytes) with_metadata(copy bytes.metadata)
-        storage_live(_54)
-        _54 = impl_SliceIndex_slice_for_usize::index<'_, u8>[{built_in impl Sized for u8}](copy _20, move _53)
+        storage_live(_58)
+        _58 = &(*bytes) with_metadata(copy bytes.metadata)
+        storage_live(_59)
+        _59 = impl_SliceIndex_slice_for_usize::index<'_, u8>[{built_in impl Sized for u8}](copy _20, move _58)
         ↳⚡ undefined_behavior
-        _19 = copy (*_54)
+        _19 = copy (*_59)
         b3 = cast<u8, i16>(move _19)
         storage_dead(_19)
         fake_read(b3)
@@ -396,12 +429,12 @@ fn f2<'_0, '_1>(a: &'_0 [u8], result: &'_1 mut [i16]) -> usize
                 _35 = copy d1
                 storage_live(_36)
                 _36 = copy sampled
-                storage_live(_45)
-                _45 = &mut (*result) with_metadata(copy result.metadata)
-                storage_live(_46)
-                _46 = impl_SliceIndex_slice_for_usize::index_mut<'_, i16>[{built_in impl Sized for i16}](copy _36, move _45)
+                storage_live(_50)
+                _50 = &mut (*result) with_metadata(copy result.metadata)
+                storage_live(_51)
+                _51 = impl_SliceIndex_slice_for_usize::index_mut<'_, i16>[{built_in impl Sized for i16}](copy _36, move _50)
                 ↳⚡ undefined_behavior
-                (*_46) = move _35
+                (*_51) = move _35
                 storage_dead(_35)
                 storage_dead(_36)
                 _37 = copy sampled panic.+ const 1usize
@@ -430,12 +463,12 @@ fn f2<'_0, '_1>(a: &'_0 [u8], result: &'_1 mut [i16]) -> usize
                 _42 = copy d2
                 storage_live(_43)
                 _43 = copy sampled
-                storage_live(_47)
-                _47 = &mut (*result) with_metadata(copy result.metadata)
-                storage_live(_48)
-                _48 = impl_SliceIndex_slice_for_usize::index_mut<'_, i16>[{built_in impl Sized for i16}](copy _43, move _47)
+                storage_live(_52)
+                _52 = &mut (*result) with_metadata(copy result.metadata)
+                storage_live(_53)
+                _53 = impl_SliceIndex_slice_for_usize::index_mut<'_, i16>[{built_in impl Sized for i16}](copy _43, move _52)
                 ↳⚡ undefined_behavior
-                (*_48) = move _42
+                (*_53) = move _42
                 storage_dead(_42)
                 storage_dead(_43)
                 _44 = copy sampled panic.+ const 1usize
@@ -468,6 +501,11 @@ fn f2<'_0, '_1>(a: &'_0 [u8], result: &'_1 mut [i16]) -> usize
     storage_dead(_37)
     storage_dead(result)
     storage_dead(a)
+    storage_dead(_59)
+    storage_dead(_58)
+    storage_dead(_57)
+    storage_dead(_56)
+    storage_dead(_55)
     storage_dead(_54)
     storage_dead(_53)
     storage_dead(_52)
