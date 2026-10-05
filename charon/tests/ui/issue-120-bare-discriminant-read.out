@@ -61,6 +61,10 @@ where
     return
 }
 
+struct str {
+  _0: [u8],
+}
+
 // Full name: test_crate::discriminant_value
 fn discriminant_value<'_0, T>(opt: &'_0 Option<T>[TraitClause0]) -> isize
 where
@@ -97,8 +101,8 @@ where
     storage_live(_4)
     _4 = &opt
     _3 = &(*_4)
-    _2 = discriminant_value<'4, T>[TraitClause0](move _3)
-    ↳⚡ drop[drop_glue<'5, T>[TraitClause0]] opt
+    _2 = discriminant_value<'13, T>[TraitClause0](move _3)
+    ↳⚡ drop[drop_glue<'14, T>[TraitClause0]] opt
         ↳⚡ storage_dead(opt)
             unwind_terminate
         storage_dead(opt)
@@ -107,7 +111,7 @@ where
     _0 = move _2 != const 0isize
     storage_dead(_2)
     storage_dead(_4)
-    drop[drop_glue<'6, T>[TraitClause0]] opt
+    drop[drop_glue<'15, T>[TraitClause0]] opt
     ↳⚡ storage_dead(opt)
         unwind_continue
     storage_dead(opt)

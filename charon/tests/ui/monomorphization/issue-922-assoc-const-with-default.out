@@ -21,6 +21,10 @@ pub fn size_of::<()>() -> usize
 
 struct () {}
 
+struct str {
+  _0: [u8],
+}
+
 // Full name: test_crate::SizedTypeProperties
 pub trait SizedTypeProperties<Self>
 {

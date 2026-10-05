@@ -151,8 +151,7 @@ struct str {
   _0: [u8],
 }
 
-// Full name: test_cargo_dependencies::main::{promoted_const}
-fn {promoted_const}() -> &'_ u32
+fn test_cargo_dependencies::main::{promoted_const}() -> &'_ u32
 {
     let _0: &'0 u32; // return
     let _1: u32; // anonymous local
@@ -164,10 +163,12 @@ fn {promoted_const}() -> &'_ u32
     return
 }
 
-// Full name: test_cargo_dependencies::main::{promoted_const}
-const {promoted_const}: &'_ u32 = {promoted_const}()
+const test_cargo_dependencies::main::{promoted_const}: &'_ u32 = test_cargo_dependencies::main::{promoted_const}()
 
-pub const test_cargo_dependencies::main::{promoted_const#2}: str = str { _0: [115u8, 114u8, 99u8, 47u8, 109u8, 97u8, 105u8, 110u8, 46u8, 114u8, 115u8] } with_metadata(11usize)
+// Full name: test_cargo_dependencies::filename#4
+pub static filename: str = RawMemory(0x73, 0x72, 0x63, 0x2f, 0x6d, 0x61, 0x69, 0x6e, 0x2e, 0x72, 0x73, 0x00) with_metadata(11usize)
+
+pub static test_cargo_dependencies::main::{promoted_const#5}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(11usize) }, 1: 14u32, 2: 5u32, 3: PhantomData {  } }
 
 // Full name: test_cargo_dependencies::main::silly_incr::{closure}
 struct {closure} {}
@@ -223,7 +224,7 @@ fn silly_incr<'_0>(x: &'_0 mut u32)
     _3 = &two-phase-mut (*x)
     storage_live(_4)
     _4 = {closure} {  }
-    _2 = take<'4, u32, {closure}>[{built_in impl Sized for u32}, {built_in impl Sized for {closure}}, impl_FnOnce_tuple_for_closure](move _3, move _4)
+    _2 = take<'13, u32, {closure}>[{built_in impl Sized for u32}, {built_in impl Sized for {closure}}, impl_FnOnce_tuple_for_closure](move _3, move _4)
     ↳⚡ unwind_continue
     storage_dead(_4)
     storage_dead(_3)
@@ -257,11 +258,7 @@ fn main()
     let _19: &'24 u32; // anonymous local
     let _20: Option<Arguments<'33>>[{built_in impl Sized for Arguments<'33>}]; // anonymous local
     let _21: &'37 u32; // anonymous local
-    let _22: *const str is !null; // anonymous local
-    let _23: NonNull<str>; // anonymous local
-    let _24: PhantomData<&'69 str>; // anonymous local
-    let _25: Location<'66>; // anonymous local
-    let _26: &'64 Location<'65>; // anonymous local
+    let _22: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     storage_live(_21)
@@ -274,7 +271,7 @@ fn main()
     storage_live(_4)
     _4 = &mut x
     _3 = &two-phase-mut (*_4)
-    _2 = silly_incr<'39>(move _3)
+    _2 = silly_incr<'48>(move _3)
     ↳⚡ unwind_continue
     storage_dead(_3)
     storage_dead(_4)
@@ -283,7 +280,7 @@ fn main()
     storage_live(_6)
     _6 = &x
     storage_live(_7)
-    _21 = copy {promoted_const}
+    _21 = copy test_cargo_dependencies::main::{promoted_const}
     _7 = &(*_21)
     _5 = (move _6, move _7)
     storage_dead(_7)
@@ -319,16 +316,8 @@ fn main()
         storage_live(_20)
         _20 = Option::None {  }
         storage_live(_22)
-        _22 = &raw const test_cargo_dependencies::main::{promoted_const#2} with_metadata(const 11usize)
-        storage_live(_23)
-        _23 = NonNull { 0: move _22 }
-        storage_live(_24)
-        _24 = PhantomData {  }
-        storage_live(_25)
-        _25 = Location { 0: move _23, 1: const 14u32, 2: const 5u32, 3: move _24 }
-        storage_live(_26)
-        _26 = &_25
-        _14 = assert_failed<'58, '59, '60, u32, u32>[{built_in impl MetaSized for u32}, {built_in impl MetaSized for u32}, impl_Debug_for_u32, impl_Debug_for_u32](move _15, move _16, move _18, move _20, move _26)
+        _22 = &test_cargo_dependencies::main::{promoted_const#5}
+        _14 = assert_failed<'71, '72, '73, u32, u32>[{built_in impl MetaSized for u32}, {built_in impl MetaSized for u32}, impl_Debug_for_u32, impl_Debug_for_u32](move _15, move _16, move _18, move _20, move _22)
         ↳⚡ unwind_continue
     }
     storage_dead(_12)

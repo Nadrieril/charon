@@ -73,6 +73,10 @@ pub trait Fn<Self, Args>
     vtable: core::ops::function::Fn::{vtable}<Args, Self::ImpliedClause1::ImpliedClause1::Output>
 }
 
+struct str {
+  _0: [u8],
+}
+
 // Full name: test_crate::mk_unit
 fn mk_unit()
 {
@@ -205,15 +209,15 @@ where
     _2 = &f
     storage_live(_3)
     _3 = (const 0u32, const true)
-    _0 = TraitClause1::call<'2>(move _2, move _3)
-    ↳⚡ conditional_drop[{built_in impl Destruct for T0}::drop_glue<'3>] f
+    _0 = TraitClause1::call<'11>(move _2, move _3)
+    ↳⚡ conditional_drop[{built_in impl Destruct for T0}::drop_glue<'12>] f
         ↳⚡ storage_dead(f)
             unwind_terminate
         storage_dead(f)
         unwind_continue
     storage_dead(_3)
     storage_dead(_2)
-    conditional_drop[{built_in impl Destruct for T0}::drop_glue<'4>] f
+    conditional_drop[{built_in impl Destruct for T0}::drop_glue<'13>] f
     ↳⚡ storage_dead(f)
         unwind_continue
     storage_dead(f)
@@ -298,7 +302,7 @@ fn call_once<'_0>(_1: {closure}<'_0>, _2: (u32, bool)) -> u32
     storage_live(_0)
     storage_live(_3)
     _3 = &mut _1
-    _0 = call_mut<'_0, '4>(move _3, move _2)
+    _0 = call_mut<'_0, '13>(move _3, move _2)
     ↳⚡ storage_dead(_3)
         storage_dead(_2)
         storage_dead(_1)
@@ -354,7 +358,7 @@ fn use_closure(z: u32) -> u32
     _3 = &z
     _2 = {closure} { _0: move _3 }
     storage_dead(_3)
-    _0 = call_closure<{closure}<'6>>[{built_in impl Sized for {closure}<'6>}, impl_Fn_unit_for_closure<'6>](move _2)
+    _0 = call_closure<{closure}<'15>>[{built_in impl Sized for {closure}<'15>}, impl_Fn_unit_for_closure<'15>](move _2)
     ↳⚡ storage_dead(z)
         unwind_continue
     storage_dead(_2)

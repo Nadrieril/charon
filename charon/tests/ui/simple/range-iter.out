@@ -1,5 +1,9 @@
 # Final LLBC before serialization:
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::clone::Clone
 #[lang_item(Clone)]
 #[diagnostic_item("Clone")]
@@ -10,7 +14,7 @@ pub trait Clone<Self>
 }
 
 // Full name: core::clone::impls::{impl Clone for usize}::clone
-pub fn impl_Clone_for_usize::clone<'_0>(_1: &'_0 usize) -> usize
+pub fn impl_Clone_for_usize::clone<'_0>(_1: &'_0 usize, _2: &'static Location<'static>) -> usize
 = <opaque>
 
 // Full name: core::clone::impls::{impl Clone for usize}
@@ -176,6 +180,10 @@ where
     TraitClause0: (I: Iterator<Clause0_Item>),
 = <opaque>
 
+struct str {
+  _0: [u8],
+}
+
 struct (_,)<A> {
   _0: A,
 }
@@ -214,7 +222,7 @@ fn iter(n: usize)
         storage_live(_8)
         _8 = &mut iter
         _7 = &two-phase-mut (*_8)
-        _6 = next<'4, usize>[impl_Step_for_usize, {built_in impl Destruct for usize}](move _7)
+        _6 = next<'17, usize>[impl_Step_for_usize, {built_in impl Destruct for usize}](move _7)
         ↳⚡ storage_dead(n)
             unwind_continue
         storage_dead(_7)

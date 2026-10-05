@@ -16,6 +16,10 @@ pub trait Sized<Self>
 
 struct () {}
 
+struct str {
+  _0: [u8],
+}
+
 // Full name: test_crate::Hasher
 pub trait Hasher<Self>
 {
@@ -77,7 +81,7 @@ fn main()
     let _5: &'4 mut DefaultHasher; // anonymous local
     let _6: &'5 u32; // anonymous local
     let _7: &'6 u32; // anonymous local
-    let _8: &'11 u32; // anonymous local
+    let _8: &'20 u32; // anonymous local
     let _9: u32; // anonymous local
 
     storage_live(_7)
@@ -100,7 +104,7 @@ fn main()
     storage_live(_5)
     _5 = &mut hasher
     _4 = &two-phase-mut (*_5)
-    _2 = hash<'9, '10, DefaultHasher>[{built_in impl Sized for DefaultHasher}, impl_Hasher_for_DefaultHasher](move _3, move _4)
+    _2 = hash<'18, '19, DefaultHasher>[{built_in impl Sized for DefaultHasher}, impl_Hasher_for_DefaultHasher](move _3, move _4)
     ↳⚡ storage_dead(_6)
         unwind_continue
     storage_dead(_4)

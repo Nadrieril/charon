@@ -1,11 +1,66 @@
 //! Functions to translate constants to LLBC.
 use crate::hax;
+use rustc_middle::mir;
 use rustc_middle::ty;
 
 use super::translate_ctx::*;
 use charon_lib::ast::*;
+use charon_lib::options::ConstHandling;
 
 impl<'tcx, 'ctx> ItemTransCtx<'tcx, 'ctx> {
+    pub(crate) fn record_definition_location(
+        &mut self,
+        span: Span,
+        fun_id: FunDeclId,
+        def_id: rustc_span::def_id::DefId,
+    ) -> Result<(), Error> {
+        if !self.definition_locations.contains_key(&fun_id) {
+            let rustc_span = self.tcx.def_span(def_id).shrink_to_lo();
+            let location = self.translate_caller_location(span, rustc_span)?;
+            self.definition_locations.insert(fun_id, location);
+        }
+        Ok(())
+    }
+
+    pub(crate) fn translate_caller_location(
+        &mut self,
+        span: Span,
+        rustc_span: rustc_span::Span,
+    ) -> Result<ConstantExpr, Error> {
+        let rustc_value = self.tcx.span_as_caller_location(rustc_span);
+        let rust_ty = self.tcx.caller_location_ty();
+        let const_op = mir::ConstOperand {
+            span: rustc_span,
+            user_ty: None,
+            const_: mir::Const::from_value(rustc_value, rust_ty),
+        };
+        let hax_op: hax::ConstOperand = self.catch_sinto(span, &const_op)?;
+        let hax::ConstOperandKind::Value(value) = &hax_op.kind else {
+            unreachable!("caller location is an evaluated constant")
+        };
+        let mut value = self.translate_constant_expr(span, value)?;
+        if matches!(self.options.consts, ConstHandling::Bytes) {
+            let mir::ConstValue::Scalar(mir::interpret::Scalar::Ptr(ptr, _)) = rustc_value else {
+                unreachable!("caller location is not an allocated pointer")
+            };
+            let (provenance, offset) = ptr.prov_and_relative_offset();
+            let pointee_ty = rust_ty.builtin_deref(true).unwrap();
+            let raw = hax::const_value_to_raw_memory(
+                &self.hax_state,
+                pointee_ty,
+                mir::ConstValue::Indirect {
+                    alloc_id: provenance.alloc_id(),
+                    offset,
+                },
+                rustc_span,
+            )
+            .unwrap();
+            let raw = self.translate_constant_expr(span, &raw)?;
+            value = ConstantExpr::new(ConstantExprKind::Ref(raw, None), value.ty().clone());
+        }
+        Ok(value)
+    }
+
     fn translate_constant_literal_to_constant_expr_kind(
         &mut self,
         span: Span,
@@ -198,6 +253,11 @@ impl<'tcx, 'ctx> ItemTransCtx<'tcx, 'ctx> {
             }
             hax::ConstantExprKind::FnPtr(item) => {
                 let fn_ptr = self.translate_fn_ptr(span, item, TransItemSourceKind::Fun)?;
+                if let Some(rustc_id) = item.def_id.as_real_def_id()
+                    && let FnPtrKind::Fun(id) = fn_ptr.kind.as_ref()
+                {
+                    self.record_definition_location(span, *id, rustc_id)?;
+                }
                 ConstantExprKind::FnPtr(fn_ptr)
             }
             hax::ConstantExprKind::Memory(bytes) => {

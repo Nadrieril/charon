@@ -1,5 +1,19 @@
 # Final LLBC before serialization:
 
+// Full name: core::marker::MetaSized
+#[fundamental]
+#[lang_item(MetaSized)]
+pub trait MetaSized<Self>
+
+// Full name: core::marker::Sized
+#[fundamental]
+#[lang_item(Sized)]
+pub trait Sized<Self>
+{
+    proof ImpliedClause0: (Self: MetaSized)
+    non-dyn-compatible
+}
+
 // Full name: core::ptr::non_null::NonNull::<Node::<u8>>
 #[lang_item(NonNull)]
 pub opaque type NonNull::<Node::<u8>>
@@ -13,6 +27,10 @@ pub enum Option::<NonNull::<Node::<u8>>> {
 }
 
 struct () {}
+
+struct str {
+  _0: [u8],
+}
 
 // Full name: test_crate::LinkedList::<u8>
 pub struct LinkedList::<u8> {

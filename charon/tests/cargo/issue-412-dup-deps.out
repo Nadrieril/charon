@@ -132,8 +132,7 @@ pub fn mydup#1::hello() -> u32
     return
 }
 
-// Full name: issue_412_dup_deps::main::{promoted_const}
-fn {promoted_const}() -> &'_ u32
+fn issue_412_dup_deps::main::{promoted_const}() -> &'_ u32
 {
     let _0: &'0 u32; // return
     let _1: u32; // anonymous local
@@ -145,10 +144,12 @@ fn {promoted_const}() -> &'_ u32
     return
 }
 
-// Full name: issue_412_dup_deps::main::{promoted_const}
-const {promoted_const}: &'_ u32 = {promoted_const}()
+const issue_412_dup_deps::main::{promoted_const}: &'_ u32 = issue_412_dup_deps::main::{promoted_const}()
 
-pub const issue_412_dup_deps::main::{promoted_const#2}: str = str { _0: [115u8, 114u8, 99u8, 47u8, 109u8, 97u8, 105u8, 110u8, 46u8, 114u8, 115u8] } with_metadata(11usize)
+// Full name: issue_412_dup_deps::filename#3
+pub static filename: str = RawMemory(0x73, 0x72, 0x63, 0x2f, 0x6d, 0x61, 0x69, 0x6e, 0x2e, 0x72, 0x73, 0x00) with_metadata(11usize)
+
+pub static issue_412_dup_deps::main::{promoted_const#4}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(11usize) }, 1: 4u32, 2: 5u32, 3: PhantomData {  } }
 
 // Full name: issue_412_dup_deps::main
 fn main()
@@ -177,11 +178,7 @@ fn main()
     let _21: &'21 u32; // anonymous local
     let _22: Option<Arguments<'30>>[{built_in impl Sized for Arguments<'30>}]; // anonymous local
     let _23: &'34 u32; // anonymous local
-    let _24: *const str is !null; // anonymous local
-    let _25: NonNull<str>; // anonymous local
-    let _26: PhantomData<&'64 str>; // anonymous local
-    let _27: Location<'61>; // anonymous local
-    let _28: &'59 Location<'60>; // anonymous local
+    let _24: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     storage_live(_8)
@@ -210,7 +207,7 @@ fn main()
     storage_dead(_6)
     _4 = &_5
     storage_live(_9)
-    _23 = copy {promoted_const}
+    _23 = copy issue_412_dup_deps::main::{promoted_const}
     _9 = &(*_23)
     _3 = (move _4, move _9)
     storage_dead(_9)
@@ -246,16 +243,8 @@ fn main()
         storage_live(_22)
         _22 = Option::None {  }
         storage_live(_24)
-        _24 = &raw const issue_412_dup_deps::main::{promoted_const#2} with_metadata(const 11usize)
-        storage_live(_25)
-        _25 = NonNull { 0: move _24 }
-        storage_live(_26)
-        _26 = PhantomData {  }
-        storage_live(_27)
-        _27 = Location { 0: move _25, 1: const 4u32, 2: const 5u32, 3: move _26 }
-        storage_live(_28)
-        _28 = &_27
-        _16 = assert_failed<'53, '54, '55, u32, u32>[{built_in impl MetaSized for u32}, {built_in impl MetaSized for u32}, impl_Debug_for_u32, impl_Debug_for_u32](move _17, move _18, move _20, move _22, move _28)
+        _24 = &issue_412_dup_deps::main::{promoted_const#4}
+        _16 = assert_failed<'70, '71, '72, u32, u32>[{built_in impl MetaSized for u32}, {built_in impl MetaSized for u32}, impl_Debug_for_u32, impl_Debug_for_u32](move _17, move _18, move _20, move _22, move _24)
         ↳⚡ unwind_continue
     }
     storage_dead(_14)

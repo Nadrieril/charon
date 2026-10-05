@@ -39,6 +39,10 @@ where
   _1: B,
 }
 
+struct str {
+  _0: [u8],
+}
+
 // Full name: test_crate::Foo
 struct Foo {}
 
@@ -67,7 +71,7 @@ unsafe fn drop_glue<'_0>(_1: &'_0 mut Foo)
     storage_live(_3)
     _0 = ()
     _2 = &mut (*_1)
-    _3 = impl_Drop_for_Foo::drop<'4>(move _2)
+    _3 = impl_Drop_for_Foo::drop<'13>(move _2)
     ↳⚡ unwind_continue
     return
 }
@@ -108,14 +112,14 @@ fn main()
     fake_read(f)
     storage_live(_2)
     _2 = may_unwind()
-    ↳⚡ conditional_drop[drop_glue<'2>] f
+    ↳⚡ conditional_drop[drop_glue<'11>] f
         ↳⚡ unwind_terminate
         unwind_continue
     storage_dead(_2)
     storage_live(_3)
     _4 = const 255u8 checked.+ const 1u8
     assert(move _4._1 == false) (overflow) else panic
-    ↳⚡ conditional_drop[drop_glue<'2>] f
+    ↳⚡ conditional_drop[drop_glue<'11>] f
         ↳⚡ unwind_terminate
         unwind_continue
     _3 = move _4._0
@@ -124,7 +128,7 @@ fn main()
     _5 = &f
     storage_dead(_5)
     _0 = ()
-    conditional_drop[drop_glue<'3>] f
+    conditional_drop[drop_glue<'12>] f
     ↳⚡ unwind_continue
     storage_dead(f)
     return

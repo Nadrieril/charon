@@ -9,7 +9,9 @@ use charon_lib::formatter::{FmtCtx, IntoFormatter};
 use charon_lib::ids::IndexVec;
 use charon_lib::options::TranslateOptions;
 use rustc_hash::{FxHashMap as HashMap, FxHashSet as HashSet};
+use rustc_middle::middle::codegen_fn_attrs::CodegenFnAttrFlags;
 use rustc_middle::ty::TyCtxt;
+use rustc_span::def_id::DefId;
 use std::borrow::Cow;
 use std::cell::RefCell;
 use std::collections::VecDeque;
@@ -52,6 +54,9 @@ pub struct TranslateCtx<'tcx> {
     pub id_map: HashMap<TransItemSource, ItemId>,
     /// The reverse map of ids.
     pub reverse_id_map: HashMap<ItemId, TransItemSource>,
+    pub caller_locations: HashMap<(FunDeclId, charon_lib::ullbc_ast::BlockId), ConstantExpr>,
+    pub definition_locations: HashMap<FunDeclId, ConstantExpr>,
+    pub track_caller_methods: HashSet<(TraitDeclId, TraitMethodId)>,
     /// Map from rustc id to associated item id
     pub assoc_item_id_map: HashMap<hax::DefId, AssocItemId>,
     /// The reverse filename map.
@@ -148,6 +153,15 @@ where
 }
 
 impl<'tcx> TranslateCtx<'tcx> {
+    pub fn is_track_caller(&self, def_id: DefId) -> bool {
+        self.tcx.def_kind(def_id).has_codegen_attrs()
+            && self
+                .tcx
+                .body_codegen_attrs(def_id)
+                .flags
+                .contains(CodegenFnAttrFlags::TRACK_CALLER)
+    }
+
     /// Span an error and register the error.
     pub fn span_err(&self, span: Span, msg: &str, level: Level) -> Error {
         self.errors

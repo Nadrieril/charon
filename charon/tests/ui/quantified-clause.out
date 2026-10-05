@@ -1,5 +1,9 @@
 # Final LLBC before serialization:
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::marker::MetaSized
 #[fundamental]
 #[lang_item(MetaSized)]
@@ -128,6 +132,10 @@ where
 {
   Ok { _0: T },
   Err { _0: E },
+}
+
+struct str {
+  _0: [u8],
 }
 
 struct (_,)<A> {

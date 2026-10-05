@@ -35,14 +35,6 @@ pub unsafe trait Allocator<Self>
     vtable: core::alloc::Allocator::{vtable}
 }
 
-struct str {
-  _0: [u8],
-}
-
-pub const core::alloc::Allocator::allocate_zeroed::{promoted_const#1}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 97u8, 108u8, 108u8, 111u8, 99u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(129usize)
-
-pub const core::alloc::Allocator::allocate_zeroed::{promoted_const}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 97u8, 108u8, 108u8, 111u8, 99u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(129usize)
-
 pub fn core::ptr::non_null::{NonNull<T>}::as_ptr<T>(self: NonNull<T>) -> *mut T
 {
     let _0: *mut T; // return
@@ -178,6 +170,10 @@ where
     return
 }
 
+struct str {
+  _0: [u8],
+}
+
 #[track_caller]
 fn core::ptr::write_bytes::precondition_check(addr: *const (), align: usize, zero_size: bool, caller_location: &'static Location<'static>)
 {
@@ -190,10 +186,10 @@ fn core::ptr::write_bytes::precondition_check(addr: *const (), align: usize, zer
     let _6: *const (); // anonymous local
     let _7: usize; // anonymous local
     let _8: bool; // anonymous local
-    let msg: &'1 str; // local
+    let msg: &'0 str; // local
     let _10: !; // anonymous local
-    let _11: Arguments<'3>; // anonymous local
-    let _12: &'4 str; // anonymous local
+    let _11: Arguments<'2>; // anonymous local
+    let _12: &'3 str; // anonymous local
 
     storage_live(_0)
     _0 = ()
@@ -217,10 +213,10 @@ fn core::ptr::write_bytes::precondition_check(addr: *const (), align: usize, zer
         storage_live(_11)
         storage_live(_12)
         _12 = &(*msg) with_metadata(copy msg.metadata)
-        _11 = from_str<'6>(move _12)
+        _11 = from_str<'13>(move _12)
         ↳⚡ unwind_terminate
         storage_dead(_12)
-        _10 = panic_nounwind_fmt<'8>(move _11, const false, copy caller_location)
+        _10 = panic_nounwind_fmt<'19>(move _11, const false, copy caller_location)
         ↳⚡ undefined_behavior
     }
     storage_dead(_8)
@@ -365,7 +361,9 @@ where
     TraitClause0: (Self: SizedTypeProperties),
  = MAX_SLICE_LEN<Self>[TraitClause0]()
 
-pub const core::mem::SizedTypeProperties::LAYOUT::{promoted_const}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 109u8, 101u8, 109u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(127usize)
+pub static test_crate::filename#15: str = RawMemory(0x2f, 0x68, 0x6f, 0x6d, 0x65, 0x2f, 0x6e, 0x61, 0x64, 0x72, 0x69, 0x65, 0x72, 0x69, 0x6c, 0x2f, 0x2e, 0x72, 0x75, 0x73, 0x74, 0x75, 0x70, 0x2f, 0x74, 0x6f, 0x6f, 0x6c, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x73, 0x2f, 0x6e, 0x69, 0x67, 0x68, 0x74, 0x6c, 0x79, 0x2d, 0x32, 0x30, 0x32, 0x36, 0x2d, 0x30, 0x39, 0x2d, 0x31, 0x37, 0x2d, 0x78, 0x38, 0x36, 0x5f, 0x36, 0x34, 0x2d, 0x75, 0x6e, 0x6b, 0x6e, 0x6f, 0x77, 0x6e, 0x2d, 0x6c, 0x69, 0x6e, 0x75, 0x78, 0x2d, 0x67, 0x6e, 0x75, 0x2f, 0x6c, 0x69, 0x62, 0x2f, 0x72, 0x75, 0x73, 0x74, 0x6c, 0x69, 0x62, 0x2f, 0x73, 0x72, 0x63, 0x2f, 0x72, 0x75, 0x73, 0x74, 0x2f, 0x6c, 0x69, 0x62, 0x72, 0x61, 0x72, 0x79, 0x2f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x73, 0x72, 0x63, 0x2f, 0x6d, 0x65, 0x6d, 0x2f, 0x6d, 0x6f, 0x64, 0x2e, 0x72, 0x73, 0x00) with_metadata(127usize)
+
+pub static core::mem::SizedTypeProperties::LAYOUT::{promoted_const#16}: Location<'static> = Location { 0: NonNull { pointer: &raw const test_crate::filename#15 with_metadata(127usize) }, 1: 1512u32, 2: 18u32, 3: PhantomData {  } }
 
 // Full name: core::mem::SizedTypeProperties::LAYOUT
 pub fn LAYOUT<Self>() -> Layout
@@ -373,24 +371,12 @@ where
     TraitClause0: (Self: SizedTypeProperties),
 {
     let _0: Layout; // return
-    let _1: *const str is !null; // anonymous local
-    let _2: NonNull<str>; // anonymous local
-    let _3: PhantomData<&'8 str>; // anonymous local
-    let _4: Location<'5>; // anonymous local
-    let _5: &'3 Location<'4>; // anonymous local
+    let _1: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     storage_live(_1)
-    _1 = &raw const core::mem::SizedTypeProperties::LAYOUT::{promoted_const} with_metadata(const 127usize)
-    storage_live(_2)
-    _2 = NonNull { pointer: move _1 }
-    storage_live(_3)
-    _3 = PhantomData {  }
-    storage_live(_4)
-    _4 = Location { 0: move _2, 1: const 1512u32, 2: const 18u32, 3: move _3 }
-    storage_live(_5)
-    _5 = &_4
-    _0 = from_size_align_unchecked(const TraitClause0::SIZE, const TraitClause0::ALIGN, move _5)
+    _1 = &core::mem::SizedTypeProperties::LAYOUT::{promoted_const#16}
+    _0 = from_size_align_unchecked(const TraitClause0::SIZE, const TraitClause0::ALIGN, move _1)
     ↳⚡ unwind_continue
     return
 }
@@ -419,7 +405,7 @@ where
     TraitClause0: (Self: SizedTypeProperties),
  = IS_ZST<Self>[TraitClause0]()
 
-pub const core::mem::SizedTypeProperties::ALIGNMENT::{promoted_const}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 109u8, 101u8, 109u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(127usize)
+pub static core::mem::SizedTypeProperties::ALIGNMENT::{promoted_const#20}: Location<'static> = Location { 0: NonNull { pointer: &raw const test_crate::filename#15 with_metadata(127usize) }, 1: 1474u32, 2: 9u32, 3: PhantomData {  } }
 
 // Full name: core::option::Option
 #[lang_item(Option)]
@@ -432,7 +418,9 @@ where
   Some { _0: T },
 }
 
-pub const core::mem::alignment::{Alignment}::new::{promoted_const}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 109u8, 101u8, 109u8, 47u8, 97u8, 108u8, 105u8, 103u8, 110u8, 109u8, 101u8, 110u8, 116u8, 46u8, 114u8, 115u8] } with_metadata(133usize)
+pub static test_crate::filename#21: str = RawMemory(0x2f, 0x68, 0x6f, 0x6d, 0x65, 0x2f, 0x6e, 0x61, 0x64, 0x72, 0x69, 0x65, 0x72, 0x69, 0x6c, 0x2f, 0x2e, 0x72, 0x75, 0x73, 0x74, 0x75, 0x70, 0x2f, 0x74, 0x6f, 0x6f, 0x6c, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x73, 0x2f, 0x6e, 0x69, 0x67, 0x68, 0x74, 0x6c, 0x79, 0x2d, 0x32, 0x30, 0x32, 0x36, 0x2d, 0x30, 0x39, 0x2d, 0x31, 0x37, 0x2d, 0x78, 0x38, 0x36, 0x5f, 0x36, 0x34, 0x2d, 0x75, 0x6e, 0x6b, 0x6e, 0x6f, 0x77, 0x6e, 0x2d, 0x6c, 0x69, 0x6e, 0x75, 0x78, 0x2d, 0x67, 0x6e, 0x75, 0x2f, 0x6c, 0x69, 0x62, 0x2f, 0x72, 0x75, 0x73, 0x74, 0x6c, 0x69, 0x62, 0x2f, 0x73, 0x72, 0x63, 0x2f, 0x72, 0x75, 0x73, 0x74, 0x2f, 0x6c, 0x69, 0x62, 0x72, 0x61, 0x72, 0x79, 0x2f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x73, 0x72, 0x63, 0x2f, 0x6d, 0x65, 0x6d, 0x2f, 0x61, 0x6c, 0x69, 0x67, 0x6e, 0x6d, 0x65, 0x6e, 0x74, 0x2e, 0x72, 0x73, 0x00) with_metadata(133usize)
+
+pub static core::mem::alignment::{Alignment}::new::{promoted_const#22}: Location<'static> = Location { 0: NonNull { pointer: &raw const test_crate::filename#21 with_metadata(133usize) }, 1: 173u32, 2: 27u32, 3: PhantomData {  } }
 
 #[track_caller]
 fn core::mem::alignment::{Alignment}::new_unchecked::precondition_check(align: usize, caller_location: &'static Location<'static>)
@@ -442,10 +430,10 @@ fn core::mem::alignment::{Alignment}::new_unchecked::precondition_check(align: u
     let caller_location: &'static Location<'static>; // arg #2
     let _3: bool; // anonymous local
     let _4: usize; // anonymous local
-    let msg: &'1 str; // local
+    let msg: &'0 str; // local
     let _6: !; // anonymous local
-    let _7: Arguments<'3>; // anonymous local
-    let _8: &'4 str; // anonymous local
+    let _7: Arguments<'2>; // anonymous local
+    let _8: &'3 str; // anonymous local
 
     storage_live(_0)
     _0 = ()
@@ -463,10 +451,10 @@ fn core::mem::alignment::{Alignment}::new_unchecked::precondition_check(align: u
         storage_live(_7)
         storage_live(_8)
         _8 = &(*msg) with_metadata(copy msg.metadata)
-        _7 = from_str<'6>(move _8)
+        _7 = from_str<'13>(move _8)
         ↳⚡ unwind_terminate
         storage_dead(_8)
-        _6 = panic_nounwind_fmt<'8>(move _7, const false, copy caller_location)
+        _6 = panic_nounwind_fmt<'19>(move _7, const false, copy caller_location)
         ↳⚡ undefined_behavior
     }
     storage_dead(_4)
@@ -516,11 +504,7 @@ pub fn core::mem::alignment::{Alignment}::new(align: usize) -> Option<Alignment>
     let _3: usize; // anonymous local
     let _4: Alignment; // anonymous local
     let _5: usize; // anonymous local
-    let _6: *const str is !null; // anonymous local
-    let _7: NonNull<str>; // anonymous local
-    let _8: PhantomData<&'8 str>; // anonymous local
-    let _9: Location<'5>; // anonymous local
-    let _10: &'3 Location<'4>; // anonymous local
+    let _6: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     storage_live(_2)
@@ -540,16 +524,8 @@ pub fn core::mem::alignment::{Alignment}::new(align: usize) -> Option<Alignment>
     storage_live(_5)
     _5 = copy align
     storage_live(_6)
-    _6 = &raw const core::mem::alignment::{Alignment}::new::{promoted_const} with_metadata(const 133usize)
-    storage_live(_7)
-    _7 = NonNull { pointer: move _6 }
-    storage_live(_8)
-    _8 = PhantomData {  }
-    storage_live(_9)
-    _9 = Location { 0: move _7, 1: const 173u32, 2: const 27u32, 3: move _8 }
-    storage_live(_10)
-    _10 = &_9
-    _4 = core::mem::alignment::{Alignment}::new_unchecked(move _5, move _10)
+    _6 = &core::mem::alignment::{Alignment}::new::{promoted_const#22}
+    _4 = core::mem::alignment::{Alignment}::new_unchecked(move _5, move _6)
     ↳⚡ unwind_continue
     storage_dead(_5)
     _0 = Option::Some { _0: move _4 }
@@ -565,27 +541,15 @@ where
 {
     let _0: Alignment; // return
     let _1: Option<Alignment>[{built_in impl Sized for Alignment}]; // anonymous local
-    let _2: *const str is !null; // anonymous local
-    let _3: NonNull<str>; // anonymous local
-    let _4: PhantomData<&'8 str>; // anonymous local
-    let _5: Location<'5>; // anonymous local
-    let _6: &'3 Location<'4>; // anonymous local
+    let _2: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     storage_live(_1)
     _1 = core::mem::alignment::{Alignment}::new(const TraitClause0::ALIGN)
     ↳⚡ unwind_continue
     storage_live(_2)
-    _2 = &raw const core::mem::SizedTypeProperties::ALIGNMENT::{promoted_const} with_metadata(const 127usize)
-    storage_live(_3)
-    _3 = NonNull { pointer: move _2 }
-    storage_live(_4)
-    _4 = PhantomData {  }
-    storage_live(_5)
-    _5 = Location { 0: move _3, 1: const 1474u32, 2: const 9u32, 3: move _4 }
-    storage_live(_6)
-    _6 = &_5
-    _0 = unwrap<Alignment>[{built_in impl Sized for Alignment}](move _1, move _6)
+    _2 = &core::mem::SizedTypeProperties::ALIGNMENT::{promoted_const#20}
+    _0 = unwrap<Alignment>[{built_in impl Sized for Alignment}](move _1, move _2)
     ↳⚡ unwind_continue
     storage_dead(_1)
     return
@@ -781,7 +745,7 @@ where
 }
 
 // Full name: core::alloc::Allocator::allocate_zeroed
-pub fn allocate_zeroed<'_0, Self>(self: &'_0 Self, layout: Layout) -> Result<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}]
+pub fn allocate_zeroed<'_0, Self>(self: &'_0 Self, layout: Layout, caller_location: &'static Location<'static>) -> Result<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}]
 where
     TraitClause0: (Self: Allocator),
     TypeOutlives0: Self: '_0,
@@ -789,73 +753,54 @@ where
     let _0: Result<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}]; // return
     let self: &'1 Self; // arg #1
     let layout: Layout; // arg #2
+    let caller_location: &'static Location<'static>; // arg #3
     let ptr: NonNull<[u8]>; // local
-    let _4: ControlFlow<Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}], NonNull<[u8]>>[{built_in impl Sized for Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}]}, {built_in impl Sized for NonNull<[u8]>}]; // anonymous local
-    let _5: Result<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}]; // anonymous local
-    let _6: &'2 Self; // anonymous local
-    let _7: Layout; // anonymous local
-    let _8: isize; // anonymous local
+    let _5: ControlFlow<Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}], NonNull<[u8]>>[{built_in impl Sized for Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}]}, {built_in impl Sized for NonNull<[u8]>}]; // anonymous local
+    let _6: Result<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}]; // anonymous local
+    let _7: &'2 Self; // anonymous local
+    let _8: Layout; // anonymous local
+    let _9: isize; // anonymous local
     let residual: Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}]; // local
-    let _10: Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}]; // anonymous local
+    let _11: Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}]; // anonymous local
     let val: NonNull<[u8]>; // local
-    let _12: (); // anonymous local
-    let _13: *mut u8; // anonymous local
-    let _14: NonNull<u8>; // anonymous local
-    let _15: NonNull<[u8]>; // anonymous local
-    let _16: usize; // anonymous local
-    let _17: NonNull<[u8]>; // anonymous local
+    let _13: (); // anonymous local
+    let _14: *mut u8; // anonymous local
+    let _15: NonNull<u8>; // anonymous local
+    let _16: NonNull<[u8]>; // anonymous local
+    let _17: usize; // anonymous local
     let _18: NonNull<[u8]>; // anonymous local
-    let _19: *const str is !null; // anonymous local
-    let _20: NonNull<str>; // anonymous local
-    let _21: PhantomData<&'12 str>; // anonymous local
-    let _22: Location<'9>; // anonymous local
-    let _23: &'7 Location<'8>; // anonymous local
-    let _24: *const str is !null; // anonymous local
-    let _25: NonNull<str>; // anonymous local
-    let _26: PhantomData<&'16 str>; // anonymous local
-    let _27: Location<'15>; // anonymous local
-    let _28: &'13 Location<'14>; // anonymous local
+    let _19: NonNull<[u8]>; // anonymous local
 
     storage_live(_0)
-    storage_live(_8)
+    storage_live(_9)
     storage_live(ptr)
-    storage_live(_4)
     storage_live(_5)
     storage_live(_6)
-    _6 = &(*self) with_metadata(copy self.metadata)
     storage_live(_7)
-    _7 = copy layout
-    _5 = TraitClause0::allocate<'3>(move _6, move _7)
+    _7 = &(*self) with_metadata(copy self.metadata)
+    storage_live(_8)
+    _8 = copy layout
+    _6 = TraitClause0::allocate<'12>(move _7, move _8, copy caller_location)
     ↳⚡ unwind_continue
+    storage_dead(_8)
     storage_dead(_7)
-    storage_dead(_6)
-    _4 = branch<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}](move _5)
+    _5 = branch<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}](move _6)
     ↳⚡ unwind_continue
-    storage_dead(_5)
-    _8 = @discriminant(_4)
-    switch move _8 {
+    storage_dead(_6)
+    _9 = @discriminant(_5)
+    switch move _9 {
         0isize => {
         },
         1isize => {
             storage_live(residual)
-            residual = copy (_4 as variant ControlFlow::Break)._0
-            storage_live(_10)
-            _10 = copy residual
-            storage_live(_19)
-            _19 = &raw const core::alloc::Allocator::allocate_zeroed::{promoted_const} with_metadata(const 129usize)
-            storage_live(_20)
-            _20 = NonNull { pointer: move _19 }
-            storage_live(_21)
-            _21 = PhantomData {  }
-            storage_live(_22)
-            _22 = Location { 0: move _20, 1: const 252u32, 2: const 19u32, 3: move _21 }
-            storage_live(_23)
-            _23 = &_22
-            _0 = from_residual<NonNull<[u8]>, AllocError, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}, {built_in impl Sized for AllocError}, {impl#6}<AllocError>[{built_in impl Sized for AllocError}]](move _10, move _23)
+            residual = copy (_5 as variant ControlFlow::Break)._0
+            storage_live(_11)
+            _11 = copy residual
+            _0 = from_residual<NonNull<[u8]>, AllocError, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}, {built_in impl Sized for AllocError}, {impl#6}<AllocError>[{built_in impl Sized for AllocError}]](move _11, copy caller_location)
             ↳⚡ unwind_continue
-            storage_dead(_10)
+            storage_dead(_11)
             storage_dead(residual)
-            storage_dead(_4)
+            storage_dead(_5)
             storage_dead(ptr)
             return
         },
@@ -864,55 +809,39 @@ where
         },
     }
     storage_live(val)
-    val = copy (_4 as variant ControlFlow::Continue)._0
+    val = copy (_5 as variant ControlFlow::Continue)._0
     ptr = copy val
     storage_dead(val)
-    storage_dead(_4)
-    storage_live(_12)
+    storage_dead(_5)
     storage_live(_13)
     storage_live(_14)
     storage_live(_15)
-    _15 = copy ptr
-    _14 = core::ptr::non_null::{NonNull<[T]>}::as_non_null_ptr<u8>[{built_in impl Sized for u8}](move _15)
-    ↳⚡ unwind_continue
-    storage_dead(_15)
-    _13 = core::ptr::non_null::{NonNull<T>}::as_ptr<u8>(move _14)
-    ↳⚡ unwind_continue
-    storage_dead(_14)
     storage_live(_16)
-    storage_live(_17)
-    _17 = copy ptr
-    _16 = core::ptr::non_null::{NonNull<[T]>}::len<u8>[{built_in impl Sized for u8}](move _17)
-    ↳⚡ unwind_continue
-    storage_dead(_17)
-    storage_live(_24)
-    _24 = &raw const core::alloc::Allocator::allocate_zeroed::{promoted_const#1} with_metadata(const 129usize)
-    storage_live(_25)
-    _25 = NonNull { pointer: move _24 }
-    storage_live(_26)
-    _26 = PhantomData {  }
-    storage_live(_27)
-    _27 = Location { 0: move _25, 1: const 254u32, 2: const 18u32, 3: move _26 }
-    storage_live(_28)
-    _28 = &_27
-    _12 = core::ptr::mut_ptr::{*mut T}::write_bytes<u8>[{built_in impl Sized for u8}](move _13, const 0u8, move _16, move _28)
+    _16 = copy ptr
+    _15 = core::ptr::non_null::{NonNull<[T]>}::as_non_null_ptr<u8>[{built_in impl Sized for u8}](move _16)
     ↳⚡ unwind_continue
     storage_dead(_16)
-    storage_dead(_13)
-    storage_dead(_12)
+    _14 = core::ptr::non_null::{NonNull<T>}::as_ptr<u8>(move _15)
+    ↳⚡ unwind_continue
+    storage_dead(_15)
+    storage_live(_17)
     storage_live(_18)
     _18 = copy ptr
-    _0 = Result::Ok { _0: move _18 }
+    _17 = core::ptr::non_null::{NonNull<[T]>}::len<u8>[{built_in impl Sized for u8}](move _18)
+    ↳⚡ unwind_continue
     storage_dead(_18)
+    _13 = core::ptr::mut_ptr::{*mut T}::write_bytes<u8>[{built_in impl Sized for u8}](move _14, const 0u8, move _17, copy caller_location)
+    ↳⚡ unwind_continue
+    storage_dead(_17)
+    storage_dead(_14)
+    storage_dead(_13)
+    storage_live(_19)
+    _19 = copy ptr
+    _0 = Result::Ok { _0: move _19 }
+    storage_dead(_19)
     storage_dead(ptr)
     return
 }
-
-pub const core::alloc::Allocator::grow::{promoted_const}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 97u8, 108u8, 108u8, 111u8, 99u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(129usize)
-
-pub const core::alloc::Allocator::grow::{promoted_const#2}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 97u8, 108u8, 108u8, 111u8, 99u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(129usize)
-
-pub const core::alloc::Allocator::grow::{promoted_const#1}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 97u8, 108u8, 108u8, 111u8, 99u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(129usize)
 
 // Full name: core::ptr::non_null::{NonNull<[T]>}::as_mut_ptr
 pub fn as_mut_ptr<T>(self: NonNull<[T]>) -> *mut T
@@ -966,10 +895,10 @@ fn core::ptr::copy_nonoverlapping::precondition_check(src: *const (), dst: *mut 
     let _23: *mut (); // anonymous local
     let _24: usize; // anonymous local
     let _25: usize; // anonymous local
-    let msg: &'1 str; // local
+    let msg: &'0 str; // local
     let _27: !; // anonymous local
-    let _28: Arguments<'3>; // anonymous local
-    let _29: &'4 str; // anonymous local
+    let _28: Arguments<'2>; // anonymous local
+    let _29: &'3 str; // anonymous local
 
     storage_live(_0)
     _0 = ()
@@ -1059,10 +988,10 @@ fn core::ptr::copy_nonoverlapping::precondition_check(src: *const (), dst: *mut 
         storage_live(_28)
         storage_live(_29)
         _29 = &(*msg) with_metadata(copy msg.metadata)
-        _28 = from_str<'6>(move _29)
+        _28 = from_str<'21>(move _29)
         ↳⚡ unwind_terminate
         storage_dead(_29)
-        _27 = panic_nounwind_fmt<'8>(move _28, const false, copy caller_location)
+        _27 = panic_nounwind_fmt<'27>(move _28, const false, copy caller_location)
         ↳⚡ undefined_behavior
     }
     _0 = ()
@@ -1159,7 +1088,7 @@ where
 }
 
 // Full name: core::alloc::Allocator::grow
-pub unsafe fn grow<'_0, Self>(self: &'_0 Self, ptr: NonNull<u8>, old_layout: Layout, new_layout: Layout) -> Result<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}]
+pub unsafe fn grow<'_0, Self>(self: &'_0 Self, ptr: NonNull<u8>, old_layout: Layout, new_layout: Layout, caller_location: &'static Location<'static>) -> Result<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}]
 where
     TraitClause0: (Self: Allocator),
     TypeOutlives0: Self: '_0,
@@ -1169,136 +1098,102 @@ where
     let ptr: NonNull<u8>; // arg #2
     let old_layout: Layout; // arg #3
     let new_layout: Layout; // arg #4
-    let _5: bool; // anonymous local
+    let caller_location: &'static Location<'static>; // arg #5
     let _6: bool; // anonymous local
-    let _7: usize; // anonymous local
-    let _8: &'3 Layout; // anonymous local
-    let _9: usize; // anonymous local
-    let _10: &'4 Layout; // anonymous local
-    let _11: !; // anonymous local
-    let _12: Arguments<'6>; // anonymous local
+    let _7: bool; // anonymous local
+    let _8: usize; // anonymous local
+    let _9: &'3 Layout; // anonymous local
+    let _10: usize; // anonymous local
+    let _11: &'4 Layout; // anonymous local
+    let _12: !; // anonymous local
+    let _13: Arguments<'6>; // anonymous local
     let new_ptr: NonNull<[u8]>; // local
-    let _14: ControlFlow<Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}], NonNull<[u8]>>[{built_in impl Sized for Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}]}, {built_in impl Sized for NonNull<[u8]>}]; // anonymous local
-    let _15: Result<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}]; // anonymous local
-    let _16: &'7 Self; // anonymous local
-    let _17: Layout; // anonymous local
-    let _18: isize; // anonymous local
+    let _15: ControlFlow<Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}], NonNull<[u8]>>[{built_in impl Sized for Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}]}, {built_in impl Sized for NonNull<[u8]>}]; // anonymous local
+    let _16: Result<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}]; // anonymous local
+    let _17: &'7 Self; // anonymous local
+    let _18: Layout; // anonymous local
+    let _19: isize; // anonymous local
     let residual: Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}]; // local
-    let _20: Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}]; // anonymous local
+    let _21: Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}]; // anonymous local
     let val: NonNull<[u8]>; // local
-    let _22: (); // anonymous local
-    let _23: *const u8; // anonymous local
-    let _24: *mut u8; // anonymous local
-    let _25: NonNull<u8>; // anonymous local
-    let _26: *mut u8; // anonymous local
-    let _27: NonNull<[u8]>; // anonymous local
-    let _28: usize; // anonymous local
-    let _29: &'8 Layout; // anonymous local
-    let _30: (); // anonymous local
-    let _31: &'9 Self; // anonymous local
-    let _32: NonNull<u8>; // anonymous local
-    let _33: Layout; // anonymous local
-    let _34: NonNull<[u8]>; // anonymous local
-    let _35: *const str is !null; // anonymous local
-    let _36: NonNull<str>; // anonymous local
-    let _37: PhantomData<&'27 str>; // anonymous local
-    let _38: Location<'25>; // anonymous local
-    let _39: &'23 Location<'24>; // anonymous local
-    let _40: *const str is !null; // anonymous local
-    let _41: NonNull<str>; // anonymous local
-    let _42: PhantomData<&'31 str>; // anonymous local
-    let _43: Location<'30>; // anonymous local
-    let _44: &'28 Location<'29>; // anonymous local
-    let _45: *const str is !null; // anonymous local
-    let _46: NonNull<str>; // anonymous local
-    let _47: PhantomData<&'37 str>; // anonymous local
-    let _48: Location<'36>; // anonymous local
-    let _49: &'34 Location<'35>; // anonymous local
+    let _23: (); // anonymous local
+    let _24: *const u8; // anonymous local
+    let _25: *mut u8; // anonymous local
+    let _26: NonNull<u8>; // anonymous local
+    let _27: *mut u8; // anonymous local
+    let _28: NonNull<[u8]>; // anonymous local
+    let _29: usize; // anonymous local
+    let _30: &'8 Layout; // anonymous local
+    let _31: (); // anonymous local
+    let _32: &'9 Self; // anonymous local
+    let _33: NonNull<u8>; // anonymous local
+    let _34: Layout; // anonymous local
+    let _35: NonNull<[u8]>; // anonymous local
 
     storage_live(_0)
-    storage_live(_18)
-    storage_live(_5)
-    _5 = const false
-    if move _5 {
-        storage_live(_6)
+    storage_live(_19)
+    storage_live(_6)
+    _6 = const false
+    if move _6 {
         storage_live(_7)
         storage_live(_8)
-        _8 = &new_layout
-        _7 = size<'11>(move _8)
-        ↳⚡ unwind_continue
-        storage_dead(_8)
         storage_live(_9)
-        storage_live(_10)
-        _10 = &old_layout
-        _9 = size<'13>(move _10)
+        _9 = &new_layout
+        _8 = size<'20>(move _9)
         ↳⚡ unwind_continue
-        storage_dead(_10)
-        _6 = move _7 >= move _9
-        if move _6 {
+        storage_dead(_9)
+        storage_live(_10)
+        storage_live(_11)
+        _11 = &old_layout
+        _10 = size<'26>(move _11)
+        ↳⚡ unwind_continue
+        storage_dead(_11)
+        _7 = move _8 >= move _10
+        if move _7 {
         } else {
-            storage_dead(_9)
-            storage_dead(_7)
-            storage_live(_11)
+            storage_dead(_10)
+            storage_dead(_8)
             storage_live(_12)
-            _12 = from_str<'15>(const "`new_layout.size()` must be greater than or equal to `old_layout.size()`")
+            storage_live(_13)
+            _13 = from_str<'40>(const "`new_layout.size()` must be greater than or equal to `old_layout.size()`")
             ↳⚡ unwind_continue
-            storage_live(_35)
-            _35 = &raw const core::alloc::Allocator::grow::{promoted_const} with_metadata(const 129usize)
-            storage_live(_36)
-            _36 = NonNull { pointer: move _35 }
-            storage_live(_37)
-            _37 = PhantomData {  }
-            storage_live(_38)
-            _38 = Location { 0: move _36, 1: const 321u32, 2: const 9u32, 3: move _37 }
-            storage_live(_39)
-            _39 = &_38
-            _11 = panic_fmt<'19>(move _12, move _39)
+            _12 = panic_fmt<'47>(move _13, copy caller_location)
             ↳⚡ unwind_continue
         }
-        storage_dead(_9)
+        storage_dead(_10)
+        storage_dead(_8)
         storage_dead(_7)
-        storage_dead(_6)
     } else {
     }
-    storage_dead(_5)
+    storage_dead(_6)
     storage_live(new_ptr)
-    storage_live(_14)
     storage_live(_15)
     storage_live(_16)
-    _16 = &(*self) with_metadata(copy self.metadata)
     storage_live(_17)
-    _17 = copy new_layout
-    _15 = TraitClause0::allocate<'14>(move _16, move _17)
+    _17 = &(*self) with_metadata(copy self.metadata)
+    storage_live(_18)
+    _18 = copy new_layout
+    _16 = TraitClause0::allocate<'31>(move _17, move _18, copy caller_location)
     ↳⚡ unwind_continue
+    storage_dead(_18)
     storage_dead(_17)
-    storage_dead(_16)
-    _14 = branch<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}](move _15)
+    _15 = branch<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}](move _16)
     ↳⚡ unwind_continue
-    storage_dead(_15)
-    _18 = @discriminant(_14)
-    switch move _18 {
+    storage_dead(_16)
+    _19 = @discriminant(_15)
+    switch move _19 {
         0isize => {
         },
         1isize => {
             storage_live(residual)
-            residual = copy (_14 as variant ControlFlow::Break)._0
-            storage_live(_20)
-            _20 = copy residual
-            storage_live(_40)
-            _40 = &raw const core::alloc::Allocator::grow::{promoted_const#1} with_metadata(const 129usize)
-            storage_live(_41)
-            _41 = NonNull { pointer: move _40 }
-            storage_live(_42)
-            _42 = PhantomData {  }
-            storage_live(_43)
-            _43 = Location { 0: move _41, 1: const 326u32, 2: const 23u32, 3: move _42 }
-            storage_live(_44)
-            _44 = &_43
-            _0 = from_residual<NonNull<[u8]>, AllocError, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}, {built_in impl Sized for AllocError}, {impl#6}<AllocError>[{built_in impl Sized for AllocError}]](move _20, move _44)
+            residual = copy (_15 as variant ControlFlow::Break)._0
+            storage_live(_21)
+            _21 = copy residual
+            _0 = from_residual<NonNull<[u8]>, AllocError, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}, {built_in impl Sized for AllocError}, {impl#6}<AllocError>[{built_in impl Sized for AllocError}]](move _21, copy caller_location)
             ↳⚡ unwind_continue
-            storage_dead(_20)
+            storage_dead(_21)
             storage_dead(residual)
-            storage_dead(_14)
+            storage_dead(_15)
             storage_dead(new_ptr)
             return
         },
@@ -1307,77 +1202,61 @@ where
         },
     }
     storage_live(val)
-    val = copy (_14 as variant ControlFlow::Continue)._0
+    val = copy (_15 as variant ControlFlow::Continue)._0
     new_ptr = copy val
     storage_dead(val)
-    storage_dead(_14)
-    storage_live(_22)
+    storage_dead(_15)
     storage_live(_23)
     storage_live(_24)
     storage_live(_25)
-    _25 = copy ptr
-    _24 = core::ptr::non_null::{NonNull<T>}::as_ptr<u8>(move _25)
-    ↳⚡ unwind_continue
-    _23 = cast<*mut u8, *const u8>(move _24)
-    storage_dead(_25)
-    storage_dead(_24)
     storage_live(_26)
+    _26 = copy ptr
+    _25 = core::ptr::non_null::{NonNull<T>}::as_ptr<u8>(move _26)
+    ↳⚡ unwind_continue
+    _24 = cast<*mut u8, *const u8>(move _25)
+    storage_dead(_26)
+    storage_dead(_25)
     storage_live(_27)
-    _27 = copy new_ptr
-    _26 = as_mut_ptr<u8>[{built_in impl Sized for u8}](move _27)
-    ↳⚡ unwind_continue
-    storage_dead(_27)
     storage_live(_28)
-    storage_live(_29)
-    _29 = &old_layout
-    _28 = size<'33>(move _29)
-    ↳⚡ unwind_continue
-    storage_dead(_29)
-    storage_live(_45)
-    _45 = &raw const core::alloc::Allocator::grow::{promoted_const#2} with_metadata(const 129usize)
-    storage_live(_46)
-    _46 = NonNull { pointer: move _45 }
-    storage_live(_47)
-    _47 = PhantomData {  }
-    storage_live(_48)
-    _48 = Location { 0: move _46, 1: const 334u32, 2: const 13u32, 3: move _47 }
-    storage_live(_49)
-    _49 = &_48
-    _22 = core::ptr::copy_nonoverlapping<u8>[{built_in impl Sized for u8}](move _23, move _26, move _28, move _49)
+    _28 = copy new_ptr
+    _27 = as_mut_ptr<u8>[{built_in impl Sized for u8}](move _28)
     ↳⚡ unwind_continue
     storage_dead(_28)
-    storage_dead(_26)
-    storage_dead(_23)
-    storage_dead(_22)
+    storage_live(_29)
     storage_live(_30)
-    storage_live(_31)
-    _31 = &(*self) with_metadata(copy self.metadata)
-    storage_live(_32)
-    _32 = copy ptr
-    storage_live(_33)
-    _33 = copy old_layout
-    _30 = TraitClause0::deallocate<'38>(move _31, move _32, move _33)
+    _30 = &old_layout
+    _29 = size<'65>(move _30)
     ↳⚡ unwind_continue
+    storage_dead(_30)
+    _23 = core::ptr::copy_nonoverlapping<u8>[{built_in impl Sized for u8}](move _24, move _27, move _29, copy caller_location)
+    ↳⚡ unwind_continue
+    storage_dead(_29)
+    storage_dead(_27)
+    storage_dead(_24)
+    storage_dead(_23)
+    storage_live(_31)
+    storage_live(_32)
+    _32 = &(*self) with_metadata(copy self.metadata)
+    storage_live(_33)
+    _33 = copy ptr
+    storage_live(_34)
+    _34 = copy old_layout
+    _31 = TraitClause0::deallocate<'74>(move _32, move _33, move _34, copy caller_location)
+    ↳⚡ unwind_continue
+    storage_dead(_34)
     storage_dead(_33)
     storage_dead(_32)
     storage_dead(_31)
-    storage_dead(_30)
-    storage_live(_34)
-    _34 = copy new_ptr
-    _0 = Result::Ok { _0: move _34 }
-    storage_dead(_34)
+    storage_live(_35)
+    _35 = copy new_ptr
+    _0 = Result::Ok { _0: move _35 }
+    storage_dead(_35)
     storage_dead(new_ptr)
     return
 }
-
-pub const core::alloc::Allocator::grow_zeroed::{promoted_const}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 97u8, 108u8, 108u8, 111u8, 99u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(129usize)
-
-pub const core::alloc::Allocator::grow_zeroed::{promoted_const#2}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 97u8, 108u8, 108u8, 111u8, 99u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(129usize)
-
-pub const core::alloc::Allocator::grow_zeroed::{promoted_const#1}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 97u8, 108u8, 108u8, 111u8, 99u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(129usize)
 
 // Full name: core::alloc::Allocator::grow_zeroed
-pub unsafe fn grow_zeroed<'_0, Self>(self: &'_0 Self, ptr: NonNull<u8>, old_layout: Layout, new_layout: Layout) -> Result<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}]
+pub unsafe fn grow_zeroed<'_0, Self>(self: &'_0 Self, ptr: NonNull<u8>, old_layout: Layout, new_layout: Layout, caller_location: &'static Location<'static>) -> Result<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}]
 where
     TraitClause0: (Self: Allocator),
     TypeOutlives0: Self: '_0,
@@ -1387,136 +1266,102 @@ where
     let ptr: NonNull<u8>; // arg #2
     let old_layout: Layout; // arg #3
     let new_layout: Layout; // arg #4
-    let _5: bool; // anonymous local
+    let caller_location: &'static Location<'static>; // arg #5
     let _6: bool; // anonymous local
-    let _7: usize; // anonymous local
-    let _8: &'3 Layout; // anonymous local
-    let _9: usize; // anonymous local
-    let _10: &'4 Layout; // anonymous local
-    let _11: !; // anonymous local
-    let _12: Arguments<'6>; // anonymous local
+    let _7: bool; // anonymous local
+    let _8: usize; // anonymous local
+    let _9: &'3 Layout; // anonymous local
+    let _10: usize; // anonymous local
+    let _11: &'4 Layout; // anonymous local
+    let _12: !; // anonymous local
+    let _13: Arguments<'6>; // anonymous local
     let new_ptr: NonNull<[u8]>; // local
-    let _14: ControlFlow<Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}], NonNull<[u8]>>[{built_in impl Sized for Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}]}, {built_in impl Sized for NonNull<[u8]>}]; // anonymous local
-    let _15: Result<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}]; // anonymous local
-    let _16: &'7 Self; // anonymous local
-    let _17: Layout; // anonymous local
-    let _18: isize; // anonymous local
+    let _15: ControlFlow<Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}], NonNull<[u8]>>[{built_in impl Sized for Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}]}, {built_in impl Sized for NonNull<[u8]>}]; // anonymous local
+    let _16: Result<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}]; // anonymous local
+    let _17: &'7 Self; // anonymous local
+    let _18: Layout; // anonymous local
+    let _19: isize; // anonymous local
     let residual: Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}]; // local
-    let _20: Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}]; // anonymous local
+    let _21: Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}]; // anonymous local
     let val: NonNull<[u8]>; // local
-    let _22: (); // anonymous local
-    let _23: *const u8; // anonymous local
-    let _24: *mut u8; // anonymous local
-    let _25: NonNull<u8>; // anonymous local
-    let _26: *mut u8; // anonymous local
-    let _27: NonNull<[u8]>; // anonymous local
-    let _28: usize; // anonymous local
-    let _29: &'8 Layout; // anonymous local
-    let _30: (); // anonymous local
-    let _31: &'9 Self; // anonymous local
-    let _32: NonNull<u8>; // anonymous local
-    let _33: Layout; // anonymous local
-    let _34: NonNull<[u8]>; // anonymous local
-    let _35: *const str is !null; // anonymous local
-    let _36: NonNull<str>; // anonymous local
-    let _37: PhantomData<&'27 str>; // anonymous local
-    let _38: Location<'25>; // anonymous local
-    let _39: &'23 Location<'24>; // anonymous local
-    let _40: *const str is !null; // anonymous local
-    let _41: NonNull<str>; // anonymous local
-    let _42: PhantomData<&'31 str>; // anonymous local
-    let _43: Location<'30>; // anonymous local
-    let _44: &'28 Location<'29>; // anonymous local
-    let _45: *const str is !null; // anonymous local
-    let _46: NonNull<str>; // anonymous local
-    let _47: PhantomData<&'37 str>; // anonymous local
-    let _48: Location<'36>; // anonymous local
-    let _49: &'34 Location<'35>; // anonymous local
+    let _23: (); // anonymous local
+    let _24: *const u8; // anonymous local
+    let _25: *mut u8; // anonymous local
+    let _26: NonNull<u8>; // anonymous local
+    let _27: *mut u8; // anonymous local
+    let _28: NonNull<[u8]>; // anonymous local
+    let _29: usize; // anonymous local
+    let _30: &'8 Layout; // anonymous local
+    let _31: (); // anonymous local
+    let _32: &'9 Self; // anonymous local
+    let _33: NonNull<u8>; // anonymous local
+    let _34: Layout; // anonymous local
+    let _35: NonNull<[u8]>; // anonymous local
 
     storage_live(_0)
-    storage_live(_18)
-    storage_live(_5)
-    _5 = const false
-    if move _5 {
-        storage_live(_6)
+    storage_live(_19)
+    storage_live(_6)
+    _6 = const false
+    if move _6 {
         storage_live(_7)
         storage_live(_8)
-        _8 = &new_layout
-        _7 = size<'11>(move _8)
-        ↳⚡ unwind_continue
-        storage_dead(_8)
         storage_live(_9)
-        storage_live(_10)
-        _10 = &old_layout
-        _9 = size<'13>(move _10)
+        _9 = &new_layout
+        _8 = size<'20>(move _9)
         ↳⚡ unwind_continue
-        storage_dead(_10)
-        _6 = move _7 >= move _9
-        if move _6 {
+        storage_dead(_9)
+        storage_live(_10)
+        storage_live(_11)
+        _11 = &old_layout
+        _10 = size<'26>(move _11)
+        ↳⚡ unwind_continue
+        storage_dead(_11)
+        _7 = move _8 >= move _10
+        if move _7 {
         } else {
-            storage_dead(_9)
-            storage_dead(_7)
-            storage_live(_11)
+            storage_dead(_10)
+            storage_dead(_8)
             storage_live(_12)
-            _12 = from_str<'15>(const "`new_layout.size()` must be greater than or equal to `old_layout.size()`")
+            storage_live(_13)
+            _13 = from_str<'40>(const "`new_layout.size()` must be greater than or equal to `old_layout.size()`")
             ↳⚡ unwind_continue
-            storage_live(_35)
-            _35 = &raw const core::alloc::Allocator::grow_zeroed::{promoted_const} with_metadata(const 129usize)
-            storage_live(_36)
-            _36 = NonNull { pointer: move _35 }
-            storage_live(_37)
-            _37 = PhantomData {  }
-            storage_live(_38)
-            _38 = Location { 0: move _36, 1: const 381u32, 2: const 9u32, 3: move _37 }
-            storage_live(_39)
-            _39 = &_38
-            _11 = panic_fmt<'19>(move _12, move _39)
+            _12 = panic_fmt<'47>(move _13, copy caller_location)
             ↳⚡ unwind_continue
         }
-        storage_dead(_9)
+        storage_dead(_10)
+        storage_dead(_8)
         storage_dead(_7)
-        storage_dead(_6)
     } else {
     }
-    storage_dead(_5)
+    storage_dead(_6)
     storage_live(new_ptr)
-    storage_live(_14)
     storage_live(_15)
     storage_live(_16)
-    _16 = &(*self) with_metadata(copy self.metadata)
     storage_live(_17)
-    _17 = copy new_layout
-    _15 = TraitClause0::allocate_zeroed<'14>(move _16, move _17)
+    _17 = &(*self) with_metadata(copy self.metadata)
+    storage_live(_18)
+    _18 = copy new_layout
+    _16 = TraitClause0::allocate_zeroed<'31>(move _17, move _18, copy caller_location)
     ↳⚡ unwind_continue
+    storage_dead(_18)
     storage_dead(_17)
-    storage_dead(_16)
-    _14 = branch<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}](move _15)
+    _15 = branch<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}](move _16)
     ↳⚡ unwind_continue
-    storage_dead(_15)
-    _18 = @discriminant(_14)
-    switch move _18 {
+    storage_dead(_16)
+    _19 = @discriminant(_15)
+    switch move _19 {
         0isize => {
         },
         1isize => {
             storage_live(residual)
-            residual = copy (_14 as variant ControlFlow::Break)._0
-            storage_live(_20)
-            _20 = copy residual
-            storage_live(_40)
-            _40 = &raw const core::alloc::Allocator::grow_zeroed::{promoted_const#1} with_metadata(const 129usize)
-            storage_live(_41)
-            _41 = NonNull { pointer: move _40 }
-            storage_live(_42)
-            _42 = PhantomData {  }
-            storage_live(_43)
-            _43 = Location { 0: move _41, 1: const 386u32, 2: const 23u32, 3: move _42 }
-            storage_live(_44)
-            _44 = &_43
-            _0 = from_residual<NonNull<[u8]>, AllocError, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}, {built_in impl Sized for AllocError}, {impl#6}<AllocError>[{built_in impl Sized for AllocError}]](move _20, move _44)
+            residual = copy (_15 as variant ControlFlow::Break)._0
+            storage_live(_21)
+            _21 = copy residual
+            _0 = from_residual<NonNull<[u8]>, AllocError, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}, {built_in impl Sized for AllocError}, {impl#6}<AllocError>[{built_in impl Sized for AllocError}]](move _21, copy caller_location)
             ↳⚡ unwind_continue
-            storage_dead(_20)
+            storage_dead(_21)
             storage_dead(residual)
-            storage_dead(_14)
+            storage_dead(_15)
             storage_dead(new_ptr)
             return
         },
@@ -1525,77 +1370,61 @@ where
         },
     }
     storage_live(val)
-    val = copy (_14 as variant ControlFlow::Continue)._0
+    val = copy (_15 as variant ControlFlow::Continue)._0
     new_ptr = copy val
     storage_dead(val)
-    storage_dead(_14)
-    storage_live(_22)
+    storage_dead(_15)
     storage_live(_23)
     storage_live(_24)
     storage_live(_25)
-    _25 = copy ptr
-    _24 = core::ptr::non_null::{NonNull<T>}::as_ptr<u8>(move _25)
-    ↳⚡ unwind_continue
-    _23 = cast<*mut u8, *const u8>(move _24)
-    storage_dead(_25)
-    storage_dead(_24)
     storage_live(_26)
+    _26 = copy ptr
+    _25 = core::ptr::non_null::{NonNull<T>}::as_ptr<u8>(move _26)
+    ↳⚡ unwind_continue
+    _24 = cast<*mut u8, *const u8>(move _25)
+    storage_dead(_26)
+    storage_dead(_25)
     storage_live(_27)
-    _27 = copy new_ptr
-    _26 = as_mut_ptr<u8>[{built_in impl Sized for u8}](move _27)
-    ↳⚡ unwind_continue
-    storage_dead(_27)
     storage_live(_28)
-    storage_live(_29)
-    _29 = &old_layout
-    _28 = size<'33>(move _29)
-    ↳⚡ unwind_continue
-    storage_dead(_29)
-    storage_live(_45)
-    _45 = &raw const core::alloc::Allocator::grow_zeroed::{promoted_const#2} with_metadata(const 129usize)
-    storage_live(_46)
-    _46 = NonNull { pointer: move _45 }
-    storage_live(_47)
-    _47 = PhantomData {  }
-    storage_live(_48)
-    _48 = Location { 0: move _46, 1: const 394u32, 2: const 13u32, 3: move _47 }
-    storage_live(_49)
-    _49 = &_48
-    _22 = core::ptr::copy_nonoverlapping<u8>[{built_in impl Sized for u8}](move _23, move _26, move _28, move _49)
+    _28 = copy new_ptr
+    _27 = as_mut_ptr<u8>[{built_in impl Sized for u8}](move _28)
     ↳⚡ unwind_continue
     storage_dead(_28)
-    storage_dead(_26)
-    storage_dead(_23)
-    storage_dead(_22)
+    storage_live(_29)
     storage_live(_30)
-    storage_live(_31)
-    _31 = &(*self) with_metadata(copy self.metadata)
-    storage_live(_32)
-    _32 = copy ptr
-    storage_live(_33)
-    _33 = copy old_layout
-    _30 = TraitClause0::deallocate<'38>(move _31, move _32, move _33)
+    _30 = &old_layout
+    _29 = size<'65>(move _30)
     ↳⚡ unwind_continue
+    storage_dead(_30)
+    _23 = core::ptr::copy_nonoverlapping<u8>[{built_in impl Sized for u8}](move _24, move _27, move _29, copy caller_location)
+    ↳⚡ unwind_continue
+    storage_dead(_29)
+    storage_dead(_27)
+    storage_dead(_24)
+    storage_dead(_23)
+    storage_live(_31)
+    storage_live(_32)
+    _32 = &(*self) with_metadata(copy self.metadata)
+    storage_live(_33)
+    _33 = copy ptr
+    storage_live(_34)
+    _34 = copy old_layout
+    _31 = TraitClause0::deallocate<'74>(move _32, move _33, move _34, copy caller_location)
+    ↳⚡ unwind_continue
+    storage_dead(_34)
     storage_dead(_33)
     storage_dead(_32)
     storage_dead(_31)
-    storage_dead(_30)
-    storage_live(_34)
-    _34 = copy new_ptr
-    _0 = Result::Ok { _0: move _34 }
-    storage_dead(_34)
+    storage_live(_35)
+    _35 = copy new_ptr
+    _0 = Result::Ok { _0: move _35 }
+    storage_dead(_35)
     storage_dead(new_ptr)
     return
 }
 
-pub const core::alloc::Allocator::shrink::{promoted_const}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 97u8, 108u8, 108u8, 111u8, 99u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(129usize)
-
-pub const core::alloc::Allocator::shrink::{promoted_const#2}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 97u8, 108u8, 108u8, 111u8, 99u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(129usize)
-
-pub const core::alloc::Allocator::shrink::{promoted_const#1}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 97u8, 108u8, 108u8, 111u8, 99u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(129usize)
-
 // Full name: core::alloc::Allocator::shrink
-pub unsafe fn shrink<'_0, Self>(self: &'_0 Self, ptr: NonNull<u8>, old_layout: Layout, new_layout: Layout) -> Result<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}]
+pub unsafe fn shrink<'_0, Self>(self: &'_0 Self, ptr: NonNull<u8>, old_layout: Layout, new_layout: Layout, caller_location: &'static Location<'static>) -> Result<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}]
 where
     TraitClause0: (Self: Allocator),
     TypeOutlives0: Self: '_0,
@@ -1605,136 +1434,102 @@ where
     let ptr: NonNull<u8>; // arg #2
     let old_layout: Layout; // arg #3
     let new_layout: Layout; // arg #4
-    let _5: bool; // anonymous local
+    let caller_location: &'static Location<'static>; // arg #5
     let _6: bool; // anonymous local
-    let _7: usize; // anonymous local
-    let _8: &'3 Layout; // anonymous local
-    let _9: usize; // anonymous local
-    let _10: &'4 Layout; // anonymous local
-    let _11: !; // anonymous local
-    let _12: Arguments<'6>; // anonymous local
+    let _7: bool; // anonymous local
+    let _8: usize; // anonymous local
+    let _9: &'3 Layout; // anonymous local
+    let _10: usize; // anonymous local
+    let _11: &'4 Layout; // anonymous local
+    let _12: !; // anonymous local
+    let _13: Arguments<'6>; // anonymous local
     let new_ptr: NonNull<[u8]>; // local
-    let _14: ControlFlow<Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}], NonNull<[u8]>>[{built_in impl Sized for Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}]}, {built_in impl Sized for NonNull<[u8]>}]; // anonymous local
-    let _15: Result<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}]; // anonymous local
-    let _16: &'7 Self; // anonymous local
-    let _17: Layout; // anonymous local
-    let _18: isize; // anonymous local
+    let _15: ControlFlow<Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}], NonNull<[u8]>>[{built_in impl Sized for Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}]}, {built_in impl Sized for NonNull<[u8]>}]; // anonymous local
+    let _16: Result<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}]; // anonymous local
+    let _17: &'7 Self; // anonymous local
+    let _18: Layout; // anonymous local
+    let _19: isize; // anonymous local
     let residual: Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}]; // local
-    let _20: Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}]; // anonymous local
+    let _21: Result<!, AllocError>[{built_in impl Sized for !}, {built_in impl Sized for AllocError}]; // anonymous local
     let val: NonNull<[u8]>; // local
-    let _22: (); // anonymous local
-    let _23: *const u8; // anonymous local
-    let _24: *mut u8; // anonymous local
-    let _25: NonNull<u8>; // anonymous local
-    let _26: *mut u8; // anonymous local
-    let _27: NonNull<[u8]>; // anonymous local
-    let _28: usize; // anonymous local
-    let _29: &'8 Layout; // anonymous local
-    let _30: (); // anonymous local
-    let _31: &'9 Self; // anonymous local
-    let _32: NonNull<u8>; // anonymous local
-    let _33: Layout; // anonymous local
-    let _34: NonNull<[u8]>; // anonymous local
-    let _35: *const str is !null; // anonymous local
-    let _36: NonNull<str>; // anonymous local
-    let _37: PhantomData<&'27 str>; // anonymous local
-    let _38: Location<'25>; // anonymous local
-    let _39: &'23 Location<'24>; // anonymous local
-    let _40: *const str is !null; // anonymous local
-    let _41: NonNull<str>; // anonymous local
-    let _42: PhantomData<&'31 str>; // anonymous local
-    let _43: Location<'30>; // anonymous local
-    let _44: &'28 Location<'29>; // anonymous local
-    let _45: *const str is !null; // anonymous local
-    let _46: NonNull<str>; // anonymous local
-    let _47: PhantomData<&'37 str>; // anonymous local
-    let _48: Location<'36>; // anonymous local
-    let _49: &'34 Location<'35>; // anonymous local
+    let _23: (); // anonymous local
+    let _24: *const u8; // anonymous local
+    let _25: *mut u8; // anonymous local
+    let _26: NonNull<u8>; // anonymous local
+    let _27: *mut u8; // anonymous local
+    let _28: NonNull<[u8]>; // anonymous local
+    let _29: usize; // anonymous local
+    let _30: &'8 Layout; // anonymous local
+    let _31: (); // anonymous local
+    let _32: &'9 Self; // anonymous local
+    let _33: NonNull<u8>; // anonymous local
+    let _34: Layout; // anonymous local
+    let _35: NonNull<[u8]>; // anonymous local
 
     storage_live(_0)
-    storage_live(_18)
-    storage_live(_5)
-    _5 = const false
-    if move _5 {
-        storage_live(_6)
+    storage_live(_19)
+    storage_live(_6)
+    _6 = const false
+    if move _6 {
         storage_live(_7)
         storage_live(_8)
-        _8 = &new_layout
-        _7 = size<'11>(move _8)
-        ↳⚡ unwind_continue
-        storage_dead(_8)
         storage_live(_9)
-        storage_live(_10)
-        _10 = &old_layout
-        _9 = size<'13>(move _10)
+        _9 = &new_layout
+        _8 = size<'20>(move _9)
         ↳⚡ unwind_continue
-        storage_dead(_10)
-        _6 = move _7 <= move _9
-        if move _6 {
+        storage_dead(_9)
+        storage_live(_10)
+        storage_live(_11)
+        _11 = &old_layout
+        _10 = size<'26>(move _11)
+        ↳⚡ unwind_continue
+        storage_dead(_11)
+        _7 = move _8 <= move _10
+        if move _7 {
         } else {
-            storage_dead(_9)
-            storage_dead(_7)
-            storage_live(_11)
+            storage_dead(_10)
+            storage_dead(_8)
             storage_live(_12)
-            _12 = from_str<'15>(const "`new_layout.size()` must be smaller than or equal to `old_layout.size()`")
+            storage_live(_13)
+            _13 = from_str<'40>(const "`new_layout.size()` must be smaller than or equal to `old_layout.size()`")
             ↳⚡ unwind_continue
-            storage_live(_35)
-            _35 = &raw const core::alloc::Allocator::shrink::{promoted_const} with_metadata(const 129usize)
-            storage_live(_36)
-            _36 = NonNull { pointer: move _35 }
-            storage_live(_37)
-            _37 = PhantomData {  }
-            storage_live(_38)
-            _38 = Location { 0: move _36, 1: const 447u32, 2: const 9u32, 3: move _37 }
-            storage_live(_39)
-            _39 = &_38
-            _11 = panic_fmt<'19>(move _12, move _39)
+            _12 = panic_fmt<'47>(move _13, copy caller_location)
             ↳⚡ unwind_continue
         }
-        storage_dead(_9)
+        storage_dead(_10)
+        storage_dead(_8)
         storage_dead(_7)
-        storage_dead(_6)
     } else {
     }
-    storage_dead(_5)
+    storage_dead(_6)
     storage_live(new_ptr)
-    storage_live(_14)
     storage_live(_15)
     storage_live(_16)
-    _16 = &(*self) with_metadata(copy self.metadata)
     storage_live(_17)
-    _17 = copy new_layout
-    _15 = TraitClause0::allocate<'14>(move _16, move _17)
+    _17 = &(*self) with_metadata(copy self.metadata)
+    storage_live(_18)
+    _18 = copy new_layout
+    _16 = TraitClause0::allocate<'31>(move _17, move _18, copy caller_location)
     ↳⚡ unwind_continue
+    storage_dead(_18)
     storage_dead(_17)
-    storage_dead(_16)
-    _14 = branch<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}](move _15)
+    _15 = branch<NonNull<[u8]>, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}](move _16)
     ↳⚡ unwind_continue
-    storage_dead(_15)
-    _18 = @discriminant(_14)
-    switch move _18 {
+    storage_dead(_16)
+    _19 = @discriminant(_15)
+    switch move _19 {
         0isize => {
         },
         1isize => {
             storage_live(residual)
-            residual = copy (_14 as variant ControlFlow::Break)._0
-            storage_live(_20)
-            _20 = copy residual
-            storage_live(_40)
-            _40 = &raw const core::alloc::Allocator::shrink::{promoted_const#1} with_metadata(const 129usize)
-            storage_live(_41)
-            _41 = NonNull { pointer: move _40 }
-            storage_live(_42)
-            _42 = PhantomData {  }
-            storage_live(_43)
-            _43 = Location { 0: move _41, 1: const 452u32, 2: const 23u32, 3: move _42 }
-            storage_live(_44)
-            _44 = &_43
-            _0 = from_residual<NonNull<[u8]>, AllocError, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}, {built_in impl Sized for AllocError}, {impl#6}<AllocError>[{built_in impl Sized for AllocError}]](move _20, move _44)
+            residual = copy (_15 as variant ControlFlow::Break)._0
+            storage_live(_21)
+            _21 = copy residual
+            _0 = from_residual<NonNull<[u8]>, AllocError, AllocError>[{built_in impl Sized for NonNull<[u8]>}, {built_in impl Sized for AllocError}, {built_in impl Sized for AllocError}, {impl#6}<AllocError>[{built_in impl Sized for AllocError}]](move _21, copy caller_location)
             ↳⚡ unwind_continue
-            storage_dead(_20)
+            storage_dead(_21)
             storage_dead(residual)
-            storage_dead(_14)
+            storage_dead(_15)
             storage_dead(new_ptr)
             return
         },
@@ -1743,65 +1538,55 @@ where
         },
     }
     storage_live(val)
-    val = copy (_14 as variant ControlFlow::Continue)._0
+    val = copy (_15 as variant ControlFlow::Continue)._0
     new_ptr = copy val
     storage_dead(val)
-    storage_dead(_14)
-    storage_live(_22)
+    storage_dead(_15)
     storage_live(_23)
     storage_live(_24)
     storage_live(_25)
-    _25 = copy ptr
-    _24 = core::ptr::non_null::{NonNull<T>}::as_ptr<u8>(move _25)
-    ↳⚡ unwind_continue
-    _23 = cast<*mut u8, *const u8>(move _24)
-    storage_dead(_25)
-    storage_dead(_24)
     storage_live(_26)
+    _26 = copy ptr
+    _25 = core::ptr::non_null::{NonNull<T>}::as_ptr<u8>(move _26)
+    ↳⚡ unwind_continue
+    _24 = cast<*mut u8, *const u8>(move _25)
+    storage_dead(_26)
+    storage_dead(_25)
     storage_live(_27)
-    _27 = copy new_ptr
-    _26 = as_mut_ptr<u8>[{built_in impl Sized for u8}](move _27)
-    ↳⚡ unwind_continue
-    storage_dead(_27)
     storage_live(_28)
-    storage_live(_29)
-    _29 = &new_layout
-    _28 = size<'33>(move _29)
-    ↳⚡ unwind_continue
-    storage_dead(_29)
-    storage_live(_45)
-    _45 = &raw const core::alloc::Allocator::shrink::{promoted_const#2} with_metadata(const 129usize)
-    storage_live(_46)
-    _46 = NonNull { pointer: move _45 }
-    storage_live(_47)
-    _47 = PhantomData {  }
-    storage_live(_48)
-    _48 = Location { 0: move _46, 1: const 460u32, 2: const 13u32, 3: move _47 }
-    storage_live(_49)
-    _49 = &_48
-    _22 = core::ptr::copy_nonoverlapping<u8>[{built_in impl Sized for u8}](move _23, move _26, move _28, move _49)
+    _28 = copy new_ptr
+    _27 = as_mut_ptr<u8>[{built_in impl Sized for u8}](move _28)
     ↳⚡ unwind_continue
     storage_dead(_28)
-    storage_dead(_26)
-    storage_dead(_23)
-    storage_dead(_22)
+    storage_live(_29)
     storage_live(_30)
-    storage_live(_31)
-    _31 = &(*self) with_metadata(copy self.metadata)
-    storage_live(_32)
-    _32 = copy ptr
-    storage_live(_33)
-    _33 = copy old_layout
-    _30 = TraitClause0::deallocate<'38>(move _31, move _32, move _33)
+    _30 = &new_layout
+    _29 = size<'65>(move _30)
     ↳⚡ unwind_continue
+    storage_dead(_30)
+    _23 = core::ptr::copy_nonoverlapping<u8>[{built_in impl Sized for u8}](move _24, move _27, move _29, copy caller_location)
+    ↳⚡ unwind_continue
+    storage_dead(_29)
+    storage_dead(_27)
+    storage_dead(_24)
+    storage_dead(_23)
+    storage_live(_31)
+    storage_live(_32)
+    _32 = &(*self) with_metadata(copy self.metadata)
+    storage_live(_33)
+    _33 = copy ptr
+    storage_live(_34)
+    _34 = copy old_layout
+    _31 = TraitClause0::deallocate<'74>(move _32, move _33, move _34, copy caller_location)
+    ↳⚡ unwind_continue
+    storage_dead(_34)
     storage_dead(_33)
     storage_dead(_32)
     storage_dead(_31)
-    storage_dead(_30)
-    storage_live(_34)
-    _34 = copy new_ptr
-    _0 = Result::Ok { _0: move _34 }
-    storage_dead(_34)
+    storage_live(_35)
+    _35 = copy new_ptr
+    _0 = Result::Ok { _0: move _35 }
+    storage_dead(_35)
     storage_dead(new_ptr)
     return
 }
@@ -2069,10 +1854,10 @@ fn core::ptr::non_null::{NonNull<T>}::new_unchecked::precondition_check(ptr: *mu
     let caller_location: &'static Location<'static>; // arg #2
     let _3: bool; // anonymous local
     let _4: *mut (); // anonymous local
-    let msg: &'1 str; // local
+    let msg: &'0 str; // local
     let _6: !; // anonymous local
-    let _7: Arguments<'3>; // anonymous local
-    let _8: &'4 str; // anonymous local
+    let _7: Arguments<'2>; // anonymous local
+    let _8: &'3 str; // anonymous local
 
     storage_live(_0)
     _0 = ()
@@ -2095,10 +1880,10 @@ fn core::ptr::non_null::{NonNull<T>}::new_unchecked::precondition_check(ptr: *mu
     storage_live(_7)
     storage_live(_8)
     _8 = &(*msg) with_metadata(copy msg.metadata)
-    _7 = from_str<'6>(move _8)
+    _7 = from_str<'13>(move _8)
     ↳⚡ unwind_terminate
     storage_dead(_8)
-    _6 = panic_nounwind_fmt<'8>(move _7, const false, copy caller_location)
+    _6 = panic_nounwind_fmt<'19>(move _7, const false, copy caller_location)
     ↳⚡ undefined_behavior
 }
 
@@ -2171,7 +1956,9 @@ pub fn from<T>(unique: Unique<T>) -> NonNull<T>
     return
 }
 
-pub const core::ptr::unique::{Unique<T>}::new_unchecked::{promoted_const}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 112u8, 116u8, 114u8, 47u8, 117u8, 110u8, 105u8, 113u8, 117u8, 101u8, 46u8, 114u8, 115u8] } with_metadata(130usize)
+pub static test_crate::filename#17: str = RawMemory(0x2f, 0x68, 0x6f, 0x6d, 0x65, 0x2f, 0x6e, 0x61, 0x64, 0x72, 0x69, 0x65, 0x72, 0x69, 0x6c, 0x2f, 0x2e, 0x72, 0x75, 0x73, 0x74, 0x75, 0x70, 0x2f, 0x74, 0x6f, 0x6f, 0x6c, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x73, 0x2f, 0x6e, 0x69, 0x67, 0x68, 0x74, 0x6c, 0x79, 0x2d, 0x32, 0x30, 0x32, 0x36, 0x2d, 0x30, 0x39, 0x2d, 0x31, 0x37, 0x2d, 0x78, 0x38, 0x36, 0x5f, 0x36, 0x34, 0x2d, 0x75, 0x6e, 0x6b, 0x6e, 0x6f, 0x77, 0x6e, 0x2d, 0x6c, 0x69, 0x6e, 0x75, 0x78, 0x2d, 0x67, 0x6e, 0x75, 0x2f, 0x6c, 0x69, 0x62, 0x2f, 0x72, 0x75, 0x73, 0x74, 0x6c, 0x69, 0x62, 0x2f, 0x73, 0x72, 0x63, 0x2f, 0x72, 0x75, 0x73, 0x74, 0x2f, 0x6c, 0x69, 0x62, 0x72, 0x61, 0x72, 0x79, 0x2f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x73, 0x72, 0x63, 0x2f, 0x70, 0x74, 0x72, 0x2f, 0x75, 0x6e, 0x69, 0x71, 0x75, 0x65, 0x2e, 0x72, 0x73, 0x00) with_metadata(130usize)
+
+pub static core::ptr::unique::{Unique<T>}::new_unchecked::{promoted_const#18}: Location<'static> = Location { 0: NonNull { pointer: &raw const test_crate::filename#17 with_metadata(130usize) }, 1: 88u32, 2: 36u32, 3: PhantomData {  } }
 
 pub unsafe fn core::ptr::unique::{Unique<T>}::new_unchecked<T>(ptr: *mut T) -> Unique<T>
 {
@@ -2180,27 +1967,15 @@ pub unsafe fn core::ptr::unique::{Unique<T>}::new_unchecked<T>(ptr: *mut T) -> U
     let _2: NonNull<T>; // anonymous local
     let _3: *mut T; // anonymous local
     let _4: PhantomData<T>; // anonymous local
-    let _5: *const str is !null; // anonymous local
-    let _6: NonNull<str>; // anonymous local
-    let _7: PhantomData<&'8 str>; // anonymous local
-    let _8: Location<'5>; // anonymous local
-    let _9: &'3 Location<'4>; // anonymous local
+    let _5: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     storage_live(_2)
     storage_live(_3)
     _3 = copy ptr
     storage_live(_5)
-    _5 = &raw const core::ptr::unique::{Unique<T>}::new_unchecked::{promoted_const} with_metadata(const 130usize)
-    storage_live(_6)
-    _6 = NonNull { pointer: move _5 }
-    storage_live(_7)
-    _7 = PhantomData {  }
-    storage_live(_8)
-    _8 = Location { 0: move _6, 1: const 88u32, 2: const 36u32, 3: move _7 }
-    storage_live(_9)
-    _9 = &_8
-    _2 = core::ptr::non_null::{NonNull<T>}::new_unchecked<T>(move _3, move _9)
+    _5 = &core::ptr::unique::{Unique<T>}::new_unchecked::{promoted_const#18}
+    _2 = core::ptr::non_null::{NonNull<T>}::new_unchecked<T>(move _3, move _5)
     ↳⚡ unwind_continue
     storage_dead(_3)
     storage_live(_4)
@@ -2264,6 +2039,11 @@ where
   _1: A,
 }
 
+pub static test_crate::filename#13: str = RawMemory(0x2f, 0x68, 0x6f, 0x6d, 0x65, 0x2f, 0x6e, 0x61, 0x64, 0x72, 0x69, 0x65, 0x72, 0x69, 0x6c, 0x2f, 0x2e, 0x72, 0x75, 0x73, 0x74, 0x75, 0x70, 0x2f, 0x74, 0x6f, 0x6f, 0x6c, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x73, 0x2f, 0x6e, 0x69, 0x67, 0x68, 0x74, 0x6c, 0x79, 0x2d, 0x32, 0x30, 0x32, 0x36, 0x2d, 0x30, 0x39, 0x2d, 0x31, 0x37, 0x2d, 0x78, 0x38, 0x36, 0x5f, 0x36, 0x34, 0x2d, 0x75, 0x6e, 0x6b, 0x6e, 0x6f, 0x77, 0x6e, 0x2d, 0x6c, 0x69, 0x6e, 0x75, 0x78, 0x2d, 0x67, 0x6e, 0x75, 0x2f, 0x6c, 0x69, 0x62, 0x2f, 0x72, 0x75, 0x73, 0x74, 0x6c, 0x69, 0x62, 0x2f, 0x73, 0x72, 0x63, 0x2f, 0x72, 0x75, 0x73, 0x74, 0x2f, 0x6c, 0x69, 0x62, 0x72, 0x61, 0x72, 0x79, 0x2f, 0x61, 0x6c, 0x6c, 0x6f, 0x63, 0x2f, 0x73, 0x72, 0x63, 0x2f, 0x62, 0x6f, 0x78, 0x65, 0x64, 0x2e, 0x72, 0x73, 0x00) with_metadata(126usize)
+
+// Full name: alloc::boxed::{impl Drop for Box<T, A>[TraitClause0, TraitClause1, TraitClause2]}::drop::{promoted_const#19}
+pub static impl_Drop_for_Box::drop::{promoted_const#19}: Location<'static> = Location { 0: NonNull { pointer: &raw const test_crate::filename#13 with_metadata(126usize) }, 1: 2014u32, 2: 17u32, 3: PhantomData {  } }
+
 // Full name: alloc::boxed::{impl Drop for Box<T, A>[TraitClause0, TraitClause1, TraitClause2]}::drop
 pub fn drop<'_0, T, A>(self: &'_0 mut Box<T, A>[TraitClause0, TraitClause1, TraitClause2])
 where
@@ -2289,6 +2069,7 @@ where
     let _13: Unique<u8>; // anonymous local
     let _14: Unique<T>; // anonymous local
     let _15: Layout; // anonymous local
+    let _16: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     _0 = ()
@@ -2311,7 +2092,7 @@ where
     storage_live(_8)
     storage_live(_9)
     _9 = &layout
-    _8 = size<'7>(move _9)
+    _8 = size<'24>(move _9)
     ↳⚡ unwind_continue
     storage_dead(_9)
     _7 = move _8 != const 0usize
@@ -2340,7 +2121,9 @@ where
     storage_dead(_13)
     storage_live(_15)
     _15 = copy layout
-    _10 = TraitClause2::deallocate<'8>(move _11, move _12, move _15)
+    storage_live(_16)
+    _16 = &impl_Drop_for_Box::drop::{promoted_const#19}
+    _10 = TraitClause2::deallocate<'37>(move _11, move _12, move _15, move _16)
     ↳⚡ unwind_continue
     storage_dead(_15)
     storage_dead(_12)
@@ -2380,23 +2163,22 @@ where
     _6 = transmute<NonNull<T>, *const T>(copy (*_1)._0.pointer)
     drop[{built_in impl Destruct for T}::drop_glue<'4>] (*_6)
     ↳⚡ _4 = &mut (*_1)
-        _5 = drop<'8, T, A>[TraitClause0, TraitClause1, TraitClause2](move _4)
+        _5 = drop<'21, T, A>[TraitClause0, TraitClause1, TraitClause2](move _4)
         ↳⚡ unwind_terminate
-        drop[{built_in impl Destruct for A}::drop_glue<'9>] (*_1)._1
+        drop[{built_in impl Destruct for A}::drop_glue<'22>] (*_1)._1
         ↳⚡ unwind_terminate
         unwind_continue
     _2 = &mut (*_1)
-    _3 = drop<'6, T, A>[TraitClause0, TraitClause1, TraitClause2](move _2)
-    ↳⚡ drop[{built_in impl Destruct for A}::drop_glue<'9>] (*_1)._1
+    _3 = drop<'15, T, A>[TraitClause0, TraitClause1, TraitClause2](move _2)
+    ↳⚡ drop[{built_in impl Destruct for A}::drop_glue<'22>] (*_1)._1
         ↳⚡ unwind_terminate
         unwind_continue
-    drop[{built_in impl Destruct for A}::drop_glue<'10>] (*_1)._1
+    drop[{built_in impl Destruct for A}::drop_glue<'23>] (*_1)._1
     ↳⚡ unwind_continue
     return
 }
 
-// Full name: alloc::boxed::box_new_uninit::{promoted_const}
-fn {promoted_const}() -> &'_ Global
+fn alloc::boxed::box_new_uninit::{promoted_const}() -> &'_ Global
 {
     let _0: &'0 Global; // return
     let _1: Global; // anonymous local
@@ -2408,8 +2190,7 @@ fn {promoted_const}() -> &'_ Global
     return
 }
 
-// Full name: alloc::boxed::box_new_uninit::{promoted_const}
-const {promoted_const}: &'_ Global = {promoted_const}()
+const alloc::boxed::box_new_uninit::{promoted_const}: &'_ Global = alloc::boxed::box_new_uninit::{promoted_const}()
 
 // Full name: alloc::boxed::box_new_uninit
 #[track_caller]
@@ -2433,11 +2214,11 @@ fn box_new_uninit(layout: Layout, caller_location: &'static Location<'static>) -
     storage_live(_11)
     storage_live(_3)
     storage_live(_4)
-    _11 = copy {promoted_const}
+    _11 = copy alloc::boxed::box_new_uninit::{promoted_const}
     _4 = &(*_11) with_metadata(copy _11.metadata)
     storage_live(_5)
     _5 = copy layout
-    _3 = allocate<'5>(move _4, move _5, copy caller_location)
+    _3 = allocate<'9>(move _4, move _5, copy caller_location)
     ↳⚡ unwind_continue
     storage_dead(_5)
     storage_dead(_4)
@@ -2496,7 +2277,7 @@ where
         } else {
             unwind_continue
         }
-        drop[{built_in impl Destruct for T}::drop_glue<'0>] x
+        drop[{built_in impl Destruct for T}::drop_glue<'4>] x
         ↳⚡ unwind_terminate
         unwind_continue
     _4 = cast<*mut u8, *mut T>(move _5)
@@ -2535,7 +2316,7 @@ where
     storage_live(_4)
     _4 = copy raw
     _3 = core::ptr::unique::{Unique<T>}::new_unchecked<T>(move _4)
-    ↳⚡ drop[{built_in impl Destruct for A}::drop_glue<'0>] alloc
+    ↳⚡ drop[{built_in impl Destruct for A}::drop_glue<'9>] alloc
         ↳⚡ unwind_terminate
         unwind_continue
     storage_dead(_4)
@@ -2599,7 +2380,7 @@ where
     storage_live(_6)
     storage_live(_7)
     _7 = &mut b_2
-    _6 = deref_mut<'7, Box<T, Global>[TraitClause0, {built_in impl Sized for Global}, {impl#0}]>[{built_in impl MetaSized for Box<T, Global>[TraitClause0, {built_in impl Sized for Global}, {impl#0}]}](move _7)
+    _6 = deref_mut<'20, Box<T, Global>[TraitClause0, {built_in impl Sized for Global}, {impl#0}]>[{built_in impl MetaSized for Box<T, Global>[TraitClause0, {built_in impl Sized for Global}, {impl#0}]}](move _7)
     ↳⚡ unwind_continue
     storage_dead(_7)
     _8 = copy (*_6)
@@ -2614,7 +2395,7 @@ where
     return
 }
 
-pub const alloc::boxed::{Box<T, A>[TraitClause0, TraitClause1, TraitClause2]}::into_raw_with_allocator::{promoted_const}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 97u8, 108u8, 108u8, 111u8, 99u8, 47u8, 115u8, 114u8, 99u8, 47u8, 98u8, 111u8, 120u8, 101u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(126usize)
+pub static alloc::boxed::{Box<T, A>[TraitClause0, TraitClause1, TraitClause2]}::into_raw_with_allocator::{promoted_const#14}: Location<'static> = Location { 0: NonNull { pointer: &raw const test_crate::filename#13 with_metadata(126usize) }, 1: 1697u32, 2: 30u32, 3: PhantomData {  } }
 
 struct (_, _)<A, B>
 where
@@ -2647,11 +2428,7 @@ where
     let _13: A; // anonymous local
     let _14: Box<T, A>[TraitClause0, TraitClause1, TraitClause2]; // anonymous local
     let _15: *const T; // anonymous local
-    let _16: *const str is !null; // anonymous local
-    let _17: NonNull<str>; // anonymous local
-    let _18: PhantomData<&'22 str>; // anonymous local
-    let _19: Location<'19>; // anonymous local
-    let _20: &'17 Location<'18>; // anonymous local
+    let _16: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     storage_live(_14)
@@ -2666,7 +2443,7 @@ where
     storage_live(_5)
     storage_live(_6)
     _6 = &mut b_2
-    _5 = deref_mut<'11, Box<T, A>[TraitClause0, TraitClause1, TraitClause2]>[{built_in impl MetaSized for Box<T, A>[TraitClause0, TraitClause1, TraitClause2]}](move _6)
+    _5 = deref_mut<'24, Box<T, A>[TraitClause0, TraitClause1, TraitClause2]>[{built_in impl MetaSized for Box<T, A>[TraitClause0, TraitClause1, TraitClause2]}](move _6)
     ↳⚡ unwind_continue
     storage_dead(_6)
     _14 = copy (*_5)
@@ -2678,22 +2455,14 @@ where
     storage_live(_10)
     storage_live(_11)
     _11 = &b_2
-    _10 = deref<'13, Box<T, A>[TraitClause0, TraitClause1, TraitClause2]>[{built_in impl MetaSized for Box<T, A>[TraitClause0, TraitClause1, TraitClause2]}](move _11)
+    _10 = deref<'30, Box<T, A>[TraitClause0, TraitClause1, TraitClause2]>[{built_in impl MetaSized for Box<T, A>[TraitClause0, TraitClause1, TraitClause2]}](move _11)
     ↳⚡ unwind_continue
     storage_dead(_11)
     _9 = &(*_10)._1 with_metadata(copy _10.metadata)
     _8 = &raw const (*_9) with_metadata(copy _9.metadata)
     storage_live(_16)
-    _16 = &raw const alloc::boxed::{Box<T, A>[TraitClause0, TraitClause1, TraitClause2]}::into_raw_with_allocator::{promoted_const} with_metadata(const 126usize)
-    storage_live(_17)
-    _17 = NonNull { pointer: move _16 }
-    storage_live(_18)
-    _18 = PhantomData {  }
-    storage_live(_19)
-    _19 = Location { 0: move _17, 1: const 1697u32, 2: const 30u32, 3: move _18 }
-    storage_live(_20)
-    _20 = &_19
-    alloc = read<A>[TraitClause1](move _8, move _20)
+    _16 = &alloc::boxed::{Box<T, A>[TraitClause0, TraitClause1, TraitClause2]}::into_raw_with_allocator::{promoted_const#14}
+    alloc = read<A>[TraitClause1](move _8, move _16)
     ↳⚡ unwind_continue
     storage_dead(_10)
     storage_dead(_9)
@@ -2767,9 +2536,11 @@ where
     return
 }
 
-pub const test_crate::foo::{promoted_const#1}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 114u8, 97u8, 119u8, 45u8, 98u8, 111u8, 120u8, 101u8, 115u8, 46u8, 114u8, 115u8] } with_metadata(21usize)
+pub static test_crate::filename#10: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x72, 0x61, 0x77, 0x2d, 0x62, 0x6f, 0x78, 0x65, 0x73, 0x2e, 0x72, 0x73, 0x00) with_metadata(21usize)
 
-pub const test_crate::foo::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 114u8, 97u8, 119u8, 45u8, 98u8, 111u8, 120u8, 101u8, 115u8, 46u8, 114u8, 115u8] } with_metadata(21usize)
+pub static test_crate::foo::{promoted_const#12}: Location<'static> = Location { 0: NonNull { pointer: &raw const test_crate::filename#10 with_metadata(21usize) }, 1: 18u32, 2: 23u32, 3: PhantomData {  } }
+
+pub static test_crate::foo::{promoted_const#11}: Location<'static> = Location { 0: NonNull { pointer: &raw const test_crate::filename#10 with_metadata(21usize) }, 1: 16u32, 2: 13u32, 3: PhantomData {  } }
 
 // Full name: test_crate::foo
 unsafe fn foo()
@@ -2785,16 +2556,8 @@ unsafe fn foo()
     let i: i32; // local
     let _9: *const i32; // anonymous local
     let _10: *const i32; // anonymous local
-    let _11: *const str is !null; // anonymous local
-    let _12: NonNull<str>; // anonymous local
-    let _13: PhantomData<&'10 str>; // anonymous local
-    let _14: Location<'7>; // anonymous local
-    let _15: &'5 Location<'6>; // anonymous local
-    let _16: *const str is !null; // anonymous local
-    let _17: NonNull<str>; // anonymous local
-    let _18: PhantomData<&'14 str>; // anonymous local
-    let _19: Location<'13>; // anonymous local
-    let _20: &'11 Location<'12>; // anonymous local
+    let _11: &'static Location<'static>; // anonymous local
+    let _12: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     storage_live(_9)
@@ -2802,16 +2565,8 @@ unsafe fn foo()
     _0 = ()
     storage_live(b_1)
     storage_live(_11)
-    _11 = &raw const test_crate::foo::{promoted_const} with_metadata(const 21usize)
-    storage_live(_12)
-    _12 = NonNull { pointer: move _11 }
-    storage_live(_13)
-    _13 = PhantomData {  }
-    storage_live(_14)
-    _14 = Location { 0: move _12, 1: const 16u32, 2: const 13u32, 3: move _13 }
-    storage_live(_15)
-    _15 = &_14
-    b_1 = alloc::boxed::{Box<T, Global>[TraitClause0::ImpliedClause0, {built_in impl Sized for Global}, {impl#0}]}::new<i32>[{built_in impl Sized for i32}](const 42i32, move _15)
+    _11 = &test_crate::foo::{promoted_const#11}
+    b_1 = alloc::boxed::{Box<T, Global>[TraitClause0::ImpliedClause0, {built_in impl Sized for Global}, {impl#0}]}::new<i32>[{built_in impl Sized for i32}](const 42i32, move _11)
     ↳⚡ unwind_continue
     storage_live(p)
     storage_live(_3)
@@ -2821,19 +2576,11 @@ unsafe fn foo()
     storage_dead(_3)
     storage_live(_4)
     storage_live(_5)
-    storage_live(_16)
-    _16 = &raw const test_crate::foo::{promoted_const#1} with_metadata(const 21usize)
-    storage_live(_17)
-    _17 = NonNull { pointer: move _16 }
-    storage_live(_18)
-    _18 = PhantomData {  }
-    storage_live(_19)
-    _19 = Location { 0: move _17, 1: const 18u32, 2: const 23u32, 3: move _18 }
-    storage_live(_20)
-    _20 = &_19
-    _5 = alloc::boxed::{Box<T, Global>[TraitClause0::ImpliedClause0, {built_in impl Sized for Global}, {impl#0}]}::new<i32>[{built_in impl Sized for i32}](const 42i32, move _20)
+    storage_live(_12)
+    _12 = &test_crate::foo::{promoted_const#12}
+    _5 = alloc::boxed::{Box<T, Global>[TraitClause0::ImpliedClause0, {built_in impl Sized for Global}, {impl#0}]}::new<i32>[{built_in impl Sized for i32}](const 42i32, move _12)
     ↳⚡ unwind_continue
-    _4 = leak<'15, i32, Global>[{built_in impl MetaSized for i32}, {built_in impl Sized for Global}, {impl#0}](move _5)
+    _4 = leak<'23, i32, Global>[{built_in impl MetaSized for i32}, {built_in impl Sized for Global}, {impl#0}](move _5)
     ↳⚡ unwind_continue
     storage_dead(_5)
     storage_dead(_4)
@@ -2850,7 +2597,7 @@ unsafe fn foo()
     (*_10) = const 42i32
     _0 = ()
     storage_dead(i)
-    drop[drop_glue<'16, i32, Global>[{built_in impl MetaSized for i32}, {built_in impl Sized for Global}, {impl#0}]] b_6
+    drop[drop_glue<'28, i32, Global>[{built_in impl MetaSized for i32}, {built_in impl Sized for Global}, {impl#0}]] b_6
     ↳⚡ unwind_continue
     storage_dead(b_6)
     storage_dead(p)

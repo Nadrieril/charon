@@ -30,6 +30,7 @@ pub mod normalize {
     pub mod normalize_trait_refs;
     pub mod partial_monomorphization;
     pub mod skip_trait_refs_when_known;
+    pub mod track_caller;
     pub mod transform_dyn_trait_calls;
 }
 
@@ -102,6 +103,7 @@ pub fn run_transformation_passes(options: &CliOpts, ctx: &mut TransformCtx) {
 
     // Item and type cleanup passes.
     ctx.run_passes([
+        global(&normalize::track_caller::Transform),
         // Link specification items and the items they specify in both directions.
         global(&add_missing_info::link_specs::Transform),
         // `--duplicate-defaulted-methods`: copy default method bodies into impls that use them.

@@ -1,5 +1,9 @@
 # Final LLBC before serialization:
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::marker::MetaSized
 #[fundamental]
 #[lang_item(MetaSized)]
@@ -42,6 +46,10 @@ pub trait Destruct<Self>
 {
     fn drop_glue<'_0_1>;
     non-dyn-compatible
+}
+
+struct str {
+  _0: [u8],
 }
 
 // Full name: test_crate::Trait
@@ -145,13 +153,13 @@ fn main()
     let _12: &'8 (); // anonymous local
     let _13: &'9 u32; // anonymous local
     let _14: &'10 u32; // anonymous local
-    let _15: &'11 (); // anonymous local
-    let _16: &'12 (); // anonymous local
-    let _17: &'14 u32; // anonymous local
+    let _15: &'24 (); // anonymous local
+    let _16: &'25 (); // anonymous local
+    let _17: &'31 u32; // anonymous local
     let _18: u32; // anonymous local
-    let _19: &'15 (); // anonymous local
+    let _19: &'32 (); // anonymous local
     let _20: (); // anonymous local
-    let _21: &'16 (); // anonymous local
+    let _21: &'33 (); // anonymous local
     let _22: (); // anonymous local
 
     storage_live(_14)
@@ -215,7 +223,7 @@ fn main()
     _11 = move _16
     _10 = &(*_11)
     _9 = &(*_10)
-    _7 = compare<'13>(move _8, move _9)
+    _7 = compare<'30>(move _8, move _9)
     ↳⚡ storage_dead(_13)
         storage_dead(_12)
         storage_dead(_11)
@@ -280,7 +288,7 @@ fn call_foo<'e>(x: &'e ()) -> &'e ()
     let _5: &'6 (); // anonymous local
     let _6: &'7 (); // anonymous local
     let _7: &'8 (); // anonymous local
-    let _8: &'13 (); // anonymous local
+    let _8: &'22 (); // anonymous local
     let _9: (); // anonymous local
 
     storage_live(_7)
@@ -300,7 +308,7 @@ fn call_foo<'e>(x: &'e ()) -> &'e ()
     _6 = move _7
     _5 = &(*_6)
     _4 = &(*_5)
-    _2 = foo<'11, '12>(move _3, move _4)
+    _2 = foo<'20, '21>(move _3, move _4)
     ↳⚡ storage_dead(_6)
         storage_dead(x)
         unwind_continue

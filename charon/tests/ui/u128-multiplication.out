@@ -648,6 +648,10 @@ pub fn carrying_mul_add(self: u128, b: u128, c: u128, d: u128) -> (u128, u128)
     return
 }
 
+struct str {
+  _0: [u8],
+}
+
 // Full name: test_crate::mult_u128
 pub fn mult_u128(a: u128, b: u128) -> u128
 {

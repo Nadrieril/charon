@@ -62,6 +62,10 @@ struct () {}
 pub fn _eprint<'_0>(_1: Arguments<'_0>)
 = <opaque>
 
+struct str {
+  _0: [u8],
+}
+
 struct (_,)<A> {
   _0: A,
 }
@@ -102,14 +106,14 @@ where
     let _18: &'58 [Argument<'59>; 1usize]; // anonymous local
     let _19: &'63 [Argument<'64>; 1usize]; // anonymous local
     let _20: [u8; 7usize]; // anonymous local
-    let _21: &'98 [u8; 7usize]; // anonymous local
+    let _21: &'115 [u8; 7usize]; // anonymous local
 
     storage_live(_0)
     _0 = ()
     storage_live(_2)
     storage_live(_3)
     _3 = copy slice
-    _2 = into_iter<'68, T>[TraitClause0](move _3)
+    _2 = into_iter<'77, T>[TraitClause0](move _3)
     ↳⚡ storage_dead(slice)
         unwind_continue
     storage_dead(_3)
@@ -121,7 +125,7 @@ where
         storage_live(_7)
         _7 = &mut iter
         _6 = &two-phase-mut (*_7)
-        _5 = next<'70, '72, T>[TraitClause0](move _6)
+        _5 = next<'83, '85, T>[TraitClause0](move _6)
         ↳⚡ storage_dead(slice)
             unwind_continue
         storage_dead(_6)
@@ -146,7 +150,7 @@ where
         storage_live(_14)
         storage_live(_15)
         _15 = &(*args_11._0)
-        _14 = new_debug<'83, '96, &'85 T>[{built_in impl Sized for &'87 T}, {impl#8}<'94, T>[TraitClause1]](move _15)
+        _14 = new_debug<'100, '113, &'102 T>[{built_in impl Sized for &'104 T}, {impl#8}<'111, T>[TraitClause1]](move _15)
         ↳⚡ storage_dead(slice)
             unwind_continue
         storage_dead(_15)
@@ -165,14 +169,14 @@ where
         storage_live(_19)
         _19 = &args_13
         _18 = &(*_19)
-        _10 = new<'103, 7usize, 1usize>(move _16, move _18)
+        _10 = new<'124, 7usize, 1usize>(move _16, move _18)
         ↳⚡ storage_dead(slice)
             unwind_continue
         storage_dead(_19)
         storage_dead(_18)
         storage_dead(_17)
         storage_dead(_16)
-        _9 = _eprint<'105>(move _10)
+        _9 = _eprint<'130>(move _10)
         ↳⚡ storage_dead(slice)
             unwind_continue
         storage_dead(_10)
@@ -205,7 +209,7 @@ fn main()
     let _4: &'4 [i32; 3usize]; // anonymous local
     let _5: &'5 [i32; 3usize]; // anonymous local
     let _6: &'6 [i32; 3usize]; // anonymous local
-    let _7: &'10 [i32; 3usize]; // anonymous local
+    let _7: &'19 [i32; 3usize]; // anonymous local
     let _8: [i32; 3usize]; // anonymous local
 
     storage_live(_6)
@@ -227,7 +231,7 @@ fn main()
     _2 = as_slice<'_, i32, 3usize>[{built_in impl Sized for i32}](move _3)
     ↳⚡ undefined_behavior
     storage_dead(_3)
-    _1 = debug_slice<'9, i32>[{built_in impl Sized for i32}, {impl#9}](move _2)
+    _1 = debug_slice<'18, i32>[{built_in impl Sized for i32}, {impl#9}](move _2)
     ↳⚡ storage_dead(_5)
         unwind_continue
     storage_dead(_2)

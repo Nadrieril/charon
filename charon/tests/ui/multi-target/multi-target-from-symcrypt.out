@@ -15,6 +15,9 @@ pub unsafe fn core::core_arch::arm_shared::neon::generated::vaddq_u16(_1: core::
 #[lang_item(MetaSized)]
 pub trait core::marker::MetaSized<Self>
 
+#[lang_item(PanicLocation)]
+pub opaque type core::panic::location::Location<'a>
+
 #[fundamental]
 #[lang_item(Sized)]
 pub trait core::marker::Sized<Self>
@@ -43,7 +46,7 @@ pub trait core::marker::Copy<Self>
 
 pub opaque type core::core_arch::x86::__m128i
 
-pub fn core::core_arch::x86::{impl core::clone::Clone for core::core_arch::x86::__m128i}::clone<'_0>(_1: &'_0 core::core_arch::x86::__m128i) -> core::core_arch::x86::__m128i
+pub fn core::core_arch::x86::{impl core::clone::Clone for core::core_arch::x86::__m128i}::clone<'_0>(_1: &'_0 core::core_arch::x86::__m128i, _2: &'static core::panic::location::Location<'static>) -> core::core_arch::x86::__m128i
 = <opaque>
 
 // Full name: core::core_arch::x86::{impl core::clone::Clone for core::core_arch::x86::__m128i}
@@ -60,7 +63,7 @@ impl core::marker::Copy for core::core_arch::x86::__m128i {
     non-dyn-compatible
 }
 
-pub fn core::core_arch::arm_shared::neon::{impl core::clone::Clone for core::core_arch::arm_shared::neon::uint16x8_t}::clone<'_0>(_1: &'_0 core::core_arch::arm_shared::neon::uint16x8_t) -> core::core_arch::arm_shared::neon::uint16x8_t
+pub fn core::core_arch::arm_shared::neon::{impl core::clone::Clone for core::core_arch::arm_shared::neon::uint16x8_t}::clone<'_0>(_1: &'_0 core::core_arch::arm_shared::neon::uint16x8_t, _2: &'static core::panic::location::Location<'static>) -> core::core_arch::arm_shared::neon::uint16x8_t
 = <opaque>
 
 // Full name: core::core_arch::arm_shared::neon::{impl core::clone::Clone for core::core_arch::arm_shared::neon::uint16x8_t}
@@ -85,9 +88,6 @@ pub unsafe fn core::core_arch::x86::sse2::_mm_loadu_si128(_1: *const core::core_
 
 pub unsafe fn core::core_arch::x86::sse2::_mm_storeu_si128(_1: *mut core::core_arch::x86::__m128i, _2: core::core_arch::x86::__m128i)
 = <opaque>
-
-#[lang_item(PanicLocation)]
-pub opaque type core::panic::location::Location<'a>
 
 #[lang_item(Index)]
 pub trait core::ops::index::Index<Self, Idx>
@@ -144,7 +144,7 @@ where
     TypeOutlives0: T: '_0,
 = <opaque>
 
-pub fn core::clone::impls::{impl core::clone::Clone for usize}::clone<'_0>(_1: &'_0 usize) -> usize
+pub fn core::clone::impls::{impl core::clone::Clone for usize}::clone<'_0>(_1: &'_0 usize, _2: &'static core::panic::location::Location<'static>) -> usize
 = <opaque>
 
 // Full name: core::clone::impls::{impl core::clone::Clone for usize}
@@ -448,6 +448,10 @@ where
     TypeOutlives0: T: '_0,
 = <opaque>
 
+struct str {
+  _0: [u8],
+}
+
 struct (_,)<A> {
   _0: A,
 }
@@ -511,7 +515,7 @@ fn test_crate::ntt_xmm::{impl test_crate::NttIntrinsicsInterface for test_crate:
     _5 = core::array::{[T; N]}::as_mut_slice<'_, u16, 8usize>[{built_in impl core::marker::Sized for u16}](move _6)
     ↳⚡ undefined_behavior
     storage_dead(_6)
-    _4 = core::slice::{[T]}::as_mut_ptr<'7, u16>[{built_in impl core::marker::Sized for u16}](move _5)
+    _4 = core::slice::{[T]}::as_mut_ptr<'16, u16>[{built_in impl core::marker::Sized for u16}](move _5)
     ↳⚡ storage_dead(val)
         storage_dead(dst)
         unwind_continue
@@ -549,7 +553,7 @@ fn test_crate::ntt_xmm::{impl test_crate::NttIntrinsicsInterface for test_crate:
     _4 = core::array::{[T; N]}::as_slice<'_, u16, 8usize>[{built_in impl core::marker::Sized for u16}](move _5)
     ↳⚡ undefined_behavior
     storage_dead(_5)
-    _3 = core::slice::{[T]}::as_ptr<'7, u16>[{built_in impl core::marker::Sized for u16}](move _4)
+    _3 = core::slice::{[T]}::as_ptr<'16, u16>[{built_in impl core::marker::Sized for u16}](move _4)
     ↳⚡ storage_dead(src)
         unwind_continue
     storage_dead(_4)
@@ -620,7 +624,7 @@ fn test_crate::ntt_neon::{impl test_crate::NttIntrinsicsInterface for test_crate
     _4 = core::array::{[T; N]}::as_mut_slice<'_, u16, 8usize>[{built_in impl core::marker::Sized for u16}](move _5)
     ↳⚡ undefined_behavior
     storage_dead(_5)
-    _3 = core::slice::{[T]}::as_mut_ptr<'7, u16>[{built_in impl core::marker::Sized for u16}](move _4)
+    _3 = core::slice::{[T]}::as_mut_ptr<'16, u16>[{built_in impl core::marker::Sized for u16}](move _4)
     ↳⚡ storage_dead(val)
         storage_dead(dst)
         unwind_continue
@@ -654,7 +658,7 @@ fn test_crate::ntt_neon::{impl test_crate::NttIntrinsicsInterface for test_crate
     _3 = core::array::{[T; N]}::as_slice<'_, u16, 8usize>[{built_in impl core::marker::Sized for u16}](move _4)
     ↳⚡ undefined_behavior
     storage_dead(_4)
-    _2 = core::slice::{[T]}::as_ptr<'7, u16>[{built_in impl core::marker::Sized for u16}](move _3)
+    _2 = core::slice::{[T]}::as_ptr<'16, u16>[{built_in impl core::marker::Sized for u16}](move _3)
     ↳⚡ storage_dead(src)
         unwind_continue
     storage_dead(_3)
@@ -721,7 +725,7 @@ fn test_crate::ntt_layer_generic<'_0, '_1>(a: &'_0 mut [u16; 8usize], b: &'_1 [u
         storage_live(_8)
         _8 = &mut iter
         _7 = &two-phase-mut (*_8)
-        _6 = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>[TraitClause0]}::next<'8, usize>[{built_in impl core::marker::Sized for usize}, core::iter::range::{impl core::iter::range::Step for usize}, {built_in impl core::marker::Destruct for usize}](move _7)
+        _6 = core::iter::range::{impl core::iter::traits::iterator::Iterator for core::ops::range::Range<A>[TraitClause0]}::next<'21, usize>[{built_in impl core::marker::Sized for usize}, core::iter::range::{impl core::iter::range::Step for usize}, {built_in impl core::marker::Destruct for usize}](move _7)
         ↳⚡ storage_dead(b)
             storage_dead(a)
             unwind_continue
@@ -820,7 +824,7 @@ where
     storage_live(va)
     storage_live(_4)
     _4 = &(*a)
-    va = TraitClause1::vec128_load<'7>(move _4)
+    va = TraitClause1::vec128_load<'16>(move _4)
     ↳⚡ storage_dead(b)
         storage_dead(a)
         unwind_continue
@@ -829,7 +833,7 @@ where
     storage_live(vb)
     storage_live(_6)
     _6 = &(*b)
-    vb = TraitClause1::vec128_load<'8>(move _6)
+    vb = TraitClause1::vec128_load<'21>(move _6)
     ↳⚡ storage_dead(b)
         storage_dead(a)
         unwind_continue
@@ -852,7 +856,7 @@ where
     _11 = &two-phase-mut (*a)
     storage_live(_12)
     _12 = copy vr
-    _10 = TraitClause1::vec128_store<'9>(move _11, move _12)
+    _10 = TraitClause1::vec128_store<'30>(move _11, move _12)
     ↳⚡ storage_dead(b)
         storage_dead(a)
         unwind_continue
@@ -928,7 +932,7 @@ fn test_crate::poly_element_ntt_layer::x86_64-apple-darwin<'_0, '_1>(a: &'_0 mut
         _8 = &two-phase-mut (*a)
         storage_live(_9)
         _9 = &(*b)
-        _7 = test_crate::ntt_layer_generic<'14, '15>(move _8, move _9)
+        _7 = test_crate::ntt_layer_generic<'31, '32>(move _8, move _9)
         ↳⚡ storage_dead(b)
             storage_dead(a)
             unwind_continue
@@ -946,7 +950,7 @@ fn test_crate::poly_element_ntt_layer::x86_64-apple-darwin<'_0, '_1>(a: &'_0 mut
     _5 = &two-phase-mut (*a)
     storage_live(_6)
     _6 = &(*b)
-    _4 = test_crate::ntt_layer_vec128<'10, '11, test_crate::ntt_xmm::NttIntrinsicsXmm>[{built_in impl core::marker::Sized for test_crate::ntt_xmm::NttIntrinsicsXmm}, test_crate::ntt_xmm::{impl test_crate::NttIntrinsicsInterface for test_crate::ntt_xmm::NttIntrinsicsXmm}](move _5, move _6)
+    _4 = test_crate::ntt_layer_vec128<'23, '24, test_crate::ntt_xmm::NttIntrinsicsXmm>[{built_in impl core::marker::Sized for test_crate::ntt_xmm::NttIntrinsicsXmm}, test_crate::ntt_xmm::{impl test_crate::NttIntrinsicsInterface for test_crate::ntt_xmm::NttIntrinsicsXmm}](move _5, move _6)
     ↳⚡ storage_dead(b)
         storage_dead(a)
         unwind_continue
@@ -987,7 +991,7 @@ fn test_crate::poly_element_ntt_layer::aarch64-apple-darwin<'_0, '_1>(a: &'_0 mu
         _8 = &two-phase-mut (*a)
         storage_live(_9)
         _9 = &(*b)
-        _7 = test_crate::ntt_layer_generic<'14, '15>(move _8, move _9)
+        _7 = test_crate::ntt_layer_generic<'31, '32>(move _8, move _9)
         ↳⚡ storage_dead(b)
             storage_dead(a)
             unwind_continue
@@ -1005,7 +1009,7 @@ fn test_crate::poly_element_ntt_layer::aarch64-apple-darwin<'_0, '_1>(a: &'_0 mu
     _5 = &two-phase-mut (*a)
     storage_live(_6)
     _6 = &(*b)
-    _4 = test_crate::ntt_layer_vec128<'10, '11, test_crate::ntt_neon::NttIntrinsicsNeon>[{built_in impl core::marker::Sized for test_crate::ntt_neon::NttIntrinsicsNeon}, test_crate::ntt_neon::{impl test_crate::NttIntrinsicsInterface for test_crate::ntt_neon::NttIntrinsicsNeon}](move _5, move _6)
+    _4 = test_crate::ntt_layer_vec128<'23, '24, test_crate::ntt_neon::NttIntrinsicsNeon>[{built_in impl core::marker::Sized for test_crate::ntt_neon::NttIntrinsicsNeon}, test_crate::ntt_neon::{impl test_crate::NttIntrinsicsInterface for test_crate::ntt_neon::NttIntrinsicsNeon}](move _5, move _6)
     ↳⚡ storage_dead(b)
         storage_dead(a)
         unwind_continue

@@ -2,14 +2,6 @@
 
 struct () {}
 
-// Full name: core::marker::Destruct
-#[lang_item(Destruct)]
-pub trait Destruct<Self>
-{
-    fn drop_glue<'_0_1>;
-    non-dyn-compatible
-}
-
 // Full name: core::marker::MetaSized
 #[fundamental]
 #[lang_item(MetaSized)]
@@ -24,6 +16,37 @@ pub trait Sized<Self>
     non-dyn-compatible
 }
 
+struct str {
+  _0: [u8],
+}
+
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub struct NonNull<T> {
+  pointer: *const T is !null,
+}
+
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub struct Location<'a> {
+  filename: NonNull<str>,
+  line: u32,
+  col: u32,
+  _filename: PhantomData<&'a str>,
+}
+
+// Full name: core::marker::Destruct
+#[lang_item(Destruct)]
+pub trait Destruct<Self>
+{
+    fn drop_glue<'_0_1>;
+    non-dyn-compatible
+}
+
 // Full name: core::clone::Clone
 #[lang_item(Clone)]
 #[diagnostic_item("Clone")]
@@ -35,7 +58,7 @@ pub trait Clone<Self>
     non-dyn-compatible
 }
 
-pub fn core::clone::Clone::clone_from<'_0, '_1, Self>(self: &'_0 mut Self, source: &'_1 Self)
+pub fn core::clone::Clone::clone_from<'_0, '_1, Self>(self: &'_0 mut Self, source: &'_1 Self, caller_location: &'static Location<'static>)
 where
     TraitClause0: (Self: Clone),
     TraitClause1: (Self: Destruct),
@@ -45,73 +68,83 @@ where
     let _0: (); // return
     let self: &'1 mut Self; // arg #1
     let source: &'3 Self; // arg #2
-    let _3: Self; // anonymous local
-    let _4: &'4 Self; // anonymous local
+    let caller_location: &'static Location<'static>; // arg #3
+    let _4: Self; // anonymous local
+    let _5: &'4 Self; // anonymous local
 
     storage_live(_0)
     _0 = ()
-    storage_live(_3)
     storage_live(_4)
-    _4 = &(*source) with_metadata(copy source.metadata)
-    _3 = TraitClause0::clone<'5>(move _4)
-    ↳⚡ storage_dead(source)
-        storage_dead(self)
-        unwind_continue
-    storage_dead(_4)
-    drop[TraitClause1::drop_glue<'6>] (*self)
-    ↳⚡ (*self) = move _3
+    storage_live(_5)
+    _5 = &(*source) with_metadata(copy source.metadata)
+    _4 = TraitClause0::clone<'14>(move _5, copy caller_location)
+    ↳⚡ storage_dead(caller_location)
         storage_dead(source)
         storage_dead(self)
         unwind_continue
-    (*self) = move _3
+    storage_dead(_5)
+    drop[TraitClause1::drop_glue<'15>] (*self)
+    ↳⚡ (*self) = move _4
+        storage_dead(caller_location)
+        storage_dead(source)
+        storage_dead(self)
+        unwind_continue
+    (*self) = move _4
     _0 = ()
-    storage_dead(_3)
+    storage_dead(_4)
+    storage_dead(caller_location)
     storage_dead(source)
     storage_dead(self)
     return
 }
 
 // Full name: core::clone::impls::{impl Clone for u8}::clone
-pub fn clone<'_0>(self: &'_0 u8) -> u8
+pub fn clone<'_0>(self: &'_0 u8, caller_location: &'static Location<'static>) -> u8
 {
     let _0: u8; // return
     let self: &'1 u8; // arg #1
+    let caller_location: &'static Location<'static>; // arg #2
 
     storage_live(_0)
     _0 = copy (*self)
+    storage_dead(caller_location)
     storage_dead(self)
     return
 }
 
 // Full name: core::clone::impls::{impl Clone for u8}::clone_from
-pub fn impl_Clone_for_u8::clone_from<'_0, '_1>(self: &'_0 mut u8, source: &'_1 u8)
+pub fn impl_Clone_for_u8::clone_from<'_0, '_1>(self: &'_0 mut u8, source: &'_1 u8, caller_location: &'static Location<'static>)
 where
     TraitClause0: (u8: Destruct),
 {
     let _0: (); // return
     let self: &'1 mut u8; // arg #1
     let source: &'3 u8; // arg #2
-    let _3: u8; // anonymous local
-    let _4: &'4 u8; // anonymous local
+    let caller_location: &'static Location<'static>; // arg #3
+    let _4: u8; // anonymous local
+    let _5: &'4 u8; // anonymous local
 
     storage_live(_0)
     _0 = ()
-    storage_live(_3)
     storage_live(_4)
-    _4 = &(*source)
-    _3 = clone<'5>(move _4)
-    ↳⚡ storage_dead(source)
-        storage_dead(self)
-        unwind_continue
-    storage_dead(_4)
-    drop[TraitClause0::drop_glue<'6>] (*self)
-    ↳⚡ (*self) = move _3
+    storage_live(_5)
+    _5 = &(*source)
+    _4 = clone<'14>(move _5, copy caller_location)
+    ↳⚡ storage_dead(caller_location)
         storage_dead(source)
         storage_dead(self)
         unwind_continue
-    (*self) = move _3
+    storage_dead(_5)
+    drop[TraitClause0::drop_glue<'15>] (*self)
+    ↳⚡ (*self) = move _4
+        storage_dead(caller_location)
+        storage_dead(source)
+        storage_dead(self)
+        unwind_continue
+    (*self) = move _4
     _0 = ()
-    storage_dead(_3)
+    storage_dead(_4)
+    storage_dead(caller_location)
     storage_dead(source)
     storage_dead(self)
     return

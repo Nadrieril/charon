@@ -255,7 +255,10 @@ struct str {
   _0: [u8],
 }
 
-pub const test_crate::get_or_insert::{promoted_const#4}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 112u8, 111u8, 108u8, 111u8, 110u8, 105u8, 117u8, 115u8, 95u8, 109u8, 97u8, 112u8, 46u8, 114u8, 115u8] } with_metadata(24usize)
+// Full name: test_crate::filename#14
+pub static filename: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x70, 0x6f, 0x6c, 0x6f, 0x6e, 0x69, 0x75, 0x73, 0x5f, 0x6d, 0x61, 0x70, 0x2e, 0x72, 0x73, 0x00) with_metadata(24usize)
+
+pub static test_crate::get_or_insert::{promoted_const#15}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(24usize) }, 1: 11u32, 2: 17u32, 3: PhantomData {  } }
 
 // Full name: test_crate::get_or_insert
 pub fn get_or_insert<'_0>(map: &'_0 mut HashMap<u32, u32, RandomState, Global>[{built_in impl Sized for u32}, {built_in impl Sized for u32}, {built_in impl Sized for RandomState}, {built_in impl Sized for Global}]) -> &'_0 u32
@@ -277,16 +280,12 @@ pub fn get_or_insert<'_0>(map: &'_0 mut HashMap<u32, u32, RandomState, Global>[{
     let _14: &'26 u32; // anonymous local
     let _15: &'27 u32; // anonymous local
     let _16: &'28 u32; // anonymous local
-    let _17: &'35 u32; // anonymous local
-    let _18: &'53 u32; // anonymous local
+    let _17: &'48 u32; // anonymous local
+    let _18: &'61 u32; // anonymous local
     let _19: u32; // anonymous local
-    let _20: &'54 u32; // anonymous local
+    let _20: &'62 u32; // anonymous local
     let _21: u32; // anonymous local
-    let _22: *const str is !null; // anonymous local
-    let _23: NonNull<str>; // anonymous local
-    let _24: PhantomData<&'47 str>; // anonymous local
-    let _25: Location<'44>; // anonymous local
-    let _26: &'42 Location<'43>; // anonymous local
+    let _22: &'static Location<'static>; // anonymous local
 
     storage_live(_16)
     storage_live(_18)
@@ -305,7 +304,7 @@ pub fn get_or_insert<'_0>(map: &'_0 mut HashMap<u32, u32, RandomState, Global>[{
     _15 = move _16
     _5 = &(*_15)
     _4 = &(*_5)
-    _2 = std::collections::hash::map::{HashMap<K, V, S, A>[TraitClause0, TraitClause1, TraitClause2, TraitClause3]}::get<'31, '32, u32, u32, RandomState, Global, u32>[{built_in impl Sized for u32}, {built_in impl Sized for u32}, {built_in impl Sized for RandomState}, {built_in impl Sized for Global}, impl_Eq_for_u32, impl_Hash_for_u32, impl_BuildHasher_for_RandomState, {built_in impl MetaSized for u32}, impl_Borrow_for_T<u32>[{built_in impl MetaSized for u32}], impl_Hash_for_u32, impl_Eq_for_u32](move _3, move _4)
+    _2 = std::collections::hash::map::{HashMap<K, V, S, A>[TraitClause0, TraitClause1, TraitClause2, TraitClause3]}::get<'40, '41, u32, u32, RandomState, Global, u32>[{built_in impl Sized for u32}, {built_in impl Sized for u32}, {built_in impl Sized for RandomState}, {built_in impl Sized for Global}, impl_Eq_for_u32, impl_Hash_for_u32, impl_BuildHasher_for_RandomState, {built_in impl MetaSized for u32}, impl_Borrow_for_T<u32>[{built_in impl MetaSized for u32}], impl_Hash_for_u32, impl_Eq_for_u32](move _3, move _4)
     ↳⚡ storage_dead(_15)
         storage_dead(_14)
         storage_dead(map)
@@ -325,10 +324,6 @@ pub fn get_or_insert<'_0>(map: &'_0 mut HashMap<u32, u32, RandomState, Global>[{
             storage_dead(_15)
             storage_dead(_14)
             storage_dead(map)
-            storage_dead(_26)
-            storage_dead(_25)
-            storage_dead(_24)
-            storage_dead(_23)
             storage_dead(_22)
             storage_dead(_21)
             storage_dead(_20)
@@ -342,7 +337,7 @@ pub fn get_or_insert<'_0>(map: &'_0 mut HashMap<u32, u32, RandomState, Global>[{
     storage_live(_7)
     storage_live(_8)
     _8 = &two-phase-mut (*map)
-    _7 = insert<'34, u32, u32, RandomState, Global>[{built_in impl Sized for u32}, {built_in impl Sized for u32}, {built_in impl Sized for RandomState}, {built_in impl Sized for Global}, impl_Eq_for_u32, impl_Hash_for_u32, impl_BuildHasher_for_RandomState](move _8, const 22u32, const 33u32)
+    _7 = insert<'47, u32, u32, RandomState, Global>[{built_in impl Sized for u32}, {built_in impl Sized for u32}, {built_in impl Sized for RandomState}, {built_in impl Sized for Global}, impl_Eq_for_u32, impl_Hash_for_u32, impl_BuildHasher_for_RandomState](move _8, const 22u32, const 33u32)
     ↳⚡ storage_dead(_15)
         storage_dead(_14)
         storage_dead(map)
@@ -365,16 +360,8 @@ pub fn get_or_insert<'_0>(map: &'_0 mut HashMap<u32, u32, RandomState, Global>[{
     _13 = &(*_14)
     _12 = &(*_13)
     storage_live(_22)
-    _22 = &raw const test_crate::get_or_insert::{promoted_const#4} with_metadata(const 24usize)
-    storage_live(_23)
-    _23 = NonNull { 0: move _22 }
-    storage_live(_24)
-    _24 = PhantomData {  }
-    storage_live(_25)
-    _25 = Location { 0: move _23, 1: const 11u32, 2: const 17u32, 3: move _24 }
-    storage_live(_26)
-    _26 = &_25
-    _10 = impl_Index_for_HashMap::index<'36, '38, u32, u32, u32, RandomState, Global>[{built_in impl Sized for u32}, {built_in impl MetaSized for u32}, {built_in impl Sized for u32}, {built_in impl Sized for RandomState}, {built_in impl Sized for Global}, impl_Eq_for_u32, impl_Hash_for_u32, impl_Borrow_for_T<u32>[{built_in impl MetaSized for u32}], impl_Eq_for_u32, impl_Hash_for_u32, impl_BuildHasher_for_RandomState](move _11, move _12, move _26)
+    _22 = &test_crate::get_or_insert::{promoted_const#15}
+    _10 = impl_Index_for_HashMap::index<'53, '55, u32, u32, u32, RandomState, Global>[{built_in impl Sized for u32}, {built_in impl MetaSized for u32}, {built_in impl Sized for u32}, {built_in impl Sized for RandomState}, {built_in impl Sized for Global}, impl_Eq_for_u32, impl_Hash_for_u32, impl_Borrow_for_T<u32>[{built_in impl MetaSized for u32}], impl_Eq_for_u32, impl_Hash_for_u32, impl_BuildHasher_for_RandomState](move _11, move _12, move _22)
     ↳⚡ storage_dead(_15)
         storage_dead(_14)
         storage_dead(map)
@@ -391,10 +378,6 @@ pub fn get_or_insert<'_0>(map: &'_0 mut HashMap<u32, u32, RandomState, Global>[{
     storage_dead(_15)
     storage_dead(_14)
     storage_dead(map)
-    storage_dead(_26)
-    storage_dead(_25)
-    storage_dead(_24)
-    storage_dead(_23)
     storage_dead(_22)
     storage_dead(_21)
     storage_dead(_20)

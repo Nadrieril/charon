@@ -29,6 +29,10 @@ where
 
 struct () {}
 
+struct str {
+  _0: [u8],
+}
+
 // Full name: test_crate::repeat_inline_const
 pub fn repeat_inline_const<T, const N : usize>() -> [MaybeUninit<T>[TraitClause0]; N]
 where

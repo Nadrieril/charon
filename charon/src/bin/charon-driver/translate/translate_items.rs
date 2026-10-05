@@ -525,6 +525,11 @@ impl<'tcx> ItemTransCtx<'tcx, '_> {
         def: &hax::FullDef<'tcx>,
     ) -> Result<FunDecl, Error> {
         let span = item_meta.span;
+        if let Some(rustc_id) = def.def_id().as_real_def_id()
+            && self.is_track_caller(rustc_id)
+        {
+            self.record_definition_location(span, def_id, rustc_id)?;
+        }
 
         let src = if matches!(
             def.kind(),
@@ -824,6 +829,24 @@ impl<'tcx> ItemTransCtx<'tcx, '_> {
 
         // Translate the associated items
         self.register_assoc_items(def.def_id(), trait_decl_id)?;
+        // A trait method's translated ABI must be shared by all implementations,
+        // including ones that are not otherwise reachable in this extraction.
+        if let Some(rustc_trait_id) = def.def_id().as_real_def_id() {
+            let tracked_impl_methods = self
+                .tcx
+                .all_impls(rustc_trait_id)
+                .flat_map(|impl_id| self.tcx.associated_items(impl_id).in_definition_order())
+                .filter(|item| self.is_track_caller(item.def_id))
+                .filter_map(|item| item.trait_item_def_id())
+                .collect_vec();
+            for method_id in tracked_impl_methods {
+                let hax_id: hax::DefId = method_id.sinto(self.hax_state());
+                let assoc_id = self.translate_assoc_item_id(trait_decl_id, &hax_id)?;
+                if let AssocItemId::Method(method_id) = assoc_id {
+                    self.track_caller_methods.insert((trait_decl_id, method_id));
+                }
+            }
+        }
         let mut consts: IndexMap<AssocConstId, _> = IndexMap::new();
         let mut types: IndexMap<AssocTypeId, _> = IndexMap::new();
         let mut methods: IndexMap<TraitMethodId, _> = IndexMap::new();

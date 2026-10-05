@@ -68,7 +68,10 @@ fn bar()
     return
 }
 
-pub const test_crate::foo::{promoted_const#4}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 109u8, 108u8, 45u8, 109u8, 111u8, 110u8, 111u8, 45u8, 110u8, 97u8, 109u8, 101u8, 45u8, 109u8, 97u8, 116u8, 99u8, 104u8, 101u8, 114u8, 45u8, 116u8, 101u8, 115u8, 116u8, 115u8, 46u8, 114u8, 115u8] } with_metadata(38usize)
+// Full name: test_crate::filename#7
+pub static filename: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x6d, 0x6c, 0x2d, 0x6d, 0x6f, 0x6e, 0x6f, 0x2d, 0x6e, 0x61, 0x6d, 0x65, 0x2d, 0x6d, 0x61, 0x74, 0x63, 0x68, 0x65, 0x72, 0x2d, 0x74, 0x65, 0x73, 0x74, 0x73, 0x2e, 0x72, 0x73, 0x00) with_metadata(38usize)
+
+pub static test_crate::foo::{promoted_const#8}: Location::<'_> = Location::<'_> { 0: NonNull::<str> { 0: &raw const filename with_metadata(38usize) }, 1: 60u32, 2: 19u32, 3: PhantomData::<&'_ str> {  } }
 
 fn test_crate::foo::{promoted_const}() -> &'_ [bool; 1usize]
 {
@@ -116,11 +119,7 @@ fn foo()
     let _9: RangeFrom::<usize>; // anonymous local
     let _10: &'10 [bool; 1usize]; // anonymous local
     let _11: &'11 Option::<i32>; // anonymous local
-    let _12: *const str is !null; // anonymous local
-    let _13: NonNull::<str>; // anonymous local
-    let _14: PhantomData::<&'_ str>; // anonymous local
-    let _15: Location::<'_>; // anonymous local
-    let _16: &'21 Location::<'_>; // anonymous local
+    let _12: &'static Location::<'_>; // anonymous local
 
     storage_live(_0)
     storage_live(_10)
@@ -130,7 +129,7 @@ fn foo()
     storage_live(_2)
     _11 = copy test_crate::foo::{promoted_const#1}
     _2 = &(*_11)
-    _1 = is_some::<i32><'14>(move _2)
+    _1 = is_some::<i32><'16>(move _2)
     ↳⚡ unwind_continue
     storage_dead(_2)
     storage_dead(_1)
@@ -140,10 +139,10 @@ fn foo()
     _10 = copy test_crate::foo::{promoted_const}
     _5 = &(*_10)
     _4 = &(*_5)
-    slice = unsize_cast<&'5 [bool; 1usize], &'16 [bool], 1usize>(move _4)
+    slice = unsize_cast<&'5 [bool; 1usize], &'18 [bool], 1usize>(move _4)
     storage_dead(_4)
     fake_read(slice)
-    set_type(typeof(slice) == &'17 [bool])
+    set_type(typeof(slice) == &'19 [bool])
     storage_dead(_5)
     storage_live(_6)
     storage_live(_7)
@@ -152,16 +151,8 @@ fn foo()
     storage_live(_9)
     _9 = RangeFrom::<usize> { start: const 1usize }
     storage_live(_12)
-    _12 = &raw const test_crate::foo::{promoted_const#4} with_metadata(const 38usize)
-    storage_live(_13)
-    _13 = NonNull::<str> { 0: move _12 }
-    storage_live(_14)
-    _14 = PhantomData::<&'_ str> {  }
-    storage_live(_15)
-    _15 = Location::<'_> { 0: move _13, 1: const 60u32, 2: const 19u32, 3: move _14 }
-    storage_live(_16)
-    _16 = &_15
-    _7 = index::<bool, RangeFrom::<usize>><'19>(move _8, move _9, move _16)
+    _12 = &test_crate::foo::{promoted_const#8}
+    _7 = index::<bool, RangeFrom::<usize>><'22>(move _8, move _9, move _12)
     ↳⚡ unwind_continue
     storage_dead(_9)
     storage_dead(_8)

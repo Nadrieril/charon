@@ -74,7 +74,7 @@ where
     storage_live(_5)
     _5 = const "S"
     _4 = &(*_5) with_metadata(copy _5.metadata)
-    _0 = write_str<'14, '17, '18>(move _3, move _4)
+    _0 = write_str<'22, '25, '26>(move _3, move _4)
     ↳⚡ storage_dead(f)
         storage_dead(self)
         unwind_continue
@@ -159,7 +159,7 @@ fn main()
     let _2: &'1 (); // anonymous local
     let _3: &'2 (); // anonymous local
     let _4: &'3 (); // anonymous local
-    let _5: &'6 (); // anonymous local
+    let _5: &'15 (); // anonymous local
     let _6: (); // anonymous local
 
     storage_live(_4)
@@ -175,7 +175,7 @@ fn main()
     storage_live(_2)
     _3 = move _4
     _2 = &(*_3)
-    _1 = bar<'5>(move _2)
+    _1 = bar<'14>(move _2)
     ↳⚡ storage_dead(_3)
         unwind_continue
     storage_dead(_2)

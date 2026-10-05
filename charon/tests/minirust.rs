@@ -16,24 +16,19 @@ const TIMEOUT: Duration = Duration::from_secs(60);
 
 // Known failures
 const FAILURES: &[(&str, &[&str])] = &[
-    // FIXME: track_caller
+    // Unsupported intrinsics exposed by translating caller locations.
     (
-        "unable to translate caller_location to MiniRust",
-        &[
-            "pass/catch_unwind.rs",
-            "pass/ops.rs",
-            "pass/ptr.rs",
-            "pass/slice.rs",
-            "pass/stdlib_mir.rs",
-            "pass/str.rs",
-            "pass/tree_borrows/cell_lazy_write_to_surrounding.rs",
-            "pass/tree_borrows/cell_inside_slice_lazy_write_to_surrounding.rs",
-            "pass/tree_borrows/zero_sized_cell_lazy_write_to_surrounding.rs",
-            "ub/assume.rs",
-            "ub/ptr_offset_from_unsigned.rs",
-            "ub/ptr_offset_not_multiple.rs",
-            "ub/slice_dangling.rs",
-        ],
+        "unable to translate assert_inhabited::<u8> to MiniRust",
+        &["pass/slice.rs"],
+    ),
+    (
+        "unable to translate is_val_statically_known::<bool> to MiniRust",
+        &["pass/str.rs"],
+    ),
+    // Unexpected translation bug exposed by translating caller locations.
+    (
+        "MiniRust rejected the program: Statement::Assign: destination and source type differ",
+        &["pass/ops.rs"],
     ),
     // FIXME: union padding
     ("got exit status: 0", &["ub/enum_mark_used_bytes.rs"]),

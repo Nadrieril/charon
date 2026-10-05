@@ -2,7 +2,6 @@
 //!
 //! Unsupported features (we translate this incorrectly):
 //! - Pointers to statics that aren't at offset 0;
-//! - `#[track_caller]`;
 //! - Precise union padding: we preserve every byte of a union, including bytes Rust may treat as padding;
 //!
 //! Unsupported features (will raise an error):

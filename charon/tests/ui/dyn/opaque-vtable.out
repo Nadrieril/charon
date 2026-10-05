@@ -5,7 +5,20 @@
 #[lang_item(MetaSized)]
 pub trait MetaSized<Self>
 
+// Full name: core::marker::Sized
+#[fundamental]
+#[lang_item(Sized)]
+pub trait Sized<Self>
+{
+    proof ImpliedClause0: (Self: MetaSized)
+    non-dyn-compatible
+}
+
 struct () {}
+
+struct str {
+  _0: [u8],
+}
 
 opaque type test_crate::x::Trait::{vtable}
 
@@ -54,7 +67,7 @@ fn main()
     let _4: &'7 (); // anonymous local
     let _5: &'8 (); // anonymous local
     let _6: &'9 (); // anonymous local
-    let _7: &'14 (); // anonymous local
+    let _7: &'23 (); // anonymous local
     let _8: (); // anonymous local
 
     storage_live(_6)
@@ -75,7 +88,7 @@ fn main()
     _3 = &(*_4)
     _2 = unsize_cast<&'6 (), &'10 (dyn Trait + '11), &impl_Trait_for_unit::{vtable}>(move _3)
     storage_dead(_3)
-    _1 = use_debug<'13>(move _2)
+    _1 = use_debug<'22>(move _2)
     ↳⚡ storage_dead(_5)
         unwind_continue
     storage_dead(_2)

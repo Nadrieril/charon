@@ -1,6 +1,24 @@
 # Final LLBC before serialization:
 
+// Full name: core::marker::MetaSized
+#[fundamental]
+#[lang_item(MetaSized)]
+pub trait MetaSized<Self>
+
+// Full name: core::marker::Sized
+#[fundamental]
+#[lang_item(Sized)]
+pub trait Sized<Self>
+{
+    proof ImpliedClause0: (Self: MetaSized)
+    non-dyn-compatible
+}
+
 struct () {}
+
+struct str {
+  _0: [u8],
+}
 
 struct (_,)::<&'_ u32> {
   _0: &'_ u32,
@@ -74,7 +92,7 @@ fn takes_closure::<for<'a> foo::<u32><'a>>(c: for<'a> foo::<u32><'a>)
     let _5: &'4 u32; // anonymous local
     let _6: &'5 u32; // anonymous local
     let _7: &'6 u32; // anonymous local
-    let _8: &'14 u32; // anonymous local
+    let _8: &'16 u32; // anonymous local
     let _9: u32; // anonymous local
 
     storage_live(_7)
@@ -95,7 +113,7 @@ fn takes_closure::<for<'a> foo::<u32><'a>>(c: for<'a> foo::<u32><'a>)
     _5 = &(*_6)
     _4 = &(*_5)
     _3 = (move _4,)
-    _0 = call::<u32><'7, '9>(move _2, move _3)
+    _0 = call::<u32><'9, '11>(move _2, move _3)
     ↳⚡ storage_dead(_6)
         storage_dead(c)
         unwind_continue
@@ -142,8 +160,8 @@ fn main()
     let _25: &'11 char; // anonymous local
     let _26: (); // anonymous local
     let _27: &'12 char; // anonymous local
-    let _28: &'21 char; // anonymous local
-    let _29: &'25 char; // anonymous local
+    let _28: &'28 char; // anonymous local
+    let _29: &'34 char; // anonymous local
     let _30: char; // anonymous local
 
     storage_live(_0)
@@ -154,11 +172,11 @@ fn main()
     fake_read(fooint1)
     set_type(typeof(fooint1) == fn<'_0_1>(&'_0_1 u8))
     storage_live(fooint2)
-    fooint2 = cast<for<'a> foo::<u8><'a>, fn<'_0_1>(&'_0_1 u8)>(const foo::<u8><'17>)
+    fooint2 = cast<for<'a> foo::<u8><'a>, fn<'_0_1>(&'_0_1 u8)>(const foo::<u8><'19>)
     fake_read(fooint2)
     set_type(typeof(fooint2) == fn<'_0_1>(&'_0_1 u8))
     storage_live(foochar)
-    foochar = cast<for<'a> foo::<char><'a>, fn<'_0_1>(&'_0_1 char)>(const foo::<char><'20>)
+    foochar = cast<for<'a> foo::<char><'a>, fn<'_0_1>(&'_0_1 char)>(const foo::<char><'22>)
     fake_read(foochar)
     set_type(typeof(foochar) == fn<'_0_1>(&'_0_1 char))
     storage_live(a)
@@ -245,7 +263,7 @@ fn main()
     storage_dead(_25)
     storage_dead(_22)
     storage_live(_26)
-    _26 = takes_closure::<for<'a> foo::<u32><'a>>(const foo::<u32><'24>)
+    _26 = takes_closure::<for<'a> foo::<u32><'a>>(const foo::<u32><'33>)
     ↳⚡ storage_dead(_27)
         unwind_continue
     storage_dead(_26)

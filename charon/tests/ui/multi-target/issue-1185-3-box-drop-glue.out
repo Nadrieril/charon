@@ -31,47 +31,27 @@ struct str {
   _0: [u8],
 }
 
+pub static test_crate::filename#6: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x6d, 0x75, 0x6c, 0x74, 0x69, 0x2d, 0x74, 0x61, 0x72, 0x67, 0x65, 0x74, 0x2f, 0x69, 0x73, 0x73, 0x75, 0x65, 0x2d, 0x31, 0x31, 0x38, 0x35, 0x2d, 0x33, 0x2d, 0x62, 0x6f, 0x78, 0x2d, 0x64, 0x72, 0x6f, 0x70, 0x2d, 0x67, 0x6c, 0x75, 0x65, 0x2e, 0x72, 0x73, 0x00) with_metadata(51usize)
+
+pub static test_crate::mono::{promoted_const#7}: core::panic::location::Location<'static> = core::panic::location::Location { 0: core::ptr::non_null::NonNull { 0: &raw const test_crate::filename#6 with_metadata(51usize) }, 1: 4u32, 2: 14u32, 3: core::marker::PhantomData {  } }
+
 pub fn test_crate::mono() -> u32
 {
     let _0: u32; // return
     let _b: alloc::boxed::Box<u32>; // local
-    let _2: str; // anonymous local
-    let _3: *const str; // anonymous local
-    let _4: *const str is !null; // anonymous local
-    let _5: core::ptr::non_null::NonNull<str>; // anonymous local
-    let _6: core::marker::PhantomData<&'8 str>; // anonymous local
-    let _7: core::panic::location::Location<'5>; // anonymous local
-    let _8: &'3 core::panic::location::Location<'4>; // anonymous local
+    let _2: &'static core::panic::location::Location<'static>; // anonymous local
 
     storage_live(_0)
     storage_live(_b)
     storage_live(_2)
-    _2 = str { _0: const [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 109u8, 117u8, 108u8, 116u8, 105u8, 45u8, 116u8, 97u8, 114u8, 103u8, 101u8, 116u8, 47u8, 105u8, 115u8, 115u8, 117u8, 101u8, 45u8, 49u8, 49u8, 56u8, 53u8, 45u8, 51u8, 45u8, 98u8, 111u8, 120u8, 45u8, 100u8, 114u8, 111u8, 112u8, 45u8, 103u8, 108u8, 117u8, 101u8, 46u8, 114u8, 115u8] }
-    storage_live(_3)
-    _3 = &raw const _2
-    storage_live(_4)
-    _4 = unsize_cast<*const str, *const str is !null, 51usize>(move _3)
-    storage_live(_5)
-    _5 = core::ptr::non_null::NonNull { 0: move _4 }
-    storage_live(_6)
-    _6 = core::marker::PhantomData {  }
-    storage_live(_7)
-    _7 = core::panic::location::Location { 0: move _5, 1: const 4u32, 2: const 14u32, 3: move _6 }
-    storage_live(_8)
-    _8 = &_7
-    _b = alloc::boxed::{alloc::boxed::Box<T>}::new<u32>(const 0u32, move _8)
+    _2 = &test_crate::mono::{promoted_const#7}
+    _b = alloc::boxed::{alloc::boxed::Box<T>}::new<u32>(const 0u32, move _2)
     ↳⚡ unwind_continue
     fake_read(_b)
     _0 = const 0u32
     conditional_drop[alloc::boxed::Box::{impl core::marker::Destruct for alloc::boxed::Box<T>}::drop_glue<'9, u32, alloc::alloc::Global>] _b
     ↳⚡ unwind_continue
     storage_dead(_b)
-    storage_dead(_8)
-    storage_dead(_7)
-    storage_dead(_6)
-    storage_dead(_5)
-    storage_dead(_4)
-    storage_dead(_3)
     storage_dead(_2)
     return
 }

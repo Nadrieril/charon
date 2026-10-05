@@ -38,6 +38,10 @@ where
 #[lang_item(NonNull)]
 pub opaque type NonNull<T>
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::alloc::Allocator
 pub unsafe trait Allocator<Self>
 {
@@ -143,10 +147,6 @@ where
   None,
   Some { _0: T },
 }
-
-// Full name: core::panic::location::Location
-#[lang_item(PanicLocation)]
-pub opaque type Location<'a>
 
 // Full name: core::panicking::panic_fmt
 #[track_caller]
@@ -354,7 +354,11 @@ unsafe fn impl_Destruct_for_TestFn::drop_glue<'_0>(_1: &'_0 mut TestFn)
 unsafe fn impl_Destruct_for_TestDesc::drop_glue<'_0>(_1: &'_0 mut TestDesc)
 = <opaque>
 
-pub const test_attributes::tests::test_should_panic#1::{promoted_const}: str = str { _0: [115u8, 114u8, 99u8, 47u8, 108u8, 105u8, 98u8, 46u8, 114u8, 115u8] } with_metadata(10usize)
+// Full name: test_attributes::filename#16
+pub static filename: str = RawMemory(0x73, 0x72, 0x63, 0x2f, 0x6c, 0x69, 0x62, 0x2e, 0x72, 0x73, 0x00) with_metadata(10usize)
+
+// Full name: test_attributes::tests::test_should_panic#1::{promoted_const#17}
+pub static {promoted_const}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(10usize) }, 1: 13u32, 2: 9u32, 3: PhantomData {  } }
 
 // Full name: test_attributes::foo
 fn foo()
@@ -425,7 +429,7 @@ fn {impl FnOnce<()> for test_attributes::tests::test_ignore::{closure}}::call_on
     storage_live(_0)
     storage_live(_3)
     _3 = &mut _1
-    _0 = {impl FnMut<()> for test_attributes::tests::test_ignore::{closure}}::call_mut<'2>(move _3, move _2)
+    _0 = {impl FnMut<()> for test_attributes::tests::test_ignore::{closure}}::call_mut<'11>(move _3, move _2)
     ↳⚡ unwind_continue
     return
 }
@@ -505,29 +509,17 @@ fn test_attributes::tests::test_should_panic#1()
     let _0: (); // return
     let _1: !; // anonymous local
     let _2: Arguments<'1>; // anonymous local
-    let _3: *const str is !null; // anonymous local
-    let _4: NonNull<str>; // anonymous local
-    let _5: PhantomData<&'14 str>; // anonymous local
-    let _6: Location<'12>; // anonymous local
-    let _7: &'10 Location<'11>; // anonymous local
+    let _3: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     _0 = ()
     storage_live(_1)
     storage_live(_2)
-    _2 = from_str<'2>(const "This test should panic")
+    _2 = from_str<'11>(const "This test should panic")
     ↳⚡ unwind_continue
     storage_live(_3)
-    _3 = &raw const test_attributes::tests::test_should_panic#1::{promoted_const} with_metadata(const 10usize)
-    storage_live(_4)
-    _4 = NonNull { 0: move _3 }
-    storage_live(_5)
-    _5 = PhantomData {  }
-    storage_live(_6)
-    _6 = Location { 0: move _4, 1: const 13u32, 2: const 9u32, 3: move _5 }
-    storage_live(_7)
-    _7 = &_6
-    _1 = panic_fmt<'6>(move _2, move _7)
+    _3 = &{promoted_const}
+    _1 = panic_fmt<'18>(move _2, move _3)
     ↳⚡ unwind_continue
 }
 
@@ -578,7 +570,7 @@ fn {impl FnOnce<()> for test_attributes::tests::test_should_panic::{closure}}::c
     storage_live(_0)
     storage_live(_3)
     _3 = &mut _1
-    _0 = {impl FnMut<()> for test_attributes::tests::test_should_panic::{closure}}::call_mut<'2>(move _3, move _2)
+    _0 = {impl FnMut<()> for test_attributes::tests::test_should_panic::{closure}}::call_mut<'11>(move _3, move _2)
     ↳⚡ unwind_continue
     return
 }
@@ -714,7 +706,7 @@ fn {impl FnOnce<()> for test_attributes::tests::test_foo::{closure}}::call_once(
     storage_live(_0)
     storage_live(_3)
     _3 = &mut _1
-    _0 = {impl FnMut<()> for test_attributes::tests::test_foo::{closure}}::call_mut<'2>(move _3, move _2)
+    _0 = {impl FnMut<()> for test_attributes::tests::test_foo::{closure}}::call_mut<'11>(move _3, move _2)
     ↳⚡ unwind_continue
     return
 }
@@ -829,7 +821,7 @@ pub fn main()
     _2 = &(*_3)
     _1 = unsize_cast<&'30 [&'31 TestDescAndFn; 3usize], &'61 [&'62 TestDescAndFn], 3usize>(move _2)
     storage_dead(_2)
-    _0 = test_main_env_args<'68, '69>(move _1)
+    _0 = test_main_env_args<'77, '78>(move _1)
     ↳⚡ unwind_continue
     storage_dead(_1)
     storage_dead(_10)

@@ -30,6 +30,8 @@
   "core::result::Result": "None",
   "core::ptr::non_null::NonNull": "None",
   "core::alloc::AllocError": "None",
+  "core::panic::location::Location": "None",
+  "core::marker::PhantomData": "None",
   "core::fmt::Formatter": "None",
   "core::fmt::Error": "None",
   "core::cmp::Ordering": "None",

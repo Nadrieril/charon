@@ -58,6 +58,10 @@ where
   Some { _0: T },
 }
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::ops::try_trait::FromResidual
 #[diagnostic_item("FromResidual")]
 pub trait FromResidual<Self, R>
@@ -207,13 +211,13 @@ where
 pub opaque type NonZeroUsizeInner
 
 // Full name: core::num::niche_types::{impl Clone for NonZeroUsizeInner}::clone_from
-pub fn impl_Clone_for_NonZeroUsizeInner::clone_from<'_0, '_1>(_1: &'_0 mut NonZeroUsizeInner, _2: &'_1 NonZeroUsizeInner)
+pub fn impl_Clone_for_NonZeroUsizeInner::clone_from<'_0, '_1>(_1: &'_0 mut NonZeroUsizeInner, _2: &'_1 NonZeroUsizeInner, _3: &'static Location<'static>)
 where
     TraitClause0: (NonZeroUsizeInner: Destruct),
 = <opaque>
 
 // Full name: core::num::niche_types::{impl Clone for NonZeroUsizeInner}::clone
-pub fn impl_Clone_for_NonZeroUsizeInner::clone<'_0>(_1: &'_0 NonZeroUsizeInner) -> NonZeroUsizeInner
+pub fn impl_Clone_for_NonZeroUsizeInner::clone<'_0>(_1: &'_0 NonZeroUsizeInner, _2: &'static Location<'static>) -> NonZeroUsizeInner
 = <opaque>
 
 // Full name: core::num::niche_types::{impl Clone for NonZeroUsizeInner}
@@ -232,11 +236,11 @@ impl "impl_Copy_for_NonZeroUsizeInner" Copy for NonZeroUsizeInner {
 }
 
 // Full name: core::clone::impls::{impl Clone for usize}::clone
-pub fn impl_Clone_for_usize::clone<'_0>(_1: &'_0 usize) -> usize
+pub fn impl_Clone_for_usize::clone<'_0>(_1: &'_0 usize, _2: &'static Location<'static>) -> usize
 = <opaque>
 
 // Full name: core::clone::impls::{impl Clone for usize}::clone_from
-pub fn impl_Clone_for_usize::clone_from<'_0, '_1>(_1: &'_0 mut usize, _2: &'_1 usize)
+pub fn impl_Clone_for_usize::clone_from<'_0, '_1>(_1: &'_0 mut usize, _2: &'_1 usize, _3: &'static Location<'static>)
 where
     TraitClause0: (usize: Destruct),
 = <opaque>
@@ -696,13 +700,13 @@ where
 = <opaque>
 
 // Full name: core::array::iter::{impl Iterator for IntoIter<T, N>[TraitClause0]}::last
-pub fn impl_Iterator_for_IntoIter::last<T, const N : usize>(_1: IntoIter<T, N>[TraitClause0]) -> Option<T>[TraitClause0]
+pub fn impl_Iterator_for_IntoIter::last<T, const N : usize>(_1: IntoIter<T, N>[TraitClause0], _2: &'static Location<'static>) -> Option<T>[TraitClause0]
 where
     TraitClause0: (T: Sized),
 = <opaque>
 
 // Full name: core::array::iter::{impl Iterator for IntoIter<T, N>[TraitClause0]}::count
-pub fn impl_Iterator_for_IntoIter::count<T, const N : usize>(_1: IntoIter<T, N>[TraitClause0]) -> usize
+pub fn impl_Iterator_for_IntoIter::count<T, const N : usize>(_1: IntoIter<T, N>[TraitClause0], _2: &'static Location<'static>) -> usize
 where
     TraitClause0: (T: Sized),
 = <opaque>
@@ -915,10 +919,6 @@ where
     TraitClause2: (IntoIter<T, N>[TraitClause0]: Sized),
     TraitClause3: (S: Sum<T>),
 = <opaque>
-
-// Full name: core::panic::location::Location
-#[lang_item(PanicLocation)]
-pub opaque type Location<'a>
 
 // Full name: core::array::iter::{impl Iterator for IntoIter<T, N>[TraitClause0]}::array_chunks
 #[track_caller]
@@ -1580,7 +1580,7 @@ where
     TypeOutlives0: T: '_0,
 = <opaque>
 
-pub fn core::clone::Clone::clone_from<'_0, '_1, Self>(_1: &'_0 mut Self, _2: &'_1 Self)
+pub fn core::clone::Clone::clone_from<'_0, '_1, Self>(_1: &'_0 mut Self, _2: &'_1 Self, _3: &'static Location<'static>)
 where
     TraitClause0: (Self: Clone),
     TraitClause1: (Self: Destruct),
@@ -1629,7 +1629,7 @@ where
 = <opaque>
 
 // Full name: core::cmp::Ord::clamp
-pub fn clamp<Self>(_1: Self, _2: Self, _3: Self) -> Self
+pub fn clamp<Self>(_1: Self, _2: Self, _3: Self, _4: &'static Location<'static>) -> Self
 where
     TraitClause0: (Self: Ord),
     TraitClause1: (Self: Sized),
@@ -1845,7 +1845,7 @@ where
     TypeOutlives0: Self: '_0,
 = <opaque>
 
-pub fn core::iter::traits::iterator::Iterator::count<Self>(_1: Self) -> usize
+pub fn core::iter::traits::iterator::Iterator::count<Self>(_1: Self, _2: &'static Location<'static>) -> usize
 where
     TraitClause0: (Self: Iterator),
     TraitClause1: (Self: Sized),
@@ -1853,7 +1853,7 @@ where
     TraitClause3: (TraitClause0::Item: Destruct),
 = <opaque>
 
-pub fn core::iter::traits::iterator::Iterator::last<Self>(_1: Self) -> Option<TraitClause0::Item>[TraitClause0::ImpliedClause1]
+pub fn core::iter::traits::iterator::Iterator::last<Self>(_1: Self, _2: &'static Location<'static>) -> Option<TraitClause0::Item>[TraitClause0::ImpliedClause1]
 where
     TraitClause0: (Self: Iterator),
     TraitClause1: (Self: Sized),
@@ -2708,7 +2708,7 @@ where
 = <opaque>
 
 // Full name: core::slice::iter::{impl Iterator for Iter<'a, T>[TraitClause0]}::last
-pub fn impl_Iterator_for_Iter::last<'a, T>(_1: Iter<'a, T>[TraitClause0]) -> Option<&'a T>[{built_in impl Sized for &'a T}]
+pub fn impl_Iterator_for_Iter::last<'a, T>(_1: Iter<'a, T>[TraitClause0], _2: &'static Location<'static>) -> Option<&'a T>[{built_in impl Sized for &'a T}]
 where
     TraitClause0: (T: Sized),
     TypeOutlives0: T: 'a,
@@ -2733,7 +2733,7 @@ where
 = <opaque>
 
 // Full name: core::slice::iter::{impl Iterator for Iter<'a, T>[TraitClause0]}::count
-pub fn impl_Iterator_for_Iter::count<'a, T>(_1: Iter<'a, T>[TraitClause0]) -> usize
+pub fn impl_Iterator_for_Iter::count<'a, T>(_1: Iter<'a, T>[TraitClause0], _2: &'static Location<'static>) -> usize
 where
     TraitClause0: (T: Sized),
     TypeOutlives0: T: 'a,
@@ -3580,7 +3580,7 @@ where
 = <opaque>
 
 // Full name: core::slice::iter::{impl Iterator for Chunks<'a, T>[TraitClause0]}::last
-pub fn impl_Iterator_for_Chunks::last<'a, T>(_1: Chunks<'a, T>[TraitClause0]) -> Option<&'a [T]>[{built_in impl Sized for &'a [T]}]
+pub fn impl_Iterator_for_Chunks::last<'a, T>(_1: Chunks<'a, T>[TraitClause0], _2: &'static Location<'static>) -> Option<&'a [T]>[{built_in impl Sized for &'a [T]}]
 where
     TraitClause0: (T: Sized),
     TypeOutlives0: T: 'a,
@@ -3596,7 +3596,7 @@ where
 = <opaque>
 
 // Full name: core::slice::iter::{impl Iterator for Chunks<'a, T>[TraitClause0]}::count
-pub fn impl_Iterator_for_Chunks::count<'a, T>(_1: Chunks<'a, T>[TraitClause0]) -> usize
+pub fn impl_Iterator_for_Chunks::count<'a, T>(_1: Chunks<'a, T>[TraitClause0], _2: &'static Location<'static>) -> usize
 where
     TraitClause0: (T: Sized),
     TypeOutlives0: T: 'a,
@@ -4575,7 +4575,7 @@ where
 = <opaque>
 
 // Full name: core::slice::iter::{impl Iterator for ChunksExact<'a, T>[TraitClause0]}::last
-pub fn impl_Iterator_for_ChunksExact::last<'a, T>(_1: ChunksExact<'a, T>[TraitClause0]) -> Option<&'a [T]>[{built_in impl Sized for &'a [T]}]
+pub fn impl_Iterator_for_ChunksExact::last<'a, T>(_1: ChunksExact<'a, T>[TraitClause0], _2: &'static Location<'static>) -> Option<&'a [T]>[{built_in impl Sized for &'a [T]}]
 where
     TraitClause0: (T: Sized),
     TypeOutlives0: T: 'a,
@@ -4591,7 +4591,7 @@ where
 = <opaque>
 
 // Full name: core::slice::iter::{impl Iterator for ChunksExact<'a, T>[TraitClause0]}::count
-pub fn impl_Iterator_for_ChunksExact::count<'a, T>(_1: ChunksExact<'a, T>[TraitClause0]) -> usize
+pub fn impl_Iterator_for_ChunksExact::count<'a, T>(_1: ChunksExact<'a, T>[TraitClause0], _2: &'static Location<'static>) -> usize
 where
     TraitClause0: (T: Sized),
     TypeOutlives0: T: 'a,
@@ -5581,11 +5581,14 @@ struct str {
   _0: [u8],
 }
 
-pub const test_crate::main::{promoted_const#2}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 105u8, 116u8, 101u8, 114u8, 97u8, 116u8, 111u8, 114u8, 46u8, 114u8, 115u8] } with_metadata(20usize)
+// Full name: test_crate::filename#14
+pub static filename: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x69, 0x74, 0x65, 0x72, 0x61, 0x74, 0x6f, 0x72, 0x2e, 0x72, 0x73, 0x00) with_metadata(20usize)
 
-pub const test_crate::main::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 105u8, 116u8, 101u8, 114u8, 97u8, 116u8, 111u8, 114u8, 46u8, 114u8, 115u8] } with_metadata(20usize)
+pub static test_crate::main::{promoted_const#17}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(20usize) }, 1: 16u32, 2: 14u32, 3: PhantomData {  } }
 
-pub const test_crate::main::{promoted_const#1}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 105u8, 116u8, 101u8, 114u8, 97u8, 116u8, 111u8, 114u8, 46u8, 114u8, 115u8] } with_metadata(20usize)
+pub static test_crate::main::{promoted_const#16}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(20usize) }, 1: 13u32, 2: 14u32, 3: PhantomData {  } }
+
+pub static test_crate::main::{promoted_const#15}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(20usize) }, 1: 11u32, 2: 9u32, 3: PhantomData {  } }
 
 // Full name: test_crate::main
 fn main()
@@ -5649,21 +5652,9 @@ fn main()
     let _56: &'91 i32; // anonymous local
     let _57: &'92 i32; // anonymous local
     let _58: Option<Arguments<'101>>[{built_in impl Sized for Arguments<'101>}]; // anonymous local
-    let _59: *const str is !null; // anonymous local
-    let _60: NonNull<str>; // anonymous local
-    let _61: PhantomData<&'153 str>; // anonymous local
-    let _62: Location<'152>; // anonymous local
-    let _63: &'150 Location<'151>; // anonymous local
-    let _64: *const str is !null; // anonymous local
-    let _65: NonNull<str>; // anonymous local
-    let _66: PhantomData<&'146 str>; // anonymous local
-    let _67: Location<'143>; // anonymous local
-    let _68: &'141 Location<'142>; // anonymous local
-    let _69: *const str is !null; // anonymous local
-    let _70: NonNull<str>; // anonymous local
-    let _71: PhantomData<&'175 str>; // anonymous local
-    let _72: Location<'174>; // anonymous local
-    let _73: &'172 Location<'173>; // anonymous local
+    let _59: &'static Location<'static>; // anonymous local
+    let _60: &'static Location<'static>; // anonymous local
+    let _61: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     storage_live(_12)
@@ -5694,7 +5685,7 @@ fn main()
         unwind_continue
     storage_dead(_5)
     _3 = impl_IntoIterator_for_T::into_iter<IntoIter<i32, 7usize>[{built_in impl Sized for i32}]>[{built_in impl Sized for IntoIter<i32, 7usize>[{built_in impl Sized for i32}]}, impl_Iterator_for_IntoIter<i32, 7usize>[{built_in impl Sized for i32}]](move _4)
-    ↳⚡ conditional_drop[drop_glue<'105, i32, 7usize>[{built_in impl Sized for i32}]] _4
+    ↳⚡ conditional_drop[drop_glue<'118, i32, 7usize>[{built_in impl Sized for i32}]] _4
         ↳⚡ storage_dead(_58)
             storage_dead(_57)
             storage_dead(_56)
@@ -5705,18 +5696,6 @@ fn main()
             storage_dead(_42)
             storage_dead(_33)
             storage_dead(_12)
-            storage_dead(_73)
-            storage_dead(_72)
-            storage_dead(_71)
-            storage_dead(_70)
-            storage_dead(_69)
-            storage_dead(_68)
-            storage_dead(_67)
-            storage_dead(_66)
-            storage_dead(_65)
-            storage_dead(_64)
-            storage_dead(_63)
-            storage_dead(_62)
             storage_dead(_61)
             storage_dead(_60)
             storage_dead(_59)
@@ -5741,8 +5720,8 @@ fn main()
         storage_live(_9)
         _9 = &mut iter_6
         _8 = &two-phase-mut (*_9)
-        _7 = impl_Iterator_for_IntoIter::next<'107, i32, 7usize>[{built_in impl Sized for i32}](move _8)
-        ↳⚡ conditional_drop[drop_glue<'108, i32, 7usize>[{built_in impl Sized for i32}]] iter_6
+        _7 = impl_Iterator_for_IntoIter::next<'124, i32, 7usize>[{built_in impl Sized for i32}](move _8)
+        ↳⚡ conditional_drop[drop_glue<'125, i32, 7usize>[{built_in impl Sized for i32}]] iter_6
             ↳⚡ storage_dead(_58)
                 storage_dead(_57)
                 storage_dead(_56)
@@ -5753,23 +5732,11 @@ fn main()
                 storage_dead(_42)
                 storage_dead(_33)
                 storage_dead(_12)
-                storage_dead(_73)
-                storage_dead(_72)
-                storage_dead(_71)
-                storage_dead(_70)
-                storage_dead(_69)
-                storage_dead(_68)
-                storage_dead(_67)
-                storage_dead(_66)
-                storage_dead(_65)
-                storage_dead(_64)
-                storage_dead(_63)
-                storage_dead(_62)
                 storage_dead(_61)
                 storage_dead(_60)
                 storage_dead(_59)
                 unwind_terminate
-            conditional_drop[drop_glue<'109, i32, 7usize>[{built_in impl Sized for i32}]] _3
+            conditional_drop[drop_glue<'126, i32, 7usize>[{built_in impl Sized for i32}]] _3
             ↳⚡ storage_dead(_58)
                 storage_dead(_57)
                 storage_dead(_56)
@@ -5780,18 +5747,6 @@ fn main()
                 storage_dead(_42)
                 storage_dead(_33)
                 storage_dead(_12)
-                storage_dead(_73)
-                storage_dead(_72)
-                storage_dead(_71)
-                storage_dead(_70)
-                storage_dead(_69)
-                storage_dead(_68)
-                storage_dead(_67)
-                storage_dead(_66)
-                storage_dead(_65)
-                storage_dead(_64)
-                storage_dead(_63)
-                storage_dead(_62)
                 storage_dead(_61)
                 storage_dead(_60)
                 storage_dead(_59)
@@ -5829,8 +5784,8 @@ fn main()
     }
     storage_dead(_9)
     storage_dead(_7)
-    conditional_drop[drop_glue<'110, i32, 7usize>[{built_in impl Sized for i32}]] iter_6
-    ↳⚡ conditional_drop[drop_glue<'109, i32, 7usize>[{built_in impl Sized for i32}]] _3
+    conditional_drop[drop_glue<'127, i32, 7usize>[{built_in impl Sized for i32}]] iter_6
+    ↳⚡ conditional_drop[drop_glue<'126, i32, 7usize>[{built_in impl Sized for i32}]] _3
         ↳⚡ storage_dead(_58)
             storage_dead(_57)
             storage_dead(_56)
@@ -5841,18 +5796,6 @@ fn main()
             storage_dead(_42)
             storage_dead(_33)
             storage_dead(_12)
-            storage_dead(_73)
-            storage_dead(_72)
-            storage_dead(_71)
-            storage_dead(_70)
-            storage_dead(_69)
-            storage_dead(_68)
-            storage_dead(_67)
-            storage_dead(_66)
-            storage_dead(_65)
-            storage_dead(_64)
-            storage_dead(_63)
-            storage_dead(_62)
             storage_dead(_61)
             storage_dead(_60)
             storage_dead(_59)
@@ -5869,7 +5812,7 @@ fn main()
         storage_dead(_12)
         unwind_continue
     storage_dead(iter_6)
-    conditional_drop[drop_glue<'111, i32, 7usize>[{built_in impl Sized for i32}]] _3
+    conditional_drop[drop_glue<'128, i32, 7usize>[{built_in impl Sized for i32}]] _3
     ↳⚡ storage_dead(_58)
         storage_dead(_57)
         storage_dead(_56)
@@ -5890,7 +5833,7 @@ fn main()
     _15 = as_slice<'_, i32, 7usize>[{built_in impl Sized for i32}](move _16)
     ↳⚡ undefined_behavior
     storage_dead(_16)
-    _14 = iter<'114, i32>[{built_in impl Sized for i32}](move _15)
+    _14 = iter<'135, i32>[{built_in impl Sized for i32}](move _15)
     ↳⚡ storage_dead(_58)
         storage_dead(_57)
         storage_dead(_56)
@@ -5903,7 +5846,7 @@ fn main()
         storage_dead(_12)
         unwind_continue
     storage_dead(_15)
-    _13 = impl_IntoIterator_for_T::into_iter<Iter<'116, i32>[{built_in impl Sized for i32}]>[{built_in impl Sized for Iter<'116, i32>[{built_in impl Sized for i32}]}, impl_Iterator_for_Iter<'116, i32>[{built_in impl Sized for i32}]](move _14)
+    _13 = impl_IntoIterator_for_T::into_iter<Iter<'141, i32>[{built_in impl Sized for i32}]>[{built_in impl Sized for Iter<'141, i32>[{built_in impl Sized for i32}]}, impl_Iterator_for_Iter<'141, i32>[{built_in impl Sized for i32}]](move _14)
     ↳⚡ storage_dead(_58)
         storage_dead(_57)
         storage_dead(_56)
@@ -5924,7 +5867,7 @@ fn main()
         storage_live(_20)
         _20 = &mut iter_17
         _19 = &two-phase-mut (*_20)
-        _18 = impl_Iterator_for_Iter::next<'127, '129, i32>[{built_in impl Sized for i32}](move _19)
+        _18 = impl_Iterator_for_Iter::next<'156, '158, i32>[{built_in impl Sized for i32}](move _19)
         ↳⚡ storage_dead(_58)
             storage_dead(_57)
             storage_dead(_56)
@@ -5951,17 +5894,9 @@ fn main()
         _23 = &two-phase-mut i
         storage_live(_24)
         _24 = copy v_21
-        storage_live(_64)
-        _64 = &raw const test_crate::main::{promoted_const#1} with_metadata(const 20usize)
-        storage_live(_65)
-        _65 = NonNull { 0: move _64 }
-        storage_live(_66)
-        _66 = PhantomData {  }
-        storage_live(_67)
-        _67 = Location { 0: move _65, 1: const 11u32, 2: const 9u32, 3: move _66 }
-        storage_live(_68)
-        _68 = &_67
-        _22 = add_assign<'135, '137>(move _23, move _24, move _68)
+        storage_live(_60)
+        _60 = &test_crate::main::{promoted_const#15}
+        _22 = add_assign<'168, '170>(move _23, move _24, move _60)
         ↳⚡ storage_dead(_58)
             storage_dead(_57)
             storage_dead(_56)
@@ -5994,16 +5929,8 @@ fn main()
     ↳⚡ undefined_behavior
     storage_dead(_28)
     storage_live(_59)
-    _59 = &raw const test_crate::main::{promoted_const} with_metadata(const 20usize)
-    storage_live(_60)
-    _60 = NonNull { 0: move _59 }
-    storage_live(_61)
-    _61 = PhantomData {  }
-    storage_live(_62)
-    _62 = Location { 0: move _60, 1: const 13u32, 2: const 14u32, 3: move _61 }
-    storage_live(_63)
-    _63 = &_62
-    _26 = chunks<'149, i32>[{built_in impl Sized for i32}](move _27, const 2usize, move _63)
+    _59 = &test_crate::main::{promoted_const#16}
+    _26 = chunks<'177, i32>[{built_in impl Sized for i32}](move _27, const 2usize, move _59)
     ↳⚡ storage_dead(_58)
         storage_dead(_57)
         storage_dead(_56)
@@ -6016,7 +5943,7 @@ fn main()
         storage_dead(_12)
         unwind_continue
     storage_dead(_27)
-    _25 = impl_IntoIterator_for_T::into_iter<Chunks<'155, i32>[{built_in impl Sized for i32}]>[{built_in impl Sized for Chunks<'155, i32>[{built_in impl Sized for i32}]}, impl_Iterator_for_Chunks<'155, i32>[{built_in impl Sized for i32}]](move _26)
+    _25 = impl_IntoIterator_for_T::into_iter<Chunks<'183, i32>[{built_in impl Sized for i32}]>[{built_in impl Sized for Chunks<'183, i32>[{built_in impl Sized for i32}]}, impl_Iterator_for_Chunks<'183, i32>[{built_in impl Sized for i32}]](move _26)
     ↳⚡ storage_dead(_58)
         storage_dead(_57)
         storage_dead(_56)
@@ -6037,7 +5964,7 @@ fn main()
         storage_live(_32)
         _32 = &mut iter_29
         _31 = &two-phase-mut (*_32)
-        _30 = impl_Iterator_for_Chunks::next<'166, '168, i32>[{built_in impl Sized for i32}](move _31)
+        _30 = impl_Iterator_for_Chunks::next<'198, '200, i32>[{built_in impl Sized for i32}](move _31)
         ↳⚡ storage_dead(_58)
             storage_dead(_57)
             storage_dead(_56)
@@ -6075,17 +6002,9 @@ fn main()
     _36 = as_slice<'_, i32, 7usize>[{built_in impl Sized for i32}](move _37)
     ↳⚡ undefined_behavior
     storage_dead(_37)
-    storage_live(_69)
-    _69 = &raw const test_crate::main::{promoted_const#2} with_metadata(const 20usize)
-    storage_live(_70)
-    _70 = NonNull { 0: move _69 }
-    storage_live(_71)
-    _71 = PhantomData {  }
-    storage_live(_72)
-    _72 = Location { 0: move _70, 1: const 16u32, 2: const 14u32, 3: move _71 }
-    storage_live(_73)
-    _73 = &_72
-    _35 = chunks_exact<'171, i32>[{built_in impl Sized for i32}](move _36, const 2usize, move _73)
+    storage_live(_61)
+    _61 = &test_crate::main::{promoted_const#17}
+    _35 = chunks_exact<'207, i32>[{built_in impl Sized for i32}](move _36, const 2usize, move _61)
     ↳⚡ storage_dead(_58)
         storage_dead(_57)
         storage_dead(_56)
@@ -6098,7 +6017,7 @@ fn main()
         storage_dead(_12)
         unwind_continue
     storage_dead(_36)
-    _34 = impl_IntoIterator_for_T::into_iter<ChunksExact<'177, i32>[{built_in impl Sized for i32}]>[{built_in impl Sized for ChunksExact<'177, i32>[{built_in impl Sized for i32}]}, impl_Iterator_for_ChunksExact<'177, i32>[{built_in impl Sized for i32}]](move _35)
+    _34 = impl_IntoIterator_for_T::into_iter<ChunksExact<'213, i32>[{built_in impl Sized for i32}]>[{built_in impl Sized for ChunksExact<'213, i32>[{built_in impl Sized for i32}]}, impl_Iterator_for_ChunksExact<'213, i32>[{built_in impl Sized for i32}]](move _35)
     ↳⚡ storage_dead(_58)
         storage_dead(_57)
         storage_dead(_56)
@@ -6119,7 +6038,7 @@ fn main()
         storage_live(_41)
         _41 = &mut iter_38
         _40 = &two-phase-mut (*_41)
-        _39 = impl_Iterator_for_ChunksExact::next<'188, '190, i32>[{built_in impl Sized for i32}](move _40)
+        _39 = impl_Iterator_for_ChunksExact::next<'228, '230, i32>[{built_in impl Sized for i32}](move _40)
         ↳⚡ storage_dead(_58)
             storage_dead(_57)
             storage_dead(_56)
@@ -6189,18 +6108,6 @@ fn main()
         _56 = &(*_57)
         storage_live(_58)
         _58 = Option::None {  }
-        storage_dead(_73)
-        storage_dead(_72)
-        storage_dead(_71)
-        storage_dead(_70)
-        storage_dead(_69)
-        storage_dead(_68)
-        storage_dead(_67)
-        storage_dead(_66)
-        storage_dead(_65)
-        storage_dead(_64)
-        storage_dead(_63)
-        storage_dead(_62)
         storage_dead(_61)
         storage_dead(_60)
         storage_dead(_59)
@@ -6237,18 +6144,6 @@ fn main()
     storage_dead(_42)
     storage_dead(_33)
     storage_dead(_12)
-    storage_dead(_73)
-    storage_dead(_72)
-    storage_dead(_71)
-    storage_dead(_70)
-    storage_dead(_69)
-    storage_dead(_68)
-    storage_dead(_67)
-    storage_dead(_66)
-    storage_dead(_65)
-    storage_dead(_64)
-    storage_dead(_63)
-    storage_dead(_62)
     storage_dead(_61)
     storage_dead(_60)
     storage_dead(_59)

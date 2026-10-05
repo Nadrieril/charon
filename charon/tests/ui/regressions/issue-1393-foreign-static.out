@@ -79,6 +79,10 @@ where
   _2: C,
 }
 
+struct str {
+  _0: [u8],
+}
+
 // Full name: test_crate::foo
 fn foo() -> (u8, *const u8, u8)
 {

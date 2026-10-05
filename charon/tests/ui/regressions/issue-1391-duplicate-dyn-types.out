@@ -7,9 +7,22 @@ opaque type core::marker::MetaSized::{vtable}
 #[lang_item(MetaSized)]
 pub trait MetaSized<Self>
 
+// Full name: core::marker::Sized
+#[fundamental]
+#[lang_item(Sized)]
+pub trait Sized<Self>
+{
+    proof ImpliedClause0: (Self: MetaSized)
+    non-dyn-compatible
+}
+
 struct () {}
 
 vtable core::marker::MetaSized::{vtable}::<D>: core::marker::MetaSized::{vtable} = Opaque(VTable was chosen to be opaque)
+
+struct str {
+  _0: [u8],
+}
 
 struct test_crate::Sub::{vtable} {
   size: usize,
@@ -161,11 +174,11 @@ fn main()
     storage_live(_15)
     _15 = &d
     _14 = &raw const (*_15)
-    _13 = unsize_cast<*const D, *const (dyn Sub + '18), &impl_Sub_for_D::{vtable}>(move _14)
+    _13 = unsize_cast<*const D, *const (dyn Sub + '20), &impl_Sub_for_D::{vtable}>(move _14)
     storage_dead(_14)
-    set_type(typeof(_13) == *const (dyn Sub + '19))
+    set_type(typeof(_13) == *const (dyn Sub + '21))
     _12 = copy _13
-    _11 = unsize_cast<*const (dyn Sub + '8), *const (dyn Sub + '20),  at []>(move _12)
+    _11 = unsize_cast<*const (dyn Sub + '8), *const (dyn Sub + '22),  at []>(move _12)
     storage_dead(_12)
     _10 = Wrapper::<(dyn Sub)> { _0: move _11 }
     storage_dead(_11)
@@ -184,11 +197,11 @@ fn main()
     storage_live(_22)
     _22 = &d
     _21 = &raw const (*_22)
-    _20 = unsize_cast<*const D, *const (dyn Sub + '21), &impl_Sub_for_D::{vtable}>(move _21)
+    _20 = unsize_cast<*const D, *const (dyn Sub + '24), &impl_Sub_for_D::{vtable}>(move _21)
     storage_dead(_21)
-    set_type(typeof(_20) == *const (dyn Sub + '22))
+    set_type(typeof(_20) == *const (dyn Sub + '25))
     _19 = copy _20
-    _18 = unsize_cast<*const (dyn Sub + '12), *const (dyn Sub + '23),  at []>(move _19)
+    _18 = unsize_cast<*const (dyn Sub + '12), *const (dyn Sub + '26),  at []>(move _19)
     storage_dead(_19)
     _17 = Wrapper::<(dyn Sub)> { _0: move _18 }
     storage_dead(_18)

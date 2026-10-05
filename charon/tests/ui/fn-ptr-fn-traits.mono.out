@@ -88,6 +88,10 @@ pub trait Fn<Self, Args>
     vtable: core::ops::function::Fn::{vtable}
 }
 
+struct str {
+  _0: [u8],
+}
+
 struct (_,)::<u32> {
   _0: u32,
 }
@@ -499,7 +503,7 @@ fn test_crate::call_once::<'_, fn<'_0_1>(Adt::<'_, u32>) -> Adt::<'_, u32>>(f: f
     storage_live(_5)
     _5 = move x
     _4 = (move _5,)
-    _0 = {impl FnOnce<(Adt::<'_, u32>,)> for fn<'_0_1>(Adt::<'_, u32>) -> Adt::<'_, u32>}::call_once::<u32, u32><'0>(move _3, move _4)
+    _0 = {impl FnOnce<(Adt::<'_, u32>,)> for fn<'_0_1>(Adt::<'_, u32>) -> Adt::<'_, u32>}::call_once::<u32, u32><'2>(move _3, move _4)
     ↳⚡ storage_dead(x)
         storage_dead(f)
         unwind_continue
@@ -586,7 +590,7 @@ fn generic_call_once::<fn<'_0_1>([&'_0_1 u8; 3usize]) -> [&'_0_1 u8; 3usize], [&
     storage_live(_5)
     _5 = move x
     _4 = (move _5,)
-    _0 = {impl FnOnce<([&'_ u8; 3usize],)> for fn<'_0_1>([&'_0_1 u8; 3usize]) -> [&'_0_1 u8; 3usize]}::call_once::<u8, u8, 3usize, 3usize><'13>(move _3, move _4)
+    _0 = {impl FnOnce<([&'_ u8; 3usize],)> for fn<'_0_1>([&'_0_1 u8; 3usize]) -> [&'_0_1 u8; 3usize]}::call_once::<u8, u8, 3usize, 3usize><'15>(move _3, move _4)
     ↳⚡ storage_dead(x)
         storage_dead(f)
         unwind_continue
@@ -619,7 +623,7 @@ fn generic_call_once2::<fn<'_0_1>(Plain::<u32>, &'_0_1 u32) -> &'_0_1 u32, Plain
     storage_live(_7)
     _7 = move y
     _5 = (move _6, move _7)
-    _0 = {impl FnOnce<(Plain::<u32>, &'_ u32)> for fn<'_0_1>(Plain::<u32>, &'_0_1 u32) -> &'_0_1 u32}::call_once::<Plain::<u32>, u32, u32><'3>(move _4, move _5)
+    _0 = {impl FnOnce<(Plain::<u32>, &'_ u32)> for fn<'_0_1>(Plain::<u32>, &'_0_1 u32) -> &'_0_1 u32}::call_once::<Plain::<u32>, u32, u32><'5>(move _4, move _5)
     ↳⚡ storage_dead(y)
         storage_dead(x)
         storage_dead(f)
@@ -736,7 +740,7 @@ pub fn test_free_region<'a>(x: &'a u32) -> &'a u32
     storage_live(f)
     f = cast<for<'_0_1> ref_identity<'_0_1>, fn(&'12 u32) -> &'13 u32>(const ref_identity<'16>)
     fake_read(f)
-    set_type(typeof(f) == fn(&'17 u32) -> &'18 u32)
+    set_type(typeof(f) == fn(&'19 u32) -> &'20 u32)
     storage_live(_3)
     storage_live(_4)
     _4 = copy f
@@ -891,10 +895,10 @@ pub fn test_dyn_fn(x: u32) -> u32
     storage_live(_5)
     _5 = &fn_ptr
     _4 = &(*_5)
-    dyn_fn = unsize_cast<&'6 fn(u32) -> u32, &'10 (dyn Fn<(u32,), ImpliedClause1::ImpliedClause1::Output = u32> + '11), &{impl Fn<(u32,)> for fn(u32) -> u32}::{vtable}::<u32, u32>>(move _4)
+    dyn_fn = unsize_cast<&'6 fn(u32) -> u32, &'12 (dyn Fn<(u32,), ImpliedClause1::ImpliedClause1::Output = u32> + '13), &{impl Fn<(u32,)> for fn(u32) -> u32}::{vtable}::<u32, u32>>(move _4)
     storage_dead(_4)
     fake_read(dyn_fn)
-    set_type(typeof(dyn_fn) == &'12 (dyn Fn<(u32,), ImpliedClause1::ImpliedClause1::Output = u32> + '13))
+    set_type(typeof(dyn_fn) == &'14 (dyn Fn<(u32,), ImpliedClause1::ImpliedClause1::Output = u32> + '15))
     storage_dead(_5)
     storage_live(_6)
     _6 = &(*dyn_fn) with_metadata(copy dyn_fn.metadata)

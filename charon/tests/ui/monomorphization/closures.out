@@ -1,5 +1,19 @@
 # Final LLBC before serialization:
 
+// Full name: core::marker::MetaSized
+#[fundamental]
+#[lang_item(MetaSized)]
+pub trait MetaSized<Self>
+
+// Full name: core::marker::Sized
+#[fundamental]
+#[lang_item(Sized)]
+pub trait Sized<Self>
+{
+    proof ImpliedClause0: (Self: MetaSized)
+    non-dyn-compatible
+}
+
 // Full name: test_crate::Thing
 struct Thing {}
 
@@ -9,6 +23,10 @@ struct () {}
 #[diagnostic_item("mem_drop")]
 pub fn drop::<Thing>(_1: Thing)
 = <opaque>
+
+struct str {
+  _0: [u8],
+}
 
 struct (_,)::<u8> {
   _0: u8,
@@ -68,7 +86,7 @@ fn apply_to_zero::<test_crate::main::{closure}<'_>>(f: test_crate::main::{closur
     _2 = &f
     storage_live(_3)
     _3 = (const 0u8,)
-    _0 = call<'5, '7>(move _2, move _3)
+    _0 = call<'7, '9>(move _2, move _3)
     ↳⚡ storage_dead(f)
         unwind_continue
     storage_dead(_3)
@@ -131,7 +149,7 @@ fn apply_to_zero_mut::<test_crate::main::{closure#1}<'_>>(f: test_crate::main::{
     _2 = &mut f
     storage_live(_3)
     _3 = (const 0u8,)
-    _0 = call_mut<'5, '7>(move _2, move _3)
+    _0 = call_mut<'7, '9>(move _2, move _3)
     ↳⚡ storage_dead(f)
         unwind_continue
     storage_dead(_3)

@@ -1,5 +1,9 @@
 # Final LLBC before serialization:
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::marker::MetaSized
 #[fundamental]
 #[lang_item(MetaSized)]
@@ -25,7 +29,7 @@ pub trait Clone<Self>
 }
 
 // Full name: core::clone::impls::{impl Clone for !}::clone
-pub fn clone<'_0>(_1: &'_0 !) -> !
+pub fn clone<'_0>(_1: &'_0 !, _2: &'static Location<'static>) -> !
 = <opaque>
 
 // Full name: core::clone::impls::{impl Clone for !}
@@ -174,6 +178,10 @@ where
     TypeOutlives0: T: 'static,
 = <opaque>
 
+struct str {
+  _0: [u8],
+}
+
 struct (_,)<A> {
   _0: A,
 }
@@ -249,7 +257,7 @@ fn {impl Fn<(Option<&'_0 mut Option<u32>[{built_in impl Sized for u32}]>[{built_
     _4 = &test_crate::FOO::{const}::{closure}::__RUST_STD_INTERNAL_VAL
     storage_live(_5)
     _5 = move __rust_std_internal_init
-    _0 = get_or_init<'23, '24, u32, (), __rust_std_internal_init_fn>[{built_in impl Sized for u32}, {built_in impl Sized for ()}, impl_DestroyedState_for_unit, {built_in impl Sized for __rust_std_internal_init_fn}, {impl FnOnce<()> for __rust_std_internal_init_fn}](move _4, move _5, const __rust_std_internal_init_fn)
+    _0 = get_or_init<'32, '33, u32, (), __rust_std_internal_init_fn>[{built_in impl Sized for u32}, {built_in impl Sized for ()}, impl_DestroyedState_for_unit, {built_in impl Sized for __rust_std_internal_init_fn}, {impl FnOnce<()> for __rust_std_internal_init_fn}](move _4, move _5, const __rust_std_internal_init_fn)
     ↳⚡ storage_dead(__rust_std_internal_init)
         storage_dead(tupled_args)
         storage_dead(_1)
@@ -295,7 +303,7 @@ fn {impl FnOnce<(Option<&'_0 mut Option<u32>[{built_in impl Sized for u32}]>[{bu
     storage_live(_0)
     storage_live(_3)
     _3 = &mut _1
-    _0 = {impl FnMut<(Option<&'_0 mut Option<u32>[{built_in impl Sized for u32}]>[{built_in impl Sized for &'_0 mut Option<u32>[{built_in impl Sized for u32}]}],)> for test_crate::FOO::{const}::{closure}}::call_mut<'_0, '35>(move _3, move _2)
+    _0 = {impl FnMut<(Option<&'_0 mut Option<u32>[{built_in impl Sized for u32}]>[{built_in impl Sized for &'_0 mut Option<u32>[{built_in impl Sized for u32}]}],)> for test_crate::FOO::{const}::{closure}}::call_mut<'_0, '44>(move _3, move _2)
     ↳⚡ storage_dead(_3)
         storage_dead(_2)
         storage_dead(_1)
@@ -360,7 +368,7 @@ fn {impl Fn<(Option<&'_0 mut Option<u32>[{built_in impl Sized for u32}]>[{built_
     _4 = &test_crate::FOO::{const}::{closure#1}::__RUST_STD_INTERNAL_VAL
     storage_live(_5)
     _5 = move __rust_std_internal_init
-    _0 = get_or_init<'23, '24, u32, !, __rust_std_internal_init_fn>[{built_in impl Sized for u32}, {built_in impl Sized for !}, {impl DestroyedState for !}, {built_in impl Sized for __rust_std_internal_init_fn}, {impl FnOnce<()> for __rust_std_internal_init_fn}](move _4, move _5, const __rust_std_internal_init_fn)
+    _0 = get_or_init<'32, '33, u32, !, __rust_std_internal_init_fn>[{built_in impl Sized for u32}, {built_in impl Sized for !}, {impl DestroyedState for !}, {built_in impl Sized for __rust_std_internal_init_fn}, {impl FnOnce<()> for __rust_std_internal_init_fn}](move _4, move _5, const __rust_std_internal_init_fn)
     ↳⚡ storage_dead(__rust_std_internal_init)
         storage_dead(tupled_args)
         storage_dead(_1)
@@ -406,7 +414,7 @@ fn {impl FnOnce<(Option<&'_0 mut Option<u32>[{built_in impl Sized for u32}]>[{bu
     storage_live(_0)
     storage_live(_3)
     _3 = &mut _1
-    _0 = {impl FnMut<(Option<&'_0 mut Option<u32>[{built_in impl Sized for u32}]>[{built_in impl Sized for &'_0 mut Option<u32>[{built_in impl Sized for u32}]}],)> for test_crate::FOO::{const}::{closure#1}}::call_mut<'_0, '35>(move _3, move _2)
+    _0 = {impl FnMut<(Option<&'_0 mut Option<u32>[{built_in impl Sized for u32}]>[{built_in impl Sized for &'_0 mut Option<u32>[{built_in impl Sized for u32}]}],)> for test_crate::FOO::{const}::{closure#1}}::call_mut<'_0, '44>(move _3, move _2)
     ↳⚡ storage_dead(_3)
         storage_dead(_2)
         storage_dead(_1)
@@ -460,12 +468,12 @@ where
     if move _3 {
         storage_live(_4)
         _4 = test_crate::FOO::{const}::{closure} {  }
-        _2 = cast<for<'_0_1> test_crate::FOO::{const}::{closure}::{as_fn}<'_0_1>, fn<'_0_1>(Option<&'_0_1 mut Option<u32>[{built_in impl Sized for u32}]>[{built_in impl Sized for &'_0_1 mut Option<u32>[{built_in impl Sized for u32}]}]) -> *const u32>(const test_crate::FOO::{const}::{closure}::{as_fn}<'13>)
+        _2 = cast<for<'_0_1> test_crate::FOO::{const}::{closure}::{as_fn}<'_0_1>, fn<'_0_1>(Option<&'_0_1 mut Option<u32>[{built_in impl Sized for u32}]>[{built_in impl Sized for &'_0_1 mut Option<u32>[{built_in impl Sized for u32}]}]) -> *const u32>(const test_crate::FOO::{const}::{closure}::{as_fn}<'31>)
         storage_dead(_4)
     } else {
         storage_live(_5)
         _5 = test_crate::FOO::{const}::{closure#1} {  }
-        _2 = cast<for<'_0_1> test_crate::FOO::{const}::{closure#1}::{as_fn}<'_0_1>, fn<'_0_1>(Option<&'_0_1 mut Option<u32>[{built_in impl Sized for u32}]>[{built_in impl Sized for &'_0_1 mut Option<u32>[{built_in impl Sized for u32}]}]) -> *const u32>(const test_crate::FOO::{const}::{closure#1}::{as_fn}<'17>)
+        _2 = cast<for<'_0_1> test_crate::FOO::{const}::{closure#1}::{as_fn}<'_0_1>, fn<'_0_1>(Option<&'_0_1 mut Option<u32>[{built_in impl Sized for u32}]>[{built_in impl Sized for &'_0_1 mut Option<u32>[{built_in impl Sized for u32}]}]) -> *const u32>(const test_crate::FOO::{const}::{closure#1}::{as_fn}<'35>)
         storage_dead(_5)
     }
     storage_dead(_3)

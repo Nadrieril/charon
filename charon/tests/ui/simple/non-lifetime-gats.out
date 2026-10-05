@@ -117,8 +117,11 @@ pub trait PointerFamily<Self>
 // Full name: test_crate::BoxFamily
 pub struct BoxFamily {}
 
-// Full name: test_crate::{impl PointerFamily for BoxFamily}::new::{promoted_const}
-pub const test_crate::impl_PointerFamily_for_BoxFamily::new::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 115u8, 105u8, 109u8, 112u8, 108u8, 101u8, 47u8, 110u8, 111u8, 110u8, 45u8, 108u8, 105u8, 102u8, 101u8, 116u8, 105u8, 109u8, 101u8, 45u8, 103u8, 97u8, 116u8, 115u8, 46u8, 114u8, 115u8] } with_metadata(36usize)
+// Full name: test_crate::filename#8
+pub static filename: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x73, 0x69, 0x6d, 0x70, 0x6c, 0x65, 0x2f, 0x6e, 0x6f, 0x6e, 0x2d, 0x6c, 0x69, 0x66, 0x65, 0x74, 0x69, 0x6d, 0x65, 0x2d, 0x67, 0x61, 0x74, 0x73, 0x2e, 0x72, 0x73, 0x00) with_metadata(36usize)
+
+// Full name: test_crate::{impl PointerFamily for BoxFamily}::new::{promoted_const#9}
+pub static {promoted_const}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(36usize) }, 1: 15u32, 2: 9u32, 3: PhantomData {  } }
 
 // Full name: test_crate::{impl PointerFamily for BoxFamily}::new
 pub fn impl_PointerFamily_for_BoxFamily::new<T>(value: T) -> Box<T>[TraitClause0::ImpliedClause0, {built_in impl Sized for Global}]
@@ -128,40 +131,20 @@ where
     let _0: Box<T>[TraitClause0::ImpliedClause0, {built_in impl Sized for Global}]; // return
     let value: T; // arg #1
     let _2: T; // anonymous local
-    let _3: *const str is !null; // anonymous local
-    let _4: NonNull<str>; // anonymous local
-    let _5: PhantomData<&'8 str>; // anonymous local
-    let _6: Location<'5>; // anonymous local
-    let _7: &'3 Location<'4>; // anonymous local
+    let _3: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     storage_live(_2)
     _2 = move value
     storage_live(_3)
-    _3 = &raw const test_crate::impl_PointerFamily_for_BoxFamily::new::{promoted_const} with_metadata(const 36usize)
-    storage_live(_4)
-    _4 = NonNull { 0: move _3 }
-    storage_live(_5)
-    _5 = PhantomData {  }
-    storage_live(_6)
-    _6 = Location { 0: move _4, 1: const 15u32, 2: const 9u32, 3: move _5 }
-    storage_live(_7)
-    _7 = &_6
-    _0 = alloc::boxed::{Box<T>[TraitClause0::ImpliedClause0, {built_in impl Sized for Global}]}::new<T>[TraitClause0](move _2, move _7)
+    _3 = &{promoted_const}
+    _0 = alloc::boxed::{Box<T>[TraitClause0::ImpliedClause0, {built_in impl Sized for Global}]}::new<T>[TraitClause0](move _2, move _3)
     ↳⚡ conditional_drop[{built_in impl Destruct for T}::drop_glue<'9>] _2
         ↳⚡ storage_dead(value)
-            storage_dead(_7)
-            storage_dead(_6)
-            storage_dead(_5)
-            storage_dead(_4)
             storage_dead(_3)
             unwind_terminate
         conditional_drop[{built_in impl Destruct for T}::drop_glue<'11>] value
         ↳⚡ storage_dead(value)
-            storage_dead(_7)
-            storage_dead(_6)
-            storage_dead(_5)
-            storage_dead(_4)
             storage_dead(_3)
             unwind_terminate
         storage_dead(value)
@@ -171,10 +154,6 @@ where
     ↳⚡ storage_dead(value)
         unwind_continue
     storage_dead(value)
-    storage_dead(_7)
-    storage_dead(_6)
-    storage_dead(_5)
-    storage_dead(_4)
     storage_dead(_3)
     return
 }
@@ -206,16 +185,16 @@ where
     storage_live(_2)
     _2 = move x
     _0 = TraitClause2::new<T>[TraitClause1](move _2)
-    ↳⚡ conditional_drop[{built_in impl Destruct for T}::drop_glue<'0>] _2
+    ↳⚡ conditional_drop[{built_in impl Destruct for T}::drop_glue<'9>] _2
         ↳⚡ storage_dead(x)
             unwind_terminate
-        conditional_drop[{built_in impl Destruct for T}::drop_glue<'2>] x
+        conditional_drop[{built_in impl Destruct for T}::drop_glue<'11>] x
         ↳⚡ storage_dead(x)
             unwind_terminate
         storage_dead(x)
         unwind_continue
     storage_dead(_2)
-    conditional_drop[{built_in impl Destruct for T}::drop_glue<'1>] x
+    conditional_drop[{built_in impl Destruct for T}::drop_glue<'10>] x
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(x)
@@ -234,7 +213,7 @@ pub fn main()
     _1 = make_pointer<BoxFamily, i32>[{built_in impl Sized for BoxFamily}, {built_in impl Sized for i32}, impl_PointerFamily_for_BoxFamily](const 42i32)
     ↳⚡ unwind_continue
     set_type(typeof(_1) <= Box<i32>[{built_in impl MetaSized for i32}, {built_in impl Sized for Global}])
-    conditional_drop[drop_glue<'0, i32, Global>[{built_in impl MetaSized for i32}, {built_in impl Sized for Global}]] _1
+    conditional_drop[drop_glue<'9, i32, Global>[{built_in impl MetaSized for i32}, {built_in impl Sized for Global}]] _1
     ↳⚡ unwind_continue
     storage_dead(_1)
     _0 = ()

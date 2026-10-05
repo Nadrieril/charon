@@ -75,6 +75,10 @@ where
     TypeConstraint0: TraitClause3::ImpliedClause1::Output = T,
 = <opaque>
 
+struct str {
+  _0: [u8],
+}
+
 // Full name: test_crate::Ops
 trait Ops<Self, const K : usize>
 {
@@ -134,7 +138,7 @@ where
     storage_live(_0)
     storage_live(_3)
     _3 = &mut _1
-    _0 = call_mut<'2, T, K>[TraitClause0, TraitClause1](move _3, move _2)
+    _0 = call_mut<'11, T, K>[TraitClause0, TraitClause1](move _3, move _2)
     ↳⚡ storage_dead(_3)
         storage_dead(_2)
         storage_dead(_1)

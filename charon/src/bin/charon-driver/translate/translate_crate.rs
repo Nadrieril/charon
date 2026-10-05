@@ -1158,6 +1158,9 @@ pub fn translate<'tcx>(
         assoc_item_id_map: Default::default(),
         id_map: Default::default(),
         reverse_id_map: Default::default(),
+        caller_locations: Default::default(),
+        definition_locations: Default::default(),
+        track_caller_methods: Default::default(),
         file_to_id: Default::default(),
         items_to_translate: Default::default(),
         processed: Default::default(),
@@ -1247,9 +1250,28 @@ pub fn translate<'tcx>(
     ctx.remove_unused_methods();
 
     // Return the context, dropping the hax state and rustc `tcx`.
+    let track_caller_funs = ctx
+        .reverse_id_map
+        .iter()
+        .filter_map(|(id, source)| {
+            let ItemId::Fun(id) = id else { return None };
+            if source.kind != TransItemSourceKind::Fun {
+                return None;
+            }
+            source
+                .def_id()
+                .as_real_def_id()
+                .filter(|id| ctx.is_track_caller(*id))
+                .map(|_| *id)
+        })
+        .collect();
     Ok(TransformCtx {
         options: ctx.options,
         translated: ctx.translated,
         errors: ctx.errors,
+        caller_locations: ctx.caller_locations.into_iter().collect(),
+        definition_locations: ctx.definition_locations.into_iter().collect(),
+        track_caller_funs,
+        track_caller_methods: ctx.track_caller_methods.into_iter().collect(),
     })
 }

@@ -1,6 +1,24 @@
 # Final LLBC before serialization:
 
+// Full name: core::marker::MetaSized
+#[fundamental]
+#[lang_item(MetaSized)]
+pub trait MetaSized<Self>
+
+// Full name: core::marker::Sized
+#[fundamental]
+#[lang_item(Sized)]
+pub trait Sized<Self>
+{
+    proof ImpliedClause0: (Self: MetaSized)
+    non-dyn-compatible
+}
+
 struct () {}
+
+struct str {
+  _0: [u8],
+}
 
 struct (_,)::<()> {
   _0: (),
@@ -63,7 +81,7 @@ fn call_once::<()>(_1: {closure}::<()>, _2: ((),))
     storage_live(_3)
     _0 = ()
     _3 = &mut _1
-    _0 = call_mut::<()><'3>(move _3, move _2)
+    _0 = call_mut::<()><'5>(move _3, move _2)
     ↳⚡ storage_dead(_3)
         storage_dead(_2)
         storage_dead(_1)

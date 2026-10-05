@@ -53,16 +53,16 @@ pub trait StructuralPartialEq<Self>
 
 struct () {}
 
+struct str {
+  _0: [u8],
+}
+
 struct (_, _)<A, B>
 where
     TraitClause0: (A: Sized),
 {
   _0: A,
   _1: B,
-}
-
-struct str {
-  _0: [u8],
 }
 
 // Full name: test_crate::Enum
@@ -152,7 +152,7 @@ pub fn impl_PartialEq_Enum_for_Enum::eq<'_0, '_1>(self: &'_0 Enum, other: &'_1 E
                     _15 = &__self_0
                     storage_live(_16)
                     _16 = &__arg1_0
-                    _0 = {impl PartialEq<&'_0 B> for &'_1 A}::eq<'42, '43, '46, '47, u8, u8>[impl_PartialEq_u8_for_u8](move _15, move _16)
+                    _0 = {impl PartialEq<&'_0 B> for &'_1 A}::eq<'59, '60, '63, '64, u8, u8>[impl_PartialEq_u8_for_u8](move _15, move _16)
                     ↳⚡ storage_dead(other)
                         storage_dead(self)
                         unwind_continue

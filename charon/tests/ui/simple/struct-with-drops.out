@@ -105,6 +105,10 @@ where
     TypeOutlives1: A: '_0,
 = <opaque>
 
+struct str {
+  _0: [u8],
+}
+
 // Full name: {impl Destruct for [T]}::drop_glue
 unsafe fn impl_Destruct_for_slice::drop_glue<'_0, T>(_1: &'_0 mut [T])
 where
@@ -227,7 +231,7 @@ where
     _0 = ()
     _2 = as_mut_slice<'_, T, N>[TraitClause0, {built_in impl Destruct for T}](move _1)
     ↳⚡ undefined_behavior
-    _0 = drop_glue<'6, [T]>[impl_Destruct_for_slice<T>[TraitClause0, TraitClause1], impl_Destruct_for_slice<T>[TraitClause0, TraitClause1]](move _2)
+    _0 = drop_glue<'18, [T]>[impl_Destruct_for_slice<T>[TraitClause0, TraitClause1], impl_Destruct_for_slice<T>[TraitClause0, TraitClause1]](move _2)
     ↳⚡ storage_dead(_2)
         storage_dead(_1)
         unwind_continue
@@ -284,23 +288,13 @@ unsafe fn impl_Destruct_for_B::drop_glue<'_0>(_1: &'_0 mut B)
     storage_live(_3)
     _0 = ()
     _2 = &mut (*_1)
-    _3 = impl_Drop_for_B::drop<'4>(move _2)
-    ↳⚡ drop[impl_Destruct_for_Box::drop_glue<'5, u32, Global>[{built_in impl MetaSized for u32}, {built_in impl Sized for Global}, {built_in impl Destruct for u32}, {built_in impl Destruct for Global}]] (*_1).x
+    _3 = impl_Drop_for_B::drop<'16>(move _2)
+    ↳⚡ drop[impl_Destruct_for_Box::drop_glue<'17, u32, Global>[{built_in impl MetaSized for u32}, {built_in impl Sized for Global}, {built_in impl Destruct for u32}, {built_in impl Destruct for Global}]] (*_1).x
         ↳⚡ storage_dead(_3)
             storage_dead(_2)
             storage_dead(_1)
             unwind_terminate
-        drop[impl_Destruct_for_Box::drop_glue<'7, u32, Global>[{built_in impl MetaSized for u32}, {built_in impl Sized for Global}, {built_in impl Destruct for u32}, {built_in impl Destruct for Global}]] (*_1).y
-        ↳⚡ storage_dead(_3)
-            storage_dead(_2)
-            storage_dead(_1)
-            unwind_terminate
-        storage_dead(_3)
-        storage_dead(_2)
-        storage_dead(_1)
-        unwind_continue
-    drop[impl_Destruct_for_Box::drop_glue<'6, u32, Global>[{built_in impl MetaSized for u32}, {built_in impl Sized for Global}, {built_in impl Destruct for u32}, {built_in impl Destruct for Global}]] (*_1).x
-    ↳⚡ drop[impl_Destruct_for_Box::drop_glue<'7, u32, Global>[{built_in impl MetaSized for u32}, {built_in impl Sized for Global}, {built_in impl Destruct for u32}, {built_in impl Destruct for Global}]] (*_1).y
+        drop[impl_Destruct_for_Box::drop_glue<'19, u32, Global>[{built_in impl MetaSized for u32}, {built_in impl Sized for Global}, {built_in impl Destruct for u32}, {built_in impl Destruct for Global}]] (*_1).y
         ↳⚡ storage_dead(_3)
             storage_dead(_2)
             storage_dead(_1)
@@ -309,7 +303,17 @@ unsafe fn impl_Destruct_for_B::drop_glue<'_0>(_1: &'_0 mut B)
         storage_dead(_2)
         storage_dead(_1)
         unwind_continue
-    drop[impl_Destruct_for_Box::drop_glue<'8, u32, Global>[{built_in impl MetaSized for u32}, {built_in impl Sized for Global}, {built_in impl Destruct for u32}, {built_in impl Destruct for Global}]] (*_1).y
+    drop[impl_Destruct_for_Box::drop_glue<'18, u32, Global>[{built_in impl MetaSized for u32}, {built_in impl Sized for Global}, {built_in impl Destruct for u32}, {built_in impl Destruct for Global}]] (*_1).x
+    ↳⚡ drop[impl_Destruct_for_Box::drop_glue<'19, u32, Global>[{built_in impl MetaSized for u32}, {built_in impl Sized for Global}, {built_in impl Destruct for u32}, {built_in impl Destruct for Global}]] (*_1).y
+        ↳⚡ storage_dead(_3)
+            storage_dead(_2)
+            storage_dead(_1)
+            unwind_terminate
+        storage_dead(_3)
+        storage_dead(_2)
+        storage_dead(_1)
+        unwind_continue
+    drop[impl_Destruct_for_Box::drop_glue<'20, u32, Global>[{built_in impl MetaSized for u32}, {built_in impl Sized for Global}, {built_in impl Destruct for u32}, {built_in impl Destruct for Global}]] (*_1).y
     ↳⚡ storage_dead(_3)
         storage_dead(_2)
         storage_dead(_1)

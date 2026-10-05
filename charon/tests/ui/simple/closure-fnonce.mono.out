@@ -1,5 +1,19 @@
 # Final LLBC before serialization:
 
+// Full name: core::marker::MetaSized
+#[fundamental]
+#[lang_item(MetaSized)]
+pub trait MetaSized<Self>
+
+// Full name: core::marker::Sized
+#[fundamental]
+#[lang_item(Sized)]
+pub trait Sized<Self>
+{
+    proof ImpliedClause0: (Self: MetaSized)
+    non-dyn-compatible
+}
+
 // Full name: test_crate::NotCopy
 struct NotCopy {}
 
@@ -9,6 +23,10 @@ struct () {}
 #[diagnostic_item("mem_drop")]
 pub fn drop::<NotCopy>(_1: NotCopy)
 = <opaque>
+
+struct str {
+  _0: [u8],
+}
 
 struct (_,)::<u8> {
   _0: u8,

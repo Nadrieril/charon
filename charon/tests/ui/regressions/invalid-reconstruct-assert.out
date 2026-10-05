@@ -111,13 +111,16 @@ struct str {
   _0: [u8],
 }
 
-pub const core::slice::{[T]}::binary_search_by::{promoted_const#3}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 115u8, 108u8, 105u8, 99u8, 101u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(129usize)
+// Full name: test_crate::filename#12
+pub static filename: str = RawMemory(0x2f, 0x68, 0x6f, 0x6d, 0x65, 0x2f, 0x6e, 0x61, 0x64, 0x72, 0x69, 0x65, 0x72, 0x69, 0x6c, 0x2f, 0x2e, 0x72, 0x75, 0x73, 0x74, 0x75, 0x70, 0x2f, 0x74, 0x6f, 0x6f, 0x6c, 0x63, 0x68, 0x61, 0x69, 0x6e, 0x73, 0x2f, 0x6e, 0x69, 0x67, 0x68, 0x74, 0x6c, 0x79, 0x2d, 0x32, 0x30, 0x32, 0x36, 0x2d, 0x30, 0x39, 0x2d, 0x31, 0x37, 0x2d, 0x78, 0x38, 0x36, 0x5f, 0x36, 0x34, 0x2d, 0x75, 0x6e, 0x6b, 0x6e, 0x6f, 0x77, 0x6e, 0x2d, 0x6c, 0x69, 0x6e, 0x75, 0x78, 0x2d, 0x67, 0x6e, 0x75, 0x2f, 0x6c, 0x69, 0x62, 0x2f, 0x72, 0x75, 0x73, 0x74, 0x6c, 0x69, 0x62, 0x2f, 0x73, 0x72, 0x63, 0x2f, 0x72, 0x75, 0x73, 0x74, 0x2f, 0x6c, 0x69, 0x62, 0x72, 0x61, 0x72, 0x79, 0x2f, 0x63, 0x6f, 0x72, 0x65, 0x2f, 0x73, 0x72, 0x63, 0x2f, 0x73, 0x6c, 0x69, 0x63, 0x65, 0x2f, 0x6d, 0x6f, 0x64, 0x2e, 0x72, 0x73, 0x00) with_metadata(129usize)
 
-pub const core::slice::{[T]}::binary_search_by::{promoted_const#2}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 115u8, 108u8, 105u8, 99u8, 101u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(129usize)
+pub static core::slice::{[T]}::binary_search_by::{promoted_const#16}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(129usize) }, 1: 3035u32, 2: 22u32, 3: PhantomData {  } }
 
-pub const core::slice::{[T]}::binary_search_by::{promoted_const#1}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 115u8, 108u8, 105u8, 99u8, 101u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(129usize)
+pub static core::slice::{[T]}::binary_search_by::{promoted_const#15}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(129usize) }, 1: 3029u32, 2: 22u32, 3: PhantomData {  } }
 
-pub const core::slice::{[T]}::binary_search_by::{promoted_const}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 115u8, 108u8, 105u8, 99u8, 101u8, 47u8, 109u8, 111u8, 100u8, 46u8, 114u8, 115u8] } with_metadata(129usize)
+pub static core::slice::{[T]}::binary_search_by::{promoted_const#14}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(129usize) }, 1: 3026u32, 2: 35u32, 3: PhantomData {  } }
+
+pub static core::slice::{[T]}::binary_search_by::{promoted_const#13}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(129usize) }, 1: 3007u32, 2: 39u32, 3: PhantomData {  } }
 
 struct (_,)<A> {
   _0: A,
@@ -194,26 +197,10 @@ where
     let _49: (); // anonymous local
     let _50: (); // anonymous local
     let _51: Result<usize, usize>[{built_in impl Sized for usize}, {built_in impl Sized for usize}]; // anonymous local
-    let _52: *const str is !null; // anonymous local
-    let _53: NonNull<str>; // anonymous local
-    let _54: PhantomData<&'24 str>; // anonymous local
-    let _55: Location<'21>; // anonymous local
-    let _56: &'19 Location<'20>; // anonymous local
-    let _57: *const str is !null; // anonymous local
-    let _58: NonNull<str>; // anonymous local
-    let _59: PhantomData<&'33 str>; // anonymous local
-    let _60: Location<'32>; // anonymous local
-    let _61: &'30 Location<'31>; // anonymous local
-    let _62: *const str is !null; // anonymous local
-    let _63: NonNull<str>; // anonymous local
-    let _64: PhantomData<&'43 str>; // anonymous local
-    let _65: Location<'42>; // anonymous local
-    let _66: &'40 Location<'41>; // anonymous local
-    let _67: *const str is !null; // anonymous local
-    let _68: NonNull<str>; // anonymous local
-    let _69: PhantomData<&'47 str>; // anonymous local
-    let _70: Location<'46>; // anonymous local
-    let _71: &'44 Location<'45>; // anonymous local
+    let _52: &'static Location<'static>; // anonymous local
+    let _53: &'static Location<'static>; // anonymous local
+    let _54: &'static Location<'static>; // anonymous local
+    let _55: &'static Location<'static>; // anonymous local
 
     bb0: {
         storage_live(_0);
@@ -266,22 +253,6 @@ where
         storage_dead(base);
         storage_dead(f);
         storage_dead(self);
-        storage_dead(_71);
-        storage_dead(_70);
-        storage_dead(_69);
-        storage_dead(_68);
-        storage_dead(_67);
-        storage_dead(_66);
-        storage_dead(_65);
-        storage_dead(_64);
-        storage_dead(_63);
-        storage_dead(_62);
-        storage_dead(_61);
-        storage_dead(_60);
-        storage_dead(_59);
-        storage_dead(_58);
-        storage_dead(_57);
-        storage_dead(_56);
         storage_dead(_55);
         storage_dead(_54);
         storage_dead(_53);
@@ -310,22 +281,6 @@ where
         storage_dead(base);
         storage_dead(f);
         storage_dead(self);
-        storage_dead(_71);
-        storage_dead(_70);
-        storage_dead(_69);
-        storage_dead(_68);
-        storage_dead(_67);
-        storage_dead(_66);
-        storage_dead(_65);
-        storage_dead(_64);
-        storage_dead(_63);
-        storage_dead(_62);
-        storage_dead(_61);
-        storage_dead(_60);
-        storage_dead(_59);
-        storage_dead(_58);
-        storage_dead(_57);
-        storage_dead(_56);
         storage_dead(_55);
         storage_dead(_54);
         storage_dead(_53);
@@ -374,16 +329,8 @@ where
         storage_live(_31);
         _31 = copy self.metadata;
         storage_live(_52);
-        _52 = &raw const core::slice::{[T]}::binary_search_by::{promoted_const} with_metadata(const 129usize);
-        storage_live(_53);
-        _53 = NonNull { 0: move _52 };
-        storage_live(_54);
-        _54 = PhantomData {  };
-        storage_live(_55);
-        _55 = Location { 0: move _53, 1: const 3007u32, 2: const 39u32, 3: move _54 };
-        storage_live(_56);
-        _56 = &_55;
-        _30 = impl_SliceIndex_slice_for_usize::get_unchecked::precondition_check(copy mid, move _31, move _56) -> bb8 (unwind: bb9);
+        _52 = &core::slice::{[T]}::binary_search_by::{promoted_const#13};
+        _30 = impl_SliceIndex_slice_for_usize::get_unchecked::precondition_check(copy mid, move _31, move _52) -> bb8 (unwind: bb9);
     }
 
     bb8: {
@@ -410,7 +357,7 @@ where
         _15 = &(*_29);
         storage_dead(_29);
         _14 = (copy _15,);
-        cmp_12 = TraitClause2::call_mut<'29>(move _13, move _14) -> bb12 (unwind: bb17);
+        cmp_12 = TraitClause2::call_mut<'33>(move _13, move _14) -> bb12 (unwind: bb17);
     }
 
     bb12: {
@@ -438,7 +385,7 @@ where
     }
 
     bb14 (cleanup): {
-        drop[TraitClause3::drop_glue<'39>] f -> bb15 (unwind: bb16);
+        drop[TraitClause3::drop_glue<'47>] f -> bb15 (unwind: bb16);
     }
 
     bb15 (cleanup): {
@@ -461,22 +408,6 @@ where
         storage_dead(base);
         storage_dead(f);
         storage_dead(self);
-        storage_dead(_71);
-        storage_dead(_70);
-        storage_dead(_69);
-        storage_dead(_68);
-        storage_dead(_67);
-        storage_dead(_66);
-        storage_dead(_65);
-        storage_dead(_64);
-        storage_dead(_63);
-        storage_dead(_62);
-        storage_dead(_61);
-        storage_dead(_60);
-        storage_dead(_59);
-        storage_dead(_58);
-        storage_dead(_57);
-        storage_dead(_56);
         storage_dead(_55);
         storage_dead(_54);
         storage_dead(_53);
@@ -505,22 +436,6 @@ where
         storage_dead(base);
         storage_dead(f);
         storage_dead(self);
-        storage_dead(_71);
-        storage_dead(_70);
-        storage_dead(_69);
-        storage_dead(_68);
-        storage_dead(_67);
-        storage_dead(_66);
-        storage_dead(_65);
-        storage_dead(_64);
-        storage_dead(_63);
-        storage_dead(_62);
-        storage_dead(_61);
-        storage_dead(_60);
-        storage_dead(_59);
-        storage_dead(_58);
-        storage_dead(_57);
-        storage_dead(_56);
         storage_dead(_55);
         storage_dead(_54);
         storage_dead(_53);
@@ -530,7 +445,7 @@ where
     }
 
     bb17 (cleanup): {
-        drop[TraitClause3::drop_glue<'39>] f -> bb18 (unwind: bb19);
+        drop[TraitClause3::drop_glue<'47>] f -> bb18 (unwind: bb19);
     }
 
     bb18 (cleanup): {
@@ -553,22 +468,6 @@ where
         storage_dead(base);
         storage_dead(f);
         storage_dead(self);
-        storage_dead(_71);
-        storage_dead(_70);
-        storage_dead(_69);
-        storage_dead(_68);
-        storage_dead(_67);
-        storage_dead(_66);
-        storage_dead(_65);
-        storage_dead(_64);
-        storage_dead(_63);
-        storage_dead(_62);
-        storage_dead(_61);
-        storage_dead(_60);
-        storage_dead(_59);
-        storage_dead(_58);
-        storage_dead(_57);
-        storage_dead(_56);
         storage_dead(_55);
         storage_dead(_54);
         storage_dead(_53);
@@ -597,22 +496,6 @@ where
         storage_dead(base);
         storage_dead(f);
         storage_dead(self);
-        storage_dead(_71);
-        storage_dead(_70);
-        storage_dead(_69);
-        storage_dead(_68);
-        storage_dead(_67);
-        storage_dead(_66);
-        storage_dead(_65);
-        storage_dead(_64);
-        storage_dead(_63);
-        storage_dead(_62);
-        storage_dead(_61);
-        storage_dead(_60);
-        storage_dead(_59);
-        storage_dead(_58);
-        storage_dead(_57);
-        storage_dead(_56);
         storage_dead(_55);
         storage_dead(_54);
         storage_dead(_53);
@@ -643,17 +526,9 @@ where
     bb22: {
         storage_live(_37);
         _37 = copy self.metadata;
-        storage_live(_57);
-        _57 = &raw const core::slice::{[T]}::binary_search_by::{promoted_const#1} with_metadata(const 129usize);
-        storage_live(_58);
-        _58 = NonNull { 0: move _57 };
-        storage_live(_59);
-        _59 = PhantomData {  };
-        storage_live(_60);
-        _60 = Location { 0: move _58, 1: const 3026u32, 2: const 35u32, 3: move _59 };
-        storage_live(_61);
-        _61 = &_60;
-        _36 = impl_SliceIndex_slice_for_usize::get_unchecked::precondition_check(copy index, move _37, move _61) -> bb23 (unwind: bb24);
+        storage_live(_53);
+        _53 = &core::slice::{[T]}::binary_search_by::{promoted_const#14};
+        _36 = impl_SliceIndex_slice_for_usize::get_unchecked::precondition_check(copy index, move _37, move _53) -> bb23 (unwind: bb24);
     }
 
     bb23: {
@@ -679,7 +554,7 @@ where
         storage_dead(_35);
         storage_dead(index);
         _20 = (copy _21,);
-        cmp_18 = TraitClause2::call_mut<'38>(move _19, move _20) -> bb27 (unwind: bb43);
+        cmp_18 = TraitClause2::call_mut<'46>(move _19, move _20) -> bb27 (unwind: bb43);
     }
 
     bb27: {
@@ -701,17 +576,9 @@ where
     }
 
     bb29: {
-        storage_live(_62);
-        _62 = &raw const core::slice::{[T]}::binary_search_by::{promoted_const#2} with_metadata(const 129usize);
-        storage_live(_63);
-        _63 = NonNull { 0: move _62 };
-        storage_live(_64);
-        _64 = PhantomData {  };
-        storage_live(_65);
-        _65 = Location { 0: move _63, 1: const 3029u32, 2: const 22u32, 3: move _64 };
-        storage_live(_66);
-        _66 = &_65;
-        _41 = core::hint::assert_unchecked::precondition_check(copy cond_23, move _66) -> bb31 (unwind: bb30);
+        storage_live(_54);
+        _54 = &core::slice::{[T]}::binary_search_by::{promoted_const#15};
+        _41 = core::hint::assert_unchecked::precondition_check(copy cond_23, move _54) -> bb31 (unwind: bb30);
     }
 
     bb30 (cleanup): {
@@ -749,17 +616,9 @@ where
     }
 
     bb35: {
-        storage_live(_67);
-        _67 = &raw const core::slice::{[T]}::binary_search_by::{promoted_const#3} with_metadata(const 129usize);
-        storage_live(_68);
-        _68 = NonNull { 0: move _67 };
-        storage_live(_69);
-        _69 = PhantomData {  };
-        storage_live(_70);
-        _70 = Location { 0: move _68, 1: const 3035u32, 2: const 22u32, 3: move _69 };
-        storage_live(_71);
-        _71 = &_70;
-        _42 = core::hint::assert_unchecked::precondition_check(copy cond_28, move _71) -> bb37 (unwind: bb36);
+        storage_live(_55);
+        _55 = &core::slice::{[T]}::binary_search_by::{promoted_const#16};
+        _42 = core::hint::assert_unchecked::precondition_check(copy cond_28, move _55) -> bb37 (unwind: bb36);
     }
 
     bb36 (cleanup): {
@@ -780,7 +639,7 @@ where
     bb39: {
         storage_dead(cmp_18);
         storage_dead(size);
-        drop[TraitClause3::drop_glue<'48>] f -> bb40 (unwind: bb41);
+        drop[TraitClause3::drop_glue<'60>] f -> bb40 (unwind: bb41);
     }
 
     bb40: {
@@ -803,22 +662,6 @@ where
         storage_dead(base);
         storage_dead(f);
         storage_dead(self);
-        storage_dead(_71);
-        storage_dead(_70);
-        storage_dead(_69);
-        storage_dead(_68);
-        storage_dead(_67);
-        storage_dead(_66);
-        storage_dead(_65);
-        storage_dead(_64);
-        storage_dead(_63);
-        storage_dead(_62);
-        storage_dead(_61);
-        storage_dead(_60);
-        storage_dead(_59);
-        storage_dead(_58);
-        storage_dead(_57);
-        storage_dead(_56);
         storage_dead(_55);
         storage_dead(_54);
         storage_dead(_53);
@@ -847,22 +690,6 @@ where
         storage_dead(base);
         storage_dead(f);
         storage_dead(self);
-        storage_dead(_71);
-        storage_dead(_70);
-        storage_dead(_69);
-        storage_dead(_68);
-        storage_dead(_67);
-        storage_dead(_66);
-        storage_dead(_65);
-        storage_dead(_64);
-        storage_dead(_63);
-        storage_dead(_62);
-        storage_dead(_61);
-        storage_dead(_60);
-        storage_dead(_59);
-        storage_dead(_58);
-        storage_dead(_57);
-        storage_dead(_56);
         storage_dead(_55);
         storage_dead(_54);
         storage_dead(_53);
@@ -876,7 +703,7 @@ where
     }
 
     bb43 (cleanup): {
-        drop[TraitClause3::drop_glue<'39>] f -> bb44 (unwind: bb45);
+        drop[TraitClause3::drop_glue<'47>] f -> bb44 (unwind: bb45);
     }
 
     bb44 (cleanup): {
@@ -899,22 +726,6 @@ where
         storage_dead(base);
         storage_dead(f);
         storage_dead(self);
-        storage_dead(_71);
-        storage_dead(_70);
-        storage_dead(_69);
-        storage_dead(_68);
-        storage_dead(_67);
-        storage_dead(_66);
-        storage_dead(_65);
-        storage_dead(_64);
-        storage_dead(_63);
-        storage_dead(_62);
-        storage_dead(_61);
-        storage_dead(_60);
-        storage_dead(_59);
-        storage_dead(_58);
-        storage_dead(_57);
-        storage_dead(_56);
         storage_dead(_55);
         storage_dead(_54);
         storage_dead(_53);
@@ -943,22 +754,6 @@ where
         storage_dead(base);
         storage_dead(f);
         storage_dead(self);
-        storage_dead(_71);
-        storage_dead(_70);
-        storage_dead(_69);
-        storage_dead(_68);
-        storage_dead(_67);
-        storage_dead(_66);
-        storage_dead(_65);
-        storage_dead(_64);
-        storage_dead(_63);
-        storage_dead(_62);
-        storage_dead(_61);
-        storage_dead(_60);
-        storage_dead(_59);
-        storage_dead(_58);
-        storage_dead(_57);
-        storage_dead(_56);
         storage_dead(_55);
         storage_dead(_54);
         storage_dead(_53);
@@ -987,7 +782,7 @@ fn call_mut<'_0, '_1>(_1: &'_1 mut {closure}, tupled_args: (&'_0 u32,)) -> Order
     let _6: &'6 u32; // anonymous local
     let _7: &'7 u32; // anonymous local
     let _8: &'8 u32; // anonymous local
-    let _9: &'13 u32; // anonymous local
+    let _9: &'22 u32; // anonymous local
     let _10: u32; // anonymous local
 
     bb0: {
@@ -1008,7 +803,7 @@ fn call_mut<'_0, '_1>(_1: &'_1 mut {closure}, tupled_args: (&'_0 u32,)) -> Order
         _7 = move _8;
         _6 = &(*_7);
         _5 = &(*_6);
-        _0 = cmp<'11, '12>(move _4, move _5) -> bb1 (unwind: bb2);
+        _0 = cmp<'20, '21>(move _4, move _5) -> bb1 (unwind: bb2);
     }
 
     bb1: {
@@ -1049,7 +844,7 @@ fn call_once<'_0>(_1: {closure}, _2: (&'_0 u32,)) -> Ordering
         storage_live(_0);
         storage_live(_3);
         _3 = &mut _1;
-        _0 = call_mut<'_0, '9>(move _3, move _2) -> bb1 (unwind: bb2);
+        _0 = call_mut<'_0, '18>(move _3, move _2) -> bb1 (unwind: bb2);
     }
 
     bb1: {
@@ -1126,7 +921,7 @@ fn main()
         storage_dead(_7);
         storage_live(_8);
         _8 = {closure} {  };
-        res = binary_search_by<'10, u32, {closure}>[{built_in impl Sized for u32}, {built_in impl Sized for {closure}}, impl_FnMut_tuple_for_closure<'10>, {built_in impl Destruct for {closure}}](move _6, move _8) -> bb1 (unwind: bb2);
+        res = binary_search_by<'19, u32, {closure}>[{built_in impl Sized for u32}, {built_in impl Sized for {closure}}, impl_FnMut_tuple_for_closure<'19>, {built_in impl Destruct for {closure}}](move _6, move _8) -> bb1 (unwind: bb2);
     }
 
     bb1: {

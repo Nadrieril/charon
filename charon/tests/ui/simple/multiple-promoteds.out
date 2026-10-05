@@ -33,6 +33,10 @@ pub opaque type NonNull<T>
 
 struct () {}
 
+struct str {
+  _0: [u8],
+}
+
 struct (_, _)<A, B>
 where
     TraitClause0: (A: Sized),
@@ -41,11 +45,10 @@ where
   _1: B,
 }
 
-struct str {
-  _0: [u8],
-}
+// Full name: test_crate::filename#10
+pub static filename: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x73, 0x69, 0x6d, 0x70, 0x6c, 0x65, 0x2f, 0x6d, 0x75, 0x6c, 0x74, 0x69, 0x70, 0x6c, 0x65, 0x2d, 0x70, 0x72, 0x6f, 0x6d, 0x6f, 0x74, 0x65, 0x64, 0x73, 0x2e, 0x72, 0x73, 0x00) with_metadata(37usize)
 
-pub const test_crate::six::{promoted_const#4}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 115u8, 105u8, 109u8, 112u8, 108u8, 101u8, 47u8, 109u8, 117u8, 108u8, 116u8, 105u8, 112u8, 108u8, 101u8, 45u8, 112u8, 114u8, 111u8, 109u8, 111u8, 116u8, 101u8, 100u8, 115u8, 46u8, 114u8, 115u8] } with_metadata(37usize)
+pub static test_crate::six::{promoted_const#11}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(37usize) }, 1: 5u32, 2: 5u32, 3: PhantomData {  } }
 
 // Full name: test_crate::six
 fn six() -> u32
@@ -67,11 +70,7 @@ fn six() -> u32
     let _14: &'21 u32; // anonymous local
     let _15: u32; // anonymous local
     let _16: u32; // anonymous local
-    let _17: *const str is !null; // anonymous local
-    let _18: NonNull<str>; // anonymous local
-    let _19: PhantomData<&'19 str>; // anonymous local
-    let _20: Location<'16>; // anonymous local
-    let _21: &'14 Location<'15>; // anonymous local
+    let _17: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     storage_live(_2)
@@ -107,16 +106,8 @@ fn six() -> u32
     storage_live(_6)
     _6 = copy y
     storage_live(_17)
-    _17 = &raw const test_crate::six::{promoted_const#4} with_metadata(const 37usize)
-    storage_live(_18)
-    _18 = NonNull { 0: move _17 }
-    storage_live(_19)
-    _19 = PhantomData {  }
-    storage_live(_20)
-    _20 = Location { 0: move _18, 1: const 5u32, 2: const 5u32, 3: move _19 }
-    storage_live(_21)
-    _21 = &_20
-    _0 = add<'9, '10>(move _5, move _6, move _21)
+    _17 = &test_crate::six::{promoted_const#11}
+    _0 = add<'18, '19>(move _5, move _6, move _17)
     ↳⚡ storage_dead(_8)
         storage_dead(_7)
         storage_dead(_4)
@@ -130,10 +121,6 @@ fn six() -> u32
     storage_dead(_7)
     storage_dead(_4)
     storage_dead(_2)
-    storage_dead(_21)
-    storage_dead(_20)
-    storage_dead(_19)
-    storage_dead(_18)
     storage_dead(_17)
     storage_dead(_16)
     storage_dead(_15)

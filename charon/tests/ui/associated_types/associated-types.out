@@ -15,6 +15,10 @@ pub trait Borrow<Self, Borrowed>
     vtable: core::borrow::Borrow::{vtable}<Borrowed>
 }
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::marker::Sized
 #[fundamental]
 #[lang_item(Sized)]
@@ -36,7 +40,7 @@ pub trait Clone<Self>
 
 // Full name: core::clone::impls::{impl Clone for &'_0 T}::clone
 #[diagnostic_item("noop_method_clone")]
-pub fn {impl Clone for &'_0 T}::clone<'_0, '_1, T>(_1: &'_1 &'_0 T) -> &'_0 T
+pub fn {impl Clone for &'_0 T}::clone<'_0, '_1, T>(_1: &'_1 &'_0 T, _2: &'static Location<'static>) -> &'_0 T
 where
     TypeOutlives0: T: '_0,
     RegionOutlives0: '_0: '_1,
@@ -72,6 +76,10 @@ where
     non-dyn-compatible
 }
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
 struct () {}
 
 // Full name: core::marker::Destruct
@@ -94,7 +102,7 @@ where
 }
 
 // Full name: core::option::{impl Clone for Option<T>[TraitClause0]}::clone
-pub fn impl_Clone_for_Option::clone<'_0, T>(_1: &'_0 Option<T>[TraitClause0]) -> Option<T>[TraitClause0]
+pub fn impl_Clone_for_Option::clone<'_0, T>(_1: &'_0 Option<T>[TraitClause0], _2: &'static Location<'static>) -> Option<T>[TraitClause0]
 where
     TraitClause0: (T: Sized),
     TraitClause1: (T: Clone),
@@ -125,6 +133,10 @@ where
     non-dyn-compatible
 }
 
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
+
 // Full name: alloc::borrow::ToOwned
 #[diagnostic_item("ToOwned")]
 pub trait ToOwned<Self, Self_Owned>
@@ -134,6 +146,10 @@ pub trait ToOwned<Self, Self_Owned>
     proof ImpliedClause2: (Self_Owned: Borrow<Self>)
     fn to_owned<'_0_1>;
     non-dyn-compatible
+}
+
+struct str {
+  _0: [u8],
 }
 
 struct (_, _)<A, B>
@@ -266,6 +282,12 @@ where
     non-dyn-compatible
 }
 
+// Full name: test_crate::filename#13
+pub static filename: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x61, 0x73, 0x73, 0x6f, 0x63, 0x69, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2f, 0x61, 0x73, 0x73, 0x6f, 0x63, 0x69, 0x61, 0x74, 0x65, 0x64, 0x2d, 0x74, 0x79, 0x70, 0x65, 0x73, 0x2e, 0x72, 0x73, 0x00) with_metadata(45usize)
+
+// Full name: test_crate::external_use_item::{promoted_const#14}
+pub static {promoted_const}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(45usize) }, 1: 34u32, 2: 5u32, 3: PhantomData {  } }
+
 // Full name: test_crate::external_use_item
 fn external_use_item<'a, T, Clause1_Item, Clause2_Item>(x: Clause1_Item) -> Clause1_Item
 where
@@ -278,6 +300,7 @@ where
     let _2: &'5 Clause1_Item; // anonymous local
     let _3: Clause1_Item; // anonymous local
     let _4: Clause1_Item; // anonymous local
+    let _5: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     storage_live(_2)
@@ -289,12 +312,15 @@ where
         unwind_continue
     _2 = &_3
     storage_dead(_4)
-    _0 = TraitClause2::ImpliedClause1::ImpliedClause1::clone<'17>(move _2)
+    storage_live(_5)
+    _5 = &{promoted_const}
+    _0 = TraitClause2::ImpliedClause1::ImpliedClause1::clone<'30>(move _2, move _5)
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(_2)
     storage_dead(_3)
     storage_dead(x)
+    storage_dead(_5)
     return
 }
 
@@ -310,7 +336,7 @@ fn call_fn()
     storage_live(_1)
     storage_live(_2)
     _2 = Option::None {  }
-    _1 = external_use_item<'25, &'25 bool, Option<&'25 bool>[{built_in impl Sized for &'25 bool}], &'25 bool>[{built_in impl Sized for &'25 bool}, {impl test_crate::Foo<'a, Option<&'a T>[{built_in impl Sized for &'a T}]> for &'a T}<'25, bool>[{built_in impl Sized for bool}], impl_Foo_for_Option<'25, &'25 bool>[{built_in impl Sized for &'25 bool}, {impl Copy for &'_0 T}<'25, bool>]](move _2)
+    _1 = external_use_item<'34, &'34 bool, Option<&'34 bool>[{built_in impl Sized for &'34 bool}], &'34 bool>[{built_in impl Sized for &'34 bool}, {impl test_crate::Foo<'a, Option<&'a T>[{built_in impl Sized for &'a T}]> for &'a T}<'34, bool>[{built_in impl Sized for bool}], impl_Foo_for_Option<'34, &'34 bool>[{built_in impl Sized for &'34 bool}, {impl Copy for &'_0 T}<'34, bool>]](move _2)
     ↳⚡ unwind_continue
     storage_dead(_2)
     storage_dead(_1)

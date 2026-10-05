@@ -151,6 +151,7 @@ impl<T: mini::Target> TranslateCtx<'_, T> {
                     "size_of_val" => self.make_layout_of_val_function(span, fdecl, false)?,
                     "align_of_val" => self.make_layout_of_val_function(span, fdecl, true)?,
                     "cold_path" => self.make_cold_path_function(span, fdecl)?,
+                    "ctpop" => self.make_ctpop_function(span, fdecl)?,
                     "arith_offset" => self.make_arith_offset_function(span, fdecl)?,
                     "ptr_offset_from" => self.make_ptr_offset_from_function(span, fdecl, false)?,
                     "ptr_offset_from_unsigned" => {
@@ -198,6 +199,23 @@ impl<T: mini::Target> TranslateCtx<'_, T> {
         builder.set_block(
             return_block,
             mb::block(&[], mini::Terminator::Return, mini::BbKind::Regular),
+        );
+        Ok(builder.finish())
+    }
+
+    fn make_ctpop_function(&self, span: Span, fdecl: &FunDecl) -> Result<mini::Function> {
+        let mut builder = FunctionBuilder::new(self, span, &fdecl.signature)?;
+        let start = builder.declare_block();
+        builder.set_block(
+            start,
+            mb::block(
+                &[mb::assign(
+                    mini::PlaceExpr::Local(builder.return_local()),
+                    mb::count_ones(mb::load(mini::PlaceExpr::Local(builder.argument(0)))),
+                )],
+                mini::Terminator::Return,
+                mini::BbKind::Regular,
+            ),
         );
         Ok(builder.finish())
     }

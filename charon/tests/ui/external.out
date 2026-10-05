@@ -11,6 +11,10 @@ pub opaque type Cell<T>
 where
     TraitClause0: (T: MetaSized),
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::marker::Sized
 #[fundamental]
 #[lang_item(Sized)]
@@ -54,7 +58,7 @@ where
 = <opaque>
 
 // Full name: core::clone::impls::{impl Clone for u32}::clone
-pub fn impl_Clone_for_u32::clone<'_0>(_1: &'_0 u32) -> u32
+pub fn impl_Clone_for_u32::clone<'_0>(_1: &'_0 u32, _2: &'static Location<'static>) -> u32
 = <opaque>
 
 // Full name: core::clone::impls::{impl Clone for u32}
@@ -97,7 +101,7 @@ where
 pub opaque type NonZeroU32Inner
 
 // Full name: core::num::niche_types::{impl Clone for NonZeroU32Inner}::clone
-pub fn impl_Clone_for_NonZeroU32Inner::clone<'_0>(_1: &'_0 NonZeroU32Inner) -> NonZeroU32Inner
+pub fn impl_Clone_for_NonZeroU32Inner::clone<'_0>(_1: &'_0 NonZeroU32Inner, _2: &'static Location<'static>) -> NonZeroU32Inner
 = <opaque>
 
 // Full name: core::num::niche_types::{impl Clone for NonZeroU32Inner}
@@ -158,10 +162,6 @@ where
     TraitClause0: (T: Sized),
     TraitClause1: (T: ZeroablePrimitive),
 = <opaque>
-
-// Full name: core::panic::location::Location
-#[lang_item(PanicLocation)]
-pub opaque type Location<'a>
 
 // Full name: core::option::{Option<T>[TraitClause0]}::unwrap
 #[track_caller]
@@ -240,7 +240,7 @@ where
     _3 = &two-phase-mut (*x)
     storage_live(_4)
     _4 = &two-phase-mut (*y)
-    _0 = core::mem::swap<'7, '8, T>[TraitClause0](move _3, move _4)
+    _0 = core::mem::swap<'16, '17, T>[TraitClause0](move _3, move _4)
     ↳⚡ storage_dead(y)
         storage_dead(x)
         unwind_continue
@@ -251,7 +251,11 @@ where
     return
 }
 
-pub const test_crate::test_new_non_zero_u32::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 101u8, 120u8, 116u8, 101u8, 114u8, 110u8, 97u8, 108u8, 46u8, 114u8, 115u8] } with_metadata(20usize)
+// Full name: test_crate::filename#7
+pub static filename: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x65, 0x78, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x2e, 0x72, 0x73, 0x00) with_metadata(20usize)
+
+// Full name: test_crate::test_new_non_zero_u32::{promoted_const#8}
+pub static {promoted_const}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(20usize) }, 1: 10u32, 2: 5u32, 3: PhantomData {  } }
 
 // Full name: test_crate::test_new_non_zero_u32
 pub fn test_new_non_zero_u32(x: u32) -> NonZero<u32>[{built_in impl Sized for u32}, impl_ZeroablePrimitive_for_u32]
@@ -260,11 +264,7 @@ pub fn test_new_non_zero_u32(x: u32) -> NonZero<u32>[{built_in impl Sized for u3
     let x: u32; // arg #1
     let _2: Option<NonZero<u32>[{built_in impl Sized for u32}, impl_ZeroablePrimitive_for_u32]>[{built_in impl Sized for NonZero<u32>[{built_in impl Sized for u32}, impl_ZeroablePrimitive_for_u32]}]; // anonymous local
     let _3: u32; // anonymous local
-    let _4: *const str is !null; // anonymous local
-    let _5: NonNull<str>; // anonymous local
-    let _6: PhantomData<&'8 str>; // anonymous local
-    let _7: Location<'5>; // anonymous local
-    let _8: &'3 Location<'4>; // anonymous local
+    let _4: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     storage_live(_2)
@@ -275,24 +275,12 @@ pub fn test_new_non_zero_u32(x: u32) -> NonZero<u32>[{built_in impl Sized for u3
         unwind_continue
     storage_dead(_3)
     storage_live(_4)
-    _4 = &raw const test_crate::test_new_non_zero_u32::{promoted_const} with_metadata(const 20usize)
-    storage_live(_5)
-    _5 = NonNull { 0: move _4 }
-    storage_live(_6)
-    _6 = PhantomData {  }
-    storage_live(_7)
-    _7 = Location { 0: move _5, 1: const 10u32, 2: const 5u32, 3: move _6 }
-    storage_live(_8)
-    _8 = &_7
-    _0 = unwrap<NonZero<u32>[{built_in impl Sized for u32}, impl_ZeroablePrimitive_for_u32]>[{built_in impl Sized for NonZero<u32>[{built_in impl Sized for u32}, impl_ZeroablePrimitive_for_u32]}](move _2, move _8)
+    _4 = &{promoted_const}
+    _0 = unwrap<NonZero<u32>[{built_in impl Sized for u32}, impl_ZeroablePrimitive_for_u32]>[{built_in impl Sized for NonZero<u32>[{built_in impl Sized for u32}, impl_ZeroablePrimitive_for_u32]}](move _2, move _4)
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(_2)
     storage_dead(x)
-    storage_dead(_8)
-    storage_dead(_7)
-    storage_dead(_6)
-    storage_dead(_5)
     storage_dead(_4)
     return
 }
@@ -316,14 +304,14 @@ pub fn test_vec_push()
     storage_live(_2)
     storage_live(_3)
     _3 = &two-phase-mut v
-    _2 = push<'3, u32, Global>[{built_in impl Sized for u32}, {built_in impl Sized for Global}, {built_in impl Destruct for Global}](move _3, const 0u32)
-    ↳⚡ conditional_drop[drop_glue<'4, u32, Global>[{built_in impl Sized for u32}, {built_in impl Sized for Global}]] v
+    _2 = push<'16, u32, Global>[{built_in impl Sized for u32}, {built_in impl Sized for Global}, {built_in impl Destruct for Global}](move _3, const 0u32)
+    ↳⚡ conditional_drop[drop_glue<'17, u32, Global>[{built_in impl Sized for u32}, {built_in impl Sized for Global}]] v
         ↳⚡ unwind_terminate
         unwind_continue
     storage_dead(_3)
     storage_dead(_2)
     _0 = ()
-    conditional_drop[drop_glue<'5, u32, Global>[{built_in impl Sized for u32}, {built_in impl Sized for Global}]] v
+    conditional_drop[drop_glue<'18, u32, Global>[{built_in impl Sized for u32}, {built_in impl Sized for Global}]] v
     ↳⚡ unwind_continue
     storage_dead(v)
     return
@@ -339,7 +327,7 @@ pub fn use_get<'_0>(rc: &'_0 Cell<u32>[{built_in impl MetaSized for u32}]) -> u3
     storage_live(_0)
     storage_live(_2)
     _2 = &(*rc)
-    _0 = core::cell::{Cell<T>[TraitClause0::ImpliedClause0]}::get<'4, u32>[{built_in impl Sized for u32}, impl_Copy_for_u32](move _2)
+    _0 = core::cell::{Cell<T>[TraitClause0::ImpliedClause0]}::get<'13, u32>[{built_in impl Sized for u32}, impl_Copy_for_u32](move _2)
     ↳⚡ storage_dead(rc)
         unwind_continue
     storage_dead(_2)
@@ -362,7 +350,7 @@ pub fn incr<'_0>(rc: &'_0 mut Cell<u32>[{built_in impl MetaSized for u32}])
     storage_live(_2)
     storage_live(_3)
     _3 = &two-phase-mut (*rc)
-    _2 = core::cell::{Cell<T>[TraitClause0]}::get_mut<'6, u32>[{built_in impl MetaSized for u32}](move _3)
+    _2 = core::cell::{Cell<T>[TraitClause0]}::get_mut<'15, u32>[{built_in impl MetaSized for u32}](move _3)
     ↳⚡ storage_dead(_4)
         storage_dead(rc)
         unwind_continue

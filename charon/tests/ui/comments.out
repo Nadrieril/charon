@@ -14,6 +14,10 @@ pub trait Sized<Self>
     non-dyn-compatible
 }
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::clone::Clone
 #[lang_item(Clone)]
 #[diagnostic_item("Clone")]
@@ -30,10 +34,6 @@ where
     TraitClause0: (T: Sized),
     TraitClause1: (T: Clone),
 = <opaque>
-
-// Full name: core::panic::location::Location
-#[lang_item(PanicLocation)]
-pub opaque type Location<'a>
 
 // Full name: core::ops::index::Index
 #[lang_item(Index)]
@@ -60,7 +60,7 @@ where
 = <opaque>
 
 // Full name: core::clone::impls::{impl Clone for u32}::clone
-pub fn clone<'_0>(_1: &'_0 u32) -> u32
+pub fn clone<'_0>(_1: &'_0 u32, _2: &'static Location<'static>) -> u32
 = <opaque>
 
 // Full name: core::clone::impls::{impl Clone for u32}
@@ -224,16 +224,16 @@ where
     TypeOutlives0: T: '_0,
 = <opaque>
 
+struct str {
+  _0: [u8],
+}
+
 struct (_, _)<A, B>
 where
     TraitClause0: (A: Sized),
 {
   _0: A,
   _1: B,
-}
-
-struct str {
-  _0: [u8],
 }
 
 // Full name: test_crate::function_call
@@ -322,7 +322,7 @@ pub fn sum<'_0>(s: &'_0 [u32]) -> u32
         storage_live(_10)
         storage_live(_11)
         _11 = &(*s) with_metadata(copy s.metadata)
-        _10 = len<'4, u32>[{built_in impl Sized for u32}](move _11)
+        _10 = len<'17, u32>[{built_in impl Sized for u32}](move _11)
         ↳⚡ storage_dead(_24)
             storage_dead(_20)
             storage_dead(_15)
@@ -539,8 +539,8 @@ fn foo()
     let _30: &'21 u32; // anonymous local
     let _31: Option<Arguments<'30>>[{built_in impl Sized for Arguments<'30>}]; // anonymous local
     let _32: &'34 u32; // anonymous local
-    let _33: &'35 u32; // anonymous local
-    let _34: &'65 u32; // anonymous local
+    let _33: &'56 u32; // anonymous local
+    let _34: &'81 u32; // anonymous local
     let _35: u32; // anonymous local
     let _36: &'_ [u32; 10usize]; // anonymous local
     let _37: &'_ u32; // anonymous local

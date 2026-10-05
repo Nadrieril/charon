@@ -73,6 +73,10 @@ where
     TypeConstraint0: TraitClause3::Output = U,
 = <opaque>
 
+struct str {
+  _0: [u8],
+}
+
 // Full name: test_crate::identity::{closure}
 struct {closure}<T>
 where

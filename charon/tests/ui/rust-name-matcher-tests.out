@@ -257,13 +257,13 @@ fn use_generic()
     ↳⚡ unwind_continue
     fake_read(_int_generic)
     storage_live(_str_generic)
-    _str_generic = new<&'17 str>[{built_in impl Sized for &'17 str}](const "hello")
+    _str_generic = new<&'29 str>[{built_in impl Sized for &'29 str}](const "hello")
     ↳⚡ unwind_continue
     fake_read(_str_generic)
     storage_live(_3)
     storage_live(_4)
     _4 = &_int_generic
-    _3 = test_crate::{Generic<T>[TraitClause0]}::get<'26, i32>[{built_in impl Sized for i32}](move _4)
+    _3 = test_crate::{Generic<T>[TraitClause0]}::get<'42, i32>[{built_in impl Sized for i32}](move _4)
     ↳⚡ unwind_continue
     storage_dead(_4)
     storage_dead(_3)

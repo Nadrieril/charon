@@ -106,6 +106,10 @@ where
     TypeConstraint0: TraitClause2::Output = R,
 = <opaque>
 
+struct str {
+  _0: [u8],
+}
+
 // Full name: test_crate::main::{closure}
 struct {closure} {}
 
@@ -150,7 +154,7 @@ fn main()
     _1 = catch_unwind<{closure}, ()>[{built_in impl Sized for {closure}}, {built_in impl Sized for ()}, impl_FnOnce_unit_for_closure, {built_in impl UnwindSafe for {closure}}](move _2)
     ↳⚡ unwind_continue
     storage_dead(_2)
-    conditional_drop[drop_glue<'126, (), Box<(dyn Any + Send + '96)>[{built_in impl MetaSized for (dyn Any + Send + '98)}, {built_in impl Sized for Global}]>[{built_in impl Sized for ()}, {built_in impl Sized for Box<(dyn Any + Send + '96)>[{built_in impl MetaSized for (dyn Any + Send + '98)}, {built_in impl Sized for Global}]}]] _1
+    conditional_drop[drop_glue<'135, (), Box<(dyn Any + Send + '105)>[{built_in impl MetaSized for (dyn Any + Send + '107)}, {built_in impl Sized for Global}]>[{built_in impl Sized for ()}, {built_in impl Sized for Box<(dyn Any + Send + '105)>[{built_in impl MetaSized for (dyn Any + Send + '107)}, {built_in impl Sized for Global}]}]] _1
     ↳⚡ unwind_continue
     storage_dead(_1)
     _0 = ()

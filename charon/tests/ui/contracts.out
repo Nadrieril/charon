@@ -5,7 +5,20 @@
 #[lang_item(MetaSized)]
 pub trait MetaSized<Self>
 
+// Full name: core::marker::Sized
+#[fundamental]
+#[lang_item(Sized)]
+pub trait Sized<Self>
+{
+    proof ImpliedClause0: (Self: MetaSized)
+    non-dyn-compatible
+}
+
 struct () {}
+
+struct str {
+  _0: [u8],
+}
 
 // Full name: test_crate::function::{closure}::closure_precondition
 #[charon::contract(kind = "pre", for = "call")]
@@ -80,7 +93,7 @@ fn function()
     _3 = &closure
     storage_live(_4)
     _4 = ()
-    _2 = call<'2>(move _3, move _4)
+    _2 = call<'11>(move _3, move _4)
     ↳⚡ unwind_continue
     storage_dead(_4)
     storage_dead(_3)

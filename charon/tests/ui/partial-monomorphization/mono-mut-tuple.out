@@ -76,6 +76,10 @@ pub trait core::marker::Destruct::<&_ mut _><'_0, T0>
     non-dyn-compatible
 }
 
+struct str {
+  _0: [u8],
+}
+
 struct (_, _)<A, B>
 where
     TraitClause0: (A: Sized),
@@ -198,17 +202,17 @@ where
     storage_live(_0)
     storage_live(_2)
     _2 = move x
-    _0 = test_crate::id::<(&_ mut _, _)><'28, u32, T>[{built_in impl core::marker::Sized::<(&_ mut _, _)><'28, T>[{built_in impl core::marker::Sized::<&_ mut _><'28> for u32}] for u32}, {built_in impl core::marker::Sized::<&_ mut _><'28> for u32}](move _2)
-    ↳⚡ conditional_drop[(_, _)::impl_Destruct_for_tuple::drop_glue::<_, &_ mut _, _><'87, '80, u32, T>[{built_in impl core::marker::Sized::<&_ mut _><'80> for u32}]] _2
+    _0 = test_crate::id::<(&_ mut _, _)><'37, u32, T>[{built_in impl core::marker::Sized::<(&_ mut _, _)><'37, T>[{built_in impl core::marker::Sized::<&_ mut _><'37> for u32}] for u32}, {built_in impl core::marker::Sized::<&_ mut _><'37> for u32}](move _2)
+    ↳⚡ conditional_drop[(_, _)::impl_Destruct_for_tuple::drop_glue::<_, &_ mut _, _><'96, '89, u32, T>[{built_in impl core::marker::Sized::<&_ mut _><'89> for u32}]] _2
         ↳⚡ storage_dead(x)
             unwind_terminate
-        conditional_drop[(_, _)::impl_Destruct_for_tuple::drop_glue::<_, &_ mut _, _><'127, '120, u32, T>[{built_in impl core::marker::Sized::<&_ mut _><'120> for u32}]] x
+        conditional_drop[(_, _)::impl_Destruct_for_tuple::drop_glue::<_, &_ mut _, _><'136, '129, u32, T>[{built_in impl core::marker::Sized::<&_ mut _><'129> for u32}]] x
         ↳⚡ storage_dead(x)
             unwind_terminate
         storage_dead(x)
         unwind_continue
     storage_dead(_2)
-    conditional_drop[(_, _)::impl_Destruct_for_tuple::drop_glue::<_, &_ mut _, _><'107, '100, u32, T>[{built_in impl core::marker::Sized::<&_ mut _><'100> for u32}]] x
+    conditional_drop[(_, _)::impl_Destruct_for_tuple::drop_glue::<_, &_ mut _, _><'116, '109, u32, T>[{built_in impl core::marker::Sized::<&_ mut _><'109> for u32}]] x
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(x)

@@ -1389,6 +1389,9 @@ impl<'tcx> ItemTransCtx<'tcx, '_> {
             Body::Opaque
         } else {
             let fun_id = self.register_item(span, def.this(), target_item);
+            if let Some(rustc_id) = def.def_id().as_real_def_id() {
+                self.record_definition_location(span, fun_id, rustc_id)?;
+            }
             let target_fn = FnPtr::new(
                 FnPtrKind::Fun(fun_id),
                 self.outermost_binder().params.identity_args(),

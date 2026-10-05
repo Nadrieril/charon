@@ -13,6 +13,10 @@ impl "impl_Debug_for_TryFromSliceError" Debug for TryFromSliceError {
 #[lang_item(MetaSized)]
 pub trait MetaSized<Self>
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::marker::Sized
 #[fundamental]
 #[lang_item(Sized)]
@@ -89,7 +93,7 @@ where
 }
 
 // Full name: core::clone::impls::{impl Clone for u8}::clone
-pub fn clone<'_0>(_1: &'_0 u8) -> u8
+pub fn clone<'_0>(_1: &'_0 u8, _2: &'static Location<'static>) -> u8
 = <opaque>
 
 // Full name: core::clone::impls::{impl Clone for u8}
@@ -118,10 +122,6 @@ impl "impl_Copy_for_u8" Copy for u8 {
 #[lang_item(PhantomData)]
 pub struct PhantomData<T> {}
 
-// Full name: core::panic::location::Location
-#[lang_item(PanicLocation)]
-pub opaque type Location<'a>
-
 // Full name: core::ptr::non_null::NonNull
 #[lang_item(NonNull)]
 pub opaque type NonNull<T>
@@ -141,7 +141,11 @@ struct str {
   _0: [u8],
 }
 
-pub const test_crate::trait_error::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 105u8, 115u8, 115u8, 117u8, 101u8, 45u8, 52u8, 45u8, 115u8, 108u8, 105u8, 99u8, 101u8, 45u8, 116u8, 114u8, 121u8, 45u8, 105u8, 110u8, 116u8, 111u8, 45u8, 97u8, 114u8, 114u8, 97u8, 121u8, 46u8, 114u8, 115u8] } with_metadata(40usize)
+// Full name: test_crate::filename#7
+pub static filename: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x69, 0x73, 0x73, 0x75, 0x65, 0x2d, 0x34, 0x2d, 0x73, 0x6c, 0x69, 0x63, 0x65, 0x2d, 0x74, 0x72, 0x79, 0x2d, 0x69, 0x6e, 0x74, 0x6f, 0x2d, 0x61, 0x72, 0x72, 0x61, 0x79, 0x2e, 0x72, 0x73, 0x00) with_metadata(40usize)
+
+// Full name: test_crate::trait_error::{promoted_const#8}
+pub static {promoted_const}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(40usize) }, 1: 2u32, 2: 27u32, 3: PhantomData {  } }
 
 // Full name: test_crate::trait_error
 pub fn trait_error<'_0>(s: &'_0 [u8])
@@ -151,11 +155,7 @@ pub fn trait_error<'_0>(s: &'_0 [u8])
     let _array: [u8; 4usize]; // local
     let _3: Result<[u8; 4usize], TryFromSliceError>[{built_in impl Sized for [u8; 4usize]}, {built_in impl Sized for TryFromSliceError}]; // anonymous local
     let _4: &'2 [u8]; // anonymous local
-    let _5: *const str is !null; // anonymous local
-    let _6: NonNull<str>; // anonymous local
-    let _7: PhantomData<&'22 str>; // anonymous local
-    let _8: Location<'19>; // anonymous local
-    let _9: &'17 Location<'18>; // anonymous local
+    let _5: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     _0 = ()
@@ -163,21 +163,13 @@ pub fn trait_error<'_0>(s: &'_0 [u8])
     storage_live(_3)
     storage_live(_4)
     _4 = &(*s) with_metadata(copy s.metadata)
-    _3 = try_into<&'4 [u8], [u8; 4usize]>[{built_in impl Sized for &'4 [u8]}, {built_in impl Sized for [u8; 4usize]}, impl_TryFrom_for_array<'4, u8, 4usize>[{built_in impl Sized for u8}, impl_Copy_for_u8]](move _4)
+    _3 = try_into<&'13 [u8], [u8; 4usize]>[{built_in impl Sized for &'13 [u8]}, {built_in impl Sized for [u8; 4usize]}, impl_TryFrom_for_array<'13, u8, 4usize>[{built_in impl Sized for u8}, impl_Copy_for_u8]](move _4)
     ↳⚡ storage_dead(s)
         unwind_continue
     storage_dead(_4)
     storage_live(_5)
-    _5 = &raw const test_crate::trait_error::{promoted_const} with_metadata(const 40usize)
-    storage_live(_6)
-    _6 = NonNull { 0: move _5 }
-    storage_live(_7)
-    _7 = PhantomData {  }
-    storage_live(_8)
-    _8 = Location { 0: move _6, 1: const 2u32, 2: const 27u32, 3: move _7 }
-    storage_live(_9)
-    _9 = &_8
-    _array = unwrap<[u8; 4usize], TryFromSliceError>[{built_in impl Sized for [u8; 4usize]}, {built_in impl Sized for TryFromSliceError}, impl_Debug_for_TryFromSliceError](move _3, move _9)
+    _5 = &{promoted_const}
+    _array = unwrap<[u8; 4usize], TryFromSliceError>[{built_in impl Sized for [u8; 4usize]}, {built_in impl Sized for TryFromSliceError}, impl_Debug_for_TryFromSliceError](move _3, move _5)
     ↳⚡ storage_dead(s)
         unwind_continue
     storage_dead(_3)
@@ -186,10 +178,6 @@ pub fn trait_error<'_0>(s: &'_0 [u8])
     _0 = ()
     storage_dead(_array)
     storage_dead(s)
-    storage_dead(_9)
-    storage_dead(_8)
-    storage_dead(_7)
-    storage_dead(_6)
     storage_dead(_5)
     return
 }

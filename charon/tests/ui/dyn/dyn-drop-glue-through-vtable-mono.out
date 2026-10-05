@@ -7,6 +7,15 @@ opaque type core::marker::MetaSized::{vtable}
 #[lang_item(MetaSized)]
 pub trait MetaSized<Self>
 
+// Full name: core::marker::Sized
+#[fundamental]
+#[lang_item(Sized)]
+pub trait Sized<Self>
+{
+    proof ImpliedClause0: (Self: MetaSized)
+    non-dyn-compatible
+}
+
 struct () {}
 
 // Full name: core::marker::Destruct
@@ -69,11 +78,15 @@ pub unsafe fn drop_in_place::<(dyn T)>(to_drop: *mut (dyn T))
     storage_live(_3)
     _3 = &mut (*to_drop) with_metadata(copy to_drop.metadata)
     _2 = &two-phase-mut (*_3) with_metadata(copy _3.metadata)
-    _0 = drop_glue::<(dyn T)><'10>(move _2)
+    _0 = drop_glue::<(dyn T)><'12>(move _2)
     ↳⚡ unwind_continue
     storage_dead(_3)
     storage_dead(_2)
     return
+}
+
+struct str {
+  _0: [u8],
 }
 
 // Full name: test_crate::f

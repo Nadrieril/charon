@@ -1,5 +1,9 @@
 # Final LLBC before serialization:
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::marker::MetaSized
 #[fundamental]
 #[lang_item(MetaSized)]
@@ -36,6 +40,10 @@ pub trait Copy<Self>
 
 struct () {}
 
+struct str {
+  _0: [u8],
+}
+
 // Full name: test_crate::Trait
 trait Trait<Self>
 {
@@ -59,7 +67,7 @@ where
     _0 = ()
     storage_live(_2)
     _2 = &(*self) with_metadata(copy self.metadata)
-    _0 = TraitClause0::fold<'3>[TraitClause1](move _2)
+    _0 = TraitClause0::fold<'12>[TraitClause1](move _2)
     ↳⚡ storage_dead(self)
         unwind_continue
     storage_dead(_2)
@@ -93,7 +101,7 @@ where
     _0 = ()
     storage_live(_2)
     _2 = &(*self)
-    _0 = fold<'3>(move _2)
+    _0 = fold<'12>(move _2)
     ↳⚡ storage_dead(self)
         unwind_continue
     storage_dead(_2)

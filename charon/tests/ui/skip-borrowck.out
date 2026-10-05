@@ -16,16 +16,16 @@ pub trait Sized<Self>
 
 struct () {}
 
+struct str {
+  _0: [u8],
+}
+
 struct (_, _)<A, B>
 where
     TraitClause0: (A: Sized),
 {
   _0: A,
   _1: B,
-}
-
-struct str {
-  _0: [u8],
 }
 
 // Full name: test_crate::choose
@@ -106,7 +106,7 @@ pub fn choose_test()
     storage_live(_7)
     _7 = &mut y
     _6 = &two-phase-mut (*_7)
-    z = choose<'7, i32>[{built_in impl Sized for i32}](const true, move _4, move _6)
+    z = choose<'16, i32>[{built_in impl Sized for i32}](const true, move _4, move _6)
     ↳⚡ storage_dead(_8)
         unwind_continue
     storage_dead(_6)

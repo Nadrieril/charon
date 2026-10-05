@@ -60,6 +60,10 @@ pub trait FnMut<Self, Args>
     vtable: core::ops::function::FnMut::{vtable}<Args, Self::ImpliedClause1::Output>
 }
 
+struct str {
+  _0: [u8],
+}
+
 struct (_,)<A> {
   _0: A,
 }
@@ -89,15 +93,15 @@ where
     _2 = &mut f
     storage_live(_3)
     _3 = (const 0u8,)
-    _0 = TraitClause1::call_mut<'2>(move _2, move _3)
-    ↳⚡ conditional_drop[{built_in impl Destruct for T0}::drop_glue<'3>] f
+    _0 = TraitClause1::call_mut<'11>(move _2, move _3)
+    ↳⚡ conditional_drop[{built_in impl Destruct for T0}::drop_glue<'12>] f
         ↳⚡ storage_dead(f)
             unwind_terminate
         storage_dead(f)
         unwind_continue
     storage_dead(_3)
     storage_dead(_2)
-    conditional_drop[{built_in impl Destruct for T0}::drop_glue<'4>] f
+    conditional_drop[{built_in impl Destruct for T0}::drop_glue<'13>] f
     ↳⚡ storage_dead(f)
         unwind_continue
     storage_dead(f)
@@ -157,7 +161,7 @@ fn call_once<'_0>(_1: {closure}<'_0>, _2: (u8,)) -> u8
     storage_live(_0)
     storage_live(_3)
     _3 = &mut _1
-    _0 = call_mut<'_0, '4>(move _3, move _2)
+    _0 = call_mut<'_0, '13>(move _3, move _2)
     ↳⚡ storage_dead(_3)
         storage_dead(_2)
         storage_dead(_1)
@@ -209,7 +213,7 @@ fn main()
     _4 = &mut z
     _3 = {closure} { _0: move _4 }
     storage_dead(_4)
-    _2 = apply_to_zero_mut<{closure}<'6>>[{built_in impl Sized for {closure}<'6>}, impl_FnMut_tuple_for_closure<'6>](move _3)
+    _2 = apply_to_zero_mut<{closure}<'15>>[{built_in impl Sized for {closure}<'15>}, impl_FnMut_tuple_for_closure<'15>](move _3)
     ↳⚡ unwind_continue
     storage_dead(_3)
     storage_dead(_2)

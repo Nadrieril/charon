@@ -1,5 +1,9 @@
 # Final LLBC before serialization:
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::marker::MetaSized
 #[fundamental]
 #[lang_item(MetaSized)]
@@ -24,6 +28,10 @@ pub trait Clone<Self>
     non-dyn-compatible
 }
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
 struct () {}
 
 // Full name: core::marker::Destruct
@@ -32,6 +40,14 @@ pub trait Destruct<Self>
 {
     fn drop_glue<'_0_1>;
     non-dyn-compatible
+}
+
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
+
+struct str {
+  _0: [u8],
 }
 
 // Full name: test_crate::Trait
@@ -54,6 +70,11 @@ trait Trait<Self>
     non-dyn-compatible
 }
 
+// Full name: test_crate::filename#7
+pub static filename: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x73, 0x69, 0x6d, 0x70, 0x6c, 0x65, 0x2f, 0x67, 0x61, 0x74, 0x2d, 0x69, 0x6d, 0x70, 0x6c, 0x69, 0x65, 0x64, 0x2d, 0x63, 0x6c, 0x61, 0x75, 0x73, 0x65, 0x2e, 0x72, 0x73, 0x00) with_metadata(37usize)
+
+pub static test_crate::lifetime_gat_bound::{promoted_const#8}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(37usize) }, 1: 8u32, 2: 13u32, 3: PhantomData {  } }
+
 // Full name: test_crate::lifetime_gat_bound
 fn lifetime_gat_bound<'_0, X>(x: TraitClause1::LifetimeGat<'_0>)
 where
@@ -64,33 +85,41 @@ where
     let x: TraitClause1::LifetimeGat<'1>; // arg #1
     let _2: TraitClause1::LifetimeGat<'2>; // anonymous local
     let _3: &'5 TraitClause1::LifetimeGat<'6>; // anonymous local
+    let _4: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     _0 = ()
     storage_live(_2)
     storage_live(_3)
     _3 = &x
-    _2 = TraitClause1::LifetimeGat<'9>::ImpliedClause1::clone<'10>(move _3)
-    ↳⚡ conditional_drop[{built_in impl Destruct for TraitClause1::LifetimeGat<'12>}::drop_glue<'13>] x
+    storage_live(_4)
+    _4 = &test_crate::lifetime_gat_bound::{promoted_const#8}
+    _2 = TraitClause1::LifetimeGat<'18>::ImpliedClause1::clone<'19>(move _3, move _4)
+    ↳⚡ conditional_drop[{built_in impl Destruct for TraitClause1::LifetimeGat<'21>}::drop_glue<'22>] x
         ↳⚡ storage_dead(x)
+            storage_dead(_4)
             unwind_terminate
         storage_dead(x)
         unwind_continue
     storage_dead(_3)
-    conditional_drop[{built_in impl Destruct for TraitClause1::LifetimeGat<'15>}::drop_glue<'16>] _2
-    ↳⚡ conditional_drop[{built_in impl Destruct for TraitClause1::LifetimeGat<'12>}::drop_glue<'13>] x
+    conditional_drop[{built_in impl Destruct for TraitClause1::LifetimeGat<'24>}::drop_glue<'25>] _2
+    ↳⚡ conditional_drop[{built_in impl Destruct for TraitClause1::LifetimeGat<'21>}::drop_glue<'22>] x
         ↳⚡ storage_dead(x)
+            storage_dead(_4)
             unwind_terminate
         storage_dead(x)
         unwind_continue
     storage_dead(_2)
     _0 = ()
-    conditional_drop[{built_in impl Destruct for TraitClause1::LifetimeGat<'18>}::drop_glue<'19>] x
+    conditional_drop[{built_in impl Destruct for TraitClause1::LifetimeGat<'27>}::drop_glue<'28>] x
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(x)
+    storage_dead(_4)
     return
 }
+
+pub static test_crate::non_lifetime_gat_bound::{promoted_const#9}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(37usize) }, 1: 12u32, 2: 13u32, 3: PhantomData {  } }
 
 // Full name: test_crate::non_lifetime_gat_bound
 fn non_lifetime_gat_bound<X>(x: TraitClause1::NonLifetimeGat<u8>[{built_in impl Sized for u8}])
@@ -102,33 +131,41 @@ where
     let x: TraitClause1::NonLifetimeGat<u8>[{built_in impl Sized for u8}]; // arg #1
     let _2: TraitClause1::NonLifetimeGat<u8>[{built_in impl Sized for u8}]; // anonymous local
     let _3: &'1 TraitClause1::NonLifetimeGat<u8>[{built_in impl Sized for u8}]; // anonymous local
+    let _4: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     _0 = ()
     storage_live(_2)
     storage_live(_3)
     _3 = &x
-    _2 = TraitClause1::NonLifetimeGat<u8>[{built_in impl Sized for u8}]::ImpliedClause1::clone<'2>(move _3)
-    ↳⚡ conditional_drop[{built_in impl Destruct for TraitClause1::NonLifetimeGat<u8>[{built_in impl Sized for u8}]}::drop_glue<'3>] x
+    storage_live(_4)
+    _4 = &test_crate::non_lifetime_gat_bound::{promoted_const#9}
+    _2 = TraitClause1::NonLifetimeGat<u8>[{built_in impl Sized for u8}]::ImpliedClause1::clone<'11>(move _3, move _4)
+    ↳⚡ conditional_drop[{built_in impl Destruct for TraitClause1::NonLifetimeGat<u8>[{built_in impl Sized for u8}]}::drop_glue<'12>] x
         ↳⚡ storage_dead(x)
+            storage_dead(_4)
             unwind_terminate
         storage_dead(x)
         unwind_continue
     storage_dead(_3)
-    conditional_drop[{built_in impl Destruct for TraitClause1::NonLifetimeGat<u8>[{built_in impl Sized for u8}]}::drop_glue<'4>] _2
-    ↳⚡ conditional_drop[{built_in impl Destruct for TraitClause1::NonLifetimeGat<u8>[{built_in impl Sized for u8}]}::drop_glue<'3>] x
+    conditional_drop[{built_in impl Destruct for TraitClause1::NonLifetimeGat<u8>[{built_in impl Sized for u8}]}::drop_glue<'13>] _2
+    ↳⚡ conditional_drop[{built_in impl Destruct for TraitClause1::NonLifetimeGat<u8>[{built_in impl Sized for u8}]}::drop_glue<'12>] x
         ↳⚡ storage_dead(x)
+            storage_dead(_4)
             unwind_terminate
         storage_dead(x)
         unwind_continue
     storage_dead(_2)
     _0 = ()
-    conditional_drop[{built_in impl Destruct for TraitClause1::NonLifetimeGat<u8>[{built_in impl Sized for u8}]}::drop_glue<'5>] x
+    conditional_drop[{built_in impl Destruct for TraitClause1::NonLifetimeGat<u8>[{built_in impl Sized for u8}]}::drop_glue<'14>] x
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(x)
+    storage_dead(_4)
     return
 }
+
+pub static test_crate::const_gat_bound::{promoted_const#10}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(37usize) }, 1: 16u32, 2: 13u32, 3: PhantomData {  } }
 
 // Full name: test_crate::const_gat_bound
 fn const_gat_bound<X>(x: TraitClause1::ConstGat<4usize>)
@@ -140,31 +177,37 @@ where
     let x: TraitClause1::ConstGat<4usize>; // arg #1
     let _2: TraitClause1::ConstGat<4usize>; // anonymous local
     let _3: &'1 TraitClause1::ConstGat<4usize>; // anonymous local
+    let _4: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     _0 = ()
     storage_live(_2)
     storage_live(_3)
     _3 = &x
-    _2 = TraitClause1::ConstGat<4usize>::ImpliedClause1::clone<'2>(move _3)
-    ↳⚡ conditional_drop[{built_in impl Destruct for TraitClause1::ConstGat<4usize>}::drop_glue<'3>] x
+    storage_live(_4)
+    _4 = &test_crate::const_gat_bound::{promoted_const#10}
+    _2 = TraitClause1::ConstGat<4usize>::ImpliedClause1::clone<'11>(move _3, move _4)
+    ↳⚡ conditional_drop[{built_in impl Destruct for TraitClause1::ConstGat<4usize>}::drop_glue<'12>] x
         ↳⚡ storage_dead(x)
+            storage_dead(_4)
             unwind_terminate
         storage_dead(x)
         unwind_continue
     storage_dead(_3)
-    conditional_drop[{built_in impl Destruct for TraitClause1::ConstGat<4usize>}::drop_glue<'4>] _2
-    ↳⚡ conditional_drop[{built_in impl Destruct for TraitClause1::ConstGat<4usize>}::drop_glue<'3>] x
+    conditional_drop[{built_in impl Destruct for TraitClause1::ConstGat<4usize>}::drop_glue<'13>] _2
+    ↳⚡ conditional_drop[{built_in impl Destruct for TraitClause1::ConstGat<4usize>}::drop_glue<'12>] x
         ↳⚡ storage_dead(x)
+            storage_dead(_4)
             unwind_terminate
         storage_dead(x)
         unwind_continue
     storage_dead(_2)
     _0 = ()
-    conditional_drop[{built_in impl Destruct for TraitClause1::ConstGat<4usize>}::drop_glue<'5>] x
+    conditional_drop[{built_in impl Destruct for TraitClause1::ConstGat<4usize>}::drop_glue<'14>] x
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(x)
+    storage_dead(_4)
     return
 }
 

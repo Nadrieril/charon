@@ -71,11 +71,11 @@ pub fn impl_Drop_for_Foo::drop<'_0>(self: &'_0 mut Foo)
         _0 = ();
         storage_live(_2);
         storage_live(_3);
-        _3 = from_str<'4>(const "Dropping Foo\n") -> bb1 (unwind: bb4);
+        _3 = from_str<'13>(const "Dropping Foo\n") -> bb1 (unwind: bb4);
     }
 
     bb1: {
-        _2 = _print<'8>(move _3) -> bb2 (unwind: bb3);
+        _2 = _print<'20>(move _3) -> bb2 (unwind: bb3);
     }
 
     bb2: {
@@ -108,7 +108,7 @@ unsafe fn drop_glue<'_0>(_1: &'_0 mut Foo)
         storage_live(_3);
         _0 = ();
         _2 = &mut (*_1);
-        _3 = impl_Drop_for_Foo::drop<'4>(move _2) -> bb1 (unwind: bb2);
+        _3 = impl_Drop_for_Foo::drop<'13>(move _2) -> bb1 (unwind: bb2);
     }
 
     bb1: {

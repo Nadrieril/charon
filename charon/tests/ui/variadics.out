@@ -61,6 +61,10 @@ pub struct PhantomData<T> {}
 #[lang_item(NonNull)]
 pub opaque type NonNull<T>
 
+struct str {
+  _0: [u8],
+}
+
 struct (_, _)<A, B>
 where
     TraitClause0: (A: Sized),
@@ -69,13 +73,12 @@ where
   _1: B,
 }
 
-struct str {
-  _0: [u8],
-}
+// Full name: test_crate::filename#7
+pub static filename: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x76, 0x61, 0x72, 0x69, 0x61, 0x64, 0x69, 0x63, 0x73, 0x2e, 0x72, 0x73, 0x00) with_metadata(21usize)
 
-pub const test_crate::sum::{promoted_const#1}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 118u8, 97u8, 114u8, 105u8, 97u8, 100u8, 105u8, 99u8, 115u8, 46u8, 114u8, 115u8] } with_metadata(21usize)
+pub static test_crate::sum::{promoted_const#9}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(21usize) }, 1: 5u32, 2: 18u32, 3: PhantomData {  } }
 
-pub const test_crate::sum::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 118u8, 97u8, 114u8, 105u8, 97u8, 100u8, 105u8, 99u8, 115u8, 46u8, 114u8, 115u8] } with_metadata(21usize)
+pub static test_crate::sum::{promoted_const#8}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(21usize) }, 1: 4u32, 2: 18u32, 3: PhantomData {  } }
 
 // Full name: test_crate::sum
 pub unsafe extern "C" fn sum(...) -> i32
@@ -89,16 +92,8 @@ pub unsafe extern "C" fn sum(...) -> i32
     let _6: i32; // anonymous local
     let _7: i32; // anonymous local
     let _8: i32; // anonymous local
-    let _9: *const str is !null; // anonymous local
-    let _10: NonNull<str>; // anonymous local
-    let _11: PhantomData<&'19 str>; // anonymous local
-    let _12: Location<'16>; // anonymous local
-    let _13: &'14 Location<'15>; // anonymous local
-    let _14: *const str is !null; // anonymous local
-    let _15: NonNull<str>; // anonymous local
-    let _16: PhantomData<&'30 str>; // anonymous local
-    let _17: Location<'29>; // anonymous local
-    let _18: &'27 Location<'28>; // anonymous local
+    let _9: &'static Location<'static>; // anonymous local
+    let _10: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     storage_live(_8)
@@ -106,27 +101,11 @@ pub unsafe extern "C" fn sum(...) -> i32
     storage_live(_3)
     _3 = &two-phase-mut ap
     storage_live(_9)
-    _9 = &raw const test_crate::sum::{promoted_const} with_metadata(const 21usize)
-    storage_live(_10)
-    _10 = NonNull { 0: move _9 }
-    storage_live(_11)
-    _11 = PhantomData {  }
-    storage_live(_12)
-    _12 = Location { 0: move _10, 1: const 4u32, 2: const 18u32, 3: move _11 }
-    storage_live(_13)
-    _13 = &_12
-    a = next_arg<'8, '10, i32>[{built_in impl Sized for i32}, impl_VaArgSafe_for_i32](move _3, move _13)
+    _9 = &test_crate::sum::{promoted_const#8}
+    a = next_arg<'17, '19, i32>[{built_in impl Sized for i32}, impl_VaArgSafe_for_i32](move _3, move _9)
     ↳⚡ conditional_drop[drop_glue<'22, '23>] ap
         ↳⚡ storage_dead(_8)
             storage_dead(ap)
-            storage_dead(_18)
-            storage_dead(_17)
-            storage_dead(_16)
-            storage_dead(_15)
-            storage_dead(_14)
-            storage_dead(_13)
-            storage_dead(_12)
-            storage_dead(_11)
             storage_dead(_10)
             storage_dead(_9)
             unwind_terminate
@@ -139,28 +118,12 @@ pub unsafe extern "C" fn sum(...) -> i32
     storage_live(b)
     storage_live(_5)
     _5 = &two-phase-mut ap
-    storage_live(_14)
-    _14 = &raw const test_crate::sum::{promoted_const#1} with_metadata(const 21usize)
-    storage_live(_15)
-    _15 = NonNull { 0: move _14 }
-    storage_live(_16)
-    _16 = PhantomData {  }
-    storage_live(_17)
-    _17 = Location { 0: move _15, 1: const 5u32, 2: const 18u32, 3: move _16 }
-    storage_live(_18)
-    _18 = &_17
-    b = next_arg<'24, '26, i32>[{built_in impl Sized for i32}, impl_VaArgSafe_for_i32](move _5, move _18)
+    storage_live(_10)
+    _10 = &test_crate::sum::{promoted_const#9}
+    b = next_arg<'28, '30, i32>[{built_in impl Sized for i32}, impl_VaArgSafe_for_i32](move _5, move _10)
     ↳⚡ conditional_drop[drop_glue<'22, '23>] ap
         ↳⚡ storage_dead(_8)
             storage_dead(ap)
-            storage_dead(_18)
-            storage_dead(_17)
-            storage_dead(_16)
-            storage_dead(_15)
-            storage_dead(_14)
-            storage_dead(_13)
-            storage_dead(_12)
-            storage_dead(_11)
             storage_dead(_10)
             storage_dead(_9)
             unwind_terminate
@@ -186,14 +149,6 @@ pub unsafe extern "C" fn sum(...) -> i32
         unwind_continue
     storage_dead(_8)
     storage_dead(ap)
-    storage_dead(_18)
-    storage_dead(_17)
-    storage_dead(_16)
-    storage_dead(_15)
-    storage_dead(_14)
-    storage_dead(_13)
-    storage_dead(_12)
-    storage_dead(_11)
     storage_dead(_10)
     storage_dead(_9)
     return

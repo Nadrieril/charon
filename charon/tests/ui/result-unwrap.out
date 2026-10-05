@@ -88,8 +88,8 @@ where
             storage_live(_6)
             _6 = &e
             _5 = unsize_cast<&'6 E, &'7 (dyn Debug + '8), &vtable_of(TraitClause2)>(copy _6)
-            _4 = unwrap_failed<'11, '12>(const "called `Result::unwrap()` on an `Err` value", move _5, copy caller_location)
-            ↳⚡ drop[{built_in impl Destruct for E}::drop_glue<'15>] e
+            _4 = unwrap_failed<'15, '16>(const "called `Result::unwrap()` on an `Err` value", move _5, copy caller_location)
+            ↳⚡ drop[{built_in impl Destruct for E}::drop_glue<'18>] e
                 ↳⚡ storage_dead(_6)
                     storage_dead(_5)
                     storage_dead(_4)
@@ -116,41 +116,29 @@ where
     return
 }
 
-pub const test_crate::unwrap::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 114u8, 101u8, 115u8, 117u8, 108u8, 116u8, 45u8, 117u8, 110u8, 119u8, 114u8, 97u8, 112u8, 46u8, 114u8, 115u8] } with_metadata(25usize)
+// Full name: test_crate::filename#1
+pub static filename: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x2d, 0x75, 0x6e, 0x77, 0x72, 0x61, 0x70, 0x2e, 0x72, 0x73, 0x00) with_metadata(25usize)
+
+// Full name: test_crate::unwrap::{promoted_const#2}
+pub static {promoted_const}: Location<'static> = Location { filename: NonNull { pointer: &raw const filename with_metadata(25usize) }, line: 5u32, col: 5u32, _filename: PhantomData {  } }
 
 fn test_crate::unwrap(res: Result<u32, u32>[{built_in impl Sized for u32}, {built_in impl Sized for u32}]) -> u32
 {
     let _0: u32; // return
     let res: Result<u32, u32>[{built_in impl Sized for u32}, {built_in impl Sized for u32}]; // arg #1
     let _2: Result<u32, u32>[{built_in impl Sized for u32}, {built_in impl Sized for u32}]; // anonymous local
-    let _3: *const str is !null; // anonymous local
-    let _4: NonNull<str>; // anonymous local
-    let _5: PhantomData<&'8 str>; // anonymous local
-    let _6: Location<'5>; // anonymous local
-    let _7: &'3 Location<'4>; // anonymous local
+    let _3: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     storage_live(_2)
     _2 = copy res
     storage_live(_3)
-    _3 = &raw const test_crate::unwrap::{promoted_const} with_metadata(const 25usize)
-    storage_live(_4)
-    _4 = NonNull { pointer: move _3 }
-    storage_live(_5)
-    _5 = PhantomData {  }
-    storage_live(_6)
-    _6 = Location { filename: move _4, line: const 5u32, col: const 5u32, _filename: move _5 }
-    storage_live(_7)
-    _7 = &_6
-    _0 = core::result::{Result<T, E>[TraitClause0, TraitClause1]}::unwrap<u32, u32>[{built_in impl Sized for u32}, {built_in impl Sized for u32}, {impl#6}](move _2, move _7)
+    _3 = &{promoted_const}
+    _0 = core::result::{Result<T, E>[TraitClause0, TraitClause1]}::unwrap<u32, u32>[{built_in impl Sized for u32}, {built_in impl Sized for u32}, {impl#6}](move _2, move _3)
     ↳⚡ storage_dead(res)
         unwind_continue
     storage_dead(_2)
     storage_dead(res)
-    storage_dead(_7)
-    storage_dead(_6)
-    storage_dead(_5)
-    storage_dead(_4)
     storage_dead(_3)
     return
 }

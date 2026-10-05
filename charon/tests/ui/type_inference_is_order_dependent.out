@@ -48,6 +48,10 @@ pub trait Destruct<Self>
 pub fn _print<'_0>(_1: Arguments<'_0>)
 = <opaque>
 
+struct str {
+  _0: [u8],
+}
+
 struct (_,)<A> {
   _0: A,
 }
@@ -101,7 +105,7 @@ where
     let _11: &'28 [Argument<'29>; 1usize]; // anonymous local
     let _12: &'33 [Argument<'34>; 1usize]; // anonymous local
     let _13: [u8; 4usize]; // anonymous local
-    let _14: &'45 [u8; 4usize]; // anonymous local
+    let _14: &'58 [u8; 4usize]; // anonymous local
 
     storage_live(_0)
     _0 = ()
@@ -120,8 +124,8 @@ where
     storage_live(_7)
     storage_live(_8)
     _8 = &(*args_3._0)
-    _7 = new_debug<'40, '42, U>[TraitClause1, TraitClause5](move _8)
-    ↳⚡ conditional_drop[{built_in impl Destruct for U}::drop_glue<'43>] _5
+    _7 = new_debug<'53, '55, U>[TraitClause1, TraitClause5](move _8)
+    ↳⚡ conditional_drop[{built_in impl Destruct for U}::drop_glue<'56>] _5
         ↳⚡ storage_dead(_14)
             storage_dead(_13)
             unwind_terminate
@@ -142,8 +146,8 @@ where
     storage_live(_12)
     _12 = &args_6
     _11 = &(*_12)
-    _2 = new<'50, 4usize, 1usize>(move _9, move _11)
-    ↳⚡ conditional_drop[{built_in impl Destruct for U}::drop_glue<'43>] _5
+    _2 = new<'67, 4usize, 1usize>(move _9, move _11)
+    ↳⚡ conditional_drop[{built_in impl Destruct for U}::drop_glue<'56>] _5
         ↳⚡ storage_dead(_14)
             storage_dead(_13)
             unwind_terminate
@@ -152,15 +156,15 @@ where
     storage_dead(_11)
     storage_dead(_10)
     storage_dead(_9)
-    _1 = _print<'52>(move _2)
-    ↳⚡ conditional_drop[{built_in impl Destruct for U}::drop_glue<'43>] _5
+    _1 = _print<'73>(move _2)
+    ↳⚡ conditional_drop[{built_in impl Destruct for U}::drop_glue<'56>] _5
         ↳⚡ storage_dead(_14)
             storage_dead(_13)
             unwind_terminate
         unwind_continue
     storage_dead(_2)
     storage_dead(args_6)
-    conditional_drop[{built_in impl Destruct for U}::drop_glue<'53>] _5
+    conditional_drop[{built_in impl Destruct for U}::drop_glue<'74>] _5
     ↳⚡ unwind_continue
     storage_dead(_5)
     storage_dead(args_3)

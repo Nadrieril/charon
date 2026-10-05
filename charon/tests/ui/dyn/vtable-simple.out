@@ -1,5 +1,9 @@
 # Final LLBC before serialization:
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 opaque type core::marker::MetaSized::{vtable}
 
 // Full name: core::marker::MetaSized
@@ -31,7 +35,7 @@ struct () {}
 vtable core::marker::MetaSized::{vtable}<Self>: core::marker::MetaSized::{vtable} = Opaque(VTable was chosen to be opaque)
 
 // Full name: core::clone::impls::{impl Clone for i32}::clone
-pub fn clone<'_0>(_1: &'_0 i32) -> i32
+pub fn clone<'_0>(_1: &'_0 i32, _2: &'static Location<'static>) -> i32
 = <opaque>
 
 // Full name: core::clone::impls::{impl Clone for i32}
@@ -39,6 +43,18 @@ impl "impl_Clone_for_i32" Clone for i32 {
     proof ImpliedClause0: (i32: Sized) = {built_in impl Sized for i32}
     fn clone<'_0_1> = clone<'_0_1>
     non-dyn-compatible
+}
+
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
+
+struct str {
+  _0: [u8],
 }
 
 struct (_, _)<A, B>
@@ -66,6 +82,12 @@ trait Modifiable<Self, T>
     vtable: test_crate::Modifiable::{vtable}<T>
 }
 
+// Full name: test_crate::filename#9
+pub static filename: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x64, 0x79, 0x6e, 0x2f, 0x76, 0x74, 0x61, 0x62, 0x6c, 0x65, 0x2d, 0x73, 0x69, 0x6d, 0x70, 0x6c, 0x65, 0x2e, 0x72, 0x73, 0x00) with_metadata(29usize)
+
+// Full name: test_crate::{impl Modifiable<T> for i32}::modify::{promoted_const#10}
+pub static impl_Modifiable_for_i32::modify::{promoted_const#10}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(29usize) }, 1: 7u32, 2: 9u32, 3: PhantomData {  } }
+
 // Full name: test_crate::{impl Modifiable<T> for i32}::modify
 fn modify<'_0, '_1, T>(self: &'_0 mut i32, arg: &'_1 T) -> T
 where
@@ -78,6 +100,7 @@ where
     let arg: &'3 T; // arg #2
     let _3: i32; // anonymous local
     let _4: &'4 T; // anonymous local
+    let _5: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     storage_live(_3)
@@ -85,7 +108,9 @@ where
     (*self) = move _3
     storage_live(_4)
     _4 = &(*arg)
-    _0 = TraitClause1::clone<'5>(move _4)
+    storage_live(_5)
+    _5 = &impl_Modifiable_for_i32::modify::{promoted_const#10}
+    _0 = TraitClause1::clone<'14>(move _4, move _5)
     ↳⚡ storage_dead(_3)
         storage_dead(arg)
         storage_dead(self)
@@ -94,6 +119,7 @@ where
     storage_dead(_3)
     storage_dead(arg)
     storage_dead(self)
+    storage_dead(_5)
     return
 }
 
@@ -216,7 +242,7 @@ fn main()
     let _3: &'2 i32; // anonymous local
     let _4: &'3 i32; // anonymous local
     let _5: &'4 i32; // anonymous local
-    let _6: &'7 i32; // anonymous local
+    let _6: &'16 i32; // anonymous local
     let _7: i32; // anonymous local
 
     storage_live(_5)
@@ -234,7 +260,7 @@ fn main()
     _4 = move _5
     _3 = &(*_4)
     _2 = &(*_3)
-    _1 = modify_trait_object<'6, i32>[{built_in impl Sized for i32}, impl_Clone_for_i32](move _2)
+    _1 = modify_trait_object<'15, i32>[{built_in impl Sized for i32}, impl_Clone_for_i32](move _2)
     ↳⚡ storage_dead(_4)
         unwind_continue
     storage_dead(_2)

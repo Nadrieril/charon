@@ -40,6 +40,10 @@ pub opaque type NonNull<T>
 pub unsafe fn new_unchecked<T>(_1: *mut T, _2: &'static Location<'static>) -> NonNull<T>
 = <opaque>
 
+struct str {
+  _0: [u8],
+}
+
 struct (_, _)<A, B>
 where
     TraitClause0: (A: Sized),
@@ -48,17 +52,17 @@ where
   _1: B,
 }
 
-struct str {
-  _0: [u8],
-}
-
 // Full name: test_crate::HasPointerNiche
 enum HasPointerNiche {
   First,
   Second { _0: NonNull<usize> },
 }
 
-pub const test_crate::main::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 99u8, 114u8, 111u8, 115u8, 115u8, 95u8, 99u8, 111u8, 109u8, 112u8, 105u8, 108u8, 101u8, 95u8, 51u8, 50u8, 95u8, 98u8, 105u8, 116u8, 46u8, 114u8, 115u8] } with_metadata(32usize)
+// Full name: test_crate::filename#8
+pub static filename: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x63, 0x72, 0x6f, 0x73, 0x73, 0x5f, 0x63, 0x6f, 0x6d, 0x70, 0x69, 0x6c, 0x65, 0x5f, 0x33, 0x32, 0x5f, 0x62, 0x69, 0x74, 0x2e, 0x72, 0x73, 0x00) with_metadata(32usize)
+
+// Full name: test_crate::main::{promoted_const#9}
+pub static {promoted_const}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(32usize) }, 1: 16u32, 2: 46u32, 3: PhantomData {  } }
 
 // Full name: test_crate::main
 fn main()
@@ -73,11 +77,7 @@ fn main()
     let a: HasPointerNiche; // local
     let _8: NonNull<usize>; // anonymous local
     let _9: *mut usize; // anonymous local
-    let _10: *const str is !null; // anonymous local
-    let _11: NonNull<str>; // anonymous local
-    let _12: PhantomData<&'8 str>; // anonymous local
-    let _13: Location<'5>; // anonymous local
-    let _14: &'3 Location<'4>; // anonymous local
+    let _10: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     storage_live(_6)
@@ -105,16 +105,8 @@ fn main()
     storage_live(_9)
     _9 = &raw mut x
     storage_live(_10)
-    _10 = &raw const test_crate::main::{promoted_const} with_metadata(const 32usize)
-    storage_live(_11)
-    _11 = NonNull { 0: move _10 }
-    storage_live(_12)
-    _12 = PhantomData {  }
-    storage_live(_13)
-    _13 = Location { 0: move _11, 1: const 16u32, 2: const 46u32, 3: move _12 }
-    storage_live(_14)
-    _14 = &_13
-    _8 = new_unchecked<usize>(move _9, move _14)
+    _10 = &{promoted_const}
+    _8 = new_unchecked<usize>(move _9, move _10)
     ↳⚡ storage_dead(_6)
         unwind_continue
     storage_dead(_9)
@@ -127,10 +119,6 @@ fn main()
     storage_dead(y)
     storage_dead(x)
     storage_dead(_6)
-    storage_dead(_14)
-    storage_dead(_13)
-    storage_dead(_12)
-    storage_dead(_11)
     storage_dead(_10)
     return
 }

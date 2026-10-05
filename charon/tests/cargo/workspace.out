@@ -32,6 +32,10 @@ where
   _1: B,
 }
 
+struct str {
+  _0: [u8],
+}
+
 // Full name: crate2::extra_random_number
 pub fn extra_random_number() -> u32
 {

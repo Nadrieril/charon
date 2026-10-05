@@ -1,5 +1,9 @@
 # Final LLBC before serialization:
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::marker::MetaSized
 #[fundamental]
 #[lang_item(MetaSized)]
@@ -42,6 +46,10 @@ pub trait Destruct<Self>
 {
     fn drop_glue<'_0_1>;
     non-dyn-compatible
+}
+
+struct str {
+  _0: [u8],
 }
 
 struct (_, _)<A, B>
@@ -116,16 +124,16 @@ where
     storage_live(_2)
     _2 = move t
     _0 = callee<T, Clause1_Item>[TraitClause0, TraitClause1](move _2)
-    ↳⚡ conditional_drop[{built_in impl Destruct for Clause1_Item}::drop_glue<'0>] _2
+    ↳⚡ conditional_drop[{built_in impl Destruct for Clause1_Item}::drop_glue<'9>] _2
         ↳⚡ storage_dead(t)
             unwind_terminate
-        conditional_drop[{built_in impl Destruct for Clause1_Item}::drop_glue<'2>] t
+        conditional_drop[{built_in impl Destruct for Clause1_Item}::drop_glue<'11>] t
         ↳⚡ storage_dead(t)
             unwind_terminate
         storage_dead(t)
         unwind_continue
     storage_dead(_2)
-    conditional_drop[{built_in impl Destruct for Clause1_Item}::drop_glue<'1>] t
+    conditional_drop[{built_in impl Destruct for Clause1_Item}::drop_glue<'10>] t
     ↳⚡ storage_dead(t)
         unwind_continue
     storage_dead(t)
@@ -170,14 +178,14 @@ where
     storage_live(_0)
     storage_live(_2)
     _2 = &x
-    _0 = TraitClause1::ImpliedClause1::method<'2>(move _2)
-    ↳⚡ conditional_drop[{built_in impl Destruct for T}::drop_glue<'3>] x
+    _0 = TraitClause1::ImpliedClause1::method<'11>(move _2)
+    ↳⚡ conditional_drop[{built_in impl Destruct for T}::drop_glue<'12>] x
         ↳⚡ storage_dead(x)
             unwind_terminate
         storage_dead(x)
         unwind_continue
     storage_dead(_2)
-    conditional_drop[{built_in impl Destruct for T}::drop_glue<'4>] x
+    conditional_drop[{built_in impl Destruct for T}::drop_glue<'13>] x
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(x)
@@ -197,14 +205,14 @@ where
     storage_live(_0)
     storage_live(_2)
     _2 = &x
-    _0 = TraitClause1::ImpliedClause1::method<'2>(move _2)
-    ↳⚡ conditional_drop[{built_in impl Destruct for T}::drop_glue<'3>] x
+    _0 = TraitClause1::ImpliedClause1::method<'11>(move _2)
+    ↳⚡ conditional_drop[{built_in impl Destruct for T}::drop_glue<'12>] x
         ↳⚡ storage_dead(x)
             unwind_terminate
         storage_dead(x)
         unwind_continue
     storage_dead(_2)
-    conditional_drop[{built_in impl Destruct for T}::drop_glue<'4>] x
+    conditional_drop[{built_in impl Destruct for T}::drop_glue<'13>] x
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(x)
@@ -238,21 +246,21 @@ where
     storage_live(_5)
     _5 = copy x
     _4 = b<T, Clause2_Clause1_Assoc>[TraitClause0, TraitClause2](move _5)
-    ↳⚡ conditional_drop[{built_in impl Destruct for Clause1_Clause1_Assoc}::drop_glue<'0>] _2
+    ↳⚡ conditional_drop[{built_in impl Destruct for Clause1_Clause1_Assoc}::drop_glue<'13>] _2
         ↳⚡ storage_dead(x)
             unwind_terminate
         storage_dead(x)
         unwind_continue
     storage_dead(_5)
     _0 = (move _2, move _4)
-    conditional_drop[{built_in impl Destruct for Clause1_Clause1_Assoc}::drop_glue<'1>] _4
-    ↳⚡ conditional_drop[{built_in impl Destruct for Clause1_Clause1_Assoc}::drop_glue<'0>] _2
+    conditional_drop[{built_in impl Destruct for Clause1_Clause1_Assoc}::drop_glue<'14>] _4
+    ↳⚡ conditional_drop[{built_in impl Destruct for Clause1_Clause1_Assoc}::drop_glue<'13>] _2
         ↳⚡ storage_dead(x)
             unwind_terminate
         storage_dead(x)
         unwind_continue
     storage_dead(_4)
-    conditional_drop[{built_in impl Destruct for Clause1_Clause1_Assoc}::drop_glue<'2>] _2
+    conditional_drop[{built_in impl Destruct for Clause1_Clause1_Assoc}::drop_glue<'15>] _2
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(_2)

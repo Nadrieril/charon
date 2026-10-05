@@ -39,6 +39,10 @@ where
     TypeOutlives0: Self: '_0,
 = <opaque>
 
+struct str {
+  _0: [u8],
+}
+
 // Full name: test_crate::NeedsDrop
 struct NeedsDrop {}
 
@@ -67,7 +71,7 @@ unsafe fn drop_glue<'_0>(_1: &'_0 mut NeedsDrop)
     storage_live(_3)
     _0 = ()
     _2 = &mut (*_1)
-    _3 = impl_Drop_for_NeedsDrop::drop<'4>(move _2)
+    _3 = impl_Drop_for_NeedsDrop::drop<'13>(move _2)
     ↳⚡ unwind_continue
     return
 }
@@ -131,7 +135,7 @@ pub fn conditional(x: NeedsDrop, move_x: bool)
     } else {
         return
     }
-    drop[drop_glue<'0>] x
+    drop[drop_glue<'9>] x
     ↳⚡ unwind_continue
     return
 }

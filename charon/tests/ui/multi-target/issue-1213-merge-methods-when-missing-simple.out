@@ -12,6 +12,10 @@ pub trait core::marker::Sized<Self>
 
 struct () {}
 
+struct str {
+  _0: [u8],
+}
+
 #[charon::opaque]
 trait test_crate::Trait<Self>
 {
@@ -65,7 +69,7 @@ where
     _0 = ()
     storage_live(_2)
     _2 = &(*x)
-    _0 = TraitClause1::method1<'3>(move _2)
+    _0 = TraitClause1::method1<'12>(move _2)
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(_2)
@@ -87,7 +91,7 @@ where
     _0 = ()
     storage_live(_2)
     _2 = &(*x)
-    _0 = TraitClause1::method2<'3>(move _2)
+    _0 = TraitClause1::method2<'12>(move _2)
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(_2)

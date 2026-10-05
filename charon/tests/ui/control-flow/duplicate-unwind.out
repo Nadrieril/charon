@@ -5,6 +5,15 @@
 #[lang_item(MetaSized)]
 pub trait MetaSized<Self>
 
+// Full name: core::marker::Sized
+#[fundamental]
+#[lang_item(Sized)]
+pub trait Sized<Self>
+{
+    proof ImpliedClause0: (Self: MetaSized)
+    non-dyn-compatible
+}
+
 struct () {}
 
 // Full name: core::ops::drop::Drop
@@ -21,6 +30,10 @@ where
     TraitClause0: (Self: Drop),
     TypeOutlives0: Self: '_0,
 = <opaque>
+
+struct str {
+  _0: [u8],
+}
 
 // Full name: test_crate::Guard
 struct Guard {}
@@ -54,7 +67,7 @@ unsafe fn drop_glue<'_0>(_1: &'_0 mut Guard)
         storage_live(_3);
         _0 = ();
         _2 = &mut (*_1);
-        _3 = impl_Drop_for_Guard::drop<'4>(move _2) -> bb1 (unwind: bb2);
+        _3 = impl_Drop_for_Guard::drop<'13>(move _2) -> bb1 (unwind: bb2);
     }
 
     bb1: {
@@ -123,12 +136,12 @@ fn shared_cleanup()
     bb2: {
         storage_dead(_4);
         _0 = ();
-        conditional_drop[drop_glue<'2>] _second -> bb3 (unwind: bb6);
+        conditional_drop[drop_glue<'15>] _second -> bb3 (unwind: bb6);
     }
 
     bb3: {
         storage_dead(_second);
-        conditional_drop[drop_glue<'3>] _first -> bb4 (unwind: bb5);
+        conditional_drop[drop_glue<'16>] _first -> bb4 (unwind: bb5);
     }
 
     bb4: {
@@ -141,7 +154,7 @@ fn shared_cleanup()
     }
 
     bb6 (cleanup): {
-        conditional_drop[drop_glue<'1>] _first -> bb7 (unwind: bb8);
+        conditional_drop[drop_glue<'14>] _first -> bb7 (unwind: bb8);
     }
 
     bb7 (cleanup): {
@@ -153,11 +166,11 @@ fn shared_cleanup()
     }
 
     bb9 (cleanup): {
-        conditional_drop[drop_glue<'0>] _second -> bb10 (unwind: bb13);
+        conditional_drop[drop_glue<'9>] _second -> bb10 (unwind: bb13);
     }
 
     bb10 (cleanup): {
-        conditional_drop[drop_glue<'1>] _first -> bb11 (unwind: bb12);
+        conditional_drop[drop_glue<'14>] _first -> bb11 (unwind: bb12);
     }
 
     bb11 (cleanup): {
@@ -173,11 +186,11 @@ fn shared_cleanup()
     }
 
     bb14 (cleanup): {
-        conditional_drop[drop_glue<'0>] _second -> bb15 (unwind: bb18);
+        conditional_drop[drop_glue<'9>] _second -> bb15 (unwind: bb18);
     }
 
     bb15 (cleanup): {
-        conditional_drop[drop_glue<'1>] _first -> bb16 (unwind: bb17);
+        conditional_drop[drop_glue<'14>] _first -> bb16 (unwind: bb17);
     }
 
     bb16 (cleanup): {

@@ -55,6 +55,10 @@ pub trait FnOnce<Self, Args>
     vtable: core::ops::function::FnOnce::{vtable}<Args, Self::Output>
 }
 
+struct str {
+  _0: [u8],
+}
+
 struct (_,)<A> {
   _0: A,
 }
@@ -85,17 +89,17 @@ where
     storage_live(_3)
     _3 = (const 0u8,)
     _0 = TraitClause1::call_once(move _2, move _3)
-    ↳⚡ conditional_drop[{built_in impl Destruct for T0}::drop_glue<'0>] _2
+    ↳⚡ conditional_drop[{built_in impl Destruct for T0}::drop_glue<'9>] _2
         ↳⚡ storage_dead(f)
             unwind_terminate
-        conditional_drop[{built_in impl Destruct for T0}::drop_glue<'2>] f
+        conditional_drop[{built_in impl Destruct for T0}::drop_glue<'11>] f
         ↳⚡ storage_dead(f)
             unwind_terminate
         storage_dead(f)
         unwind_continue
     storage_dead(_3)
     storage_dead(_2)
-    conditional_drop[{built_in impl Destruct for T0}::drop_glue<'1>] f
+    conditional_drop[{built_in impl Destruct for T0}::drop_glue<'10>] f
     ↳⚡ storage_dead(f)
         unwind_continue
     storage_dead(f)

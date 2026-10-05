@@ -270,7 +270,10 @@ impl Consume for *mut u32 {
     vtable: {impl Consume for *mut u32}::{vtable}
 }
 
-pub const test_crate::mk::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 100u8, 121u8, 110u8, 47u8, 98u8, 121u8, 45u8, 118u8, 97u8, 108u8, 117u8, 101u8, 45u8, 115u8, 101u8, 108u8, 102u8, 45u8, 118u8, 116u8, 97u8, 98u8, 108u8, 101u8, 46u8, 114u8, 115u8] } with_metadata(36usize)
+// Full name: test_crate::filename#5
+pub static filename: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x64, 0x79, 0x6e, 0x2f, 0x62, 0x79, 0x2d, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x2d, 0x73, 0x65, 0x6c, 0x66, 0x2d, 0x76, 0x74, 0x61, 0x62, 0x6c, 0x65, 0x2e, 0x72, 0x73, 0x00) with_metadata(36usize)
+
+pub static test_crate::mk::{promoted_const#6}: Location::<'_> = Location::<'_> { 0: NonNull::<str> { 0: &raw const filename with_metadata(36usize) }, 1: 32u32, 2: 5u32, 3: PhantomData::<&'_ str> {  } }
 
 // Full name: test_crate::mk
 fn mk() -> Box::<(dyn Consume), Global>
@@ -279,11 +282,7 @@ fn mk() -> Box::<(dyn Consume), Global>
     let _1: Box::<(dyn Consume), Global>; // anonymous local
     let _2: Box::<S, Global>; // anonymous local
     let _3: S; // anonymous local
-    let _4: *const str is !null; // anonymous local
-    let _5: NonNull::<str>; // anonymous local
-    let _6: PhantomData::<&'_ str>; // anonymous local
-    let _7: Location::<'_>; // anonymous local
-    let _8: &'1 Location::<'_>; // anonymous local
+    let _4: &'static Location::<'_>; // anonymous local
 
     storage_live(_0)
     storage_live(_1)
@@ -291,16 +290,8 @@ fn mk() -> Box::<(dyn Consume), Global>
     storage_live(_3)
     _3 = S { _0: const 42u32 }
     storage_live(_4)
-    _4 = &raw const test_crate::mk::{promoted_const} with_metadata(const 36usize)
-    storage_live(_5)
-    _5 = NonNull::<str> { 0: move _4 }
-    storage_live(_6)
-    _6 = PhantomData::<&'_ str> {  }
-    storage_live(_7)
-    _7 = Location::<'_> { 0: move _5, 1: const 32u32, 2: const 5u32, 3: move _6 }
-    storage_live(_8)
-    _8 = &_7
-    _2 = alloc::boxed::{Box::<S, Global>}::new::<S>(move _3, move _8)
+    _4 = &test_crate::mk::{promoted_const#6}
+    _2 = alloc::boxed::{Box::<S, Global>}::new::<S>(move _3, move _4)
     ↳⚡ unwind_continue
     _1 = unsize_cast<Box::<S, Global>, Box::<(dyn Consume), Global>, &impl_Consume_for_S::{vtable}>(move _2)
     conditional_drop[{impl Destruct for Box::<S, Global>}::drop_glue::<S, Global><'2>] _2
@@ -311,15 +302,11 @@ fn mk() -> Box::<(dyn Consume), Global>
     conditional_drop[{impl Destruct for Box::<(dyn Consume), Global>}::drop_glue::<(dyn Consume), Global><'3>] _1
     ↳⚡ unwind_continue
     storage_dead(_1)
-    storage_dead(_8)
-    storage_dead(_7)
-    storage_dead(_6)
-    storage_dead(_5)
     storage_dead(_4)
     return
 }
 
-pub const test_crate::mk_ptr::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 100u8, 121u8, 110u8, 47u8, 98u8, 121u8, 45u8, 118u8, 97u8, 108u8, 117u8, 101u8, 45u8, 115u8, 101u8, 108u8, 102u8, 45u8, 118u8, 116u8, 97u8, 98u8, 108u8, 101u8, 46u8, 114u8, 115u8] } with_metadata(36usize)
+pub static test_crate::mk_ptr::{promoted_const#7}: Location::<'_> = Location::<'_> { 0: NonNull::<str> { 0: &raw const filename with_metadata(36usize) }, 1: 36u32, 2: 5u32, 3: PhantomData::<&'_ str> {  } }
 
 // Full name: test_crate::mk_ptr
 fn mk_ptr(x: *mut u32) -> Box::<(dyn Consume), Global>
@@ -329,11 +316,7 @@ fn mk_ptr(x: *mut u32) -> Box::<(dyn Consume), Global>
     let _2: Box::<(dyn Consume), Global>; // anonymous local
     let _3: Box::<*mut u32, Global>; // anonymous local
     let _4: *mut u32; // anonymous local
-    let _5: *const str is !null; // anonymous local
-    let _6: NonNull::<str>; // anonymous local
-    let _7: PhantomData::<&'_ str>; // anonymous local
-    let _8: Location::<'_>; // anonymous local
-    let _9: &'1 Location::<'_>; // anonymous local
+    let _5: &'static Location::<'_>; // anonymous local
 
     storage_live(_0)
     storage_live(_2)
@@ -341,16 +324,8 @@ fn mk_ptr(x: *mut u32) -> Box::<(dyn Consume), Global>
     storage_live(_4)
     _4 = copy x
     storage_live(_5)
-    _5 = &raw const test_crate::mk_ptr::{promoted_const} with_metadata(const 36usize)
-    storage_live(_6)
-    _6 = NonNull::<str> { 0: move _5 }
-    storage_live(_7)
-    _7 = PhantomData::<&'_ str> {  }
-    storage_live(_8)
-    _8 = Location::<'_> { 0: move _6, 1: const 36u32, 2: const 5u32, 3: move _7 }
-    storage_live(_9)
-    _9 = &_8
-    _3 = alloc::boxed::{Box::<*mut u32, Global>}::new::<*mut u32>(move _4, move _9)
+    _5 = &test_crate::mk_ptr::{promoted_const#7}
+    _3 = alloc::boxed::{Box::<*mut u32, Global>}::new::<*mut u32>(move _4, move _5)
     ↳⚡ storage_dead(x)
         unwind_continue
     _2 = unsize_cast<Box::<*mut u32, Global>, Box::<(dyn Consume), Global>, &{impl Consume for *mut u32}::{vtable}>(move _3)
@@ -365,10 +340,6 @@ fn mk_ptr(x: *mut u32) -> Box::<(dyn Consume), Global>
         unwind_continue
     storage_dead(_2)
     storage_dead(x)
-    storage_dead(_9)
-    storage_dead(_8)
-    storage_dead(_7)
-    storage_dead(_6)
     storage_dead(_5)
     return
 }
@@ -401,7 +372,7 @@ fn main()
     storage_live(_10)
     _10 = cast<*const (), fn(&'3 (dyn Consume + '4)) -> u32>(copy (*_3.metadata).method_read)
     _v_2 = (copy _10)(move _3)
-    ↳⚡ conditional_drop[{impl Destruct for Box::<(dyn Consume), Global>}::drop_glue::<(dyn Consume), Global><'13>] x
+    ↳⚡ conditional_drop[{impl Destruct for Box::<(dyn Consume), Global>}::drop_glue::<(dyn Consume), Global><'16>] x
         ↳⚡ storage_dead(_11)
             storage_dead(_10)
             unwind_terminate
@@ -417,7 +388,7 @@ fn main()
     _7 = &mut n
     _6 = &raw mut (*_7)
     p = mk_ptr(move _6)
-    ↳⚡ conditional_drop[{impl Destruct for Box::<(dyn Consume), Global>}::drop_glue::<(dyn Consume), Global><'13>] x
+    ↳⚡ conditional_drop[{impl Destruct for Box::<(dyn Consume), Global>}::drop_glue::<(dyn Consume), Global><'16>] x
         ↳⚡ storage_dead(_11)
             storage_dead(_10)
             unwind_terminate
@@ -431,11 +402,11 @@ fn main()
     storage_live(_11)
     _11 = cast<*const (), fn(&'7 (dyn Consume + '8)) -> u32>(copy (*_9.metadata).method_read)
     _v_8 = (copy _11)(move _9)
-    ↳⚡ conditional_drop[{impl Destruct for Box::<(dyn Consume), Global>}::drop_glue::<(dyn Consume), Global><'18>] p
+    ↳⚡ conditional_drop[{impl Destruct for Box::<(dyn Consume), Global>}::drop_glue::<(dyn Consume), Global><'23>] p
         ↳⚡ storage_dead(_11)
             storage_dead(_10)
             unwind_terminate
-        conditional_drop[{impl Destruct for Box::<(dyn Consume), Global>}::drop_glue::<(dyn Consume), Global><'13>] x
+        conditional_drop[{impl Destruct for Box::<(dyn Consume), Global>}::drop_glue::<(dyn Consume), Global><'16>] x
         ↳⚡ storage_dead(_11)
             storage_dead(_10)
             unwind_terminate
@@ -444,8 +415,8 @@ fn main()
     fake_read(_v_8)
     _0 = ()
     storage_dead(_v_8)
-    conditional_drop[{impl Destruct for Box::<(dyn Consume), Global>}::drop_glue::<(dyn Consume), Global><'19>] p
-    ↳⚡ conditional_drop[{impl Destruct for Box::<(dyn Consume), Global>}::drop_glue::<(dyn Consume), Global><'13>] x
+    conditional_drop[{impl Destruct for Box::<(dyn Consume), Global>}::drop_glue::<(dyn Consume), Global><'24>] p
+    ↳⚡ conditional_drop[{impl Destruct for Box::<(dyn Consume), Global>}::drop_glue::<(dyn Consume), Global><'16>] x
         ↳⚡ storage_dead(_11)
             storage_dead(_10)
             unwind_terminate
@@ -453,7 +424,7 @@ fn main()
     storage_dead(p)
     storage_dead(n)
     storage_dead(_v_2)
-    conditional_drop[{impl Destruct for Box::<(dyn Consume), Global>}::drop_glue::<(dyn Consume), Global><'20>] x
+    conditional_drop[{impl Destruct for Box::<(dyn Consume), Global>}::drop_glue::<(dyn Consume), Global><'25>] x
     ↳⚡ unwind_continue
     storage_dead(x)
     storage_dead(_11)

@@ -53,7 +53,7 @@ pub trait Clone<Self>
 }
 
 // Full name: core::clone::impls::{impl Clone for i32}::clone
-pub fn impl_Clone_for_i32::clone<'_0>(_1: &'_0 i32) -> i32
+pub fn impl_Clone_for_i32::clone<'_0>(_1: &'_0 i32, _2: &'static Location<'static>) -> i32
 = <opaque>
 
 // Full name: core::clone::impls::{impl Clone for i32}
@@ -64,7 +64,7 @@ impl "impl_Clone_for_i32" Clone for i32 {
 }
 
 // Full name: core::clone::impls::{impl Clone for usize}::clone
-pub fn impl_Clone_for_usize::clone<'_0>(_1: &'_0 usize) -> usize
+pub fn impl_Clone_for_usize::clone<'_0>(_1: &'_0 usize, _2: &'static Location<'static>) -> usize
 = <opaque>
 
 // Full name: core::clone::impls::{impl Clone for usize}
@@ -75,7 +75,7 @@ impl "impl_Clone_for_usize" Clone for usize {
 }
 
 // Full name: core::clone::impls::{impl Clone for u32}::clone
-pub fn impl_Clone_for_u32::clone<'_0>(_1: &'_0 u32) -> u32
+pub fn impl_Clone_for_u32::clone<'_0>(_1: &'_0 u32, _2: &'static Location<'static>) -> u32
 = <opaque>
 
 // Full name: core::clone::impls::{impl Clone for u32}
@@ -1301,6 +1301,9 @@ pub fn test_loops()
     return
 }
 
+// Full name: test_crate::filename#17
+pub static filename: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x63, 0x6f, 0x6e, 0x74, 0x72, 0x6f, 0x6c, 0x2d, 0x66, 0x6c, 0x6f, 0x77, 0x2f, 0x6c, 0x6f, 0x6f, 0x70, 0x73, 0x2e, 0x72, 0x73, 0x00) with_metadata(30usize)
+
 // Full name: test_crate::nested_loops_enum
 pub fn nested_loops_enum(step_out: usize, step_in: usize) -> usize
 {
@@ -1355,7 +1358,7 @@ pub fn nested_loops_enum(step_out: usize, step_in: usize) -> usize
         storage_live(_9)
         _9 = &mut iter_6
         _8 = &two-phase-mut (*_9)
-        _7 = next<'9, i32>[{built_in impl Sized for i32}, impl_Step_for_i32, {built_in impl Destruct for i32}](move _8)
+        _7 = next<'22, i32>[{built_in impl Sized for i32}, impl_Step_for_i32, {built_in impl Destruct for i32}](move _8)
         ↳⚡ storage_dead(_25)
             storage_dead(_10)
             storage_dead(step_in)
@@ -1400,7 +1403,7 @@ pub fn nested_loops_enum(step_out: usize, step_in: usize) -> usize
         storage_live(_17)
         _17 = &mut iter_14
         _16 = &two-phase-mut (*_17)
-        _15 = next<'11, usize>[{built_in impl Sized for usize}, impl_Step_for_usize, {built_in impl Destruct for usize}](move _16)
+        _15 = next<'32, usize>[{built_in impl Sized for usize}, impl_Step_for_usize, {built_in impl Destruct for usize}](move _16)
         ↳⚡ storage_dead(_25)
             storage_dead(_10)
             storage_dead(step_in)
@@ -1435,7 +1438,7 @@ pub fn nested_loops_enum(step_out: usize, step_in: usize) -> usize
             storage_live(_24)
             _24 = &mut iter_21
             _23 = &two-phase-mut (*_24)
-            _22 = next<'13, usize>[{built_in impl Sized for usize}, impl_Step_for_usize, {built_in impl Destruct for usize}](move _23)
+            _22 = next<'42, usize>[{built_in impl Sized for usize}, impl_Step_for_usize, {built_in impl Destruct for usize}](move _23)
             ↳⚡ storage_dead(_25)
                 storage_dead(_10)
                 storage_dead(step_in)
@@ -1531,7 +1534,7 @@ pub fn loop_inside_if(b: bool, n: u32) -> u32
         storage_live(_11)
         _11 = &mut iter
         _10 = &two-phase-mut (*_11)
-        _9 = next<'4, u32>[{built_in impl Sized for u32}, impl_Step_for_u32, {built_in impl Destruct for u32}](move _10)
+        _9 = next<'17, u32>[{built_in impl Sized for u32}, impl_Step_for_u32, {built_in impl Destruct for u32}](move _10)
         ↳⚡ storage_dead(_14)
             storage_dead(n)
             storage_dead(b)
@@ -1698,7 +1701,7 @@ pub fn sum_array<const N : usize>(a: [u32; N]) -> u32
     return
 }
 
-pub const test_crate::clear::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 99u8, 111u8, 110u8, 116u8, 114u8, 111u8, 108u8, 45u8, 102u8, 108u8, 111u8, 119u8, 47u8, 108u8, 111u8, 111u8, 112u8, 115u8, 46u8, 114u8, 115u8] } with_metadata(30usize)
+pub static test_crate::clear::{promoted_const#24}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(30usize) }, 1: 211u32, 2: 10u32, 3: PhantomData {  } }
 
 // Full name: test_crate::clear
 pub fn clear<'_0>(v: &'_0 mut Vec<u32>[{built_in impl Sized for u32}, {built_in impl Sized for Global}])
@@ -1714,11 +1717,7 @@ pub fn clear<'_0>(v: &'_0 mut Vec<u32>[{built_in impl Sized for u32}, {built_in 
     let _8: &'6 mut Vec<u32>[{built_in impl Sized for u32}, {built_in impl Sized for Global}]; // anonymous local
     let _9: usize; // anonymous local
     let _10: usize; // anonymous local
-    let _11: *const str is !null; // anonymous local
-    let _12: NonNull<str>; // anonymous local
-    let _13: PhantomData<&'19 str>; // anonymous local
-    let _14: Location<'16>; // anonymous local
-    let _15: &'14 Location<'15>; // anonymous local
+    let _11: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     storage_live(_10)
@@ -1733,7 +1732,7 @@ pub fn clear<'_0>(v: &'_0 mut Vec<u32>[{built_in impl Sized for u32}, {built_in 
         storage_live(_5)
         storage_live(_6)
         _6 = &(*v)
-        _5 = alloc::vec::{Vec<T>[TraitClause0, TraitClause1]}::len<'8, u32, Global>[{built_in impl Sized for u32}, {built_in impl Sized for Global}](move _6)
+        _5 = alloc::vec::{Vec<T>[TraitClause0, TraitClause1]}::len<'17, u32, Global>[{built_in impl Sized for u32}, {built_in impl Sized for Global}](move _6)
         ↳⚡ storage_dead(_10)
             storage_dead(v)
             unwind_continue
@@ -1751,16 +1750,8 @@ pub fn clear<'_0>(v: &'_0 mut Vec<u32>[{built_in impl Sized for u32}, {built_in 
         storage_live(_9)
         _9 = copy i
         storage_live(_11)
-        _11 = &raw const test_crate::clear::{promoted_const} with_metadata(const 30usize)
-        storage_live(_12)
-        _12 = NonNull { 0: move _11 }
-        storage_live(_13)
-        _13 = PhantomData {  }
-        storage_live(_14)
-        _14 = Location { 0: move _12, 1: const 211u32, 2: const 10u32, 3: move _13 }
-        storage_live(_15)
-        _15 = &_14
-        _7 = impl_IndexMut_for_Vec::index_mut<'10, u32, usize, Global>[{built_in impl Sized for u32}, {built_in impl Sized for usize}, {built_in impl Sized for Global}, impl_SliceIndex_slice_for_usize<u32>[{built_in impl Sized for u32}]](move _8, move _9, move _15)
+        _11 = &test_crate::clear::{promoted_const#24}
+        _7 = impl_IndexMut_for_Vec::index_mut<'23, u32, usize, Global>[{built_in impl Sized for u32}, {built_in impl Sized for usize}, {built_in impl Sized for Global}, impl_SliceIndex_slice_for_usize<u32>[{built_in impl Sized for u32}]](move _8, move _9, move _11)
         ↳⚡ storage_dead(_10)
             storage_dead(v)
             unwind_continue
@@ -1780,10 +1771,6 @@ pub fn clear<'_0>(v: &'_0 mut Vec<u32>[{built_in impl Sized for u32}, {built_in 
     storage_dead(i)
     storage_dead(_10)
     storage_dead(v)
-    storage_dead(_15)
-    storage_dead(_14)
-    storage_dead(_13)
-    storage_dead(_12)
     storage_dead(_11)
     return
 }

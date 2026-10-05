@@ -23,6 +23,10 @@ struct () {}
 // Full name: core::num::{u32}::MAX
 pub const MAX: u32 = MAX()
 
+struct str {
+  _0: [u8],
+}
+
 struct (_, _)<A, B>
 where
     TraitClause0: (A: Sized),

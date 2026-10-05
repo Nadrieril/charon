@@ -1,5 +1,9 @@
 # Final LLBC before serialization:
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::marker::MetaSized
 #[fundamental]
 #[lang_item(MetaSized)]
@@ -45,18 +49,24 @@ pub trait Copy<Self>
 
 struct () {}
 
+struct str {
+  _0: [u8],
+}
+
 // Full name: test_crate::Foo
 struct Foo {}
 
 // Full name: test_crate::{impl Clone for Foo}::clone
 #[inline(hint)]
-pub fn clone<'_0>(self: &'_0 Foo) -> Foo
+pub fn clone<'_0>(self: &'_0 Foo, caller_location: &'static Location<'static>) -> Foo
 {
     let _0: Foo; // return
     let self: &'1 Foo; // arg #1
+    let caller_location: &'static Location<'static>; // arg #2
 
     storage_live(_0)
     _0 = copy (*self)
+    storage_dead(caller_location)
     storage_dead(self)
     return
 }

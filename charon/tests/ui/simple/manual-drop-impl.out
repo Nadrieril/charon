@@ -51,6 +51,10 @@ where
     TypeOutlives1: A: '_0,
 = <opaque>
 
+struct str {
+  _0: [u8],
+}
+
 // Full name: test_crate::Foo
 struct Foo<T>
 where
@@ -91,8 +95,8 @@ where
     storage_live(_3)
     _0 = ()
     _2 = &mut (*_1)
-    _3 = impl_Drop_for_Foo::drop<'4, T>[TraitClause0](move _2)
-    ↳⚡ drop[impl_Destruct_for_Vec::drop_glue<'5, T, Global>[TraitClause0, {built_in impl Sized for Global}]] (*_1).vec
+    _3 = impl_Drop_for_Foo::drop<'13, T>[TraitClause0](move _2)
+    ↳⚡ drop[impl_Destruct_for_Vec::drop_glue<'14, T, Global>[TraitClause0, {built_in impl Sized for Global}]] (*_1).vec
         ↳⚡ storage_dead(_3)
             storage_dead(_2)
             storage_dead(_1)
@@ -101,7 +105,7 @@ where
         storage_dead(_2)
         storage_dead(_1)
         unwind_continue
-    drop[impl_Destruct_for_Vec::drop_glue<'6, T, Global>[TraitClause0, {built_in impl Sized for Global}]] (*_1).vec
+    drop[impl_Destruct_for_Vec::drop_glue<'15, T, Global>[TraitClause0, {built_in impl Sized for Global}]] (*_1).vec
     ↳⚡ storage_dead(_3)
         storage_dead(_2)
         storage_dead(_1)

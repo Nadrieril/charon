@@ -31,8 +31,8 @@ use charon_lib::ullbc_ast::*;
 pub(crate) struct BodyTransCtx<'tcx, 'tctx, 'ictx> {
     /// The translation context for the item.
     pub i_ctx: &'ictx mut ItemTransCtx<'tcx, 'tctx>,
-    /// List of body locals.
-    pub local_decls: &'ictx rustc_index::IndexVec<mir::Local, mir::LocalDecl<'tcx>>,
+    /// The MIR body.
+    pub mir_body: &'ictx mir::Body<'tcx>,
     /// Types supplied explicitly by the user.
     pub user_type_annotations: ty::CanonicalUserTypeAnnotations<'tcx>,
 
@@ -78,7 +78,7 @@ impl<'tcx, 'tctx, 'ictx> BodyTransCtx<'tcx, 'tctx, 'ictx> {
         }
         BodyTransCtx {
             i_ctx,
-            local_decls: &body.local_decls,
+            mir_body: body,
             user_type_annotations,
             drop_kind,
             locals: Default::default(),
@@ -597,6 +597,14 @@ impl<'tcx> BodyTransCtx<'tcx, '_, '_> {
 
             // Add the variable to the environment
             self.push_var(index, ty, name, span);
+
+            if index.as_usize() == body.arg_count {
+                // This becomes an argument only after the crate-wide `track_caller` pass
+                // has determined the calling convention of every trait method.
+                let rust_ty = self.tcx.caller_location_ty();
+                let ty = self.translate_rustc_ty(span, &rust_ty)?;
+                self.locals.new_var(Some("caller_location".into()), ty);
+            }
         }
 
         Ok(())
@@ -1037,7 +1045,7 @@ impl<'tcx> BlockTransCtx<'tcx, '_, '_, '_> {
         use rustc_middle::ty;
 
         let tcx = self.hax_state.base().tcx;
-        let local_decls = self.local_decls;
+        let local_decls = &self.mir_body.local_decls;
         let mut place_ty: mir::PlaceTy = mir::Place::from(mir_place.local).ty(local_decls, tcx);
         let var_id = self.translate_local(&mir_place.local).unwrap();
         let mut place = self.locals.place_for_var(var_id);
@@ -1248,7 +1256,7 @@ impl<'tcx> BlockTransCtx<'tcx, '_, '_, '_> {
             }
             mir::Rvalue::Repeat(operand, cnst) => {
                 let ty_is_copy = {
-                    let rust_ty = operand.ty(self.local_decls, self.tcx);
+                    let rust_ty = operand.ty(&self.mir_body.local_decls, self.tcx);
                     hax::solve_copy(&self.hax_state, rust_ty)
                         .map(|proof| self.translate_trait_proof(span, &proof))
                         .transpose()?
@@ -1284,7 +1292,7 @@ impl<'tcx> BlockTransCtx<'tcx, '_, '_, '_> {
                 })
             }
             mir::Rvalue::Cast(cast_kind, mir_operand, rust_tgt_ty) => {
-                let op_ty = mir_operand.ty(self.local_decls, self.tcx);
+                let op_ty = mir_operand.ty(&self.mir_body.local_decls, self.tcx);
                 let tgt_ty = self.translate_rustc_ty(span, rust_tgt_ty)?;
 
                 // Translate the operand
@@ -1342,8 +1350,19 @@ impl<'tcx> BlockTransCtx<'tcx, '_, '_, '_> {
                         CastKind::FnPtr(src_ty, tgt_ty)
                     }
                     mir::CastKind::PointerCoercion(
-                        ty::adjustment::PointerCoercion::UnsafeFnPointer
-                        | ty::adjustment::PointerCoercion::ReifyFnPointer(_),
+                        ty::adjustment::PointerCoercion::ReifyFnPointer(_),
+                        ..,
+                    ) => {
+                        if let ty::TyKind::FnDef(rustc_id, _) = op_ty.kind()
+                            && let TyKind::FnDef(fn_ptr) = src_ty.kind()
+                            && let FnPtrKind::Fun(fun_id) = fn_ptr.skip_binder.kind.as_ref()
+                        {
+                            self.record_definition_location(span, *fun_id, *rustc_id)?;
+                        }
+                        CastKind::FnPtr(src_ty, tgt_ty)
+                    }
+                    mir::CastKind::PointerCoercion(
+                        ty::adjustment::PointerCoercion::UnsafeFnPointer,
                         ..,
                     ) => CastKind::FnPtr(src_ty, tgt_ty),
                     mir::CastKind::Transmute | mir::CastKind::BoxDerefTransmute => {
@@ -1437,7 +1456,9 @@ impl<'tcx> BlockTransCtx<'tcx, '_, '_, '_> {
                         ))
                     }
                     mir::AggregateKind::Tuple => {
-                        let tys = operands.iter().map(|op| op.ty(self.local_decls, self.tcx));
+                        let tys = operands
+                            .iter()
+                            .map(|op| op.ty(&self.mir_body.local_decls, self.tcx));
                         let ty = ty::Ty::new_tup_from_iter(self.tcx, tys);
                         let ty = self.translate_rustc_ty(span, &ty)?;
                         let tref = ty.as_adt().unwrap().clone();
@@ -1553,7 +1574,7 @@ impl<'tcx> BlockTransCtx<'tcx, '_, '_, '_> {
                 mir::CopyNonOverlapping { src, dst, count },
             )) => {
                 let pointee_ty = src
-                    .ty(self.local_decls, self.tcx)
+                    .ty(&self.mir_body.local_decls, self.tcx)
                     .builtin_deref(true)
                     .unwrap();
                 let generic_args = self.tcx.mk_args(&[pointee_ty.into()]);
@@ -1693,7 +1714,15 @@ impl<'tcx> BlockTransCtx<'tcx, '_, '_, '_> {
                 target,
                 unwind,
                 ..
-            } => self.translate_function_call(span, func, args, destination, target, unwind)?,
+            } => self.translate_function_call(
+                span,
+                terminator.source_info,
+                func,
+                args,
+                destination,
+                target,
+                unwind,
+            )?,
             TerminatorKind::Assert {
                 cond,
                 expected,
@@ -1932,6 +1961,28 @@ impl<'tcx> BlockTransCtx<'tcx, '_, '_, '_> {
         Ok((data, branch_targets))
     }
 
+    /// Save the rustc-constructed location constant for a call; a later pass decides
+    /// whether this call needs the location at all.
+    fn record_caller_location(
+        &mut self,
+        span: Span,
+        source_info: mir::SourceInfo,
+    ) -> Result<(), Error> {
+        let rustc_span = self.mir_body.caller_location_span(
+            source_info,
+            None::<rustc_span::Span>,
+            self.tcx,
+            |span| span,
+        );
+        let value = self.translate_caller_location(span, rustc_span)?;
+        let Some(ItemId::Fun(fun_id)) = self.item_id else {
+            unreachable!("a MIR call belongs to a function")
+        };
+        let block_id = self.current_block;
+        self.caller_locations.insert((fun_id, block_id), value);
+        Ok(())
+    }
+
     /// Translate a function call statement.
     /// Note that `body` is the body of the function being translated, not of the
     /// function referenced in the function call: we need it in order to translate
@@ -1940,6 +1991,7 @@ impl<'tcx> BlockTransCtx<'tcx, '_, '_, '_> {
     fn translate_function_call(
         &mut self,
         span: Span,
+        source_info: mir::SourceInfo,
         func: &mir::Operand<'tcx>,
         args: &[hax::Spanned<mir::Operand<'tcx>>],
         destination: &mir::Place<'tcx>,
@@ -1947,11 +1999,14 @@ impl<'tcx> BlockTransCtx<'tcx, '_, '_, '_> {
         unwind: &mir::UnwindAction,
     ) -> Result<TerminatorKind, Error> {
         let tcx = self.tcx;
-        let op_ty = func.ty(self.local_decls, tcx);
+        let op_ty = func.ty(&self.mir_body.local_decls, tcx);
         // There are two cases, depending on whether this is a "regular"
         // call to a top-level function identified by its id, or if we
         // are using a local function pointer (i.e., the operand is a "move").
         let lval = self.translate_place(span, destination)?;
+
+        self.record_caller_location(span, source_info)?;
+
         let on_unwind = self.translate_unwind_action(span, unwind);
         // Translate the function operand.
         let fn_operand = match op_ty.kind() {
@@ -2055,7 +2110,7 @@ impl<'tcx> BlockTransCtx<'tcx, '_, '_, '_> {
         target: &mir::BasicBlock,
         unwind: &mir::UnwindAction,
     ) -> Result<TerminatorKind, Error> {
-        let place_ty = place.ty(self.local_decls, self.tcx).ty;
+        let place_ty = place.ty(&self.mir_body.local_decls, self.tcx).ty;
         let fn_ptr = self.translate_drop_glue_method_call(span, place_ty)?;
         let place = self.translate_place(span, place)?;
         let target = self.translate_basic_block_id(*target);

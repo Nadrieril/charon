@@ -1,5 +1,9 @@
 # Final LLBC before serialization:
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::marker::MetaSized
 #[fundamental]
 #[lang_item(MetaSized)]
@@ -24,6 +28,10 @@ pub trait Clone<Self>
     non-dyn-compatible
 }
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
 struct () {}
 
 // Full name: core::marker::Destruct
@@ -45,6 +53,14 @@ where
   Some { _0: T },
 }
 
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
+
+struct str {
+  _0: [u8],
+}
+
 // Full name: test_crate::Trait
 trait Trait<Self, T, Self_Item>
 {
@@ -59,13 +75,15 @@ struct Struct {}
 
 // Full name: test_crate::{impl Clone for Struct}::clone
 #[inline(hint)]
-pub fn clone<'_0>(self: &'_0 Struct) -> Struct
+pub fn clone<'_0>(self: &'_0 Struct, caller_location: &'static Location<'static>) -> Struct
 {
     let _0: Struct; // return
     let self: &'1 Struct; // arg #1
+    let caller_location: &'static Location<'static>; // arg #2
 
     storage_live(_0)
     _0 = Struct {  }
+    storage_dead(caller_location)
     storage_dead(self)
     return
 }
@@ -113,6 +131,12 @@ where
     vtable: unknown // vtables of trait alias impls are not supported
 }
 
+// Full name: test_crate::filename#8
+pub static filename: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x73, 0x69, 0x6d, 0x70, 0x6c, 0x65, 0x2f, 0x74, 0x72, 0x61, 0x69, 0x74, 0x2d, 0x61, 0x6c, 0x69, 0x61, 0x73, 0x2e, 0x72, 0x73, 0x00) with_metadata(30usize)
+
+// Full name: test_crate::takes_alias::{promoted_const#9}
+pub static {promoted_const}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(30usize) }, 1: 17u32, 2: 13u32, 3: PhantomData {  } }
+
 // Full name: test_crate::takes_alias
 fn takes_alias<T>(x: T)
 where
@@ -123,31 +147,37 @@ where
     let x: T; // arg #1
     let _2: T; // anonymous local
     let _3: &'1 T; // anonymous local
+    let _4: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     _0 = ()
     storage_live(_2)
     storage_live(_3)
     _3 = &x
-    _2 = TraitClause1::ImpliedClause2::clone<'2>(move _3)
-    ↳⚡ conditional_drop[{built_in impl Destruct for T}::drop_glue<'3>] x
+    storage_live(_4)
+    _4 = &{promoted_const}
+    _2 = TraitClause1::ImpliedClause2::clone<'11>(move _3, move _4)
+    ↳⚡ conditional_drop[{built_in impl Destruct for T}::drop_glue<'12>] x
         ↳⚡ storage_dead(x)
+            storage_dead(_4)
             unwind_terminate
         storage_dead(x)
         unwind_continue
     storage_dead(_3)
-    conditional_drop[{built_in impl Destruct for T}::drop_glue<'4>] _2
-    ↳⚡ conditional_drop[{built_in impl Destruct for T}::drop_glue<'3>] x
+    conditional_drop[{built_in impl Destruct for T}::drop_glue<'13>] _2
+    ↳⚡ conditional_drop[{built_in impl Destruct for T}::drop_glue<'12>] x
         ↳⚡ storage_dead(x)
+            storage_dead(_4)
             unwind_terminate
         storage_dead(x)
         unwind_continue
     storage_dead(_2)
     _0 = ()
-    conditional_drop[{built_in impl Destruct for T}::drop_glue<'5>] x
+    conditional_drop[{built_in impl Destruct for T}::drop_glue<'14>] x
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(x)
+    storage_dead(_4)
     return
 }
 

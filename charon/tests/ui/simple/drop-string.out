@@ -114,6 +114,10 @@ unsafe fn impl_Destruct_for_String::drop_glue<'_0>(_1: &'_0 mut String)
 pub fn new() -> String
 = <opaque>
 
+struct str {
+  _0: [u8],
+}
+
 // Full name: {impl Destruct for [T]}::drop_glue
 unsafe fn impl_Destruct_for_slice::drop_glue<'_0, T>(_1: &'_0 mut [T])
 where
@@ -236,7 +240,7 @@ where
     _0 = ()
     _2 = as_mut_slice<'_, T, N>[TraitClause0, {built_in impl Destruct for T}](move _1)
     ↳⚡ undefined_behavior
-    _0 = drop_glue<'6, [T]>[impl_Destruct_for_slice<T>[TraitClause0, TraitClause1], impl_Destruct_for_slice<T>[TraitClause0, TraitClause1]](move _2)
+    _0 = drop_glue<'18, [T]>[impl_Destruct_for_slice<T>[TraitClause0, TraitClause1], impl_Destruct_for_slice<T>[TraitClause0, TraitClause1]](move _2)
     ↳⚡ storage_dead(_2)
         storage_dead(_1)
         unwind_continue
@@ -285,18 +289,18 @@ fn main()
     ↳⚡ unwind_continue
     storage_live(_2)
     _2 = new()
-    ↳⚡ drop[impl_Destruct_for_String::drop_glue<'0>] s
+    ↳⚡ drop[impl_Destruct_for_String::drop_glue<'17>] s
         ↳⚡ unwind_terminate
         unwind_continue
-    drop[impl_Destruct_for_String::drop_glue<'1>] s
+    drop[impl_Destruct_for_String::drop_glue<'18>] s
     ↳⚡ s = move _2
-        drop[impl_Destruct_for_String::drop_glue<'0>] s
+        drop[impl_Destruct_for_String::drop_glue<'17>] s
         ↳⚡ unwind_terminate
         unwind_continue
     s = move _2
     storage_dead(_2)
     _0 = ()
-    drop[impl_Destruct_for_String::drop_glue<'2>] s
+    drop[impl_Destruct_for_String::drop_glue<'19>] s
     ↳⚡ unwind_continue
     storage_dead(s)
     return

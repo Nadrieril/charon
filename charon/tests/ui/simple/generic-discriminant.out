@@ -1,5 +1,9 @@
 # Final LLBC before serialization:
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::marker::MetaSized
 #[fundamental]
 #[lang_item(MetaSized)]
@@ -111,10 +115,6 @@ pub opaque type Discriminant<T>
 where
     TraitClause0: (T: Sized),
 
-// Full name: core::panic::location::Location
-#[lang_item(PanicLocation)]
-pub opaque type Location<'a>
-
 // Full name: core::mem::discriminant
 #[track_caller]
 #[diagnostic_item("mem_discriminant")]
@@ -150,7 +150,11 @@ struct str {
   _0: [u8],
 }
 
-pub const test_crate::f::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 115u8, 105u8, 109u8, 112u8, 108u8, 101u8, 47u8, 103u8, 101u8, 110u8, 101u8, 114u8, 105u8, 99u8, 45u8, 100u8, 105u8, 115u8, 99u8, 114u8, 105u8, 109u8, 105u8, 110u8, 97u8, 110u8, 116u8, 46u8, 114u8, 115u8] } with_metadata(39usize)
+// Full name: test_crate::filename#7
+pub static filename: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x73, 0x69, 0x6d, 0x70, 0x6c, 0x65, 0x2f, 0x67, 0x65, 0x6e, 0x65, 0x72, 0x69, 0x63, 0x2d, 0x64, 0x69, 0x73, 0x63, 0x72, 0x69, 0x6d, 0x69, 0x6e, 0x61, 0x6e, 0x74, 0x2e, 0x72, 0x73, 0x00) with_metadata(39usize)
+
+// Full name: test_crate::f::{promoted_const#8}
+pub static {promoted_const}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(39usize) }, 1: 3u32, 2: 5u32, 3: PhantomData {  } }
 
 // Full name: test_crate::f
 pub fn f<'_0, T>(x: &'_0 T) -> Discriminant<T>[TraitClause0]
@@ -161,34 +165,18 @@ where
     let _0: Discriminant<T>[TraitClause0]; // return
     let x: &'1 T; // arg #1
     let _2: &'2 T; // anonymous local
-    let _3: *const str is !null; // anonymous local
-    let _4: NonNull<str>; // anonymous local
-    let _5: PhantomData<&'13 str>; // anonymous local
-    let _6: Location<'10>; // anonymous local
-    let _7: &'8 Location<'9>; // anonymous local
+    let _3: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     storage_live(_2)
     _2 = &(*x)
     storage_live(_3)
-    _3 = &raw const test_crate::f::{promoted_const} with_metadata(const 39usize)
-    storage_live(_4)
-    _4 = NonNull { 0: move _3 }
-    storage_live(_5)
-    _5 = PhantomData {  }
-    storage_live(_6)
-    _6 = Location { 0: move _4, 1: const 3u32, 2: const 5u32, 3: move _5 }
-    storage_live(_7)
-    _7 = &_6
-    _0 = discriminant<'4, T>[TraitClause0](move _2, move _7)
+    _3 = &{promoted_const}
+    _0 = discriminant<'13, T>[TraitClause0](move _2, move _3)
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(_2)
     storage_dead(x)
-    storage_dead(_7)
-    storage_dead(_6)
-    storage_dead(_5)
-    storage_dead(_4)
     storage_dead(_3)
     return
 }

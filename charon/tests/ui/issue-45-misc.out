@@ -14,6 +14,10 @@ pub trait Sized<Self>
     non-dyn-compatible
 }
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::clone::Clone
 #[lang_item(Clone)]
 #[diagnostic_item("Clone")]
@@ -30,10 +34,6 @@ where
     TraitClause0: (T: Sized),
     TraitClause1: (T: Clone),
 = <opaque>
-
-// Full name: core::panic::location::Location
-#[lang_item(PanicLocation)]
-pub opaque type Location<'a>
 
 // Full name: core::ops::index::Index
 #[lang_item(Index)]
@@ -134,7 +134,7 @@ where
 = <opaque>
 
 // Full name: core::clone::impls::{impl Clone for u8}::clone
-pub fn impl_Clone_for_u8::clone<'_0>(_1: &'_0 u8) -> u8
+pub fn impl_Clone_for_u8::clone<'_0>(_1: &'_0 u8, _2: &'static Location<'static>) -> u8
 = <opaque>
 
 // Full name: core::clone::impls::{impl Clone for u8}
@@ -491,7 +491,7 @@ fn call_once(_1: {closure}, _2: (i32,)) -> i32
     storage_live(_0)
     storage_live(_3)
     _3 = &mut _1
-    _0 = call_mut<'2>(move _3, move _2)
+    _0 = call_mut<'11>(move _3, move _2)
     ↳⚡ storage_dead(_3)
         storage_dead(_2)
         storage_dead(_1)
@@ -589,7 +589,7 @@ fn cbd(prf_input: [u8; 33usize])
         storage_live(_7)
         _7 = &mut iter
         _6 = &two-phase-mut (*_7)
-        _5 = next<'4, u8>[{built_in impl Sized for u8}, impl_Step_for_u8, {built_in impl Destruct for u8}](move _6)
+        _5 = next<'17, u8>[{built_in impl Sized for u8}, impl_Step_for_u8, {built_in impl Destruct for u8}](move _6)
         ↳⚡ storage_dead(prf_input)
             unwind_continue
         storage_dead(_6)
@@ -668,7 +668,7 @@ fn select<'_0, '_1>(lhs: &'_0 [u8], rhs: &'_1 [u8])
         storage_live(_6)
         storage_live(_7)
         _7 = &(*lhs) with_metadata(copy lhs.metadata)
-        _6 = core::slice::{[T]}::len<'40, u8>[{built_in impl Sized for u8}](move _7)
+        _6 = core::slice::{[T]}::len<'49, u8>[{built_in impl Sized for u8}](move _7)
         ↳⚡ storage_dead(_22)
             storage_dead(_21)
             storage_dead(_20)
@@ -685,7 +685,7 @@ fn select<'_0, '_1>(lhs: &'_0 [u8], rhs: &'_1 [u8])
         storage_live(_9)
         storage_live(_10)
         _10 = &(*rhs) with_metadata(copy rhs.metadata)
-        _9 = core::slice::{[T]}::len<'42, u8>[{built_in impl Sized for u8}](move _10)
+        _9 = core::slice::{[T]}::len<'55, u8>[{built_in impl Sized for u8}](move _10)
         ↳⚡ storage_dead(_22)
             storage_dead(_21)
             storage_dead(_20)

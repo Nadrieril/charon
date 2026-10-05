@@ -20,6 +20,10 @@ struct () {}
 
 vtable core::marker::MetaSized::{vtable}<Self>: core::marker::MetaSized::{vtable} = Opaque(VTable was chosen to be opaque)
 
+struct str {
+  _0: [u8],
+}
+
 struct (_, _)<A, B>
 where
     TraitClause0: (A: Sized),
@@ -62,7 +66,7 @@ where
     storage_live(_2)
     storage_live(_3)
     _3 = &(*self) with_metadata(copy self.metadata)
-    _2 = TraitClause0::base<'3>(move _3)
+    _2 = TraitClause0::base<'12>(move _3)
     ↳⚡ storage_dead(_4)
         storage_dead(self)
         unwind_continue
@@ -143,7 +147,7 @@ pub fn impl_Trait_for_Struct::dflt<'_0>(self: &'_0 Struct) -> i32
     storage_live(_2)
     storage_live(_3)
     _3 = &(*self)
-    _2 = base<'3>(move _3)
+    _2 = base<'12>(move _3)
     ↳⚡ storage_dead(_4)
         storage_dead(self)
         unwind_continue
@@ -194,7 +198,7 @@ pub fn main()
     let _5: &'8 (dyn Trait + '9); // anonymous local
     let _6: &'10 Struct; // anonymous local
     let _7: &'11 Struct; // anonymous local
-    let _8: &'20 Struct; // anonymous local
+    let _8: &'29 Struct; // anonymous local
     let _9: Struct; // anonymous local
 
     storage_live(_7)

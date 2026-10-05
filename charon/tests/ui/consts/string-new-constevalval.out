@@ -57,6 +57,10 @@ pub fn alloc::string::{String}::new() -> String
 
 struct () {}
 
+struct str {
+  _0: [u8],
+}
+
 // Full name: {impl Destruct for [T]}
 impl<T> "impl_Destruct_for_slice" Destruct for [T]
 where
@@ -128,7 +132,7 @@ pub fn mk_string()
     storage_live(_1)
     _1 = alloc::string::{String}::new()
     ↳⚡ unwind_continue
-    conditional_drop[impl_Destruct_for_String::drop_glue<'0>] _1
+    conditional_drop[impl_Destruct_for_String::drop_glue<'9>] _1
     ↳⚡ unwind_continue
     storage_dead(_1)
     _0 = const ()

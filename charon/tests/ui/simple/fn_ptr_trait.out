@@ -1,5 +1,9 @@
 # Final LLBC before serialization:
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::marker::MetaSized
 #[fundamental]
 #[lang_item(MetaSized)]
@@ -55,6 +59,10 @@ pub trait FnPtr<Self>
 }
 
 struct () {}
+
+struct str {
+  _0: [u8],
+}
 
 // Full name: test_crate::requires_fn_ptr
 fn requires_fn_ptr<F>()

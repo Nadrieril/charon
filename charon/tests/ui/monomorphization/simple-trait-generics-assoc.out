@@ -20,6 +20,10 @@ struct () {}
 
 vtable core::marker::MetaSized::{vtable}::<i32>: core::marker::MetaSized::{vtable} = Opaque(VTable was chosen to be opaque)
 
+struct str {
+  _0: [u8],
+}
+
 struct test_crate::Trait::{vtable} {
   size: usize,
   align: usize,
@@ -107,7 +111,7 @@ fn main()
     let _6: &'10 i32; // anonymous local
     let _7: fn(&'8 (dyn Trait<usize, Item = bool> + '9)); // anonymous local
     let _8: &'11 i32; // anonymous local
-    let _9: &'20 i32; // anonymous local
+    let _9: &'22 i32; // anonymous local
     let _10: i32; // anonymous local
 
     storage_live(_8)

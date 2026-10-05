@@ -144,6 +144,10 @@ where
 
 struct () {}
 
+struct str {
+  _0: [u8],
+}
+
 pub struct test_crate::Foo::x86_64-pc-windows-msvc {
   x: u64,
 }

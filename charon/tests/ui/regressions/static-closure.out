@@ -136,10 +136,14 @@ struct (_, _)::<&'_ i32, &'_ i32> {
   _1: &'_ i32,
 }
 
-pub const test_crate::foo::{impl Fn<(i32,)> for test_crate::foo::{closure}::<u8>}::call::<u8>::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 114u8, 101u8, 103u8, 114u8, 101u8, 115u8, 115u8, 105u8, 111u8, 110u8, 115u8, 47u8, 115u8, 116u8, 97u8, 116u8, 105u8, 99u8, 45u8, 99u8, 108u8, 111u8, 115u8, 117u8, 114u8, 101u8, 46u8, 114u8, 115u8] } with_metadata(38usize)
+// Full name: test_crate::filename#17
+pub static filename: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x72, 0x65, 0x67, 0x72, 0x65, 0x73, 0x73, 0x69, 0x6f, 0x6e, 0x73, 0x2f, 0x73, 0x74, 0x61, 0x74, 0x69, 0x63, 0x2d, 0x63, 0x6c, 0x6f, 0x73, 0x75, 0x72, 0x65, 0x2e, 0x72, 0x73, 0x00) with_metadata(38usize)
 
-// Full name: test_crate::BAR::{impl Fn<(i32,)> for test_crate::BAR::{closure}}::call::{promoted_const}
-pub const test_crate::BAR::impl_Fn_for_closure::call::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 114u8, 101u8, 103u8, 114u8, 101u8, 115u8, 115u8, 105u8, 111u8, 110u8, 115u8, 47u8, 115u8, 116u8, 97u8, 116u8, 105u8, 99u8, 45u8, 99u8, 108u8, 111u8, 115u8, 117u8, 114u8, 101u8, 46u8, 114u8, 115u8] } with_metadata(38usize)
+// Full name: test_crate::foo::{impl Fn<(i32,)> for test_crate::foo::{closure}::<u8>}::call::<u8>::{promoted_const#18}
+pub static {impl Fn<(i32,)> for test_crate::foo::{closure}::<u8>}::call::<u8>::{promoted_const#18}: Location::<'_> = Location::<'_> { 0: NonNull::<str> { 0: &raw const filename with_metadata(38usize) }, 1: 6u32, 2: 22u32, 3: PhantomData::<&'_ str> {  } }
+
+// Full name: test_crate::BAR::{impl Fn<(i32,)> for test_crate::BAR::{closure}}::call::{promoted_const#19}
+pub static impl_Fn_for_closure::call::{promoted_const#19}: Location::<'_> = Location::<'_> { 0: NonNull::<str> { 0: &raw const filename with_metadata(38usize) }, 1: 3u32, 2: 27u32, 3: PhantomData::<&'_ str> {  } }
 
 struct test_crate::BAR::{closure} {}
 
@@ -170,11 +174,7 @@ fn impl_Fn_for_closure::call<'_0>(_1: &'_0 test_crate::BAR::{closure}, tupled_ar
     let _21: &'12 i32; // anonymous local
     let _22: &'23 i32; // anonymous local
     let _23: i32; // anonymous local
-    let _24: *const str is !null; // anonymous local
-    let _25: NonNull::<str>; // anonymous local
-    let _26: PhantomData::<&'_ str>; // anonymous local
-    let _27: Location::<'_>; // anonymous local
-    let _28: &'22 Location::<'_>; // anonymous local
+    let _24: &'static Location::<'_>; // anonymous local
 
     storage_live(_21)
     storage_live(_22)
@@ -227,10 +227,6 @@ fn impl_Fn_for_closure::call<'_0>(_1: &'_0 test_crate::BAR::{closure}, tupled_ar
         storage_dead(a)
         storage_dead(tupled_args)
         storage_dead(_1)
-        storage_dead(_28)
-        storage_dead(_27)
-        storage_dead(_26)
-        storage_dead(_25)
         storage_dead(_24)
         storage_dead(_23)
         storage_dead(_22)
@@ -256,16 +252,8 @@ fn impl_Fn_for_closure::call<'_0>(_1: &'_0 test_crate::BAR::{closure}, tupled_ar
     storage_live(_19)
     _19 = Option::<Arguments::<'_>>::None {  }
     storage_live(_24)
-    _24 = &raw const test_crate::BAR::impl_Fn_for_closure::call::{promoted_const} with_metadata(const 38usize)
-    storage_live(_25)
-    _25 = NonNull::<str> { 0: move _24 }
-    storage_live(_26)
-    _26 = PhantomData::<&'_ str> {  }
-    storage_live(_27)
-    _27 = Location::<'_> { 0: move _25, 1: const 3u32, 2: const 27u32, 3: move _26 }
-    storage_live(_28)
-    _28 = &_27
-    _13 = assert_failed::<i32, i32><'18, '19, '20>(move _14, move _15, move _17, move _19, move _28)
+    _24 = &impl_Fn_for_closure::call::{promoted_const#19}
+    _13 = assert_failed::<i32, i32><'20, '21, '22>(move _14, move _15, move _17, move _19, move _24)
     ↳⚡ storage_dead(_20)
         storage_dead(_19)
         storage_dead(_18)
@@ -316,7 +304,7 @@ fn call_once(_1: test_crate::BAR::{closure}, _2: (i32,))
     storage_live(_3)
     _0 = ()
     _3 = &mut _1
-    _0 = call_mut<'3>(move _3, move _2)
+    _0 = call_mut<'5>(move _3, move _2)
     ↳⚡ storage_dead(_3)
         storage_dead(_2)
         storage_dead(_1)
@@ -398,11 +386,7 @@ fn {impl Fn<(i32,)> for test_crate::foo::{closure}::<u8>}::call::<u8><'_0>(_1: &
     let _21: &'12 i32; // anonymous local
     let _22: &'23 i32; // anonymous local
     let _23: i32; // anonymous local
-    let _24: *const str is !null; // anonymous local
-    let _25: NonNull::<str>; // anonymous local
-    let _26: PhantomData::<&'_ str>; // anonymous local
-    let _27: Location::<'_>; // anonymous local
-    let _28: &'22 Location::<'_>; // anonymous local
+    let _24: &'static Location::<'_>; // anonymous local
 
     storage_live(_21)
     storage_live(_22)
@@ -455,10 +439,6 @@ fn {impl Fn<(i32,)> for test_crate::foo::{closure}::<u8>}::call::<u8><'_0>(_1: &
         storage_dead(a)
         storage_dead(tupled_args)
         storage_dead(_1)
-        storage_dead(_28)
-        storage_dead(_27)
-        storage_dead(_26)
-        storage_dead(_25)
         storage_dead(_24)
         storage_dead(_23)
         storage_dead(_22)
@@ -484,16 +464,8 @@ fn {impl Fn<(i32,)> for test_crate::foo::{closure}::<u8>}::call::<u8><'_0>(_1: &
     storage_live(_19)
     _19 = Option::<Arguments::<'_>>::None {  }
     storage_live(_24)
-    _24 = &raw const test_crate::foo::{impl Fn<(i32,)> for test_crate::foo::{closure}::<u8>}::call::<u8>::{promoted_const} with_metadata(const 38usize)
-    storage_live(_25)
-    _25 = NonNull::<str> { 0: move _24 }
-    storage_live(_26)
-    _26 = PhantomData::<&'_ str> {  }
-    storage_live(_27)
-    _27 = Location::<'_> { 0: move _25, 1: const 6u32, 2: const 22u32, 3: move _26 }
-    storage_live(_28)
-    _28 = &_27
-    _13 = assert_failed::<i32, i32><'18, '19, '20>(move _14, move _15, move _17, move _19, move _28)
+    _24 = &{impl Fn<(i32,)> for test_crate::foo::{closure}::<u8>}::call::<u8>::{promoted_const#18}
+    _13 = assert_failed::<i32, i32><'20, '21, '22>(move _14, move _15, move _17, move _19, move _24)
     ↳⚡ storage_dead(_20)
         storage_dead(_19)
         storage_dead(_18)
@@ -528,7 +500,7 @@ fn foo::<u8>()
     _3 = &c
     storage_live(_4)
     _4 = (const 42i32,)
-    _2 = {impl Fn<(i32,)> for test_crate::foo::{closure}::<u8>}::call::<u8><'3>(move _3, move _4)
+    _2 = {impl Fn<(i32,)> for test_crate::foo::{closure}::<u8>}::call::<u8><'5>(move _3, move _4)
     ↳⚡ unwind_continue
     storage_dead(_4)
     storage_dead(_3)
@@ -567,7 +539,7 @@ fn main()
     _5 = &(*boo) with_metadata(copy boo.metadata)
     storage_live(_6)
     _6 = (const 42i32,)
-    _4 = Fn<(dyn Fn<(i32,), ImpliedClause1::ImpliedClause1::Output = ()> + '18), (i32,)>::call<'19>(move _5, move _6)
+    _4 = Fn<(dyn Fn<(i32,), ImpliedClause1::ImpliedClause1::Output = ()> + '20), (i32,)>::call<'21>(move _5, move _6)
     ↳⚡ unwind_continue
     storage_dead(_6)
     storage_dead(_5)

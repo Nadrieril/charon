@@ -57,6 +57,10 @@ where
     return
 }
 
+struct str {
+  _0: [u8],
+}
+
 // Full name: test_crate::type_id_u32
 fn type_id_u32() -> TypeId
 {

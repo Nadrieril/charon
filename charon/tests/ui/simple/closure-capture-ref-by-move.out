@@ -16,6 +16,10 @@ pub trait Sized<Self>
 
 struct () {}
 
+struct str {
+  _0: [u8],
+}
+
 struct (_, _)<A, B>
 where
     TraitClause0: (A: Sized),
@@ -78,7 +82,7 @@ fn foo()
     _5 = &mut closure
     storage_live(_6)
     _6 = ()
-    _4 = call_mut<'11, '12>(move _5, move _6)
+    _4 = call_mut<'20, '21>(move _5, move _6)
     ↳⚡ unwind_continue
     storage_dead(_6)
     storage_dead(_5)

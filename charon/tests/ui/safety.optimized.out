@@ -411,16 +411,16 @@ where
     TypeOutlives1: A: '_0,
 = <opaque>
 
+struct str {
+  _0: [u8],
+}
+
 struct (_, _)<A, B>
 where
     TraitClause0: (A: Sized),
 {
   _0: A,
   _1: B,
-}
-
-struct str {
-  _0: [u8],
 }
 
 // Full name: test_crate::S
@@ -640,13 +640,15 @@ union Foo {
 
 // Full name: test_crate::{impl Clone for Foo}::clone
 #[inline(hint)]
-pub fn clone<'_0>(self: &'_0 Foo) -> Foo
+pub fn clone<'_0>(self: &'_0 Foo, caller_location: &'static Location<'static>) -> Foo
 {
     let _0: Foo; // return
     let self: &'1 Foo; // arg #1
+    let caller_location: &'static Location<'static>; // arg #2
 
     storage_live(_0)
     _0 = copy (*self)
+    storage_dead(caller_location)
     storage_dead(self)
     return
 }
@@ -1356,7 +1358,7 @@ unsafe fn safe_call_target_feature_fn_in_closure()
     let _2: (); // anonymous local
     let _3: &'2 test_crate::safe_call_target_feature_fn_in_closure::{closure}; // anonymous local
     let _4: &'3 test_crate::safe_call_target_feature_fn_in_closure::{closure}; // anonymous local
-    let _5: &'5 test_crate::safe_call_target_feature_fn_in_closure::{closure}; // anonymous local
+    let _5: &'14 test_crate::safe_call_target_feature_fn_in_closure::{closure}; // anonymous local
     let _6: test_crate::safe_call_target_feature_fn_in_closure::{closure}; // anonymous local
 
     storage_live(_4)
@@ -1373,7 +1375,7 @@ unsafe fn safe_call_target_feature_fn_in_closure()
     _1 = &(*_3)
     storage_live(_2)
     _2 = ()
-    _0 = {impl Fn<()> for test_crate::safe_call_target_feature_fn_in_closure::{closure}}::call<'4>(move _1, move _2)
+    _0 = {impl Fn<()> for test_crate::safe_call_target_feature_fn_in_closure::{closure}}::call<'13>(move _1, move _2)
     ↳⚡ storage_dead(_3)
         unwind_continue
     storage_dead(_2)
@@ -1417,7 +1419,7 @@ unsafe fn safe_call_target_feature_fn_in_inline_closure()
     let _2: (); // anonymous local
     let _3: &'2 test_crate::safe_call_target_feature_fn_in_inline_closure::{closure}; // anonymous local
     let _4: &'3 test_crate::safe_call_target_feature_fn_in_inline_closure::{closure}; // anonymous local
-    let _5: &'5 test_crate::safe_call_target_feature_fn_in_inline_closure::{closure}; // anonymous local
+    let _5: &'14 test_crate::safe_call_target_feature_fn_in_inline_closure::{closure}; // anonymous local
     let _6: test_crate::safe_call_target_feature_fn_in_inline_closure::{closure}; // anonymous local
 
     storage_live(_4)
@@ -1434,7 +1436,7 @@ unsafe fn safe_call_target_feature_fn_in_inline_closure()
     _1 = &(*_3)
     storage_live(_2)
     _2 = ()
-    _0 = {impl Fn<()> for test_crate::safe_call_target_feature_fn_in_inline_closure::{closure}}::call<'4>(move _1, move _2)
+    _0 = {impl Fn<()> for test_crate::safe_call_target_feature_fn_in_inline_closure::{closure}}::call<'13>(move _1, move _2)
     ↳⚡ storage_dead(_3)
         unwind_continue
     storage_dead(_2)

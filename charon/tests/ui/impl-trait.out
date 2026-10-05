@@ -1,5 +1,9 @@
 # Final LLBC before serialization:
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::marker::MetaSized
 #[fundamental]
 #[lang_item(MetaSized)]
@@ -25,7 +29,7 @@ pub trait Clone<Self>
 }
 
 // Full name: core::clone::impls::{impl Clone for u32}::clone
-pub fn impl_Clone_for_u32::clone<'_0>(_1: &'_0 u32) -> u32
+pub fn impl_Clone_for_u32::clone<'_0>(_1: &'_0 u32, _2: &'static Location<'static>) -> u32
 = <opaque>
 
 // Full name: core::clone::impls::{impl Clone for u32}
@@ -37,7 +41,7 @@ impl "impl_Clone_for_u32" Clone for u32 {
 
 // Full name: core::clone::impls::{impl Clone for &'_0 T}::clone
 #[diagnostic_item("noop_method_clone")]
-pub fn {impl Clone for &'_0 T}::clone<'_0, '_1, T>(_1: &'_1 &'_0 T) -> &'_0 T
+pub fn {impl Clone for &'_0 T}::clone<'_0, '_1, T>(_1: &'_1 &'_0 T, _2: &'static Location<'static>) -> &'_0 T
 where
     TypeOutlives0: T: '_0,
     RegionOutlives0: '_0: '_1,
@@ -53,6 +57,10 @@ where
     non-dyn-compatible
 }
 
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
 struct () {}
 
 // Full name: core::marker::Destruct
@@ -61,6 +69,14 @@ pub trait Destruct<Self>
 {
     fn drop_glue<'_0_1>;
     non-dyn-compatible
+}
+
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
+
+struct str {
+  _0: [u8],
 }
 
 struct (_,)<A> {
@@ -131,6 +147,11 @@ fn mk_foo()
     return
 }
 
+// Full name: test_crate::filename#11
+pub static filename: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x69, 0x6d, 0x70, 0x6c, 0x2d, 0x74, 0x72, 0x61, 0x69, 0x74, 0x2e, 0x72, 0x73, 0x00) with_metadata(22usize)
+
+pub static test_crate::use_foo::{promoted_const#12}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(22usize) }, 1: 21u32, 2: 13u32, 3: PhantomData {  } }
+
 // Full name: test_crate::use_foo
 fn use_foo()
 {
@@ -140,6 +161,7 @@ fn use_foo()
     let _3: &'1 u32; // anonymous local
     let _4: &'2 u32; // anonymous local
     let _5: &'4 (); // anonymous local
+    let _6: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     _0 = ()
@@ -152,17 +174,20 @@ fn use_foo()
     storage_live(_4)
     storage_live(_5)
     _5 = &foo
-    _4 = get_ty<'6>(move _5)
+    _4 = get_ty<'19>(move _5)
     ↳⚡ unwind_continue
     _3 = &(*_4) with_metadata(copy _4.metadata)
     storage_dead(_5)
-    _2 = impl_Clone_for_u32::clone<'9>(move _3)
+    storage_live(_6)
+    _6 = &test_crate::use_foo::{promoted_const#12}
+    _2 = impl_Clone_for_u32::clone<'26>(move _3, move _6)
     ↳⚡ unwind_continue
     storage_dead(_3)
     storage_dead(_4)
     storage_dead(_2)
     _0 = ()
     storage_dead(foo)
+    storage_dead(_6)
     return
 }
 
@@ -210,6 +235,8 @@ impl "impl_RPITIT_for_unit" RPITIT for () {
     non-dyn-compatible
 }
 
+pub static test_crate::use_tait::{promoted_const#13}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(22usize) }, 1: 37u32, 2: 13u32, 3: PhantomData {  } }
+
 // Full name: test_crate::use_tait
 fn use_tait<T>()
 where
@@ -222,6 +249,7 @@ where
     let _3: &'1 TraitClause1::ImpliedClause2::Type; // anonymous local
     let _4: &'2 TraitClause1::ImpliedClause2::Type; // anonymous local
     let _5: &'4 TraitClause1::make_foo_ty; // anonymous local
+    let _6: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     _0 = ()
@@ -234,27 +262,33 @@ where
     storage_live(_4)
     storage_live(_5)
     _5 = &foo
-    _4 = TraitClause1::ImpliedClause2::get_ty<'5>(move _5)
-    ↳⚡ conditional_drop[{built_in impl Destruct for TraitClause1::make_foo_ty}::drop_glue<'6>] foo
-        ↳⚡ unwind_terminate
+    _4 = TraitClause1::ImpliedClause2::get_ty<'18>(move _5)
+    ↳⚡ conditional_drop[{built_in impl Destruct for TraitClause1::make_foo_ty}::drop_glue<'19>] foo
+        ↳⚡ storage_dead(_6)
+            unwind_terminate
         unwind_continue
     _3 = &(*_4) with_metadata(copy _4.metadata)
     storage_dead(_5)
-    _2 = TraitClause1::ImpliedClause2::ImpliedClause2::clone<'7>(move _3)
-    ↳⚡ conditional_drop[{built_in impl Destruct for TraitClause1::make_foo_ty}::drop_glue<'6>] foo
-        ↳⚡ unwind_terminate
+    storage_live(_6)
+    _6 = &test_crate::use_tait::{promoted_const#13}
+    _2 = TraitClause1::ImpliedClause2::ImpliedClause2::clone<'24>(move _3, move _6)
+    ↳⚡ conditional_drop[{built_in impl Destruct for TraitClause1::make_foo_ty}::drop_glue<'19>] foo
+        ↳⚡ storage_dead(_6)
+            unwind_terminate
         unwind_continue
     storage_dead(_3)
-    conditional_drop[{built_in impl Destruct for TraitClause1::ImpliedClause2::Type}::drop_glue<'8>] _2
-    ↳⚡ conditional_drop[{built_in impl Destruct for TraitClause1::make_foo_ty}::drop_glue<'6>] foo
-        ↳⚡ unwind_terminate
+    conditional_drop[{built_in impl Destruct for TraitClause1::ImpliedClause2::Type}::drop_glue<'25>] _2
+    ↳⚡ conditional_drop[{built_in impl Destruct for TraitClause1::make_foo_ty}::drop_glue<'19>] foo
+        ↳⚡ storage_dead(_6)
+            unwind_terminate
         unwind_continue
     storage_dead(_4)
     storage_dead(_2)
     _0 = ()
-    conditional_drop[{built_in impl Destruct for TraitClause1::make_foo_ty}::drop_glue<'9>] foo
+    conditional_drop[{built_in impl Destruct for TraitClause1::make_foo_ty}::drop_glue<'26>] foo
     ↳⚡ unwind_continue
     storage_dead(foo)
+    storage_dead(_6)
     return
 }
 
@@ -321,8 +355,8 @@ pub fn use_wrap()
     let _5: &'19 u32; // anonymous local
     let _6: &'20 u32; // anonymous local
     let _7: &'21 u32; // anonymous local
-    let _8: &'22 u32; // anonymous local
-    let _9: &'37 u32; // anonymous local
+    let _8: &'31 u32; // anonymous local
+    let _9: &'50 u32; // anonymous local
     let _10: u32; // anonymous local
 
     storage_live(_0)
@@ -349,13 +383,13 @@ pub fn use_wrap()
     _6 = &(*_7)
     _5 = &(*_6)
     _4 = (move _5,)
-    _2 = call_once<'27, u32>[{built_in impl Sized for u32}](move _3, move _4)
+    _2 = call_once<'40, u32>[{built_in impl Sized for u32}](move _3, move _4)
     ↳⚡ storage_dead(_7)
         unwind_continue
     storage_dead(_5)
     storage_dead(_4)
     storage_dead(_3)
-    set_type(typeof(_2) <= WrapClone<&'29 u32>[{built_in impl Sized for &'29 u32}, {impl Clone for &'_0 T}<'29, u32>])
+    set_type(typeof(_2) <= WrapClone<&'42 u32>[{built_in impl Sized for &'42 u32}, {impl Clone for &'_0 T}<'42, u32>])
     storage_dead(_6)
     storage_dead(_2)
     _0 = ()

@@ -1,5 +1,19 @@
 # Final LLBC before serialization:
 
+// Full name: core::marker::MetaSized
+#[fundamental]
+#[lang_item(MetaSized)]
+pub trait MetaSized<Self>
+
+// Full name: core::marker::Sized
+#[fundamental]
+#[lang_item(Sized)]
+pub trait Sized<Self>
+{
+    proof ImpliedClause0: (Self: MetaSized)
+    non-dyn-compatible
+}
+
 struct () {}
 
 // Full name: core::ptr::metadata::from_raw_parts::<u8, ()>
@@ -78,6 +92,10 @@ pub fn null::<u8>() -> *const u8
     storage_dead(_2)
     storage_dead(_1)
     return
+}
+
+struct str {
+  _0: [u8],
 }
 
 // Full name: test_crate::null_ptr

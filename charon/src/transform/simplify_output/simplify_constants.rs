@@ -84,7 +84,10 @@ fn transform_constant_expr(
         cexpr @ (ConstantExprKind::Ref(bval, metadata)
         | ConstantExprKind::Ptr(_, bval, metadata)) => {
             let rk = cexpr.as_ptr().map(|(rk, _, _)| *rk);
-            let bval_is_sized = bval.ty().get_ptr_metadata(ctx.get_crate()).is_none();
+            // A pointer without metadata points to a sized value, even when the type
+            // declaration is absent and `get_ptr_metadata` cannot establish that.
+            let bval_is_sized =
+                metadata.is_none() || bval.ty().get_ptr_metadata(ctx.get_crate()).is_none();
 
             let place = match bval.kind() {
                 ConstantExprKind::Global(global_ref) => {

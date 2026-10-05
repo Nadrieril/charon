@@ -7,9 +7,22 @@ opaque type core::marker::MetaSized::{vtable}
 #[lang_item(MetaSized)]
 pub trait MetaSized<Self>
 
+// Full name: core::marker::Sized
+#[fundamental]
+#[lang_item(Sized)]
+pub trait Sized<Self>
+{
+    proof ImpliedClause0: (Self: MetaSized)
+    non-dyn-compatible
+}
+
 struct () {}
 
 vtable core::marker::MetaSized::{vtable}::<Struct>: core::marker::MetaSized::{vtable} = Opaque(VTable was chosen to be opaque)
+
+struct str {
+  _0: [u8],
+}
 
 struct (_, _)::<i32, bool> {
   _0: i32,
@@ -61,7 +74,7 @@ pub fn dflt::<Struct><'_0>(self: &'_0 Struct) -> i32
     storage_live(_2)
     storage_live(_3)
     _3 = &(*self)
-    _2 = base<'4>(move _3)
+    _2 = base<'6>(move _3)
     ↳⚡ storage_dead(_4)
         storage_dead(self)
         unwind_continue
@@ -148,7 +161,7 @@ pub fn main()
     let _6: &'10 Struct; // anonymous local
     let _7: fn(&'8 (dyn Trait + '9)) -> i32; // anonymous local
     let _8: &'11 Struct; // anonymous local
-    let _9: &'20 Struct; // anonymous local
+    let _9: &'22 Struct; // anonymous local
     let _10: Struct; // anonymous local
 
     storage_live(_8)

@@ -14,6 +14,10 @@ pub trait Sized<Self>
     non-dyn-compatible
 }
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::clone::Clone
 #[lang_item(Clone)]
 #[diagnostic_item("Clone")]
@@ -30,10 +34,6 @@ where
     TraitClause0: (T: Sized),
     TraitClause1: (T: Clone),
 = <opaque>
-
-// Full name: core::panic::location::Location
-#[lang_item(PanicLocation)]
-pub opaque type Location<'a>
 
 // Full name: core::ops::index::Index
 #[lang_item(Index)]
@@ -60,7 +60,7 @@ where
 = <opaque>
 
 // Full name: core::clone::impls::{impl Clone for u8}::clone
-pub fn clone<'_0>(_1: &'_0 u8) -> u8
+pub fn clone<'_0>(_1: &'_0 u8, _2: &'static Location<'static>) -> u8
 = <opaque>
 
 // Full name: core::clone::impls::{impl Clone for u8}
@@ -187,6 +187,10 @@ where
 }
 
 struct () {}
+
+struct str {
+  _0: [u8],
+}
 
 // Full name: test_crate::index_array_generic
 pub fn index_array_generic<const N : usize>(s: [u32; N], i: usize) -> u32

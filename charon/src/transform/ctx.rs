@@ -7,6 +7,7 @@ use crate::pretty::FmtWithCtx;
 use crate::transform::CowBox;
 use crate::ullbc_ast;
 use std::cell::RefCell;
+use std::collections::{HashMap, HashSet};
 use std::{fmt, mem};
 
 /// Simpler context used for rustc-independent code transformation. This only depends on rustc for
@@ -18,6 +19,14 @@ pub struct TransformCtx {
     pub translated: TranslatedCrate,
     /// Context for tracking and reporting errors.
     pub errors: RefCell<ErrorCtx>,
+    /// rustc's call-site constants, recorded before we decide which calls need them.
+    pub caller_locations: HashMap<(FunDeclId, ullbc_ast::BlockId), ConstantExpr>,
+    /// A location at each function's definition, for function-pointer decay shims.
+    pub definition_locations: HashMap<FunDeclId, ConstantExpr>,
+    /// Functions for which rustc enables `#[track_caller]`, including inherited attributes.
+    pub track_caller_funs: HashSet<FunDeclId>,
+    /// Trait methods whose convention must carry a location because any known impl does.
+    pub track_caller_methods: HashSet<(TraitDeclId, TraitMethodId)>,
 }
 
 /// A pass that modifies ullbc bodies and can be fused with previous passes so that we run all of

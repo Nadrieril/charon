@@ -18,6 +18,7 @@
   - [Polymorphic vs Monomorphic Code]()
   - [Explicit Drops]()
   - [Constant (Un)evaluation]()
+  - [Multi-Target Translation]()
   - [Treating `Box` as a Builtin]()
   - [Free vs Bound Variables]()
 - [Reconstructed Information]()

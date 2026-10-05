@@ -237,7 +237,7 @@ where
     _0 = ()
     _2 = as_mut_slice<'_, T, N>[TraitClause0, {built_in impl Destruct for T}](move _1)
     ↳⚡ undefined_behavior
-    _0 = drop_glue<'6, [T]>[impl_Destruct_for_slice<T>[TraitClause0, TraitClause1], impl_Destruct_for_slice<T>[TraitClause0, TraitClause1]](move _2)
+    _0 = drop_glue<'18, [T]>[impl_Destruct_for_slice<T>[TraitClause0, TraitClause1], impl_Destruct_for_slice<T>[TraitClause0, TraitClause1]](move _2)
     ↳⚡ storage_dead(_2)
         storage_dead(_1)
         unwind_continue
@@ -272,7 +272,11 @@ fn use_box(_1: Box<u32>[{built_in impl MetaSized for u32}, {built_in impl Sized 
     return
 }
 
-pub const test_crate::main::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 115u8, 105u8, 109u8, 112u8, 108u8, 101u8, 47u8, 99u8, 111u8, 110u8, 100u8, 105u8, 116u8, 105u8, 111u8, 110u8, 97u8, 108u8, 45u8, 100u8, 114u8, 111u8, 112u8, 46u8, 114u8, 115u8] } with_metadata(35usize)
+// Full name: test_crate::filename#7
+pub static filename: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x73, 0x69, 0x6d, 0x70, 0x6c, 0x65, 0x2f, 0x63, 0x6f, 0x6e, 0x64, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x61, 0x6c, 0x2d, 0x64, 0x72, 0x6f, 0x70, 0x2e, 0x72, 0x73, 0x00) with_metadata(35usize)
+
+// Full name: test_crate::main::{promoted_const#8}
+pub static {promoted_const}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(35usize) }, 1: 5u32, 2: 13u32, 3: PhantomData {  } }
 
 // Full name: test_crate::main
 fn main()
@@ -282,26 +286,14 @@ fn main()
     let _2: bool; // anonymous local
     let _3: (); // anonymous local
     let _4: Box<u32>[{built_in impl MetaSized for u32}, {built_in impl Sized for Global}, {built_in impl Destruct for u32}, {built_in impl Destruct for Global}]; // anonymous local
-    let _5: *const str is !null; // anonymous local
-    let _6: NonNull<str>[{built_in impl Destruct for str}]; // anonymous local
-    let _7: PhantomData<&'10 str>[{built_in impl Destruct for &'10 str}]; // anonymous local
-    let _8: Location<'5>; // anonymous local
-    let _9: &'3 Location<'4>; // anonymous local
+    let _5: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     _0 = ()
     storage_live(b)
     storage_live(_5)
-    _5 = &raw const test_crate::main::{promoted_const} with_metadata(const 35usize)
-    storage_live(_6)
-    _6 = NonNull { 0: move _5 }
-    storage_live(_7)
-    _7 = PhantomData {  }
-    storage_live(_8)
-    _8 = Location { 0: move _6, 1: const 5u32, 2: const 13u32, 3: move _7 }
-    storage_live(_9)
-    _9 = &_8
-    b = new<u32>[{built_in impl Sized for u32}, {built_in impl Destruct for u32}](const 1u32, move _9)
+    _5 = &{promoted_const}
+    b = new<u32>[{built_in impl Sized for u32}, {built_in impl Destruct for u32}](const 1u32, move _5)
     ↳⚡ unwind_continue
     storage_live(_2)
     _2 = const false
@@ -319,13 +311,9 @@ fn main()
     }
     storage_dead(_2)
     // `b` is dropped implicitly here
-    conditional_drop[impl_Destruct_for_Box::drop_glue<'12, u32, Global>[{built_in impl MetaSized for u32}, {built_in impl Sized for Global}, {built_in impl Destruct for u32}, {built_in impl Destruct for Global}]] b
+    conditional_drop[impl_Destruct_for_Box::drop_glue<'17, u32, Global>[{built_in impl MetaSized for u32}, {built_in impl Sized for Global}, {built_in impl Destruct for u32}, {built_in impl Destruct for Global}]] b
     ↳⚡ unwind_continue
     storage_dead(b)
-    storage_dead(_9)
-    storage_dead(_8)
-    storage_dead(_7)
-    storage_dead(_6)
     storage_dead(_5)
     return
 }

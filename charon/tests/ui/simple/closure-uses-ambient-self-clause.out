@@ -24,6 +24,10 @@ pub trait Destruct<Self>
     non-dyn-compatible
 }
 
+struct str {
+  _0: [u8],
+}
+
 struct (_,)<A> {
   _0: A,
 }
@@ -106,7 +110,7 @@ where
     let _4: TraitClause0::Item; // anonymous local
     let _5: &'2 {closure}<Self>[TraitClause0]; // anonymous local
     let _6: &'3 {closure}<Self>[TraitClause0]; // anonymous local
-    let _7: &'10 {closure}<Self>[TraitClause0]; // anonymous local
+    let _7: &'19 {closure}<Self>[TraitClause0]; // anonymous local
     let _8: {closure}<Self>[TraitClause0]; // anonymous local
 
     storage_live(_6)
@@ -125,22 +129,22 @@ where
     storage_live(_4)
     _4 = move i
     _3 = (move _4,)
-    _0 = call<'4, Self>[TraitClause0](move _2, move _3)
-    ↳⚡ conditional_drop[drop_glue<'5, TraitClause0::Item>] _3
+    _0 = call<'13, Self>[TraitClause0](move _2, move _3)
+    ↳⚡ conditional_drop[drop_glue<'14, TraitClause0::Item>] _3
         ↳⚡ storage_dead(_5)
             storage_dead(i)
             storage_dead(_8)
             storage_dead(_7)
             storage_dead(_6)
             unwind_terminate
-        conditional_drop[{built_in impl Destruct for TraitClause0::Item}::drop_glue<'7>] _4
+        conditional_drop[{built_in impl Destruct for TraitClause0::Item}::drop_glue<'16>] _4
         ↳⚡ storage_dead(_5)
             storage_dead(i)
             storage_dead(_8)
             storage_dead(_7)
             storage_dead(_6)
             unwind_terminate
-        conditional_drop[{built_in impl Destruct for TraitClause0::Item}::drop_glue<'9>] i
+        conditional_drop[{built_in impl Destruct for TraitClause0::Item}::drop_glue<'18>] i
         ↳⚡ storage_dead(_5)
             storage_dead(i)
             storage_dead(_8)
@@ -150,8 +154,8 @@ where
         storage_dead(_5)
         storage_dead(i)
         unwind_continue
-    conditional_drop[{built_in impl Destruct for TraitClause0::Item}::drop_glue<'6>] _4
-    ↳⚡ conditional_drop[{built_in impl Destruct for TraitClause0::Item}::drop_glue<'9>] i
+    conditional_drop[{built_in impl Destruct for TraitClause0::Item}::drop_glue<'15>] _4
+    ↳⚡ conditional_drop[{built_in impl Destruct for TraitClause0::Item}::drop_glue<'18>] i
         ↳⚡ storage_dead(_5)
             storage_dead(i)
             storage_dead(_8)
@@ -164,7 +168,7 @@ where
     storage_dead(_4)
     storage_dead(_3)
     storage_dead(_2)
-    conditional_drop[{built_in impl Destruct for TraitClause0::Item}::drop_glue<'8>] i
+    conditional_drop[{built_in impl Destruct for TraitClause0::Item}::drop_glue<'17>] i
     ↳⚡ storage_dead(_5)
         storage_dead(i)
         unwind_continue

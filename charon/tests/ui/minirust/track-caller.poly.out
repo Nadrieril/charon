@@ -1,0 +1,115 @@
+# Final LLBC before serialization:
+
+// Full name: core::marker::MetaSized
+#[fundamental]
+#[lang_item(MetaSized)]
+pub trait MetaSized<Self>
+
+// Full name: core::marker::Sized
+#[fundamental]
+#[lang_item(Sized)]
+pub trait Sized<Self>
+{
+    proof ImpliedClause0: (Self: MetaSized)
+    non-dyn-compatible
+}
+
+// Full name: core::convert::From
+#[lang_item(From)]
+#[diagnostic_item("From")]
+pub trait From<Self, T>
+{
+    proof ImpliedClause0: (Self: Sized)
+    proof ImpliedClause1: (T: Sized)
+    fn from;
+    non-dyn-compatible
+}
+
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
+// Full name: core::convert::{impl Into<U> for T}::into
+#[track_caller]
+pub fn into<T, U>(self: T, caller_location: &'static Location<'static>) -> U
+where
+    TraitClause0: (T: Sized),
+    TraitClause1: (U: Sized),
+    TraitClause2: (U: From<T>),
+{
+    let _0: U; // return
+    let self: T; // arg #1
+    let caller_location: &'static Location<'static>; // arg #2
+    let _3: T; // anonymous local
+
+    storage_live(_0)
+    storage_live(_3)
+    _3 = move self
+    _0 = TraitClause2::from(move _3)
+    ↳⚡ unwind_continue
+    storage_dead(_3)
+    return
+}
+
+// Full name: core::convert::num::{impl From<bool> for u32}::from
+pub fn from(b: bool) -> u32
+{
+    let _0: u32; // return
+    let b: bool; // arg #1
+    let _2: bool; // anonymous local
+
+    storage_live(_0)
+    storage_live(_2)
+    _2 = copy b
+    _0 = cast<bool, u32>(move _2)
+    storage_dead(_2)
+    return
+}
+
+// Full name: core::convert::num::{impl From<bool> for u32}
+impl "impl_From_bool_for_u32" From<bool> for u32 {
+    proof ImpliedClause0: (u32: Sized) = {built_in impl Sized for u32}
+    proof ImpliedClause1: (bool: Sized) = {built_in impl Sized for bool}
+    fn from = from
+    non-dyn-compatible
+}
+
+// Full name: core::marker::PhantomData
+#[lang_item(PhantomData)]
+pub struct PhantomData<T> {}
+
+// Full name: core::ptr::non_null::NonNull
+#[lang_item(NonNull)]
+pub opaque type NonNull<T>
+
+struct str {
+  _0: [u8],
+}
+
+// Full name: test_crate::filename#1
+pub static filename: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x6d, 0x69, 0x6e, 0x69, 0x72, 0x75, 0x73, 0x74, 0x2f, 0x74, 0x72, 0x61, 0x63, 0x6b, 0x2d, 0x63, 0x61, 0x6c, 0x6c, 0x65, 0x72, 0x2e, 0x72, 0x73, 0x00) with_metadata(33usize)
+
+// Full name: test_crate::convert::{promoted_const#2}
+pub static {promoted_const}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(33usize) }, 1: 38u32, 2: 5u32, 3: PhantomData {  } }
+
+// Full name: test_crate::convert
+fn convert(value: bool) -> u32
+{
+    let _0: u32; // return
+    let value: bool; // arg #1
+    let _2: bool; // anonymous local
+    let _3: &'static Location<'static>; // anonymous local
+
+    storage_live(_0)
+    storage_live(_2)
+    _2 = copy value
+    storage_live(_3)
+    _3 = &{promoted_const}
+    _0 = into<bool, u32>[{built_in impl Sized for bool}, {built_in impl Sized for u32}, impl_From_bool_for_u32](move _2, move _3)
+    ↳⚡ unwind_continue
+    storage_dead(_2)
+    return
+}
+
+
+

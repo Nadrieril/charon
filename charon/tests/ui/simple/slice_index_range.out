@@ -34,7 +34,7 @@ fn core::slice::index::slice_index_fail::do_panic::runtime(start: usize, len: us
     let _18: &'52 usize; // anonymous local
     let _19: &'53 usize; // anonymous local
     let _20: [u8; 57usize]; // anonymous local
-    let _21: &'68 [u8; 57usize]; // anonymous local
+    let _21: &'76 [u8; 57usize]; // anonymous local
 
     storage_live(_0)
     storage_live(_18)
@@ -54,7 +54,7 @@ fn core::slice::index::slice_index_fail::do_panic::runtime(start: usize, len: us
     storage_live(_11)
     _18 = copy args_6._0
     _11 = &(*_18)
-    _10 = new_display<'60, '62, usize>[{built_in impl Sized for usize}, {impl#7}](move _11)
+    _10 = new_display<'64, '66, usize>[{built_in impl Sized for usize}, {impl#7}](move _11)
     ↳⚡ storage_dead(_19)
         storage_dead(_18)
         storage_dead(args_9)
@@ -70,7 +70,7 @@ fn core::slice::index::slice_index_fail::do_panic::runtime(start: usize, len: us
     storage_live(_13)
     _19 = copy args_6._1
     _13 = &(*_19)
-    _12 = new_display<'64, '66, usize>[{built_in impl Sized for usize}, {impl#7}](move _13)
+    _12 = new_display<'72, '74, usize>[{built_in impl Sized for usize}, {impl#7}](move _13)
     ↳⚡ storage_dead(_19)
         storage_dead(_18)
         storage_dead(args_9)
@@ -97,7 +97,7 @@ fn core::slice::index::slice_index_fail::do_panic::runtime(start: usize, len: us
     storage_live(_17)
     _17 = &args_9
     _16 = &(*_17)
-    _5 = core::fmt::{Arguments<'a>}::new<'73, 57usize, 2usize>(move _14, move _16)
+    _5 = core::fmt::{Arguments<'a>}::new<'85, 57usize, 2usize>(move _14, move _16)
     ↳⚡ storage_dead(_19)
         storage_dead(_18)
         storage_dead(args_9)
@@ -112,7 +112,7 @@ fn core::slice::index::slice_index_fail::do_panic::runtime(start: usize, len: us
     storage_dead(_16)
     storage_dead(_15)
     storage_dead(_14)
-    _4 = panic_fmt<'75>(move _5, copy caller_location)
+    _4 = panic_fmt<'91>(move _5, copy caller_location)
     ↳⚡ storage_dead(_19)
         storage_dead(_18)
         storage_dead(args_9)
@@ -149,7 +149,7 @@ fn core::slice::index::slice_index_fail::do_panic#1::runtime(end: usize, len: us
     let _18: &'52 usize; // anonymous local
     let _19: &'53 usize; // anonymous local
     let _20: [u8; 55usize]; // anonymous local
-    let _21: &'68 [u8; 55usize]; // anonymous local
+    let _21: &'76 [u8; 55usize]; // anonymous local
 
     storage_live(_0)
     storage_live(_18)
@@ -169,7 +169,7 @@ fn core::slice::index::slice_index_fail::do_panic#1::runtime(end: usize, len: us
     storage_live(_11)
     _18 = copy args_6._0
     _11 = &(*_18)
-    _10 = new_display<'60, '62, usize>[{built_in impl Sized for usize}, {impl#7}](move _11)
+    _10 = new_display<'64, '66, usize>[{built_in impl Sized for usize}, {impl#7}](move _11)
     ↳⚡ storage_dead(_19)
         storage_dead(_18)
         storage_dead(args_9)
@@ -185,7 +185,7 @@ fn core::slice::index::slice_index_fail::do_panic#1::runtime(end: usize, len: us
     storage_live(_13)
     _19 = copy args_6._1
     _13 = &(*_19)
-    _12 = new_display<'64, '66, usize>[{built_in impl Sized for usize}, {impl#7}](move _13)
+    _12 = new_display<'72, '74, usize>[{built_in impl Sized for usize}, {impl#7}](move _13)
     ↳⚡ storage_dead(_19)
         storage_dead(_18)
         storage_dead(args_9)
@@ -212,7 +212,7 @@ fn core::slice::index::slice_index_fail::do_panic#1::runtime(end: usize, len: us
     storage_live(_17)
     _17 = &args_9
     _16 = &(*_17)
-    _5 = core::fmt::{Arguments<'a>}::new<'73, 55usize, 2usize>(move _14, move _16)
+    _5 = core::fmt::{Arguments<'a>}::new<'85, 55usize, 2usize>(move _14, move _16)
     ↳⚡ storage_dead(_19)
         storage_dead(_18)
         storage_dead(args_9)
@@ -227,7 +227,7 @@ fn core::slice::index::slice_index_fail::do_panic#1::runtime(end: usize, len: us
     storage_dead(_16)
     storage_dead(_15)
     storage_dead(_14)
-    _4 = panic_fmt<'75>(move _5, copy caller_location)
+    _4 = panic_fmt<'91>(move _5, copy caller_location)
     ↳⚡ storage_dead(_19)
         storage_dead(_18)
         storage_dead(args_9)
@@ -264,7 +264,7 @@ fn core::slice::index::slice_index_fail::do_panic#2::runtime(start: usize, end: 
     let _18: &'52 usize; // anonymous local
     let _19: &'53 usize; // anonymous local
     let _20: [u8; 40usize]; // anonymous local
-    let _21: &'68 [u8; 40usize]; // anonymous local
+    let _21: &'76 [u8; 40usize]; // anonymous local
 
     storage_live(_0)
     storage_live(_18)
@@ -284,7 +284,7 @@ fn core::slice::index::slice_index_fail::do_panic#2::runtime(start: usize, end: 
     storage_live(_11)
     _18 = copy args_6._0
     _11 = &(*_18)
-    _10 = new_display<'60, '62, usize>[{built_in impl Sized for usize}, {impl#7}](move _11)
+    _10 = new_display<'64, '66, usize>[{built_in impl Sized for usize}, {impl#7}](move _11)
     ↳⚡ storage_dead(_19)
         storage_dead(_18)
         storage_dead(args_9)
@@ -300,7 +300,7 @@ fn core::slice::index::slice_index_fail::do_panic#2::runtime(start: usize, end: 
     storage_live(_13)
     _19 = copy args_6._1
     _13 = &(*_19)
-    _12 = new_display<'64, '66, usize>[{built_in impl Sized for usize}, {impl#7}](move _13)
+    _12 = new_display<'72, '74, usize>[{built_in impl Sized for usize}, {impl#7}](move _13)
     ↳⚡ storage_dead(_19)
         storage_dead(_18)
         storage_dead(args_9)
@@ -327,7 +327,7 @@ fn core::slice::index::slice_index_fail::do_panic#2::runtime(start: usize, end: 
     storage_live(_17)
     _17 = &args_9
     _16 = &(*_17)
-    _5 = core::fmt::{Arguments<'a>}::new<'73, 40usize, 2usize>(move _14, move _16)
+    _5 = core::fmt::{Arguments<'a>}::new<'85, 40usize, 2usize>(move _14, move _16)
     ↳⚡ storage_dead(_19)
         storage_dead(_18)
         storage_dead(args_9)
@@ -342,7 +342,7 @@ fn core::slice::index::slice_index_fail::do_panic#2::runtime(start: usize, end: 
     storage_dead(_16)
     storage_dead(_15)
     storage_dead(_14)
-    _4 = panic_fmt<'75>(move _5, copy caller_location)
+    _4 = panic_fmt<'91>(move _5, copy caller_location)
     ↳⚡ storage_dead(_19)
         storage_dead(_18)
         storage_dead(args_9)
@@ -379,7 +379,7 @@ fn core::slice::index::slice_index_fail::do_panic#3::runtime(end: usize, len: us
     let _18: &'52 usize; // anonymous local
     let _19: &'53 usize; // anonymous local
     let _20: [u8; 55usize]; // anonymous local
-    let _21: &'68 [u8; 55usize]; // anonymous local
+    let _21: &'76 [u8; 55usize]; // anonymous local
 
     storage_live(_0)
     storage_live(_18)
@@ -399,7 +399,7 @@ fn core::slice::index::slice_index_fail::do_panic#3::runtime(end: usize, len: us
     storage_live(_11)
     _18 = copy args_6._0
     _11 = &(*_18)
-    _10 = new_display<'60, '62, usize>[{built_in impl Sized for usize}, {impl#7}](move _11)
+    _10 = new_display<'64, '66, usize>[{built_in impl Sized for usize}, {impl#7}](move _11)
     ↳⚡ storage_dead(_19)
         storage_dead(_18)
         storage_dead(args_9)
@@ -415,7 +415,7 @@ fn core::slice::index::slice_index_fail::do_panic#3::runtime(end: usize, len: us
     storage_live(_13)
     _19 = copy args_6._1
     _13 = &(*_19)
-    _12 = new_display<'64, '66, usize>[{built_in impl Sized for usize}, {impl#7}](move _13)
+    _12 = new_display<'72, '74, usize>[{built_in impl Sized for usize}, {impl#7}](move _13)
     ↳⚡ storage_dead(_19)
         storage_dead(_18)
         storage_dead(args_9)
@@ -442,7 +442,7 @@ fn core::slice::index::slice_index_fail::do_panic#3::runtime(end: usize, len: us
     storage_live(_17)
     _17 = &args_9
     _16 = &(*_17)
-    _5 = core::fmt::{Arguments<'a>}::new<'73, 55usize, 2usize>(move _14, move _16)
+    _5 = core::fmt::{Arguments<'a>}::new<'85, 55usize, 2usize>(move _14, move _16)
     ↳⚡ storage_dead(_19)
         storage_dead(_18)
         storage_dead(args_9)
@@ -457,7 +457,7 @@ fn core::slice::index::slice_index_fail::do_panic#3::runtime(end: usize, len: us
     storage_dead(_16)
     storage_dead(_15)
     storage_dead(_14)
-    _4 = panic_fmt<'75>(move _5, copy caller_location)
+    _4 = panic_fmt<'91>(move _5, copy caller_location)
     ↳⚡ storage_dead(_19)
         storage_dead(_18)
         storage_dead(args_9)
@@ -636,7 +636,7 @@ where
     _5 = move index
     storage_live(_6)
     _6 = &(*self) with_metadata(copy self.metadata)
-    _4 = TraitClause2::index<'6>(move _5, move _6, copy caller_location)
+    _4 = TraitClause2::index<'10>(move _5, move _6, copy caller_location)
     ↳⚡ storage_dead(caller_location)
         storage_dead(index)
         storage_dead(self)
@@ -980,7 +980,7 @@ where
             storage_live(_9)
             storage_live(_10)
             _10 = &(*slice) with_metadata(copy slice.metadata)
-            _9 = core::slice::{[T]}::len<'17, T>[TraitClause0](move _10)
+            _9 = core::slice::{[T]}::len<'30, T>[TraitClause0](move _10)
             ↳⚡ storage_dead(slice)
                 storage_dead(self)
                 unwind_continue
@@ -1080,7 +1080,7 @@ where
             storage_live(_9)
             storage_live(_10)
             _10 = &(*slice) with_metadata(copy slice.metadata)
-            _9 = core::slice::{[T]}::len<'18, T>[TraitClause0](move _10)
+            _9 = core::slice::{[T]}::len<'31, T>[TraitClause0](move _10)
             ↳⚡ storage_dead(slice)
                 storage_dead(self)
                 unwind_continue
@@ -1153,10 +1153,10 @@ fn impl_SliceIndex_slice_for_Range_usize::get_unchecked::precondition_check(star
     let _8: bool; // anonymous local
     let _9: usize; // anonymous local
     let _10: usize; // anonymous local
-    let msg: &'1 str; // local
+    let msg: &'0 str; // local
     let _12: !; // anonymous local
-    let _13: Arguments<'3>; // anonymous local
-    let _14: &'4 str; // anonymous local
+    let _13: Arguments<'2>; // anonymous local
+    let _14: &'3 str; // anonymous local
 
     storage_live(_0)
     _0 = ()
@@ -1203,7 +1203,7 @@ fn impl_SliceIndex_slice_for_Range_usize::get_unchecked::precondition_check(star
     storage_live(_13)
     storage_live(_14)
     _14 = &(*msg) with_metadata(copy msg.metadata)
-    _13 = from_str<'6>(move _14)
+    _13 = from_str<'9>(move _14)
     ↳⚡ storage_dead(_13)
         storage_dead(_12)
         storage_dead(msg)
@@ -1213,7 +1213,7 @@ fn impl_SliceIndex_slice_for_Range_usize::get_unchecked::precondition_check(star
         storage_dead(start)
         unwind_terminate
     storage_dead(_14)
-    _12 = panic_nounwind_fmt<'8>(move _13, const false, copy caller_location)
+    _12 = panic_nounwind_fmt<'15>(move _13, const false, copy caller_location)
     ↳⚡ undefined_behavior
 }
 
@@ -1317,10 +1317,10 @@ fn impl_SliceIndex_slice_for_Range_usize::get_unchecked_mut::precondition_check(
     let _8: bool; // anonymous local
     let _9: usize; // anonymous local
     let _10: usize; // anonymous local
-    let msg: &'1 str; // local
+    let msg: &'0 str; // local
     let _12: !; // anonymous local
-    let _13: Arguments<'3>; // anonymous local
-    let _14: &'4 str; // anonymous local
+    let _13: Arguments<'2>; // anonymous local
+    let _14: &'3 str; // anonymous local
 
     storage_live(_0)
     _0 = ()
@@ -1367,7 +1367,7 @@ fn impl_SliceIndex_slice_for_Range_usize::get_unchecked_mut::precondition_check(
     storage_live(_13)
     storage_live(_14)
     _14 = &(*msg) with_metadata(copy msg.metadata)
-    _13 = from_str<'6>(move _14)
+    _13 = from_str<'9>(move _14)
     ↳⚡ storage_dead(_13)
         storage_dead(_12)
         storage_dead(msg)
@@ -1377,7 +1377,7 @@ fn impl_SliceIndex_slice_for_Range_usize::get_unchecked_mut::precondition_check(
         storage_dead(start)
         unwind_terminate
     storage_dead(_14)
-    _12 = panic_nounwind_fmt<'8>(move _13, const false, copy caller_location)
+    _12 = panic_nounwind_fmt<'15>(move _13, const false, copy caller_location)
     ↳⚡ undefined_behavior
 }
 
@@ -1514,7 +1514,7 @@ where
     storage_live(len)
     storage_live(_8)
     _8 = &(*slice) with_metadata(copy slice.metadata)
-    len = core::slice::{[T]}::len<'8, T>[TraitClause0](move _8)
+    len = core::slice::{[T]}::len<'12, T>[TraitClause0](move _8)
     ↳⚡ storage_dead(_28)
         storage_dead(_27)
         storage_dead(_26)
@@ -1630,7 +1630,7 @@ where
     storage_live(_28)
     storage_live(_29)
     _29 = &(*slice) with_metadata(copy slice.metadata)
-    _28 = core::slice::{[T]}::len<'10, T>[TraitClause0](move _29)
+    _28 = core::slice::{[T]}::len<'18, T>[TraitClause0](move _29)
     ↳⚡ storage_dead(_28)
         storage_dead(_27)
         storage_dead(_26)
@@ -1701,7 +1701,7 @@ where
     storage_live(len)
     storage_live(_8)
     _8 = &(*slice) with_metadata(copy slice.metadata)
-    len = core::slice::{[T]}::len<'7, T>[TraitClause0](move _8)
+    len = core::slice::{[T]}::len<'11, T>[TraitClause0](move _8)
     ↳⚡ storage_dead(_28)
         storage_dead(_27)
         storage_dead(_26)
@@ -1817,7 +1817,7 @@ where
     storage_live(_28)
     storage_live(_29)
     _29 = &(*slice) with_metadata(copy slice.metadata)
-    _28 = core::slice::{[T]}::len<'9, T>[TraitClause0](move _29)
+    _28 = core::slice::{[T]}::len<'17, T>[TraitClause0](move _29)
     ↳⚡ storage_dead(_28)
         storage_dead(_27)
         storage_dead(_26)
@@ -1840,117 +1840,79 @@ where
         unwind_continue
 }
 
-// Full name: core::slice::index::{impl SliceIndex<[T]> for RangeInclusive<usize>[{built_in impl Sized for usize}]}::get_unchecked_mut::{promoted_const}
-pub const core::slice::index::impl_SliceIndex_slice_for_RangeInclusive_usize::get_unchecked_mut::{promoted_const}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 115u8, 108u8, 105u8, 99u8, 101u8, 47u8, 105u8, 110u8, 100u8, 101u8, 120u8, 46u8, 114u8, 115u8] } with_metadata(131usize)
-
 // Full name: core::slice::index::{impl SliceIndex<[T]> for RangeInclusive<usize>[{built_in impl Sized for usize}]}::get_unchecked_mut
-pub unsafe fn impl_SliceIndex_slice_for_RangeInclusive_usize::get_unchecked_mut<T>(self: RangeInclusive<usize>[{built_in impl Sized for usize}], slice: *mut [T]) -> *mut [T]
+pub unsafe fn impl_SliceIndex_slice_for_RangeInclusive_usize::get_unchecked_mut<T>(self: RangeInclusive<usize>[{built_in impl Sized for usize}], slice: *mut [T], caller_location: &'static Location<'static>) -> *mut [T]
 where
     TraitClause0: (T: Sized),
 {
     let _0: *mut [T]; // return
     let self: RangeInclusive<usize>[{built_in impl Sized for usize}]; // arg #1
     let slice: *mut [T]; // arg #2
-    let _3: Range<usize>[{built_in impl Sized for usize}]; // anonymous local
-    let _4: RangeInclusive<usize>[{built_in impl Sized for usize}]; // anonymous local
-    let _5: *mut [T]; // anonymous local
-    let _6: *const str is !null; // anonymous local
-    let _7: NonNull<str>; // anonymous local
-    let _8: PhantomData<&'8 str>; // anonymous local
-    let _9: Location<'5>; // anonymous local
-    let _10: &'3 Location<'4>; // anonymous local
+    let caller_location: &'static Location<'static>; // arg #3
+    let _4: Range<usize>[{built_in impl Sized for usize}]; // anonymous local
+    let _5: RangeInclusive<usize>[{built_in impl Sized for usize}]; // anonymous local
+    let _6: *mut [T]; // anonymous local
 
     storage_live(_0)
-    storage_live(_3)
     storage_live(_4)
-    _4 = move self
-    _3 = into_slice_range(move _4)
-    ↳⚡ storage_dead(slice)
-        storage_dead(self)
-        unwind_continue
-    storage_dead(_4)
     storage_live(_5)
-    _5 = copy slice
-    storage_live(_6)
-    _6 = &raw const core::slice::index::impl_SliceIndex_slice_for_RangeInclusive_usize::get_unchecked_mut::{promoted_const} with_metadata(const 131usize)
-    storage_live(_7)
-    _7 = NonNull { 0: move _6 }
-    storage_live(_8)
-    _8 = PhantomData {  }
-    storage_live(_9)
-    _9 = Location { 0: move _7, 1: const 674u32, 2: const 18u32, 3: move _8 }
-    storage_live(_10)
-    _10 = &_9
-    _0 = impl_SliceIndex_slice_for_Range_usize::get_unchecked_mut<T>[TraitClause0](move _3, move _5, move _10)
-    ↳⚡ storage_dead(slice)
+    _5 = move self
+    _4 = into_slice_range(move _5)
+    ↳⚡ storage_dead(caller_location)
+        storage_dead(slice)
         storage_dead(self)
         unwind_continue
     storage_dead(_5)
-    storage_dead(_3)
+    storage_live(_6)
+    _6 = copy slice
+    _0 = impl_SliceIndex_slice_for_Range_usize::get_unchecked_mut<T>[TraitClause0](move _4, move _6, copy caller_location)
+    ↳⚡ storage_dead(caller_location)
+        storage_dead(slice)
+        storage_dead(self)
+        unwind_continue
+    storage_dead(_6)
+    storage_dead(_4)
+    storage_dead(caller_location)
     storage_dead(slice)
     storage_dead(self)
-    storage_dead(_10)
-    storage_dead(_9)
-    storage_dead(_8)
-    storage_dead(_7)
-    storage_dead(_6)
     return
 }
 
-// Full name: core::slice::index::{impl SliceIndex<[T]> for RangeInclusive<usize>[{built_in impl Sized for usize}]}::get_unchecked::{promoted_const}
-pub const core::slice::index::impl_SliceIndex_slice_for_RangeInclusive_usize::get_unchecked::{promoted_const}: str = str { _0: [47u8, 104u8, 111u8, 109u8, 101u8, 47u8, 110u8, 97u8, 100u8, 114u8, 105u8, 101u8, 114u8, 105u8, 108u8, 47u8, 46u8, 114u8, 117u8, 115u8, 116u8, 117u8, 112u8, 47u8, 116u8, 111u8, 111u8, 108u8, 99u8, 104u8, 97u8, 105u8, 110u8, 115u8, 47u8, 110u8, 105u8, 103u8, 104u8, 116u8, 108u8, 121u8, 45u8, 50u8, 48u8, 50u8, 54u8, 45u8, 48u8, 57u8, 45u8, 49u8, 55u8, 45u8, 120u8, 56u8, 54u8, 95u8, 54u8, 52u8, 45u8, 117u8, 110u8, 107u8, 110u8, 111u8, 119u8, 110u8, 45u8, 108u8, 105u8, 110u8, 117u8, 120u8, 45u8, 103u8, 110u8, 117u8, 47u8, 108u8, 105u8, 98u8, 47u8, 114u8, 117u8, 115u8, 116u8, 108u8, 105u8, 98u8, 47u8, 115u8, 114u8, 99u8, 47u8, 114u8, 117u8, 115u8, 116u8, 47u8, 108u8, 105u8, 98u8, 114u8, 97u8, 114u8, 121u8, 47u8, 99u8, 111u8, 114u8, 101u8, 47u8, 115u8, 114u8, 99u8, 47u8, 115u8, 108u8, 105u8, 99u8, 101u8, 47u8, 105u8, 110u8, 100u8, 101u8, 120u8, 46u8, 114u8, 115u8] } with_metadata(131usize)
-
 // Full name: core::slice::index::{impl SliceIndex<[T]> for RangeInclusive<usize>[{built_in impl Sized for usize}]}::get_unchecked
-pub unsafe fn impl_SliceIndex_slice_for_RangeInclusive_usize::get_unchecked<T>(self: RangeInclusive<usize>[{built_in impl Sized for usize}], slice: *const [T]) -> *const [T]
+pub unsafe fn impl_SliceIndex_slice_for_RangeInclusive_usize::get_unchecked<T>(self: RangeInclusive<usize>[{built_in impl Sized for usize}], slice: *const [T], caller_location: &'static Location<'static>) -> *const [T]
 where
     TraitClause0: (T: Sized),
 {
     let _0: *const [T]; // return
     let self: RangeInclusive<usize>[{built_in impl Sized for usize}]; // arg #1
     let slice: *const [T]; // arg #2
-    let _3: Range<usize>[{built_in impl Sized for usize}]; // anonymous local
-    let _4: RangeInclusive<usize>[{built_in impl Sized for usize}]; // anonymous local
-    let _5: *const [T]; // anonymous local
-    let _6: *const str is !null; // anonymous local
-    let _7: NonNull<str>; // anonymous local
-    let _8: PhantomData<&'8 str>; // anonymous local
-    let _9: Location<'5>; // anonymous local
-    let _10: &'3 Location<'4>; // anonymous local
+    let caller_location: &'static Location<'static>; // arg #3
+    let _4: Range<usize>[{built_in impl Sized for usize}]; // anonymous local
+    let _5: RangeInclusive<usize>[{built_in impl Sized for usize}]; // anonymous local
+    let _6: *const [T]; // anonymous local
 
     storage_live(_0)
-    storage_live(_3)
     storage_live(_4)
-    _4 = move self
-    _3 = into_slice_range(move _4)
-    ↳⚡ storage_dead(slice)
-        storage_dead(self)
-        unwind_continue
-    storage_dead(_4)
     storage_live(_5)
-    _5 = copy slice
-    storage_live(_6)
-    _6 = &raw const core::slice::index::impl_SliceIndex_slice_for_RangeInclusive_usize::get_unchecked::{promoted_const} with_metadata(const 131usize)
-    storage_live(_7)
-    _7 = NonNull { 0: move _6 }
-    storage_live(_8)
-    _8 = PhantomData {  }
-    storage_live(_9)
-    _9 = Location { 0: move _7, 1: const 668u32, 2: const 18u32, 3: move _8 }
-    storage_live(_10)
-    _10 = &_9
-    _0 = impl_SliceIndex_slice_for_Range_usize::get_unchecked<T>[TraitClause0](move _3, move _5, move _10)
-    ↳⚡ storage_dead(slice)
+    _5 = move self
+    _4 = into_slice_range(move _5)
+    ↳⚡ storage_dead(caller_location)
+        storage_dead(slice)
         storage_dead(self)
         unwind_continue
     storage_dead(_5)
-    storage_dead(_3)
+    storage_live(_6)
+    _6 = copy slice
+    _0 = impl_SliceIndex_slice_for_Range_usize::get_unchecked<T>[TraitClause0](move _4, move _6, copy caller_location)
+    ↳⚡ storage_dead(caller_location)
+        storage_dead(slice)
+        storage_dead(self)
+        unwind_continue
+    storage_dead(_6)
+    storage_dead(_4)
+    storage_dead(caller_location)
     storage_dead(slice)
     storage_dead(self)
-    storage_dead(_10)
-    storage_dead(_9)
-    storage_dead(_8)
-    storage_dead(_7)
-    storage_dead(_6)
     return
 }
 
@@ -1979,7 +1941,7 @@ where
     storage_live(_5)
     storage_live(_6)
     _6 = &self
-    _5 = end<'21, usize>[{built_in impl Sized for usize}](move _6)
+    _5 = end<'30, usize>[{built_in impl Sized for usize}](move _6)
     ↳⚡ storage_dead(slice)
         storage_dead(self)
         unwind_continue
@@ -1988,7 +1950,7 @@ where
     storage_live(_7)
     storage_live(_8)
     _8 = &(*slice) with_metadata(copy slice.metadata)
-    _7 = core::slice::{[T]}::len<'23, T>[TraitClause0](move _8)
+    _7 = core::slice::{[T]}::len<'36, T>[TraitClause0](move _8)
     ↳⚡ storage_dead(slice)
         storage_dead(self)
         unwind_continue
@@ -2009,7 +1971,7 @@ where
         storage_dead(_10)
         storage_live(_11)
         _11 = &two-phase-mut (*slice) with_metadata(copy slice.metadata)
-        _0 = impl_SliceIndex_slice_for_Range_usize::get_mut<'32, T>[TraitClause0](move _9, move _11)
+        _0 = impl_SliceIndex_slice_for_Range_usize::get_mut<'53, T>[TraitClause0](move _9, move _11)
         ↳⚡ storage_dead(slice)
             storage_dead(self)
             unwind_continue
@@ -2055,7 +2017,7 @@ where
     storage_live(_5)
     storage_live(_6)
     _6 = &self
-    _5 = end<'20, usize>[{built_in impl Sized for usize}](move _6)
+    _5 = end<'29, usize>[{built_in impl Sized for usize}](move _6)
     ↳⚡ storage_dead(slice)
         storage_dead(self)
         unwind_continue
@@ -2064,7 +2026,7 @@ where
     storage_live(_7)
     storage_live(_8)
     _8 = &(*slice) with_metadata(copy slice.metadata)
-    _7 = core::slice::{[T]}::len<'22, T>[TraitClause0](move _8)
+    _7 = core::slice::{[T]}::len<'35, T>[TraitClause0](move _8)
     ↳⚡ storage_dead(slice)
         storage_dead(self)
         unwind_continue
@@ -2085,7 +2047,7 @@ where
         storage_dead(_10)
         storage_live(_11)
         _11 = &(*slice) with_metadata(copy slice.metadata)
-        _0 = impl_SliceIndex_slice_for_Range_usize::get<'31, T>[TraitClause0](move _9, move _11)
+        _0 = impl_SliceIndex_slice_for_Range_usize::get<'52, T>[TraitClause0](move _9, move _11)
         ↳⚡ storage_dead(slice)
             storage_dead(self)
             unwind_continue
@@ -2124,7 +2086,11 @@ where
     vtable: lazy
 }
 
-pub const test_crate::slice_index_range::{promoted_const}: str = str { _0: [116u8, 101u8, 115u8, 116u8, 115u8, 47u8, 117u8, 105u8, 47u8, 115u8, 105u8, 109u8, 112u8, 108u8, 101u8, 47u8, 115u8, 108u8, 105u8, 99u8, 101u8, 95u8, 105u8, 110u8, 100u8, 101u8, 120u8, 95u8, 114u8, 97u8, 110u8, 103u8, 101u8, 46u8, 114u8, 115u8] } with_metadata(36usize)
+// Full name: test_crate::filename#4
+pub static filename: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x73, 0x69, 0x6d, 0x70, 0x6c, 0x65, 0x2f, 0x73, 0x6c, 0x69, 0x63, 0x65, 0x5f, 0x69, 0x6e, 0x64, 0x65, 0x78, 0x5f, 0x72, 0x61, 0x6e, 0x67, 0x65, 0x2e, 0x72, 0x73, 0x00) with_metadata(36usize)
+
+// Full name: test_crate::slice_index_range::{promoted_const#5}
+pub static {promoted_const}: Location<'static> = Location { 0: NonNull { 0: &raw const filename with_metadata(36usize) }, 1: 6u32, 2: 11u32, 3: PhantomData {  } }
 
 // Full name: test_crate::slice_index_range
 pub fn slice_index_range<'_0>(slice: &'_0 [u8]) -> &'_0 [u8]
@@ -2135,11 +2101,7 @@ pub fn slice_index_range<'_0>(slice: &'_0 [u8]) -> &'_0 [u8]
     let _3: &'4 [u8]; // anonymous local
     let _4: &'5 [u8]; // anonymous local
     let _5: RangeInclusive<usize>[{built_in impl Sized for usize}]; // anonymous local
-    let _6: *const str is !null; // anonymous local
-    let _7: NonNull<str>; // anonymous local
-    let _8: PhantomData<&'16 str>; // anonymous local
-    let _9: Location<'13>; // anonymous local
-    let _10: &'11 Location<'12>; // anonymous local
+    let _6: &'static Location<'static>; // anonymous local
 
     storage_live(_0)
     storage_live(_2)
@@ -2151,16 +2113,8 @@ pub fn slice_index_range<'_0>(slice: &'_0 [u8]) -> &'_0 [u8]
     ↳⚡ storage_dead(slice)
         unwind_continue
     storage_live(_6)
-    _6 = &raw const test_crate::slice_index_range::{promoted_const} with_metadata(const 36usize)
-    storage_live(_7)
-    _7 = NonNull { 0: move _6 }
-    storage_live(_8)
-    _8 = PhantomData {  }
-    storage_live(_9)
-    _9 = Location { 0: move _7, 1: const 6u32, 2: const 11u32, 3: move _8 }
-    storage_live(_10)
-    _10 = &_9
-    _3 = impl_Index_for_slice::index<'7, u8, RangeInclusive<usize>[{built_in impl Sized for usize}]>[{built_in impl Sized for u8}, {built_in impl Sized for RangeInclusive<usize>[{built_in impl Sized for usize}]}, impl_SliceIndex_slice_for_RangeInclusive_usize<u8>[{built_in impl Sized for u8}]](move _4, move _5, move _10)
+    _6 = &{promoted_const}
+    _3 = impl_Index_for_slice::index<'20, u8, RangeInclusive<usize>[{built_in impl Sized for usize}]>[{built_in impl Sized for u8}, {built_in impl Sized for RangeInclusive<usize>[{built_in impl Sized for usize}]}, impl_SliceIndex_slice_for_RangeInclusive_usize<u8>[{built_in impl Sized for u8}]](move _4, move _5, move _6)
     ↳⚡ storage_dead(slice)
         unwind_continue
     storage_dead(_5)
@@ -2170,10 +2124,6 @@ pub fn slice_index_range<'_0>(slice: &'_0 [u8]) -> &'_0 [u8]
     storage_dead(_3)
     storage_dead(_2)
     storage_dead(slice)
-    storage_dead(_10)
-    storage_dead(_9)
-    storage_dead(_8)
-    storage_dead(_7)
     storage_dead(_6)
     return
 }

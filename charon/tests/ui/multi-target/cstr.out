@@ -24,6 +24,10 @@ pub struct core::ffi::c_str::CStr::powerpc64-unknown-linux-gnu {
 
 struct () {}
 
+struct str {
+  _0: [u8],
+}
+
 pub const test_crate::main::{promoted_const}::x86_64-unknown-linux-gnu: core::ffi::c_str::CStr::x86_64-unknown-linux-gnu = core::ffi::c_str::CStr::x86_64-unknown-linux-gnu { inner: [49i8, 50i8, 51i8, 0i8] } with_metadata(4usize)
 
 fn test_crate::main::x86_64-unknown-linux-gnu()

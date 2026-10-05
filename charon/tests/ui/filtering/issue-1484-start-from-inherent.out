@@ -1,10 +1,28 @@
 # Final LLBC before serialization:
 
+// Full name: core::marker::MetaSized
+#[fundamental]
+#[lang_item(MetaSized)]
+pub trait MetaSized<Self>
+
+// Full name: core::marker::Sized
+#[fundamental]
+#[lang_item(Sized)]
+pub trait Sized<Self>
+{
+    proof ImpliedClause0: (Self: MetaSized)
+    non-dyn-compatible
+}
+
 // Full name: core::num::{u32}::wrapping_add
 pub fn wrapping_add(_1: u32, _2: u32) -> u32
 = <opaque>
 
 struct () {}
+
+struct str {
+  _0: [u8],
+}
 
 // Full name: test_crate::Counter
 pub struct Counter {

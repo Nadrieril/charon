@@ -29,16 +29,16 @@ pub unsafe trait Sync<Self>
 
 vtable core::marker::Sync::{vtable}<Self>: core::marker::Sync::{vtable} = Opaque(VTable was chosen to be opaque)
 
+struct str {
+  _0: [u8],
+}
+
 struct (_, _)<A, B>
 where
     TraitClause0: (A: Sized),
 {
   _0: A,
   _1: B,
-}
-
-struct str {
-  _0: [u8],
 }
 
 // Full name: test_crate::Wrap

@@ -1,6 +1,24 @@
 # Final LLBC before serialization:
 
+// Full name: core::marker::MetaSized
+#[fundamental]
+#[lang_item(MetaSized)]
+pub trait MetaSized<Self>
+
+// Full name: core::marker::Sized
+#[fundamental]
+#[lang_item(Sized)]
+pub trait Sized<Self>
+{
+    proof ImpliedClause0: (Self: MetaSized)
+    non-dyn-compatible
+}
+
 struct () {}
+
+struct str {
+  _0: [u8],
+}
 
 // Full name: test_crate::{impl Trait for bool}::method
 pub fn method<'_0>(self: &'_0 bool)
@@ -26,7 +44,7 @@ fn do_test::<bool>(x: bool)
     _0 = ()
     storage_live(_2)
     _2 = &x
-    _0 = method<'3>(move _2)
+    _0 = method<'5>(move _2)
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(_2)

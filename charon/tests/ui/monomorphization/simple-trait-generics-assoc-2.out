@@ -22,6 +22,10 @@ vtable core::marker::MetaSized::{vtable}::<i32>: core::marker::MetaSized::{vtabl
 
 vtable core::marker::MetaSized::{vtable}::<bool>: core::marker::MetaSized::{vtable} = Opaque(VTable was chosen to be opaque)
 
+struct str {
+  _0: [u8],
+}
+
 struct test_crate::Trait::{vtable} {
   size: usize,
   align: usize,
@@ -175,10 +179,10 @@ fn main()
     let _13: fn(&'8 (dyn Trait<usize, Item = bool> + '9)); // anonymous local
     let _14: fn(&'18 (dyn Trait<bool, Item = usize> + '19)); // anonymous local
     let _15: &'22 i32; // anonymous local
-    let _16: &'31 bool; // anonymous local
-    let _17: &'40 i32; // anonymous local
+    let _16: &'33 bool; // anonymous local
+    let _17: &'43 i32; // anonymous local
     let _18: i32; // anonymous local
-    let _19: &'41 bool; // anonymous local
+    let _19: &'44 bool; // anonymous local
     let _20: bool; // anonymous local
 
     storage_live(_15)
@@ -225,10 +229,10 @@ fn main()
     _11 = move _16
     _8 = &(*_11)
     _7 = &(*_8)
-    b = unsize_cast<&'16 bool, &'32 (dyn Trait<bool, Item = usize> + '33), &impl_Trait_bool_for_bool::{vtable}>(move _7)
+    b = unsize_cast<&'16 bool, &'34 (dyn Trait<bool, Item = usize> + '35), &impl_Trait_bool_for_bool::{vtable}>(move _7)
     storage_dead(_7)
     fake_read(b)
-    set_type(typeof(b) == &'34 (dyn Trait<bool, Item = usize> + '35))
+    set_type(typeof(b) == &'36 (dyn Trait<bool, Item = usize> + '37))
     storage_dead(_8)
     storage_live(_9)
     storage_live(_10)

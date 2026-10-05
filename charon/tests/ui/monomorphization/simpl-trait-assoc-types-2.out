@@ -7,11 +7,24 @@ opaque type core::marker::MetaSized::{vtable}
 #[lang_item(MetaSized)]
 pub trait MetaSized<Self>
 
+// Full name: core::marker::Sized
+#[fundamental]
+#[lang_item(Sized)]
+pub trait Sized<Self>
+{
+    proof ImpliedClause0: (Self: MetaSized)
+    non-dyn-compatible
+}
+
 struct () {}
 
 vtable core::marker::MetaSized::{vtable}::<i32>: core::marker::MetaSized::{vtable} = Opaque(VTable was chosen to be opaque)
 
 vtable core::marker::MetaSized::{vtable}::<usize>: core::marker::MetaSized::{vtable} = Opaque(VTable was chosen to be opaque)
+
+struct str {
+  _0: [u8],
+}
 
 struct test_crate::Trait::{vtable} {
   size: usize,
@@ -163,10 +176,10 @@ fn main()
     let _13: fn(&'8 (dyn Trait<Item = bool> + '9)); // anonymous local
     let _14: fn(&'18 (dyn Trait<Item = u32> + '19)); // anonymous local
     let _15: &'22 i32; // anonymous local
-    let _16: &'31 usize; // anonymous local
-    let _17: &'40 i32; // anonymous local
+    let _16: &'33 usize; // anonymous local
+    let _17: &'43 i32; // anonymous local
     let _18: i32; // anonymous local
-    let _19: &'41 usize; // anonymous local
+    let _19: &'44 usize; // anonymous local
     let _20: usize; // anonymous local
 
     storage_live(_15)
@@ -213,10 +226,10 @@ fn main()
     _11 = move _16
     _8 = &(*_11)
     _7 = &(*_8)
-    b = unsize_cast<&'16 usize, &'32 (dyn Trait<Item = u32> + '33), &impl_Trait_for_usize::{vtable}>(move _7)
+    b = unsize_cast<&'16 usize, &'34 (dyn Trait<Item = u32> + '35), &impl_Trait_for_usize::{vtable}>(move _7)
     storage_dead(_7)
     fake_read(b)
-    set_type(typeof(b) == &'34 (dyn Trait<Item = u32> + '35))
+    set_type(typeof(b) == &'36 (dyn Trait<Item = u32> + '37))
     storage_dead(_8)
     storage_live(_9)
     storage_live(_10)

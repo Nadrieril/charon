@@ -190,11 +190,11 @@ where
     vtable: lazy
 }
 
-static test_crate::{promoted_const}: MaybeUninit<[u8; 8usize]>[{built_in impl Sized for [u8; 8usize]}] = RawMemory(&{as_fn}[0], &{as_fn}[1], &{as_fn}[2], &{as_fn}[3], &{as_fn}[4], &{as_fn}[5], &{as_fn}[6], &{as_fn}[7])
+static test_crate::{promoted_const#10}: MaybeUninit<[u8; 8usize]>[{built_in impl Sized for [u8; 8usize]}] = RawMemory(&{as_fn}[0], &{as_fn}[1], &{as_fn}[2], &{as_fn}[3], &{as_fn}[4], &{as_fn}[5], &{as_fn}[6], &{as_fn}[7])
 
-static test_crate::{promoted_const#1}: MaybeUninit<[u8; 8usize]>[{built_in impl Sized for [u8; 8usize]}] = RawMemory(&{built_in impl Clone for (u8, u8)}::clone<'_>[0], &{built_in impl Clone for (u8, u8)}::clone<'_>[1], &{built_in impl Clone for (u8, u8)}::clone<'_>[2], &{built_in impl Clone for (u8, u8)}::clone<'_>[3], &{built_in impl Clone for (u8, u8)}::clone<'_>[4], &{built_in impl Clone for (u8, u8)}::clone<'_>[5], &{built_in impl Clone for (u8, u8)}::clone<'_>[6], &{built_in impl Clone for (u8, u8)}::clone<'_>[7])
+static test_crate::{promoted_const#11}: MaybeUninit<[u8; 8usize]>[{built_in impl Sized for [u8; 8usize]}] = RawMemory(&{built_in impl Clone for (u8, u8)}::clone<'_>[0], &{built_in impl Clone for (u8, u8)}::clone<'_>[1], &{built_in impl Clone for (u8, u8)}::clone<'_>[2], &{built_in impl Clone for (u8, u8)}::clone<'_>[3], &{built_in impl Clone for (u8, u8)}::clone<'_>[4], &{built_in impl Clone for (u8, u8)}::clone<'_>[5], &{built_in impl Clone for (u8, u8)}::clone<'_>[6], &{built_in impl Clone for (u8, u8)}::clone<'_>[7])
 
-static test_crate::{promoted_const#2}: MaybeUninit<[u8; 8usize]>[{built_in impl Sized for [u8; 8usize]}] = RawMemory(&{impl Fn<(A,)> for fn(A) -> B}<u8, u8>[{built_in impl Sized for u8}, {built_in impl Sized for u8}]::call<'_>[0], &{impl Fn<(A,)> for fn(A) -> B}<u8, u8>[{built_in impl Sized for u8}, {built_in impl Sized for u8}]::call<'_>[1], &{impl Fn<(A,)> for fn(A) -> B}<u8, u8>[{built_in impl Sized for u8}, {built_in impl Sized for u8}]::call<'_>[2], &{impl Fn<(A,)> for fn(A) -> B}<u8, u8>[{built_in impl Sized for u8}, {built_in impl Sized for u8}]::call<'_>[3], &{impl Fn<(A,)> for fn(A) -> B}<u8, u8>[{built_in impl Sized for u8}, {built_in impl Sized for u8}]::call<'_>[4], &{impl Fn<(A,)> for fn(A) -> B}<u8, u8>[{built_in impl Sized for u8}, {built_in impl Sized for u8}]::call<'_>[5], &{impl Fn<(A,)> for fn(A) -> B}<u8, u8>[{built_in impl Sized for u8}, {built_in impl Sized for u8}]::call<'_>[6], &{impl Fn<(A,)> for fn(A) -> B}<u8, u8>[{built_in impl Sized for u8}, {built_in impl Sized for u8}]::call<'_>[7])
+static test_crate::{promoted_const#12}: MaybeUninit<[u8; 8usize]>[{built_in impl Sized for [u8; 8usize]}] = RawMemory(&{impl Fn<(A,)> for fn(A) -> B}<u8, u8>[{built_in impl Sized for u8}, {built_in impl Sized for u8}]::call<'_>[0], &{impl Fn<(A,)> for fn(A) -> B}<u8, u8>[{built_in impl Sized for u8}, {built_in impl Sized for u8}]::call<'_>[1], &{impl Fn<(A,)> for fn(A) -> B}<u8, u8>[{built_in impl Sized for u8}, {built_in impl Sized for u8}]::call<'_>[2], &{impl Fn<(A,)> for fn(A) -> B}<u8, u8>[{built_in impl Sized for u8}, {built_in impl Sized for u8}]::call<'_>[3], &{impl Fn<(A,)> for fn(A) -> B}<u8, u8>[{built_in impl Sized for u8}, {built_in impl Sized for u8}]::call<'_>[4], &{impl Fn<(A,)> for fn(A) -> B}<u8, u8>[{built_in impl Sized for u8}, {built_in impl Sized for u8}]::call<'_>[5], &{impl Fn<(A,)> for fn(A) -> B}<u8, u8>[{built_in impl Sized for u8}, {built_in impl Sized for u8}]::call<'_>[6], &{impl Fn<(A,)> for fn(A) -> B}<u8, u8>[{built_in impl Sized for u8}, {built_in impl Sized for u8}]::call<'_>[7])
 
 // Full name: test_crate::A
 struct A {
@@ -202,7 +202,7 @@ struct A {
 }
 
 // Full name: test_crate::CLOSURE_STATELESS
-static CLOSURE_STATELESS: &'static A = &test_crate::{promoted_const}
+static CLOSURE_STATELESS: &'static A = &test_crate::{promoted_const#10}
 
 // Full name: test_crate::B
 struct B {
@@ -210,7 +210,7 @@ struct B {
 }
 
 // Full name: test_crate::BUILTIN_IMPL
-static BUILTIN_IMPL: &'static B = &test_crate::{promoted_const#1}
+static BUILTIN_IMPL: &'static B = &test_crate::{promoted_const#11}
 
 // Full name: test_crate::C
 struct C {
@@ -218,7 +218,7 @@ struct C {
 }
 
 // Full name: test_crate::FN_PTR_CALL
-static FN_PTR_CALL: &'static C = &test_crate::{promoted_const#2}
+static FN_PTR_CALL: &'static C = &test_crate::{promoted_const#12}
 
 
 

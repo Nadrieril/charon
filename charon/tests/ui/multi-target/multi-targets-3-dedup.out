@@ -1,4 +1,7 @@
-pub fn core::clone::impls::{impl core::clone::Clone for u32}::clone<'_0>(_1: &'_0 u32) -> u32
+#[lang_item(PanicLocation)]
+pub opaque type core::panic::location::Location<'a>
+
+pub fn core::clone::impls::{impl core::clone::Clone for u32}::clone<'_0>(_1: &'_0 u32, _2: &'static core::panic::location::Location<'static>) -> u32
 = <opaque>
 
 #[fundamental]
@@ -13,7 +16,17 @@ pub trait core::marker::Sized<Self>
     non-dyn-compatible
 }
 
+#[lang_item(PhantomData)]
+pub struct core::marker::PhantomData<T> {}
+
+#[lang_item(NonNull)]
+pub opaque type core::ptr::non_null::NonNull<T>
+
 struct () {}
+
+struct str {
+  _0: [u8],
+}
 
 struct (_, _)<A, B>
 where
@@ -23,20 +36,28 @@ where
   _1: B,
 }
 
+pub static test_crate::filename#7: str = RawMemory(0x74, 0x65, 0x73, 0x74, 0x73, 0x2f, 0x75, 0x69, 0x2f, 0x6d, 0x75, 0x6c, 0x74, 0x69, 0x2d, 0x74, 0x61, 0x72, 0x67, 0x65, 0x74, 0x2f, 0x6d, 0x75, 0x6c, 0x74, 0x69, 0x2d, 0x74, 0x61, 0x72, 0x67, 0x65, 0x74, 0x73, 0x2d, 0x33, 0x2d, 0x64, 0x65, 0x64, 0x75, 0x70, 0x2e, 0x72, 0x73, 0x00) with_metadata(46usize)
+
+pub static test_crate::clone_it::{promoted_const#8}: core::panic::location::Location<'static> = core::panic::location::Location { 0: core::ptr::non_null::NonNull { 0: &raw const test_crate::filename#7 with_metadata(46usize) }, 1: 3u32, 2: 5u32, 3: core::marker::PhantomData {  } }
+
 fn test_crate::clone_it<'_0>(x: &'_0 u32) -> u32
 {
     let _0: u32; // return
     let x: &'1 u32; // arg #1
     let _2: &'2 u32; // anonymous local
+    let _3: &'static core::panic::location::Location<'static>; // anonymous local
 
     storage_live(_0)
     storage_live(_2)
     _2 = &(*x)
-    _0 = core::clone::impls::{impl core::clone::Clone for u32}::clone<'4>(move _2)
+    storage_live(_3)
+    _3 = &test_crate::clone_it::{promoted_const#8}
+    _0 = core::clone::impls::{impl core::clone::Clone for u32}::clone<'13>(move _2, move _3)
     ↳⚡ storage_dead(x)
         unwind_continue
     storage_dead(_2)
     storage_dead(x)
+    storage_dead(_3)
     return
 }
 
@@ -88,7 +109,7 @@ pub fn test_crate::call_both<'_0>(x: &'_0 u32) -> u32
     storage_live(_2)
     storage_live(_3)
     _3 = &(*x)
-    _2 = test_crate::clone_it<'4>(move _3)
+    _2 = test_crate::clone_it<'13>(move _3)
     ↳⚡ storage_dead(_5)
         storage_dead(x)
         unwind_continue

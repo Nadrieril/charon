@@ -24,6 +24,10 @@ pub trait Destruct<Self>
     non-dyn-compatible
 }
 
+struct str {
+  _0: [u8],
+}
+
 // Full name: test_crate::Apply
 trait Apply<Self, A, Self_Output>
 {
@@ -143,7 +147,7 @@ fn g()
     storage_dead(_4)
     storage_live(_5)
     _5 = F {  }
-    _1 = impl_Iter_for_Empty::map<'3, (), (), F>[{built_in impl Sized for ()}, {built_in impl Sized for ()}, {built_in impl Sized for F}, impl_Apply_unit_for_F](move _2, move _5)
+    _1 = impl_Iter_for_Empty::map<'12, (), (), F>[{built_in impl Sized for ()}, {built_in impl Sized for ()}, {built_in impl Sized for F}, impl_Apply_unit_for_F](move _2, move _5)
     ↳⚡ unwind_continue
     storage_dead(_5)
     storage_dead(_2)

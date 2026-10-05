@@ -14,6 +14,10 @@ pub trait Sized<Self>
     non-dyn-compatible
 }
 
+// Full name: core::panic::location::Location
+#[lang_item(PanicLocation)]
+pub opaque type Location<'a>
+
 // Full name: core::clone::Clone
 #[lang_item(Clone)]
 #[diagnostic_item("Clone")]
@@ -196,7 +200,7 @@ where
             storage_dead(_6)
         },
     }
-    _0 = core::fmt::{Formatter<'a>}::write_str<'16, '19, '20>(move _3, move _4)
+    _0 = core::fmt::{Formatter<'a>}::write_str<'24, '27, '28>(move _3, move _4)
     ↳⚡ storage_dead(f)
         storage_dead(self)
         unwind_continue

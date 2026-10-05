@@ -1,3 +1,6 @@
+#[lang_item(PanicLocation)]
+pub opaque type core::panic::location::Location<'a>
+
 #[fundamental]
 #[lang_item(MetaSized)]
 pub trait core::marker::MetaSized<Self>
@@ -21,12 +24,17 @@ pub trait core::clone::Clone<Self>
 
 struct () {}
 
+struct str {
+  _0: [u8],
+}
+
 pub struct test_crate::Foo {}
 
-pub fn test_crate::{impl core::clone::Clone for test_crate::Foo}::clone<'_0>(self: &'_0 test_crate::Foo) -> test_crate::Foo
+pub fn test_crate::{impl core::clone::Clone for test_crate::Foo}::clone<'_0>(self: &'_0 test_crate::Foo, caller_location: &'static core::panic::location::Location<'static>) -> test_crate::Foo
 {
     let _0: test_crate::Foo; // return
     let self: &'1 test_crate::Foo; // arg #1
+    let caller_location: &'static core::panic::location::Location<'static>; // arg #2
 
     storage_live(_0)
     loop {

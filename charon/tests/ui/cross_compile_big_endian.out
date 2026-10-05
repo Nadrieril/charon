@@ -27,6 +27,10 @@ pub const MAX: usize = MAX()
 pub fn to_ne_bytes(_1: u128) -> [u8; 16usize]
 = <opaque>
 
+struct str {
+  _0: [u8],
+}
+
 struct (_, _)<A, B>
 where
     TraitClause0: (A: Sized),
